@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 
 
@@ -13,6 +14,7 @@ import PaymentBreakdown from "./PaymentBreakdown";
 import TodayOverview from "./TodayOverview";
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { branch } = useSelector((state) => state.branch);
   const branchId = branch?.id;
@@ -33,7 +35,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight text-white">Branch Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.branchManager.dashboard.title')}</h1>
         <p className="text-gray-400">{branch?.name || "Loading branch..."}</p>
       </div>
       {/* KPI Cards */}

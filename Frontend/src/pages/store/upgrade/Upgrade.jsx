@@ -5,8 +5,10 @@ import { Button } from "../../../components/ui/button";
 import { Badge } from "../../../components/ui/badge";
 import { CheckCircle, Star } from "lucide-react";
 import { getAllSubscriptionPlans } from "../../../Redux Toolkit/features/subscriptionPlan/subscriptionPlanThunks";
+import { useTranslation } from "react-i18next";
 
 const Upgrade = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { plans, loading } = useSelector((state) => state.subscriptionPlan);
   const { store } = useSelector((state) => state.store);
@@ -20,9 +22,9 @@ const Upgrade = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Upgrade Your Plan</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('storeModule.upgrade.title')}</h2>
         <p className="text-gray-400">
-          Choose a plan that fits your business needs and unlock more features.
+          {t('storeModule.upgrade.subtitle')}
         </p>
       </div>
 
@@ -38,14 +40,14 @@ const Upgrade = () => {
           >
             {currentPlanId === plan.id && (
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white">
-                Current Plan
+                {t('storeModule.upgrade.currentPlan')}
               </Badge>
             )}
             <CardHeader className="border-b border-white/10 text-center">
               <CardTitle className="text-2xl font-bold text-white">{plan.name}</CardTitle>
               <div className="text-4xl font-bold text-emerald-400 my-4">
                 ₹{plan.price}
-                <span className="text-base font-medium text-gray-400">/{plan.billingCycle.toLowerCase()}</span>
+                <span className="text-base font-medium text-gray-400">/{t(`storeModule.upgrade.billingCycle.${plan.billingCycle.toLowerCase()}`)}</span>
               </div>
               <CardDescription className="text-gray-400">{plan.description}</CardDescription>
             </CardHeader>
@@ -65,7 +67,7 @@ const Upgrade = () => {
                 disabled={currentPlanId === plan.id}
                 variant={currentPlanId === plan.id ? "outline" : "default"}
               >
-                {currentPlanId === plan.id ? "Currently Active" : "Choose Plan"}
+                {currentPlanId === plan.id ? t('storeModule.upgrade.currentlyActive') : t('storeModule.upgrade.choosePlan')}
               </Button>
             </CardFooter>
           </Card>

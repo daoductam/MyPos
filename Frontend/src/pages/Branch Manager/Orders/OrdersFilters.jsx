@@ -1,5 +1,4 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -7,17 +6,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, Filter } from "lucide-react";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { paymentModeMap, statusMap } from "./data";
 import { getOrdersByBranch } from "../../../Redux Toolkit/features/order/orderThunks";
 
 const OrdersFilters = () => {
-
-    const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
   const branchId = useSelector((state) => state.branch.branch?.id);
   const { employees } = useSelector((state) => state.employee);
 
@@ -27,20 +25,18 @@ const OrdersFilters = () => {
     status: "all",
   });
 
-    useEffect(() => {
-      if (branchId) {
-        const data = {
-          branchId,
-          cashierId: filters.cashierId !== "all" ? filters.cashierId : undefined,
-          paymentType: paymentModeMap[filters.paymentMode],
-          status: statusMap[filters.status],
-        };
-        console.log("filters data ", data);
-        dispatch(getOrdersByBranch(data));
-      }
-    }, [branchId, filters, dispatch]);
-
-
+  useEffect(() => {
+    if (branchId) {
+      const data = {
+        branchId,
+        cashierId: filters.cashierId !== "all" ? filters.cashierId : undefined,
+        paymentType: paymentModeMap[filters.paymentMode],
+        status: statusMap[filters.status],
+      };
+      console.log("filters data ", data);
+      dispatch(getOrdersByBranch(data));
+    }
+  }, [branchId, filters, dispatch]);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -53,10 +49,10 @@ const OrdersFilters = () => {
           }
         >
           <SelectTrigger className="w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40">
-            <SelectValue placeholder="All Payment Modes" />
+            <SelectValue placeholder={t('dashboard.branchManager.orders.filters.allPayments')} />
           </SelectTrigger>
           <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
-            <SelectItem value="all">All Payment Modes</SelectItem>
+            <SelectItem value="all">{t('dashboard.branchManager.orders.filters.allPayments')}</SelectItem>
             <SelectItem value="Cash">Cash</SelectItem>
             <SelectItem value="UPI">UPI</SelectItem>
             <SelectItem value="Card">Card</SelectItem>
@@ -72,10 +68,10 @@ const OrdersFilters = () => {
           }
         >
           <SelectTrigger className="w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40">
-            <SelectValue placeholder="All Cashiers" />
+            <SelectValue placeholder={t('dashboard.branchManager.orders.filters.allCashiers')} />
           </SelectTrigger>
           <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
-            <SelectItem value="all">All Cashiers</SelectItem>
+            <SelectItem value="all">{t('dashboard.branchManager.orders.filters.allCashiers')}</SelectItem>
             {employees &&
               employees.map((emp) => (
                 <SelectItem key={emp.id} value={emp.id}>
@@ -92,14 +88,14 @@ const OrdersFilters = () => {
           onValueChange={(value) => setFilters({ ...filters, status: value })}
         >
           <SelectTrigger className="w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40">
-            <SelectValue placeholder="All Status" />
+            <SelectValue placeholder={t('dashboard.branchManager.orders.filters.allStatus')} />
           </SelectTrigger>
           <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="Completed">Completed</SelectItem>
-            <SelectItem value="Pending">Pending</SelectItem>
-            <SelectItem value="Cancelled">Cancelled</SelectItem>
-            <SelectItem value="Refunded">Refunded</SelectItem>
+            <SelectItem value="all">{t('dashboard.branchManager.orders.filters.allStatus')}</SelectItem>
+            <SelectItem value="Completed">{t('dashboard.branchManager.orders.filters.completed')}</SelectItem>
+            <SelectItem value="Pending">{t('dashboard.branchManager.orders.filters.pending')}</SelectItem>
+            <SelectItem value="Cancelled">{t('dashboard.branchManager.orders.filters.cancelled')}</SelectItem>
+            <SelectItem value="Refunded">{t('dashboard.branchManager.orders.filters.refunded')}</SelectItem>
           </SelectContent>
         </Select>
       </div>

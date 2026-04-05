@@ -8,50 +8,59 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { pdfStyles } from "./pdfStyles";
+import { formatCurrency, getPaymentModeLabel } from "../data";
+
 
 // Create PDF document
 export const OrderPDF = ({ order }) => {
+  const subtotal = order.totalAmount || 0;
+  const tax = subtotal * 0.1; // Default 10% VAT for Vietnam
+  const grandTotal = subtotal + tax;
+
   return (
-    <Document title={`Invoice - #${order.id}`}>
+    <Document title={`Hóa đơn - #${order.id}`}>
       <Page size="A4" style={pdfStyles.page}>
         <View style={pdfStyles.header}>
           <View>
             <Text style={pdfStyles.storeName}>{order.branch?.name || 'POS Pro'}</Text>
             <Text style={pdfStyles.storeAddress}>
-              {order.branch?.address || "123 Main St, Anytown, USA"}
+              {order.branch?.address || "Việt Nam"}
             </Text>
+            {order.branch?.phone && (
+               <Text style={pdfStyles.storeAddress}>SĐT: {order.branch.phone}</Text>
+            )}
           </View>
           <View style={{ textAlign: "right" }}>
-            <Text style={pdfStyles.invoiceTitle}>TAX INVOICE</Text>
-            <Text style={pdfStyles.invoiceNumber}>#{order.id}</Text>
+            <Text style={pdfStyles.invoiceTitle}>HÓA ĐƠN BÁN HÀNG</Text>
+            <Text style={pdfStyles.invoiceNumber}>Mã đơn: #{order.id}</Text>
           </View>
         </View>
 
         <View style={pdfStyles.customerInfo}>
           <View>
-            <Text style={pdfStyles.label}>Bill To:</Text>
+            <Text style={pdfStyles.label}>Khách hàng:</Text>
             <Text style={pdfStyles.customerName}>
-              {order.customer?.fullName || "Walk-in Customer"}
+              {order.customer?.fullName || "Khách lẻ"}
             </Text>
-            <Text style={pdfStyles.text}>{order.customer?.phone || ""}</Text>
-            <Text style={pdfStyles.text}>{order.customer?.email || ''}</Text>
+            {order.customer?.phone && <Text style={pdfStyles.text}>SĐT: {order.customer.phone}</Text>}
+            {order.customer?.email && <Text style={pdfStyles.text}>Email: {order.customer.email}</Text>}
           </View>
           <View style={{ textAlign: "right" }}>
-            <Text style={pdfStyles.label}>Date:</Text>
+            <Text style={pdfStyles.label}>Ngày lập:</Text>
             <Text style={pdfStyles.text}>
-              {new Date(order.createdAt).toLocaleDateString()}
+              {new Date(order.createdAt).toLocaleDateString('vi-VN')}
             </Text>
-            <Text style={pdfStyles.label}>Payment Method:</Text>
-            <Text style={pdfStyles.text}>{order.paymentType}</Text>
+            <Text style={pdfStyles.label}>Thanh toán:</Text>
+            <Text style={pdfStyles.text}>{getPaymentModeLabel(order.paymentType)}</Text>
           </View>
         </View>
 
         <View style={pdfStyles.table}>
           <View style={pdfStyles.tableHeader}>
-            <Text style={[pdfStyles.tableHeaderCell, { flex: 4 }]}>Item</Text>
-            <Text style={[pdfStyles.tableHeaderCell, { flex: 1, textAlign: 'center' }]}>Qty</Text>
-            <Text style={[pdfStyles.tableHeaderCell, { flex: 1.5, textAlign: 'right' }]}>Price</Text>
-            <Text style={[pdfStyles.tableHeaderCell, { flex: 1.5, textAlign: 'right' }]}>Total</Text>
+            <Text style={[pdfStyles.tableHeaderCell, { flex: 4 }]}>Sản phẩm</Text>
+            <Text style={[pdfStyles.tableHeaderCell, { flex: 1, textAlign: 'center' }]}>SL</Text>
+            <Text style={[pdfStyles.tableHeaderCell, { flex: 1.5, textAlign: 'right' }]}>Giá</Text>
+            <Text style={[pdfStyles.tableHeaderCell, { flex: 1.5, textAlign: 'right' }]}>Tổng</Text>
           </View>
           {order.items?.map((item, index) => (
             <View key={index} style={pdfStyles.tableRow}>
@@ -60,10 +69,10 @@ export const OrderPDF = ({ order }) => {
               </Text>
               <Text style={[pdfStyles.tableCell, { flex: 1, textAlign: 'center' }]}>{item.quantity}</Text>
               <Text style={[pdfStyles.tableCell, { flex: 1.5, textAlign: 'right' }]}>
-                ₹{item.price?.toFixed(2)}
+                {formatCurrency(item.price)}
               </Text>
               <Text style={[pdfStyles.tableCell, { flex: 1.5, textAlign: 'right' }]}>
-                ₹{(item.price * item.quantity).toFixed(2)}
+                {formatCurrency(item.price * item.quantity)}
               </Text>
             </View>
           ))}
@@ -71,27 +80,27 @@ export const OrderPDF = ({ order }) => {
 
         <View style={pdfStyles.totals}>
           <View style={pdfStyles.totalsRow}>
-            <Text style={pdfStyles.totalsLabel}>Subtotal</Text>
+            <Text style={pdfStyles.totalsLabel}>Tạm tính (VNĐ)</Text>
             <Text style={pdfStyles.totalsValue}>
-              ₹{order.totalAmount?.toFixed(2)}
+              {formatCurrency(subtotal)}
             </Text>
           </View>
           <View style={pdfStyles.totalsRow}>
-            <Text style={pdfStyles.totalsLabel}>Tax (GST @18%)</Text>
+            <Text style={pdfStyles.totalsLabel}>Thuế (VAT 10%)</Text>
             <Text style={pdfStyles.totalsValue}>
-              ₹{(order.totalAmount * 0.18).toFixed(2)}
+              {formatCurrency(tax)}
             </Text>
           </View>
           <View style={[pdfStyles.totalsRow, pdfStyles.grandTotal]}>
-            <Text style={pdfStyles.grandTotalLabel}>Grand Total</Text>
+            <Text style={pdfStyles.grandTotalLabel}>Tổng cộng</Text>
             <Text style={pdfStyles.grandTotalValue}>
-              ₹{(order.totalAmount * 1.18).toFixed(2)}
+              {formatCurrency(grandTotal)} VNĐ
             </Text>
           </View>
         </View>
 
         <View style={pdfStyles.footer}>
-          <Text>Thank you for your business! Visit us again.</Text>
+          <Text>Cảm ơn quý khách đã mua hàng! Hẹn gặp lại.</Text>
         </View>
       </Page>
     </Document>

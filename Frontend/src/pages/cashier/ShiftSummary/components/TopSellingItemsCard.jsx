@@ -1,11 +1,13 @@
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { useTranslation } from "react-i18next";
+import { formatVND } from '../../../../utils/formatCurrency';
 
 const TopSellingItemsCard = ({ shiftData }) => {
+  const { t } = useTranslation();
   return (
     <Card>
       <CardContent className="p-6">
-        <h2 className="text-xl font-semibold mb-4">Top Selling Items</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('dashboard.cashier.shiftSummary.cards.topProducts')}</h2>
         <div className="space-y-3">
           {shiftData.topSellingProducts?.map((item, index) => (
             <div key={item.id} className="flex items-center">
@@ -15,10 +17,10 @@ const TopSellingItemsCard = ({ shiftData }) => {
               <div className="flex-1">
                 <div className="flex justify-between">
                   <span className="font-medium">{item.name}</span>
-                  <span className="font-bold">₹{item.sellingPrice?.toFixed(2)}</span>
+                  <span className="font-bold">VNĐ {formatVND(item.sellingPrice)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>{item.quantity} units sold</span>
+                  <span>{t('dashboard.cashier.shiftSummary.unitsSold', { count: item.quantity })}</span>
                 </div>
               </div>
             </div>

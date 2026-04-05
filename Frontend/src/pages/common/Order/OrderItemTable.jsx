@@ -1,4 +1,3 @@
-import { Card, CardContent } from "../../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -7,17 +6,21 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table";
+import { useTranslation } from "react-i18next";
+import { formatVND } from "@/utils/formatCurrency";
+
 
 const OrderItemTable = ({ selectedOrder }) => {
+  const { t } = useTranslation();
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-16">Image</TableHead>
-          <TableHead>Item</TableHead>
-          <TableHead className="text-center">Quantity</TableHead>
-          <TableHead className="text-right">Price</TableHead>
-          <TableHead className="text-right">Total</TableHead>
+          <TableHead className="w-16">{t('dashboard.cashier.invoiceDialog.itemsTable.image')}</TableHead>
+          <TableHead>{t('dashboard.cashier.invoiceDialog.itemsTable.item')}</TableHead>
+          <TableHead className="text-center">{t('dashboard.cashier.invoiceDialog.itemsTable.quantity')}</TableHead>
+          <TableHead className="text-right">{t('dashboard.cashier.invoiceDialog.itemsTable.price')}</TableHead>
+          <TableHead className="text-right">{t('dashboard.cashier.invoiceDialog.itemsTable.total')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -59,12 +62,10 @@ const OrderItemTable = ({ selectedOrder }) => {
             </TableCell>
             <TableCell className="text-center">{item.quantity}</TableCell>
             <TableCell className="text-right">
-              ₹{item.product?.sellingPrice?.toFixed(2) || "0.00"}
+              VNĐ {formatVND(item.product?.sellingPrice)}
             </TableCell>
-            <TableCell className="text-right">
-              ₹
-              {(item.product?.sellingPrice * item.quantity)?.toFixed(2) ||
-                "0.00"}
+            <TableCell className="text-right font-medium">
+              VNĐ {formatVND(item.product?.sellingPrice * item.quantity)}
             </TableCell>
           </TableRow>
         ))}

@@ -3,12 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getBranchById } from "../../../Redux Toolkit/features/branch/branchThunks";
 import { Button } from "../../../components/ui/button";
-import { LogOutIcon, ShoppingCart } from "lucide-react";
+import { LogOutIcon, ShoppingCart, Languages } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+
 import { logout } from "../../../Redux Toolkit/features/user/userThunks";
 import BranchInfo from "./BranchInfo";
+import { useTranslation } from "react-i18next";
 
 const CashierSideBar = ({ navItems, onClose }) => {
+  const { t, i18n } = useTranslation();
+
   const dispatch = useDispatch();
   const { userProfile } = useSelector((state) => state.user);
   const { branch, loading, error } = useSelector((state) => state.branch);
@@ -30,6 +34,13 @@ const CashierSideBar = ({ navItems, onClose }) => {
     dispatch(logout())
     navigate("/") 
   };
+
+  const currentLanguage = i18n.language || "vi";
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
 
   return (
     <div className="w-64 border-r border-white/10 bg-black/20 backdrop-blur-lg p-4 flex flex-col h-full relative">
@@ -86,15 +97,39 @@ const CashierSideBar = ({ navItems, onClose }) => {
       <Separator className="my-4 bg-white/10" />
 
       <div className="space-y-2">
+        <div className="flex items-center gap-2 mb-2 px-1">
+          <Languages className="w-4 h-4 text-gray-400" />
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t('common.language')}</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <Button
+            variant={currentLanguage.startsWith("vi") ? "default" : "outline"}
+            size="sm"
+            className={`text-xs h-8 ${currentLanguage.startsWith("vi") ? "bg-emerald-600 hover:bg-emerald-700" : "bg-transparent border-white/10 text-gray-400"}`}
+            onClick={() => changeLanguage("vi")}
+          >
+            Tiếng Việt
+          </Button>
+          <Button
+            variant={currentLanguage.startsWith("en") ? "default" : "outline"}
+            size="sm"
+            className={`text-xs h-8 ${currentLanguage.startsWith("en") ? "bg-emerald-600 hover:bg-emerald-700" : "bg-transparent border-white/10 text-gray-400"}`}
+            onClick={() => changeLanguage("en")}
+          >
+            English
+          </Button>
+        </div>
+
         <Button
           variant="outline"
           className="w-full justify-center bg-transparent border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300"
           onClick={handleLogout}
         >
           <LogOutIcon className="mr-2 h-4 w-4" />
-          End Shift & Logout
+          {t('dashboard.cashier.logout')}
         </Button>
       </div>
+
     </div>
   );
 };

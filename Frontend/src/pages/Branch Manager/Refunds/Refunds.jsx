@@ -7,36 +7,33 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table";
-import {   Card,CardContent, } from "@/components/ui/card.jsx";
-import { Button } from "../../../components/ui/button";
-import { Edit, Loader2 } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { Card, CardContent } from "@/components/ui/card.jsx";
+import { Loader2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
-  getAllRefunds,
   getRefundsByBranch,
 } from "../../../Redux Toolkit/features/refund/refundThunks";
 
-
 const Refunds = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { branch, loading: branchLoading } = useSelector((store) => store.branch);
   const { refundsByBranch: refunds, loading: refundsLoading } = useSelector((store) => store.refund);
 
   useEffect(() => {
     if (branch) dispatch(getRefundsByBranch(branch?.id));
-  }, [branch]);
+  }, [branch, dispatch]);
 
-  console.log("refund s", refunds)
   const loading = branchLoading || refundsLoading;
 
   return (
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Refund Management</h1>
-          <p className="text-gray-400 mt-1">Review all processed refunds for your branch.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.branchManager.refunds.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('dashboard.branchManager.refunds.subtitle')}</p>
         </div>
       </div>
 
@@ -45,10 +42,10 @@ const Refunds = () => {
           <Table>
             <TableHeader>
               <TableRow className="border-white/10">
-                <TableHead className="w-[100px] text-gray-400">ID</TableHead>
-                <TableHead className="text-gray-400">Order ID</TableHead>
-                <TableHead className="text-gray-400">Amount</TableHead>
-                <TableHead className="text-right text-gray-400">Reason</TableHead>
+                <TableHead className="w-[100px] text-gray-400">{t('dashboard.branchManager.orders.table.id')}</TableHead>
+                <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.orderId')}</TableHead>
+                <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.amount')}</TableHead>
+                <TableHead className="text-right text-gray-400">{t('dashboard.branchManager.refunds.reason')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -57,7 +54,7 @@ const Refunds = () => {
                   <TableCell colSpan={4} className="text-center py-16">
                     <div className="flex justify-center items-center text-gray-400">
                       <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mr-3" />
-                      Loading refunds...
+                      {t('dashboard.branchManager.refunds.loading')}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -73,8 +70,8 @@ const Refunds = () => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center py-16 text-gray-400">
-                    <h3 className="text-xl font-semibold">No Refunds Found</h3>
-                    <p className="mt-2">There are no refunds to display for this branch.</p>
+                    <h3 className="text-xl font-semibold">{t('dashboard.branchManager.refunds.noRefunds')}</h3>
+                    <p className="mt-2">{t('dashboard.branchManager.refunds.noRefundsDesc')}</p>
                   </TableCell>
                 </TableRow>
               )}

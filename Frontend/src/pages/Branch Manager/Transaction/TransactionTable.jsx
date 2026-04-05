@@ -1,21 +1,22 @@
 import React from 'react'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Eye } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 
-const TransactionTable = ({filteredTransactions,handleViewTransaction}) => {
+const TransactionTable = ({ filteredTransactions, handleViewTransaction }) => {
+  const { t } = useTranslation();
   return (
     <Table>
       <TableHeader>
         <TableRow className="border-white/10">
-          <TableHead className="text-gray-400">Date & Time</TableHead>
-          <TableHead className="text-gray-400">Cashier</TableHead>
-          <TableHead className="text-gray-400">Customer</TableHead>
-          <TableHead className="text-gray-400">Amount</TableHead>
-          <TableHead className="text-gray-400">Payment Method</TableHead>
-          <TableHead className="text-gray-400">Status</TableHead>
-          <TableHead className="text-right text-gray-400">Actions</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.transactions.dialog.dateTime')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.transactions.dialog.cashier')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.customer')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.amount')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.transactions.dialog.payment')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.status')}</TableHead>
+          <TableHead className="text-right text-gray-400">{t('dashboard.branchManager.orders.table.actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -29,7 +30,9 @@ const TransactionTable = ({filteredTransactions,handleViewTransaction}) => {
             </TableCell>
             <TableCell className="text-gray-300">{transaction.customer?.fullName}</TableCell>
             <TableCell className={transaction.totalAmount > 0 ? 'text-emerald-400 font-medium' : 'text-red-400 font-medium'}>
-              {transaction.totalAmount > 0 ? `+₹${transaction.totalAmount.toFixed(2)}` : `-₹${Math.abs(transaction.totalAmount).toFixed(2)}`}
+              {transaction.totalAmount > 0 
+                ? `+${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(transaction.totalAmount)}` 
+                : `-${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Math.abs(transaction.totalAmount))}`}
             </TableCell>
             <TableCell className="text-gray-300">{transaction.paymentType}</TableCell>
             <TableCell>
@@ -42,6 +45,7 @@ const TransactionTable = ({filteredTransactions,handleViewTransaction}) => {
                 variant="outline"
                 size="sm"
                 onClick={() => handleViewTransaction(transaction)}
+                title={t('dashboard.branchManager.orders.table.viewDetails')}
                 className="bg-transparent border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300"
               >
                 <Eye className="h-4 w-4" />
@@ -54,4 +58,4 @@ const TransactionTable = ({filteredTransactions,handleViewTransaction}) => {
   )
 }
 
-export default TransactionTable
+export default TransactionTable;

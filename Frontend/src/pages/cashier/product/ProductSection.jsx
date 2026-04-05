@@ -14,8 +14,10 @@ import {
 } from "../../../Redux Toolkit/features/product/productThunks";
 import { getBranchById } from "../../../Redux Toolkit/features/branch/branchThunks";
 import { clearSearchResults } from '@/Redux Toolkit/features/product/productSlice';
+import { useTranslation } from "react-i18next";
 
 const ProductSection = ({searchInputRef}) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { branch } = useSelector((state) => state.branch);
   const { userProfile } = useSelector((state) => state.user);
@@ -53,8 +55,8 @@ const ProductSection = ({searchInputRef}) => {
         } catch (error) {
           console.error("Failed to fetch products:", error);
           toast({
-            title: "Error",
-            description: error || "Failed to fetch products",
+            title: t('common.error'),
+            description: error || t('dashboard.cashier.pos.loading'),
             variant: "destructive",
           });
         }
@@ -75,8 +77,8 @@ const ProductSection = ({searchInputRef}) => {
         } catch (error) {
           console.error("Failed to fetch branch:", error);
           toast({
-            title: "Error",
-            description: "Failed to load branch information",
+            title: t('common.error'),
+            description: t('dashboard.branchManager.settings.info.loadError'),
             variant: "destructive",
           });
         }
@@ -104,8 +106,8 @@ const ProductSection = ({searchInputRef}) => {
               .catch((error) => {
                 console.error("Search failed:", error);
                 toast({
-                  title: "Search Error",
-                  description: error || "Failed to search products",
+                  title: t('common.error'),
+                  description: error || t('dashboard.cashier.pos.noMatchingProducts'),
                   variant: "destructive",
                 });
               });
@@ -131,7 +133,7 @@ const ProductSection = ({searchInputRef}) => {
     useEffect(() => {
       if (productsError) {
         toast({
-          title: 'Error',
+          title: t('common.error'),
           description: productsError,
           variant: 'destructive',
         });
@@ -147,7 +149,7 @@ const ProductSection = ({searchInputRef}) => {
           <Input
             ref={searchInputRef}
             type="text"
-            placeholder="Search products or scan barcode (F1)"
+            placeholder={t('dashboard.cashier.pos.searchPlaceholder')}
             className="w-full pl-10 pr-4 py-3 text-lg border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
             value={searchTerm}
             onChange={handleSearchChange}
@@ -157,10 +159,10 @@ const ProductSection = ({searchInputRef}) => {
         <div className="flex items-center justify-between mt-2">
           <span className="text-sm text-gray-400">
             {loading
-              ? "Loading products..."
+              ? t('dashboard.cashier.pos.loading')
               : searchTerm.trim()
-              ? `Search results: ${getDisplayProducts().length} products found`
-              : `${getDisplayProducts().length} products found`}
+              ? t('dashboard.cashier.pos.searchResults', { count: getDisplayProducts().length })
+              : t('dashboard.cashier.pos.productsFound', { count: getDisplayProducts().length })}
           </span>
           <div className="flex gap-2">
             {searchTerm.trim() && (
@@ -172,7 +174,7 @@ const ProductSection = ({searchInputRef}) => {
                 disabled={loading}
               >
                 <X className="w-4 h-4 mr-1" />
-                Clear
+                {t('dashboard.cashier.pos.clearSearch')}
               </Button>
             )}
             <Button
@@ -182,7 +184,7 @@ const ProductSection = ({searchInputRef}) => {
               disabled={loading}
             >
               <Barcode className="w-4 h-4 mr-1" />
-              Scan
+              {t('dashboard.cashier.pos.scan')}
             </Button>
           </div>
         </div>
@@ -194,7 +196,7 @@ const ProductSection = ({searchInputRef}) => {
           <div className="flex items-center justify-center h-64">
             <div className="flex flex-col items-center space-y-4">
               <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
-              <p className="text-gray-400">Loading products...</p>
+              <p className="text-gray-400">{t('dashboard.cashier.pos.loading')}</p>
             </div>
           </div>
         ) : getDisplayProducts().length === 0 ? (
@@ -203,8 +205,8 @@ const ProductSection = ({searchInputRef}) => {
               <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-400">
                 {searchTerm
-                  ? "No products found matching your search"
-                  : "No products available"}
+                  ? t('dashboard.cashier.pos.noMatchingProducts')
+                  : t('dashboard.cashier.pos.noProducts')}
               </p>
             </div>
           </div>

@@ -1,6 +1,8 @@
 import { Badge } from "../../../components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 export default function StoreStatusBadge({ status }) {
+    const { t } = useTranslation();
     const statusStyles = {
         ACTIVE: "bg-green-500/10 text-green-400 border-green-500/20",
         PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
@@ -15,7 +17,7 @@ export default function StoreStatusBadge({ status }) {
             variant="outline"
             className={`capitalize text-xs font-medium ${style}`}
         >
-            {status.toLowerCase()}
+            {t(`superAdminModule.stores.statuses.${status.toLowerCase()}`)}
         </Badge>
     );
 }

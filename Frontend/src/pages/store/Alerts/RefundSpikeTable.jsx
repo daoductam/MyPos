@@ -16,22 +16,19 @@ import {
 } from "../../../components/ui/table";
 import { AlertTriangle } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
+import { useTranslation } from "react-i18next";
 
-const refundSpikes = [
-  { branch: "Branch Downtown", refundsToday: 15, average: 4 },
-  { branch: "Branch South", refundsToday: 8, average: 2 },
-];
-
-const RefundSpikeTable = () => {
+const RefundSpikeTable = ({ spikes }) => {
+  const { t } = useTranslation();
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-red-400">
           <AlertTriangle />
-          Unusual Refund Activity
+          {t('storeModule.alerts.refundSpikes.title')}
         </CardTitle>
         <CardDescription className="text-gray-400">
-          These branches have a significantly higher number of refunds today compared to their daily average.
+          Cảnh báo các giao dịch hoàn tiền có giá trị cao hoặc dấu hiệu bất thường.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -39,23 +36,31 @@ const RefundSpikeTable = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-black/30 hover:bg-black/40 border-b-white/10">
-                <TableHead className="text-white">Branch Name</TableHead>
-                <TableHead className="text-center text-white">Refunds Today</TableHead>
-                <TableHead className="text-center text-white">Daily Average</TableHead>
+                <TableHead className="text-white">Lý do</TableHead>
+                <TableHead className="text-center text-white">Số tiền</TableHead>
+                <TableHead className="text-center text-white">Thu ngân</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {refundSpikes.map((spike, index) => (
-                <TableRow key={index} className="hover:bg-white/5 border-b-white/10">
-                  <TableCell className="font-medium text-white">{spike.branch}</TableCell>
-                  <TableCell className="text-center">
-                    <Badge variant="destructive" className="bg-red-500/10 text-red-300 border-red-500/20 text-base">
-                      {spike.refundsToday}
-                    </Badge>
+              {spikes.length > 0 ? (
+                spikes.map((spike, index) => (
+                  <TableRow key={spike.id || index} className="hover:bg-white/5 border-b-white/10">
+                    <TableCell className="font-medium text-white">{spike.reason}</TableCell>
+                    <TableCell className="text-center">
+                      <Badge variant="destructive" className="bg-red-500/10 text-red-300 border-red-500/20 text-base">
+                        {spike.amount?.toLocaleString()} VNĐ
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-center text-gray-400">{spike.cashierName}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center py-8 text-gray-500 italic">
+                    {t('common.noData')}
                   </TableCell>
-                  <TableCell className="text-center text-gray-400">{spike.average}</TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>

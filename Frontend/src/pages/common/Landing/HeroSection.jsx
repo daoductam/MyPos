@@ -3,18 +3,14 @@ import { Button } from "../../../components/ui/button";
 import { Play, ArrowRight, CheckCircle, ShoppingCart, BarChart3, Shield } from "lucide-react";
 import { useNavigate } from "react-router";
 import { TypewriterText } from "./components";
+import { useTranslation } from 'react-i18next';
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const [currentBusinessTypeIndex, setCurrentBusinessTypeIndex] = useState(0);
+  const { t } = useTranslation();
 
-  const businessTypes = [
-    "Restaurants",
-    "Cafes & Bakeries",
-    "Bookstores",
-    "Supermarkets",
-    "Retail Chains",
-  ];
+  const businessTypes = t('hero.businessTypes', { returnObjects: true });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,14 +42,14 @@ const HeroSection = () => {
           <div 
             className="inline-block bg-white/10 text-emerald-300 rounded-full px-4 py-1 text-sm font-medium mb-6 animate-pulse"
           >
-            New Feature: Multi-store Management Now Available
+            {t('hero.badge')}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
             <span 
               className="bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent animate-fade-in-up"
               style={{ animationDelay: '0.1s' }}
             >
-                A New Command Center for
+                {t('hero.title')}
             </span>
             <br />
             <TypewriterText
@@ -70,8 +66,7 @@ const HeroSection = () => {
             className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-fade-in-up"
             style={{ animationDelay: '0.2s' }}
           >
-            Unify your sales, inventory, and customer data into one intuitive platform.
-            Make smarter decisions, delight your customers, and watch your business thrive.
+            {t('hero.description')}
           </p>
           
           {/* Feature Highlights */}
@@ -80,10 +75,10 @@ const HeroSection = () => {
             style={{ animationDelay: '1.6s' }}
           >
             {[
-              { icon: <ShoppingCart className="w-4 h-4" />, text: "Fast Checkout" },
-              { icon: <BarChart3 className="w-4 h-4" />, text: "Real-time Analytics" },
-              { icon: <Shield className="w-4 h-4" />, text: "Secure Access" },
-              { icon: <CheckCircle className="w-4 h-4" />, text: "GST Ready" }
+              { icon: <ShoppingCart className="w-4 h-4" />, text: t('hero.fastCheckout') },
+              { icon: <BarChart3 className="w-4 h-4" />, text: t('hero.realTimeAnalytics') },
+              { icon: <Shield className="w-4 h-4" />, text: t('hero.secureAccess') },
+              { icon: <CheckCircle className="w-4 h-4" />, text: t('hero.taxReady') }
             ].map((feature, index) => (
               <div 
                 key={index} 
@@ -105,7 +100,7 @@ const HeroSection = () => {
               size="lg" 
               className="text-lg px-8 py-3 shadow-lg shadow-emerald-600/30 hover:shadow-xl transition-all duration-300 hover:scale-105 animate-bounce-subtle bg-emerald-600 hover:bg-emerald-500 text-white"
             >
-              Start Your Free Trial
+              {t('hero.startFreeTrial')}
               <ArrowRight className="w-5 h-5 ml-2"/>
             </Button>
             <Button 
@@ -114,7 +109,7 @@ const HeroSection = () => {
               className="text-lg px-8 py-3 hover:bg-white/10 transition-all duration-300 border-white/30 text-white hover:text-white"
               onClick={handleWatchDemo}
             >
-              See It In Action
+              {t('hero.watchDemo')}
               <Play className="w-5 h-5 ml-2" />
             </Button>
           </div>

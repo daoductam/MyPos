@@ -36,7 +36,7 @@ const ProductCard = ({ product }) => {
         <div className="p-4">
           <h3 className="font-semibold truncate text-white">{product.name}</h3>
           <p className="text-sm text-gray-400">{product.sku}</p>
-          <p className="text-lg font-bold mt-1 text-emerald-400">₹{product.sellingPrice}</p>
+          <p className="text-lg font-bold mt-1 text-emerald-400">VNĐ {product.sellingPrice}</p>
         </div>
       </CardContent>
     </Card>

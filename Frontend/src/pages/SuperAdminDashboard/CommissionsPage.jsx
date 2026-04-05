@@ -22,7 +22,7 @@ import {
 import { Label } from "../../components/ui/label";
 import { DollarSign, Edit, TrendingUp, TrendingDown } from "lucide-react";
 import { useToast } from "../../components/ui/use-toast";
-// import { useToast } from "../../hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 // Mock commission data
 const mockCommissions = [
@@ -56,6 +56,7 @@ const mockCommissions = [
 ];
 
 export default function CommissionsPage() {
+  const { t } = useTranslation();
   const [commissions, setCommissions] = useState(mockCommissions);
   const [selectedCommission, setSelectedCommission] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -73,8 +74,8 @@ export default function CommissionsPage() {
       const rate = parseFloat(newRate);
       if (isNaN(rate) || rate < 0 || rate > 10) {
         toast({
-          title: "Invalid Rate",
-          description: "Commission rate must be between 0% and 10%",
+          title: t('superAdminModule.commissions.toast.invalidRate'),
+          description: t('superAdminModule.commissions.toast.invalidRateDesc'),
           variant: "destructive",
         });
         return;
@@ -87,8 +88,8 @@ export default function CommissionsPage() {
       ));
 
       toast({
-        title: "Commission Updated",
-        description: `Commission rate for ${selectedCommission.storeName} has been updated to ${rate}%`,
+        title: t('superAdminModule.commissions.toast.updated'),
+        description: t('superAdminModule.commissions.toast.updatedDesc', { name: selectedCommission.storeName, rate }),
       });
 
       setEditDialogOpen(false);
@@ -111,9 +112,9 @@ export default function CommissionsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Commissions</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('superAdminModule.commissions.title')}</h2>
         <p className="text-gray-400">
-          Manage commission rates for all stores
+          {t('superAdminModule.commissions.subtitle')}
         </p>
       </div>
 
@@ -121,37 +122,37 @@ export default function CommissionsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Total Earnings</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-400">{t('superAdminModule.commissions.stats.totalEarnings')}</CardTitle>
             <DollarSign className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">₹37,000</div>
             <p className="text-xs text-gray-400">
-              +12% from last month
+              +12% {t('superAdminModule.dashboard.stats.fromLastMonth')}
             </p>
           </CardContent>
         </Card>
         <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Average Rate</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-400">{t('superAdminModule.commissions.stats.averageRate')}</CardTitle>
             <TrendingUp className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2.5%</div>
             <p className="text-xs text-gray-400">
-              +0.2% from last month
+              +0.2% {t('superAdminModule.dashboard.stats.fromLastMonth')}
             </p>
           </CardContent>
         </Card>
         <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Active Stores</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-400">{t('superAdminModule.commissions.stats.activeStores')}</CardTitle>
             <DollarSign className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{commissions.length}</div>
             <p className="text-xs text-gray-400">
-              All stores have commission rates set
+              {t('superAdminModule.commissions.stats.rateSetHint')}
             </p>
           </CardContent>
         </Card>
@@ -160,19 +161,19 @@ export default function CommissionsPage() {
       {/* Commission Table */}
       <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
         <CardHeader className="border-b border-white/10">
-          <CardTitle>Store Commission Rates</CardTitle>
+          <CardTitle>{t('superAdminModule.commissions.table.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="border-t border-white/10 -mx-6">
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-black/40 border-b-white/10">
-                  <TableHead className="text-white">Store Name</TableHead>
-                  <TableHead className="text-white">Current Rate</TableHead>
-                  <TableHead className="text-white">Rate Change</TableHead>
-                  <TableHead className="text-white">Total Earnings</TableHead>
-                  <TableHead className="text-white">Last Updated</TableHead>
-                  <TableHead className="text-right text-white">Actions</TableHead>
+                  <TableHead className="text-white">{t('superAdminModule.commissions.table.storeName')}</TableHead>
+                  <TableHead className="text-white">{t('superAdminModule.commissions.table.currentRate')}</TableHead>
+                  <TableHead className="text-white">{t('superAdminModule.commissions.table.rateChange')}</TableHead>
+                  <TableHead className="text-white">{t('superAdminModule.commissions.table.totalEarnings')}</TableHead>
+                  <TableHead className="text-white">{t('superAdminModule.commissions.table.lastUpdated')}</TableHead>
+                  <TableHead className="text-right text-white">{t('superAdminModule.commissions.table.actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -201,7 +202,7 @@ export default function CommissionsPage() {
                           onClick={() => handleEditCommission(commission)}
                         >
                           <Edit className="w-4 h-4 mr-1" />
-                          Edit Rate
+                          {t('superAdminModule.commissions.table.editRate')}
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -217,20 +218,20 @@ export default function CommissionsPage() {
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className="bg-gray-800/80 border-white/10 text-white backdrop-blur-lg">
           <DialogHeader>
-            <DialogTitle>Edit Commission Rate</DialogTitle>
+            <DialogTitle>{t('superAdminModule.commissions.dialog.editTitle')}</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Update the commission rate for {selectedCommission?.storeName}
+              {t('superAdminModule.commissions.dialog.editDesc', { name: selectedCommission?.storeName })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="current-rate" className="text-gray-300">Current Rate</Label>
+              <Label htmlFor="current-rate" className="text-gray-300">{t('superAdminModule.commissions.dialog.currentRateLabel')}</Label>
               <div className="text-sm text-gray-400">
                 {selectedCommission?.currentRate}%
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="new-rate" className="text-gray-300">New Rate (%)</Label>
+              <Label htmlFor="new-rate" className="text-gray-300">{t('superAdminModule.commissions.dialog.newRateLabel')}</Label>
               <Input
                 id="new-rate"
                 type="number"
@@ -239,20 +240,20 @@ export default function CommissionsPage() {
                 max="10"
                 value={newRate}
                 onChange={(e) => setNewRate(e.target.value)}
-                placeholder="Enter new commission rate" className="bg-white/5 border-white/20 text-white placeholder-gray-500"
+                placeholder={t('superAdminModule.commissions.dialog.placeholder')} className="bg-white/5 border-white/20 text-white placeholder-gray-500"
               />
               <p className="text-xs text-gray-400">
-                Rate must be between 0% and 10%
+                {t('superAdminModule.commissions.dialog.rateLimitHint')}
               </p>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" className="border-white/20 text-white hover:bg-white/10" onClick={() => setEditDialogOpen(false)}>
-              Cancel
+              {t('superAdminModule.commissions.dialog.cancel')}
             </Button>
             <Button onClick={confirmEditCommission} className="bg-emerald-600 hover:bg-emerald-500">
               <Edit className="w-4 h-4 mr-2" />
-              Update Rate
+              {t('superAdminModule.commissions.dialog.update')}
             </Button>
           </DialogFooter>
         </DialogContent>

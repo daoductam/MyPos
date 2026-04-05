@@ -17,8 +17,10 @@ import { Loader2 } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { User } from "lucide-react";
 import { getTopCashiersByRevenue } from "@/Redux Toolkit/features/branchAnalytics/branchAnalyticsThunks";
+import { useTranslation } from "react-i18next";
 
 const CashierPerformance = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const branchId = useSelector((state) => state.branch.branch?.id);
   const { topCashiers, loading } = useSelector((state) => state.branchAnalytics);
@@ -45,10 +47,10 @@ const CashierPerformance = () => {
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader className="flex flex-row items-center justify-between border-b border-white/10">
-        <CardTitle className="text-xl font-semibold text-white">Cashier Performance</CardTitle>
+        <CardTitle className="text-xl font-semibold text-white">{t('dashboard.branchManager.dashboard.cashierPerformance')}</CardTitle>
         <div className="flex items-center gap-2">
           <User className="h-5 w-5 text-emerald-400" />
-          <span className="text-sm text-gray-400">Top 5 Cashiers</span>
+          <span className="text-sm text-gray-400">{t('dashboard.branchManager.dashboard.topCashiers')}</span>
         </div>
       </CardHeader>
       <CardContent className="pt-6">
@@ -64,7 +66,7 @@ const CashierPerformance = () => {
                 bottom: 5,
               }}
             >
-              <XAxis type="number" stroke="rgba(255, 255, 255, 0.5)" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `₹${value}`} />
+              <XAxis type="number" stroke="rgba(255, 255, 255, 0.5)" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value)} />
               <YAxis dataKey="name" type="category" stroke="rgba(255, 255, 255, 0.5)" fontSize={12} tickLine={false} axisLine={false} />
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
               <ChartTooltip

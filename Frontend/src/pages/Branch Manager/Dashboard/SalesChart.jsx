@@ -15,8 +15,10 @@ import {
 } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { getDailySalesChart } from "@/Redux Toolkit/features/branchAnalytics/branchAnalyticsThunks";
+import { useTranslation } from "react-i18next";
 
 const SalesChart = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const branchId = useSelector((state) => state.branch.branch?.id);
   const analytics = useSelector((state) => state.branchAnalytics);
@@ -45,7 +47,7 @@ const SalesChart = () => {
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader className="border-b border-white/10">
-        <CardTitle className="text-xl font-semibold text-white">Daily Sales</CardTitle>
+        <CardTitle className="text-xl font-semibold text-white">{t('dashboard.branchManager.dashboard.dailySales')}</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         <ChartContainer config={config}>
@@ -63,7 +65,7 @@ const SalesChart = () => {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `₹${value}`}
+                tickFormatter={(value) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value)}
               />
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
               <ChartTooltip

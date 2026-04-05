@@ -18,8 +18,10 @@ import {
   deleteEmployee,
 } from "@/Redux Toolkit/features/employee/employeeThunks";
 import { storeAdminRole } from "@/utils/userRole";
+import { useTranslation } from "react-i18next";
 
 export default function StoreEmployees() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { employees } = useSelector((state) => state.employee);
   const {store}=useSelector(state=>state.store)
@@ -84,17 +86,17 @@ export default function StoreEmployees() {
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Employee Management</h1>
-          <p className="text-gray-400 mt-1">Manage your store's staff and roles.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('storeModule.employees.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('storeModule.employees.subtitle')}</p>
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <Button onClick={() => setIsAddDialogOpen(true)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            <Plus className="mr-2 h-4 w-4" /> Add Employee
+            <Plus className="mr-2 h-4 w-4" /> {t('storeModule.employees.addEmployee')}
           </Button>
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Add New Employee</DialogTitle>
-              <p className="text-gray-300 mt-2">Enter the details for the new employee.</p>
+              <DialogTitle className="text-3xl font-bold">{t('storeModule.employees.addNewTitle')}</DialogTitle>
+              <p className="text-gray-300 mt-2">{t('storeModule.employees.addNewSubtitle')}</p>
             </DialogHeader>
             <EmployeeForm
               onSubmit={handleAddEmployee}
@@ -114,8 +116,8 @@ export default function StoreEmployees() {
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Edit Employee</DialogTitle>
-              <p className="text-gray-300 mt-2">Update the employee details below.</p>
+              <DialogTitle className="text-3xl font-bold">{t('storeModule.employees.editTitle')}</DialogTitle>
+              <p className="text-gray-300 mt-2">{t('storeModule.employees.editSubtitle')}</p>
             </DialogHeader>
             <EmployeeForm
               onSubmit={handleEditEmployee}

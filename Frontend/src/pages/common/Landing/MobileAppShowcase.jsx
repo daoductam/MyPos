@@ -1,16 +1,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Smartphone, Download, CheckCircle, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const MobileAppShowcase = () => {
-  const appFeatures = [
-    'Real-time sales tracking',
-    'Inventory management on the go',
-    'Push notifications for low stock',
-    'Mobile receipt generation',
-    'Customer management',
-    'Offline functionality'
-  ];
+  const { t } = useTranslation();
+  const appFeatures = t('mobileApp.appFeatures', { returnObjects: true });
 
   return (
     <section className="py-20 md:py-28 overflow-hidden relative">
@@ -20,16 +15,15 @@ const MobileAppShowcase = () => {
           <div>
             <div className="inline-flex items-center space-x-2 bg-white/10 text-emerald-300 rounded-full px-4 py-1 text-sm font-medium mb-6">
               <Smartphone className="w-4 h-4" />
-              <span>Mobile App</span>
+              <span>{t('mobileApp.badge')}</span>
             </div>
             
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Take Your Business <span className="text-emerald-400">Anywhere</span> With Our Mobile App
+              {t('mobileApp.title')} <span className="text-emerald-400">{t('mobileApp.titleHighlight')}</span> {t('mobileApp.titleSuffix')}
             </h2>
             
             <p className="text-lg text-gray-300 mb-8">
-              Our mobile app gives you the freedom to manage your business from anywhere. 
-              Check sales, update inventory, and stay connected with your team—all from your smartphone.
+              {t('mobileApp.description')}
             </p>
             
             <div className="space-y-4 mb-8">
@@ -43,11 +37,11 @@ const MobileAppShowcase = () => {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="group bg-emerald-600 hover:bg-emerald-500 text-white">
-                Download for iOS
+                {t('mobileApp.downloadIOS')}
                 <Download className="ml-2 w-5 h-5 group-hover:-translate-y-1 transition-transform" />
               </Button>
               <Button size="lg" variant="outline" className="group border-white/30 text-white hover:bg-white/10">
-                Download for Android
+                {t('mobileApp.downloadAndroid')}
                 <Download className="ml-2 w-5 h-5 group-hover:-translate-y-1 transition-transform" />
               </Button>
             </div>
@@ -60,7 +54,6 @@ const MobileAppShowcase = () => {
               <div className="w-[280px] h-[580px] bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-[40px] p-3 shadow-2xl relative z-10 overflow-hidden">
                 {/* Inner Bezel */}
                 <div className="absolute top-0 left-0 right-0 h-20 bg-gray-900 rounded-t-[37px] z-20">
-                  {/* Notch */}
                   <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-40 h-6 bg-gray-900 rounded-b-xl z-30"></div>
                 </div>
                 
@@ -71,7 +64,7 @@ const MobileAppShowcase = () => {
                     <div className="flex justify-between items-center">
                       <div>
                         <h3 className="font-bold">POS Pro</h3>
-                        <p className="text-xs opacity-90">Dashboard</p>
+                        <p className="text-xs opacity-90">{t('mobileApp.phone.dashboard')}</p>
                       </div>
                       <div className="w-8 h-8 bg-white/20 rounded-full"></div>
                     </div>
@@ -79,46 +72,41 @@ const MobileAppShowcase = () => {
                   
                   {/* App Content */}
                   <div className="p-4">
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-2 gap-3 mb-4 ">
+                    <div className="grid grid-cols-2 gap-3 mb-4">
                       <div className="bg-white/5 p-3 rounded-lg border border-white/10">
-                        <p className="text-xs text-gray-400">Today's Sales</p>
-                        <p className="text-lg font-bold text-white">₹12,450</p>
-                        <p className="text-xs text-green-500">+8% from yesterday</p>
+                        <p className="text-xs text-gray-400">{t('mobileApp.phone.todaySales')}</p>
+                        <p className="text-lg font-bold text-white">12,450K</p>
+                        <p className="text-xs text-green-500">+8% {t('mobileApp.phone.vsYesterday')}</p>
                       </div>
                       <div className="bg-white/5 p-3 rounded-lg border border-white/10">
-                        <p className="text-xs text-gray-400">Orders</p>
+                        <p className="text-xs text-gray-400">{t('mobileApp.phone.orders')}</p>
                         <p className="text-lg font-bold text-white">48</p>
-                        <p className="text-xs text-green-500">+5 new today</p>
+                        <p className="text-xs text-green-500">+5 {t('mobileApp.phone.newOrders')}</p>
                       </div>
                     </div>
                     
-                    {/* Recent Orders */}
                     <div className="mb-4">
                       <div className="flex justify-between items-center mb-2">
-                        <h4 className="font-medium text-sm">Recent Orders</h4>
-                        <p className="text-xs text-emerald-400">View All</p>
+                        <h4 className="font-medium text-sm">{t('mobileApp.phone.recentOrders')}</h4>
+                        <p className="text-xs text-emerald-400">{t('mobileApp.phone.viewAll')}</p>
                       </div>
-                      
-                      {/* Order Items */}
                       {[1, 2, 3].map((item) => (
                         <div key={item} className="bg-white/5 border border-white/10 rounded-lg p-3 mb-2 shadow-sm">
                           <div className="flex justify-between">
                             <div>
-                              <p className="text-xs font-medium">Order #{1000 + item}</p>
-                              <p className="text-xs text-gray-400">2 mins ago</p>
+                              <p className="text-xs font-medium">{t('mobileApp.phone.order')} #{1000 + item}</p>
+                              <p className="text-xs text-gray-400">2 {t('mobileApp.phone.minsAgo')}</p>
                             </div>
-                            <p className="text-sm font-bold">₹{(item * 450).toLocaleString()}</p>
+                            <p className="text-sm font-bold">${(item * 18).toFixed(2)}</p>
                           </div>
                         </div>
                       ))}
                     </div>
                     
-                    {/* Quick Actions */}
                     <div>
-                      <h4 className="font-medium text-sm mb-2">Quick Actions</h4>
+                      <h4 className="font-medium text-sm mb-2">{t('mobileApp.phone.quickActions')}</h4>
                       <div className="grid grid-cols-3 gap-2">
-                        {['New Sale', 'Inventory', 'Reports'].map((action, i) => (
+                        {[t('mobileApp.phone.newSale'), t('mobileApp.phone.inventory'), t('mobileApp.phone.reports')].map((action, i) => (
                           <div key={i} className="bg-white/5 border border-white/10 p-2 rounded-lg text-center">
                             <div className="w-8 h-8 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-1">
                               <div className="w-4 h-4 bg-emerald-500 rounded-md"></div>
@@ -132,7 +120,7 @@ const MobileAppShowcase = () => {
                   
                   {/* Bottom Navigation */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gray-900/50 border-t border-white/10 p-2 flex justify-around backdrop-blur-sm">
-                    {['Home', 'Sales', 'Products', 'More'].map((item, i) => (
+                    {[t('mobileApp.phone.navHome'), t('mobileApp.phone.navSales'), t('mobileApp.phone.navProducts'), t('mobileApp.phone.navMore')].map((item, i) => (
                       <div key={i} className={`p-2 rounded-md ${i === 0 ? 'bg-emerald-500/10' : ''}`}>
                         <div className={`w-5 h-5 mx-auto ${i === 0 ? 'bg-emerald-500' : 'bg-gray-500'} rounded-md`}></div>
                         <p className={`text-[10px] mt-1 text-center ${i === 0 ? 'text-emerald-400 font-medium' : 'text-gray-400'}`}>{item}</p>
@@ -154,7 +142,7 @@ const MobileAppShowcase = () => {
                   </div>
                 </div>
               </div>
-              <p className="text-xs text-center font-medium">Scan to download</p>
+              <p className="text-xs text-center font-medium">{t('mobileApp.scanToDownload')}</p>
             </div>
           </div>
         </div>

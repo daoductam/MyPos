@@ -2,47 +2,50 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import { FileText, BarChart2, Users, Package, Download, GitBranch } from "lucide-react";
-
-const reportTypes = [
-  {
-    title: "Overall Sales Report",
-    description: "Aggregated sales data from all branches, including revenue and profit.",
-    icon: <BarChart2 className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Branch Performance",
-    description: "Compare sales, orders, and revenue between different branches.",
-    icon: <GitBranch className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Product Performance",
-    description: "Insights into top-selling products and category performance across the store.",
-    icon: <Package className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Employee Sales Report",
-    description: "Track sales performance for individual employees across all branches.",
-    icon: <Users className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Inventory Summary",
-    description: "A complete overview of stock levels for all products in all branches.",
-    icon: <FileText className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Tax & GST Report",
-    description: "Consolidated tax reports for easy filing and reconciliation.",
-    icon: <FileText className="w-6 h-6 text-emerald-400" />,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const Reports = () => {
+  const { t } = useTranslation();
+
+  const reportTypes = [
+    {
+      title: t('storeModule.reports.types.overallSales.title'),
+      description: t('storeModule.reports.types.overallSales.desc'),
+      icon: <BarChart2 className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      title: t('storeModule.reports.types.branchPerformance.title'),
+      description: t('storeModule.reports.types.branchPerformance.desc'),
+      icon: <GitBranch className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      title: t('storeModule.reports.types.productPerformance.title'),
+      description: t('storeModule.reports.types.productPerformance.desc'),
+      icon: <Package className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      title: t('storeModule.reports.types.employeeSales.title'),
+      description: t('storeModule.reports.types.employeeSales.desc'),
+      icon: <Users className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      title: t('storeModule.reports.types.inventorySummary.title'),
+      description: t('storeModule.reports.types.inventorySummary.desc'),
+      icon: <FileText className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      title: t('storeModule.reports.types.taxReport.title'),
+      description: t('storeModule.reports.types.taxReport.desc'),
+      icon: <FileText className="w-6 h-6 text-emerald-400" />,
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Reports</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('storeModule.reports.title')}</h2>
         <p className="text-gray-400">
-          Generate and download consolidated reports for your entire store.
+          {t('storeModule.reports.subtitle')}
         </p>
       </div>
 
@@ -61,7 +64,7 @@ const Reports = () => {
             <div className="p-6 pt-0">
               <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
                 <Download className="w-4 h-4 mr-2" />
-                Generate Report
+                {t('storeModule.reports.generateReport')}
               </Button>
             </div>
           </Card>

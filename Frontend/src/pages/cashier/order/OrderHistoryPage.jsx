@@ -12,7 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
+
 
 import {
   SearchIcon,
@@ -26,11 +28,13 @@ import {
 } from "lucide-react";
 import { getOrdersByCashier } from "@/Redux Toolkit/features/order/orderThunks";
 import OrderDetails from "./OrderDetails/OrderDetails";
-
 import OrderTable from "./OrderTable";
+
 import { handleDownloadOrderPDF } from "./pdf/pdfUtils";
+import { useTranslation } from "react-i18next";
 
 const OrderHistoryPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
   const { userProfile } = useSelector((state) => state.user);
@@ -56,7 +60,7 @@ const OrderHistoryPage = () => {
   useEffect(() => {
     if (error) {
       toast({
-        title: "Error",
+        title: t('common.error'),
         description: error,
         variant: "destructive",
       });
@@ -116,16 +120,16 @@ const OrderHistoryPage = () => {
 
   const handlePrintInvoice = (order) => {
     toast({
-      title: "Printing Invoice",
-      description: `Printing invoice for order ${order.id}`,
+      title: t('dashboard.cashier.orderHistory.toast.printing'),
+      description: t('dashboard.cashier.orderHistory.toast.printingDesc', { id: order.id }),
     });
   };
 
   const handleInitiateReturn = (order) => {
     // In a real app, this would navigate to the return page with the order pre-selected
     toast({
-      title: "Initiating Return",
-      description: `Navigating to returns page for order ${order.id}`,
+      title: t('dashboard.cashier.orderHistory.toast.initiatingReturn'),
+      description: t('dashboard.cashier.orderHistory.toast.initiatingReturnDesc', { id: order.id }),
     });
   };
 
@@ -138,8 +142,8 @@ const OrderHistoryPage = () => {
     if (userProfile?.id) {
       dispatch(getOrdersByCashier(userProfile.id));
       toast({
-        title: "Refreshing Orders",
-        description: "Orders are being refreshed...",
+        title: t('dashboard.cashier.orderHistory.toast.refreshing'),
+        description: t('dashboard.cashier.orderHistory.toast.refreshingDesc'),
       });
     }
   };
@@ -148,8 +152,8 @@ const OrderHistoryPage = () => {
     <div className="h-full flex flex-col bg-gray-900 text-white p-6 space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Order History</h1>
-          <p className="text-gray-400 mt-1">Review all past orders processed at this terminal.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.cashier.nav.orders')}</h1>
+          <p className="text-gray-400 mt-1">{t('dashboard.cashier.orderHistoryDesc')}</p>
         </div>
         <Button
           variant="outline"
@@ -160,7 +164,7 @@ const OrderHistoryPage = () => {
           <RefreshCw
             className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
           />
-          Refresh
+          {t('common.refresh')}
         </Button>
       </div>
 
@@ -172,7 +176,7 @@ const OrderHistoryPage = () => {
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <Input
                   type="text"
-                  placeholder="Search by order ID or customer..."
+                  placeholder={t('dashboard.cashier.orderSearchPlaceholder')}
                   className="w-full pl-10 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -181,26 +185,26 @@ const OrderHistoryPage = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button
+               <Button
                 variant={dateFilter === "today" ? "default" : "outline"}
                 onClick={() => setDateFilter("today")}
                 className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
               >
-                Today
+                {t('dashboard.branchManager.reports.today')}
               </Button>
               <Button
                 variant={dateFilter === "week" ? "default" : "outline"}
                 onClick={() => setDateFilter("week")}
                 className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
               >
-                This Week
+                {t('dashboard.branchManager.reports.week')}
               </Button>
               <Button
                 variant={dateFilter === "month" ? "default" : "outline"}
                 onClick={() => setDateFilter("month")}
                 className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
               >
-                This Month
+                {t('dashboard.branchManager.reports.month')}
               </Button>
               <Button
                 variant={dateFilter === "custom" ? "default" : "outline"}
@@ -208,7 +212,7 @@ const OrderHistoryPage = () => {
                 className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
               >
                 <CalendarIcon className="h-4 w-4 mr-2" />
-                Custom
+                {t('dashboard.branchManager.reports.custom')}
               </Button>
             </div>
           </div>
@@ -216,7 +220,7 @@ const OrderHistoryPage = () => {
           {dateFilter === "custom" && (
             <div className="mt-4 flex gap-4 items-end">
               <div className="flex-1">
-                <Label htmlFor="start-date" className="text-gray-300">Start Date</Label>
+                <Label htmlFor="start-date" className="text-gray-300">{t('dashboard.branchManager.reports.startDate')}</Label>
                 <Input
                   id="start-date"
                   type="date"
@@ -228,7 +232,7 @@ const OrderHistoryPage = () => {
                 />
               </div>
               <div className="flex-1">
-                <Label htmlFor="end-date" className="text-gray-300">End Date</Label>
+                <Label htmlFor="end-date" className="text-gray-300">{t('dashboard.branchManager.reports.endDate')}</Label>
                 <Input
                   id="end-date"
                   type="date"
@@ -244,7 +248,7 @@ const OrderHistoryPage = () => {
                 onClick={() => setCustomDateRange({ start: "", end: "" })}
                 className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
               >
-                Clear
+                {t('dashboard.cashier.pos.clearSearch')}
               </Button>
             </div>
           )}
@@ -269,21 +273,25 @@ const OrderHistoryPage = () => {
         {selectedOrder && (
           <DialogContent className="max-w-3xl bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Order Details - Invoice</DialogTitle>
+              <DialogTitle className="text-3xl font-bold">{t('dashboard.cashier.invoiceDialog.title')}</DialogTitle>
+              <DialogDescription className="sr-only">
+                Invoice details show products, quantity, price and total for the selected order.
+              </DialogDescription>
             </DialogHeader>
             <OrderDetails selectedOrder={selectedOrder} />
+
 
             <DialogFooter className="gap-2 sm:gap-0 space-x-3">
               <Button variant="outline" onClick={handleDownloadPDF} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
                 <Download className="h-4 w-4 mr-2" />
-                Download PDF
+                {t('dashboard.cashier.invoiceDialog.download')}
               </Button>
-              <Button
+               <Button
                 variant="outline" className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
                 onClick={() => handlePrintInvoice(selectedOrder)}
               >
                 <PrinterIcon className="h-4 w-4 mr-2" />
-                Print Invoice
+                {t('dashboard.cashier.invoiceDialog.print')}
               </Button>
              
             </DialogFooter>

@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { User, Store, Shield, Bell } from "lucide-react";
 import StoreInformation from "../storeInformation/StoreInformation";
+import { useTranslation } from "react-i18next";
 
 // Placeholder for other settings components
 const ProfileSettings = () => <div className="text-gray-400">Profile settings will be available here.</div>;
 const SecuritySettings = () => <div className="text-gray-400">Security settings will be available here.</div>;
 const NotificationsSettings = () => <div className="text-gray-400">Notifications settings will be available here.</div>;
 
-const settingsTabs = [
-  { id: 'store', name: 'Store Details', icon: <Store className="w-5 h-5" />, component: <StoreInformation /> },
-  { id: 'profile', name: 'My Profile', icon: <User className="w-5 h-5" />, component: <ProfileSettings /> },
-  { id: 'security', name: 'Security', icon: <Shield className="w-5 h-5" />, component: <SecuritySettings /> },
-  { id: 'notifications', name: 'Notifications', icon: <Bell className="w-5 h-5" />, component: <NotificationsSettings /> },
-];
-
 const Settings = () => {
+  const { t } = useTranslation();
+
+  const settingsTabs = [
+    { id: 'store', name: t('storeModule.settings.tabs.storeDetails'), icon: <Store className="w-5 h-5" />, component: <StoreInformation /> },
+    { id: 'profile', name: t('storeModule.settings.tabs.myProfile'), icon: <User className="w-5 h-5" />, component: <ProfileSettings /> },
+    { id: 'security', name: t('storeModule.settings.tabs.security'), icon: <Shield className="w-5 h-5" />, component: <SecuritySettings /> },
+    { id: 'notifications', name: t('storeModule.settings.tabs.notifications'), icon: <Bell className="w-5 h-5" />, component: <NotificationsSettings /> },
+  ];
+
   const [activeTab, setActiveTab] = useState('store');
 
   const ActiveComponent = settingsTabs.find(tab => tab.id === activeTab)?.component || null;
@@ -22,9 +25,9 @@ const Settings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Settings</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('storeModule.settings.title')}</h2>
         <p className="text-gray-400">
-          Manage your store, profile, and account settings.
+          {t('storeModule.settings.subtitle')}
         </p>
       </div>
 

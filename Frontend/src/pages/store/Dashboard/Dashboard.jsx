@@ -2,14 +2,16 @@ import React from "react";
 import DashboardStats from "./DashboardStats";
 import SalesTrend from "./SalesTrend";
 import RecentSales from "./RecentSales";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Store Dashboard</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.store.home.title')}</h2>
         <p className="text-gray-400">
-          An overview of your store's performance.
+          {t('dashboard.store.home.subtitle')}
         </p>
       </div>
       <DashboardStats />

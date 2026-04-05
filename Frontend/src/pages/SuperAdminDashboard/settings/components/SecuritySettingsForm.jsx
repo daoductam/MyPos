@@ -4,8 +4,10 @@ import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import { Loader2 } from "lucide-react";
 import { useSettingsState } from "./useSettingsState";
+import { useTranslation } from "react-i18next";
 
 export default function SecuritySettingsForm() {
+  const { t } = useTranslation();
   const [passwords, setPasswords] = useSettingsState({
     currentPassword: "",
     newPassword: "",
@@ -26,7 +28,7 @@ export default function SecuritySettingsForm() {
   return (
     <form onSubmit={handleSave} className="space-y-6 max-w-lg">
       <div className="space-y-2">
-        <Label htmlFor="current-password" className="text-gray-300">Current Password</Label>
+        <Label htmlFor="current-password" className="text-gray-300">{t('superAdminModule.settings.security.currentPassword')}</Label>
         <Input
           id="current-password"
           type="password"
@@ -36,7 +38,7 @@ export default function SecuritySettingsForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="new-password" className="text-gray-300">New Password</Label>
+        <Label htmlFor="new-password" className="text-gray-300">{t('superAdminModule.settings.security.newPassword')}</Label>
         <Input
           id="new-password"
           type="password"
@@ -46,7 +48,7 @@ export default function SecuritySettingsForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="confirm-password" className="text-gray-300">Confirm New Password</Label>
+        <Label htmlFor="confirm-password" className="text-gray-300">{t('superAdminModule.settings.security.confirmPassword')}</Label>
         <Input
           id="confirm-password"
           type="password"
@@ -56,8 +58,8 @@ export default function SecuritySettingsForm() {
         />
       </div>
       <div className="flex justify-end">
-        <Button type="submit" disabled={isSaving} className="w-36 bg-emerald-600 hover:bg-emerald-500">
-          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Update Password"}
+        <Button type="submit" disabled={isSaving} className="w-40 bg-emerald-600 hover:bg-emerald-500">
+          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : t('superAdminModule.settings.security.updateButton')}
         </Button>
       </div>
     </form>

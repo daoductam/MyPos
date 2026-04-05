@@ -2,33 +2,35 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Bell } from "lucide-react";
 import ToggleSwitch from "./ToggleSwitch";
+import { useTranslation } from "react-i18next";
 
 const NotificationSettings = ({ settings, onChange }) => {
+  const { t } = useTranslation();
   const notificationOptions = [
     {
       name: "emailNotifications",
-      title: "Email Notifications",
-      description: "Receive notifications via email"
+      title: t('storeModule.settings.notifications.email'),
+      description: t('storeModule.settings.notifications.emailDesc')
     },
     {
       name: "smsNotifications",
-      title: "SMS Notifications",
-      description: "Receive notifications via SMS"
+      title: t('storeModule.settings.notifications.sms'),
+      description: t('storeModule.settings.notifications.smsDesc')
     },
     {
       name: "lowStockAlerts",
-      title: "Low Stock Alerts",
-      description: "Get notified when inventory is low"
+      title: t('storeModule.settings.notifications.lowStock'),
+      description: t('storeModule.settings.notifications.lowStockDesc')
     },
     {
       name: "salesReports",
-      title: "Sales Reports",
-      description: "Receive periodic sales reports"
+      title: t('storeModule.settings.notifications.salesReports'),
+      description: t('storeModule.settings.notifications.salesReportsDesc')
     },
     {
       name: "employeeActivity",
-      title: "Employee Activity",
-      description: "Get notified about employee activities"
+      title: t('storeModule.settings.notifications.employeeActivity'),
+      description: t('storeModule.settings.notifications.employeeActivityDesc')
     }
   ];
 
@@ -42,10 +44,10 @@ const NotificationSettings = ({ settings, onChange }) => {
       <CardHeader>
         <CardTitle className="flex items-center">
           <Bell className="mr-2 h-5 w-5 text-emerald-500" />
-          Notification Settings
+          {t('storeModule.settings.notifications.title')}
         </CardTitle>
         <CardDescription>
-          Configure how you receive alerts and notifications
+          {t('storeModule.settings.notifications.desc')}
         </CardDescription>
       </CardHeader>
       <CardContent>

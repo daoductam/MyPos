@@ -13,8 +13,10 @@ import { Button } from "../../../components/ui/button";
 import StoreTable from "./StoreTable";
 import StoreDetailDrawer from "./StoreDetailDrawer";
 import { getAllStores } from "../../../Redux Toolkit/features/store/storeThunks";
+import { useTranslation } from "react-i18next";
 
 export default function StoreListPage() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { stores, loading, error } = useSelector((state) => state.store);
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,9 +67,9 @@ export default function StoreListPage() {
     <>
       <div className="space-y-8">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-white">Stores</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-white">{t('superAdminModule.stores.title')}</h2>
           <p className="text-gray-400">
-            View and manage all registered stores
+            {t('superAdminModule.stores.subtitle')}
           </p>
         </div>
         <div className="bg-black/20 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
@@ -76,7 +78,7 @@ export default function StoreListPage() {
               <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
-                  placeholder="Search by store name or ID..."
+                  placeholder={t('superAdminModule.stores.searchPlaceholder')}
                   className="pl-10 bg-white/5 border-white/20 text-white placeholder-gray-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -84,13 +86,13 @@ export default function StoreListPage() {
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-[180px] bg-white/5 border-white/20 text-white">
-                  <SelectValue placeholder="Filter by status" />
+                  <SelectValue placeholder={t('superAdminModule.stores.filterPlaceholder')} />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-800/80 border-white/10 text-white backdrop-blur-lg">
-                  <SelectItem value="ALL">All Statuses</SelectItem>
-                  <SelectItem value="ACTIVE">Active</SelectItem>
-                  <SelectItem value="PENDING">Pending</SelectItem>
-                  <SelectItem value="BLOCKED">Blocked</SelectItem>
+                  <SelectItem value="ALL">{t('superAdminModule.stores.allStatuses')}</SelectItem>
+                  <SelectItem value="ACTIVE">{t('superAdminModule.stores.statuses.active')}</SelectItem>
+                  <SelectItem value="PENDING">{t('superAdminModule.stores.statuses.pending')}</SelectItem>
+                  <SelectItem value="BLOCKED">{t('superAdminModule.stores.statuses.blocked')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -116,10 +118,10 @@ export default function StoreListPage() {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    {t('superAdminModule.stores.pagination.previous')}
                   </Button>
                   <span className="text-sm text-gray-400">
-                    Page {currentPage} of {totalPages}
+                    {t('superAdminModule.stores.pagination.pageOf', { current: currentPage, total: totalPages })}
                   </span>
                   <Button
                     variant="outline" className="border-white/20 text-white hover:bg-white/10"
@@ -127,7 +129,7 @@ export default function StoreListPage() {
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    Next
+                    {t('superAdminModule.stores.pagination.next')}
                   </Button>
                 </div>
               )}

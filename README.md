@@ -77,7 +77,7 @@ Before running the project:
 
 * **Node.js 18+**
 * **npm or pnpm**
-* **Java 17**
+* **Java 21**
 * **MySQL Server** installed and running
 
 <hr />

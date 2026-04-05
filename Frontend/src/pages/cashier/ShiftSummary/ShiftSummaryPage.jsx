@@ -15,8 +15,10 @@ import {
 import { getCurrentShiftProgress, endShift } from '../../../Redux Toolkit/features/shiftReport/shiftReportThunks';
 import { logout } from '../../../Redux Toolkit/features/user/userThunks';
 import { useNavigate } from 'react-router';
+import { useTranslation } from "react-i18next";
 
 const ShiftSummaryPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
   const [showLogoutConfirmDialog, setShowLogoutConfirmDialog] = useState(false);
@@ -32,8 +34,8 @@ const ShiftSummaryPage = () => {
   const handlePrintSummary = () => {
     setShowPrintDialog(false);
     toast({
-      title: 'Printing Shift Summary',
-      description: 'Shift summary is being printed',
+      title: t('dashboard.cashier.shiftSummary.toast.printing'),
+      description: t('dashboard.cashier.shiftSummary.toast.printingDesc'),
     });
   };
 
@@ -44,8 +46,8 @@ const ShiftSummaryPage = () => {
        dispatch(logout())
        navigate("/")
       toast({
-        title: 'Shift Ended',
-        description: 'You have been logged out successfully',
+        title: t('dashboard.cashier.shiftSummary.toast.ended'),
+        description: t('dashboard.cashier.shiftSummary.toast.endedDesc'),
       });
       
     }
@@ -59,7 +61,7 @@ const ShiftSummaryPage = () => {
       />
       <div className="flex-1 overflow-auto p-4">
         {loading ? (
-          <div className="flex justify-center items-center h-full text-lg">Loading shift summary...</div>
+          <div className="flex justify-center items-center h-full text-lg">{t('dashboard.cashier.shiftSummary.loading')}</div>
         ) : error ? (
           <div className="flex justify-center items-center h-full text-destructive">{error}</div>
         ) : currentShift ? (
@@ -78,7 +80,7 @@ const ShiftSummaryPage = () => {
             </div>
           </>
         ) : (
-          <div className="flex justify-center items-center h-full text-muted-foreground">No shift data available.</div>
+          <div className="flex justify-center items-center h-full text-muted-foreground">{t('dashboard.cashier.shiftSummary.noData')}</div>
         )}
       </div>
       <LogoutConfirmDialog 

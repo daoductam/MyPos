@@ -14,8 +14,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, forgotPassword } from '@/Redux Toolkit/features/auth/authThunk';
 import { getUserProfile } from '@/Redux Toolkit/features/user/userThunks';
 import { startShift, getCurrentShiftProgress } from '@/Redux Toolkit/features/shiftReport/shiftReportThunks';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -58,8 +60,8 @@ const Login = () => {
       const resultAction = await dispatch(login(formData));
       if (login.fulfilled.match(resultAction)) {
         toast({
-          title: "Success",
-          description: "Login successful!",
+          title: t('auth.login.successTitle'),
+          description: t('auth.login.successDesc'),
         });
 
         const user = resultAction.payload.user;
@@ -75,7 +77,7 @@ const Login = () => {
           } catch (shiftError) {
             // If getting current shift fails (e.g., 404 Not Found), it means no shift is active.
             // So, we start a new one.
-            console.log("No active shift found, starting a new one.");
+            console.log("Không tìm thấy ca làm việc hoạt động, đang bắt đầu ca mới.");
             await dispatch(startShift({ branchId: user.branchId, cashierId: user.id })).unwrap();
           }
           navigate('/cashier');
@@ -88,15 +90,15 @@ const Login = () => {
         }
       } else {
         toast({
-          title: "Error",
-          description: resultAction.payload || 'Login failed',
+          title: t('auth.login.errorTitle'),
+          description: resultAction.payload || t('auth.login.errorDescFallback'),
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: error.message || 'Login failed',
+        title: t('auth.login.errorTitle'),
+        description: error.message || t('auth.login.errorDescFallback'),
         variant: "destructive",
       });
     }
@@ -108,14 +110,14 @@ const Login = () => {
       const resultAction = await dispatch(forgotPassword(forgotEmail));
       if (forgotPassword.fulfilled.match(resultAction)) {
         toast({
-          title: "Success",
-          description: "Password reset email sent!",
+          title: t('auth.forgotPassword.emailSentTitle'),
+          description: t('auth.forgotPassword.emailSentDesc'),
         });
         setEmailSent(true);
       } else {
         toast({
-          title: "Error",
-          description: resultAction.payload || 'Failed to send reset email',
+          title: t('auth.forgotPassword.errorTitle'),
+          description: resultAction.payload || t('auth.forgotPassword.errorDescFallback'),
           variant: "destructive",
         });
       }
@@ -143,22 +145,22 @@ const Login = () => {
               <CheckCircle className="w-8 h-8 text-emerald-400" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">
-              Check Your Email
+              {t('auth.forgotPassword.checkEmail')}
             </h3>
             <p className="text-gray-400 mb-6">
-              We've sent password reset instructions to <strong>{forgotEmail}</strong>
+              {t('auth.forgotPassword.instructionSent')} <strong>{forgotEmail}</strong>
             </p>
             <div className="space-y-3">
               <Button onClick={resetForgotPassword} className="w-full bg-emerald-600 hover:bg-emerald-500">
-                Back to Login
+                {t('auth.forgotPassword.backToLogin')}
               </Button>
               <p className="text-sm text-gray-400">
-                Didn't receive it? Check spam or{' '}
+                {t('auth.forgotPassword.didntReceive')}{' '}
                 <button
                   onClick={() => setEmailSent(false)}
                   className="text-emerald-400 hover:text-emerald-300 font-medium"
                 >
-                  try again
+                  {t('auth.forgotPassword.tryAgain')}
                 </button>
               </p>
             </div>
@@ -169,7 +171,7 @@ const Login = () => {
         <form onSubmit={handleForgotPassword} className="space-y-6">
           <div>
             <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-300 mb-2">
-              Email Address
+              {t('auth.login.emailLabel')}
             </label>
             <Input
               type="email"
@@ -177,16 +179,16 @@ const Login = () => {
               value={forgotEmail}
               onChange={(e) => setForgotEmail(e.target.value)}
               className="bg-white/5 border-white/20 text-white placeholder-gray-500"
-              placeholder="Enter your email"
+              placeholder={t('auth.login.emailPlaceholder')}
               required
             />
           </div>
           <div className="flex space-x-3">
             <Button type="button" variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10" onClick={resetForgotPassword}>
-              Cancel
+              {t('auth.forgotPassword.cancelBtn')}
             </Button>
             <Button type="submit" className="flex-1 bg-emerald-600 hover:bg-emerald-500" disabled={loading}>
-              {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Send Reset Link'}
+              {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : t('auth.forgotPassword.sendLinkBtn')}
             </Button>
           </div>
         </form>
@@ -196,7 +198,7 @@ const Login = () => {
       <form onSubmit={handleLogin} className="space-y-6">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-            Email Address
+            {t('auth.login.emailLabel')}
           </label>
           <Input
             type="email"
@@ -205,13 +207,13 @@ const Login = () => {
             value={formData.email}
             onChange={handleInputChange}
             className="bg-white/5 border-white/20 text-white placeholder-gray-500"
-            placeholder="Enter your email"
+            placeholder={t('auth.login.emailPlaceholder')}
             required
           />
         </div>
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-            Password
+            {t('auth.login.passwordLabel')}
           </label>
           <div className="relative">
             <Input
@@ -221,7 +223,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleInputChange}
               className="pr-12 bg-white/5 border-white/20 text-white placeholder-gray-500"
-              placeholder="Enter your password"
+              placeholder={t('auth.login.passwordPlaceholder')}
               required
             />
             <button
@@ -237,15 +239,15 @@ const Login = () => {
           <div className="flex items-center">
             <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 rounded focus:ring-emerald-600" />
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
-              Remember me
+              {t('auth.login.rememberMe')}
             </label>
           </div>
           <button type="button" onClick={() => setShowForgotPassword(true)} className="text-sm text-emerald-400 hover:text-emerald-300 font-medium">
-            Forgot password?
+            {t('auth.login.forgotPassword')}
           </button>
         </div>
         <Button type="submit" className="w-full py-3 text-lg font-medium bg-emerald-600 hover:bg-emerald-500" disabled={loading}>
-          {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Sign In'}
+          {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : t('auth.login.loginBtn')}
         </Button>
       </form>
     );
@@ -270,13 +272,13 @@ const Login = () => {
               <ShoppingCart className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
-              {showForgotPassword ? 'Reset Password' : 'Welcome Back'}
+              {showForgotPassword ? t('auth.forgotPassword.title') : t('auth.login.title')}
             </h1>
           </Link>
           <p className="text-gray-400 mt-2">
             {showForgotPassword 
-              ? (emailSent ? 'A reset link has been sent' : 'Enter your email to receive reset instructions')
-              : 'Sign in to your account to continue'
+              ? (emailSent ? t('auth.forgotPassword.sentSubtitle') : t('auth.forgotPassword.subtitle'))
+              : t('auth.login.subtitle')
             }
           </p>
         </div>
@@ -291,7 +293,7 @@ const Login = () => {
                   <span className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-gray-800/50 px-2 text-gray-400 backdrop-blur-sm">Or continue with</span>
+                  <span className="bg-gray-800/50 px-2 text-gray-400 backdrop-blur-sm">{t('auth.login.orContinueWith')}</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -311,9 +313,9 @@ const Login = () => {
         {!showForgotPassword && (
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-400">
-              Don't have an account?{' '}
+              {t('auth.login.noAccount')}{' '}
               <Link to="/auth/onboarding" className="font-medium text-emerald-400 hover:text-emerald-300 hover:underline">
-                Sign up here
+                {t('auth.login.registerHere')}
               </Link>
             </p>
           </div>

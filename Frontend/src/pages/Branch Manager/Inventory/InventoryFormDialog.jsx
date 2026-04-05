@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Filter } from "lucide-react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const InventoryFormDialog = ({
   open,
@@ -28,6 +29,7 @@ const InventoryFormDialog = ({
   onSubmit,
   mode = "add",
 }) => {
+  const { t } = useTranslation();
   const products = useSelector((state) => state.product.products);
   const isEdit = mode === "edit";
   const selectedProduct = products.find(
@@ -38,13 +40,13 @@ const InventoryFormDialog = ({
       <DialogContent className="sm:max-w-lg bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
         <DialogHeader className="text-center">
           <DialogTitle className="text-2xl font-bold">
-            {isEdit ? "Edit Inventory" : "Add Inventory"}
+            {isEdit ? t('dashboard.branchManager.inventory.title') : t('dashboard.branchManager.inventory.addNew')}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <div className="space-y-2">
             <label htmlFor="product" className="text-sm font-medium text-gray-300">
-              Product
+              {t('dashboard.branchManager.inventory.table.product')}
             </label>
             {isEdit ? (
               <Input
@@ -59,7 +61,7 @@ const InventoryFormDialog = ({
                 onValueChange={(value) => setSelectedProductId(value)}
               >
                 <SelectTrigger className="w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40">
-                  <SelectValue placeholder="Select a Product" />
+                  <SelectValue placeholder={t('dashboard.branchManager.inventory.searchPlaceholder')} />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
                   {products.map((product) => (
@@ -73,7 +75,7 @@ const InventoryFormDialog = ({
           </div>
           <div className="space-y-2">
             <label htmlFor="quantity" className="text-sm font-medium text-gray-300">
-              Quantity
+              {t('dashboard.branchManager.inventory.table.stock')}
             </label>
             <Input
               id="quantity"
@@ -87,10 +89,10 @@ const InventoryFormDialog = ({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
-            Cancel
+            {t('auth.forgotPassword.cancelBtn')}
           </Button>
           <Button onClick={onSubmit} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            {isEdit ? "Update Inventory" : "Add Inventory"}
+            {isEdit ? t('dashboard.branchManager.inventory.title') : t('dashboard.branchManager.inventory.addNew')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -99,3 +101,4 @@ const InventoryFormDialog = ({
 };
 
 export default InventoryFormDialog;
+

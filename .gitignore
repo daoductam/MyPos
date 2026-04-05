@@ -1,0 +1,47 @@
+# Java/Maven
+Backend/target/
+Backend/.mvn/wrapper/maven-wrapper.jar
+Backend/.mvn/wrapper/maven-wrapper.properties
+!Backend/target/classes/static/
+!Backend/target/test-classes/
+
+# React/Frontend
+Frontend/node_modules/
+Frontend/dist/
+Frontend/build/
+Frontend/.env
+Frontend/.env.local
+Frontend/.env.development.local
+Frontend/.env.test.local
+Frontend/.env.production.local
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+
+# IDEs/Editors
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+.nbworkspace
+.nbproject/
+build/
+bin/
+
+# Logs
+*.log
+logs/
+
+# Optional: System files
+.DS_Store
+Thumbs.db
+
+# OS-specific
+*.exe
+*.dll
+*.so
+*.dylib

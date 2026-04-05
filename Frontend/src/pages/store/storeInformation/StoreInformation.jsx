@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { updateStore } from "@/Redux Toolkit/features/store/storeThunks";
+import { useTranslation } from "react-i18next";
 
 const StoreInformation = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
   const { store, loading } = useSelector((state) => state.store);
@@ -37,11 +39,11 @@ const StoreInformation = () => {
     e.preventDefault();
     try {
       await dispatch(updateStore({ id: store.id, storeData: formData })).unwrap();
-      toast({ title: "Success", description: "Store information updated successfully." });
+      toast({ title: t('toast.success'), description: t('storeModule.settings.storeInfo.updateSuccess') });
     } catch (err) {
       toast({
-        title: "Error",
-        description: err.message || "Failed to update store information.",
+        title: t('toast.error'),
+        description: err.message || t('toast.fetchError'),
         variant: "destructive",
       });
     }
@@ -50,7 +52,7 @@ const StoreInformation = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="brand" className="text-gray-300">Store Name</Label>
+        <Label htmlFor="brand" className="text-gray-300">{t('storeModule.settings.storeInfo.storeName')}</Label>
         <Input
           id="brand"
           name="brand"
@@ -60,7 +62,7 @@ const StoreInformation = () => {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="storeType" className="text-gray-300">Store Type</Label>
+        <Label htmlFor="storeType" className="text-gray-300">{t('storeModule.settings.storeInfo.storeType')}</Label>
         <Input
           id="storeType"
           name="storeType"
@@ -70,7 +72,7 @@ const StoreInformation = () => {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="address" className="text-gray-300">Address</Label>
+        <Label htmlFor="address" className="text-gray-300">{t('storeModule.settings.storeInfo.address')}</Label>
         <Textarea
           id="address"
           name="address"
@@ -82,7 +84,7 @@ const StoreInformation = () => {
       </div>
       <div className="flex justify-end">
         <Button type="submit" disabled={loading} className="w-32 bg-emerald-600 hover:bg-emerald-500">
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('storeModule.settings.storeInfo.saveChanges')}
         </Button>
       </div>
     </form>

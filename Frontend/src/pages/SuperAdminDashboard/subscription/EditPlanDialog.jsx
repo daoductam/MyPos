@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -13,30 +13,31 @@ import { Switch } from '../../../components/ui/switch';
 import { Button } from '../../../components/ui/button';
 import { updateSubscriptionPlan } from '@/Redux Toolkit/features/subscriptionPlan/subscriptionPlanThunks';
 import { Loader2, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const BILLING_CYCLES = [
-  { label: 'Monthly', value: 'MONTHLY' },
-  { label: 'Yearly', value: 'YEARLY' },
+const getBillingCycles = (t) => [
+  { label: t('superAdminModule.subscriptions.billingCycles.monthly'), value: 'MONTHLY' },
+  { label: t('superAdminModule.subscriptions.billingCycles.yearly'), value: 'YEARLY' },
 ];
 
 const FEATURE_FIELDS = [
-  { key: 'enableAdvancedReports', label: 'Advanced Reports' },
-  { key: 'enableInventory', label: 'Inventory System' },
-  { key: 'enableIntegrations', label: 'Integrations' },
-  { key: 'enableEcommerce', label: 'eCommerce' },
-  { key: 'enableInvoiceBranding', label: 'Invoice Branding' },
-  { key: 'prioritySupport', label: 'Priority Support' },
-  { key: 'enableMultiLocation', label: 'Multi-location' },
+  { key: 'enableAdvancedReports', labelKey: 'superAdminModule.subscriptions.features.advancedReports' },
+  { key: 'enableInventory', labelKey: 'superAdminModule.subscriptions.features.inventory' },
+  { key: 'enableIntegrations', labelKey: 'superAdminModule.subscriptions.features.integrations' },
+  { key: 'enableEcommerce', labelKey: 'superAdminModule.subscriptions.features.ecommerce' },
+  { key: 'enableInvoiceBranding', labelKey: 'superAdminModule.subscriptions.features.invoiceBranding' },
+  { key: 'prioritySupport', labelKey: 'superAdminModule.subscriptions.features.prioritySupport' },
+  { key: 'enableMultiLocation', labelKey: 'superAdminModule.subscriptions.features.multiLocation' },
 ];
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  description: Yup.string().required('Description is required'),
-  price: Yup.number().typeError('Price must be a number').required('Price is required').min(0),
-  billingCycle: Yup.string().oneOf(['MONTHLY', 'YEARLY']).required('Billing cycle is required'),
-  maxBranches: Yup.number().typeError('Branches must be a number').required('Branches is required').min(1),
-  maxUsers: Yup.number().typeError('Users must be a number').required('Users is required').min(1),
-  maxProducts: Yup.number().typeError('Products must be a number').required('Products is required').min(1),
+const getValidationSchema = (t) => Yup.object().shape({
+  name: Yup.string().required(t('superAdminModule.subscriptions.validation.nameRequired')),
+  description: Yup.string().required(t('superAdminModule.subscriptions.validation.descRequired')),
+  price: Yup.number().typeError(t('superAdminModule.subscriptions.validation.priceNumber')).required(t('superAdminModule.subscriptions.validation.priceRequired')).min(0),
+  billingCycle: Yup.string().oneOf(['MONTHLY', 'YEARLY']).required(t('superAdminModule.subscriptions.validation.billingRequired')),
+  maxBranches: Yup.number().typeError(t('superAdminModule.subscriptions.validation.branchesNumber')).required(t('superAdminModule.subscriptions.validation.branchesRequired')).min(1),
+  maxUsers: Yup.number().typeError(t('superAdminModule.subscriptions.validation.usersNumber')).required(t('superAdminModule.subscriptions.validation.usersRequired')).min(1),
+  maxProducts: Yup.number().typeError(t('superAdminModule.subscriptions.validation.productsNumber')).required(t('superAdminModule.subscriptions.validation.productsRequired')).min(1),
   enableAdvancedReports: Yup.boolean().required(),
   enableInventory: Yup.boolean().required(),
   enableIntegrations: Yup.boolean().required(),
@@ -44,10 +45,10 @@ const validationSchema = Yup.object().shape({
   enableInvoiceBranding: Yup.boolean().required(),
   prioritySupport: Yup.boolean().required(),
   enableMultiLocation: Yup.boolean().required(),
-  extraFeatures: Yup.array().of(Yup.string().required('Feature cannot be empty')).min(1, 'At least one extra feature is required'),
+  extraFeatures: Yup.array().of(Yup.string().required(t('superAdminModule.subscriptions.validation.featureEmpty'))).min(1, t('superAdminModule.subscriptions.validation.featureAtLeastOne')),
 });
 
-const FeaturesSwitchGrid = memo(({ handleFeatureSwitch }) => (
+const FeaturesSwitchGrid = memo(({ handleFeatureSwitch, t }) => (
   <div className="grid grid-cols-2 gap-4 p-4 bg-black/20 rounded-md">
     {FEATURE_FIELDS.map(f => (
       <label key={f.key} className="flex items-center gap-3 text-sm font-medium">
@@ -60,21 +61,21 @@ const FeaturesSwitchGrid = memo(({ handleFeatureSwitch }) => (
             />
           )}
         </Field>
-        <span className="text-gray-300">{f.label}</span>
+        <span className="text-gray-300">{t(f.labelKey)}</span>
       </label>
     ))}
   </div>
 ));
 FeaturesSwitchGrid.displayName = 'FeaturesSwitchGrid';
 
-const ExtraFeaturesList = memo(({ values, handleExtraFeatureChange, handleRemoveExtraFeature, handleAddExtraFeature }) => (
+const ExtraFeaturesList = memo(({ values, handleExtraFeatureChange, handleRemoveExtraFeature, handleAddExtraFeature, t }) => (
   <>
     {values.extraFeatures.map((feature, idx) => (
       <div key={idx} className="flex gap-2 mb-2">
         <Input
           value={feature}
           onChange={e => handleExtraFeatureChange(idx, e.target.value)}
-          placeholder="e.g., Custom API endpoint"
+          placeholder={t('superAdminModule.subscriptions.dialog.placeholders.custom')}
           aria-label={`Extra feature ${idx + 1}`}
           className="bg-white/5 border-white/20 text-white placeholder-gray-500"
         />
@@ -96,7 +97,7 @@ const ExtraFeaturesList = memo(({ values, handleExtraFeatureChange, handleRemove
       onClick={handleAddExtraFeature}
       className="border-white/20 text-white hover:bg-white/10"
     >
-      + Add Feature
+      + {t('superAdminModule.subscriptions.features.addFeature')}
     </Button>
   </>
 ));
@@ -124,8 +125,12 @@ const getInitialValues = (plan) => {
 };
 
 const EditPlanDialog = ({ open, onOpenChange, plan, onSuccess }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  
+  const BILLING_CYCLES = useMemo(() => getBillingCycles(t), [t]);
+  const validationSchema = useMemo(() => getValidationSchema(t), [t]);
 
   if (!plan) return null;
 
@@ -136,7 +141,7 @@ const EditPlanDialog = ({ open, onOpenChange, plan, onSuccess }) => {
       if (res.meta.requestStatus === 'fulfilled') {
         if (onSuccess) onSuccess();
       } else {
-        setErrors({ submit: res.payload || 'Failed to update plan' });
+        setErrors({ submit: res.payload || t('superAdminModule.subscriptions.toast.updateFailed') });
       }
     } finally {
       setLoading(false);
@@ -163,28 +168,28 @@ const EditPlanDialog = ({ open, onOpenChange, plan, onSuccess }) => {
     return (
       <Form className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-name">Plan Name</label>
-          <Field as={Input} id="edit-plan-name" name="name" placeholder="e.g., Professional Plan" className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
+          <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-name">{t('superAdminModule.subscriptions.dialog.labels.name')}</label>
+          <Field as={Input} id="edit-plan-name" name="name" placeholder={t('superAdminModule.subscriptions.dialog.placeholders.name')} className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
           <ErrorMessage name="name" component="div" className="text-destructive text-xs mt-1" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-description">Description</label>
-          <Field as={Input} id="edit-plan-description" name="description" placeholder="A short description of the plan" className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
+          <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-description">{t('superAdminModule.subscriptions.dialog.labels.description')}</label>
+          <Field as={Input} id="edit-plan-description" name="description" placeholder={t('superAdminModule.subscriptions.dialog.placeholders.description')} className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
           <ErrorMessage name="description" component="div" className="text-destructive text-xs mt-1" />
         </div>
         <div className="flex gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-price">Price (₹)</label>
-            <Field as={Input} id="edit-plan-price" name="price" type="number" min="0" placeholder="e.g., 1999" className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
+            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-price">{t('superAdminModule.subscriptions.dialog.labels.price')}</label>
+            <Field as={Input} id="edit-plan-price" name="price" type="number" min="0" placeholder={t('superAdminModule.subscriptions.dialog.placeholders.price')} className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
             <ErrorMessage name="price" component="div" className="text-destructive text-xs mt-1" />
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-billing-cycle">Billing Cycle</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-billing-cycle">{t('superAdminModule.subscriptions.dialog.labels.billingCycle')}</label>
             <Field name="billingCycle">
               {({ field }) => (
                 <Select value={field.value} onValueChange={val => setFieldValue('billingCycle', val)}>
                   <SelectTrigger className="w-full bg-white/5 border-white/20 text-white" id="edit-plan-billing-cycle">
-                    <SelectValue placeholder="Select cycle" />
+                    <SelectValue placeholder={t('superAdminModule.subscriptions.dialog.placeholders.selectCycle')} />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800/80 border-white/10 text-white backdrop-blur-lg">
                     {BILLING_CYCLES.map(opt => (
@@ -199,45 +204,46 @@ const EditPlanDialog = ({ open, onOpenChange, plan, onSuccess }) => {
         </div>
         <div className="flex gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-branches">Max Branches</label>
-            <Field as={Input} id="edit-plan-branches" name="maxBranches" type="number" min="1" placeholder="e.g., 5" className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
+            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-branches">{t('superAdminModule.subscriptions.dialog.labels.branches')}</label>
+            <Field as={Input} id="edit-plan-branches" name="maxBranches" type="number" min="1" placeholder={t('superAdminModule.subscriptions.dialog.placeholders.branches')} className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
             <ErrorMessage name="maxBranches" component="div" className="text-destructive text-xs mt-1" />
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-users">Max Users</label>
-            <Field as={Input} id="edit-plan-users" name="maxUsers" type="number" min="1" placeholder="e.g., 20" className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
+            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-users">{t('superAdminModule.subscriptions.dialog.labels.users')}</label>
+            <Field as={Input} id="edit-plan-users" name="maxUsers" type="number" min="1" placeholder={t('superAdminModule.subscriptions.dialog.placeholders.users')} className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
             <ErrorMessage name="maxUsers" component="div" className="text-destructive text-xs mt-1" />
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-products">Max Products</label>
-            <Field as={Input} id="edit-plan-products" name="maxProducts" type="number" min="1" placeholder="e.g., 10000" className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
+            <label className="block text-sm font-medium text-gray-300 mb-1" htmlFor="edit-plan-products">{t('superAdminModule.subscriptions.dialog.labels.products')}</label>
+            <Field as={Input} id="edit-plan-products" name="maxProducts" type="number" min="1" placeholder={t('superAdminModule.subscriptions.dialog.placeholders.products')} className="bg-white/5 border-white/20 text-white placeholder-gray-500" />
             <ErrorMessage name="maxProducts" component="div" className="text-destructive text-xs mt-1" />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Included Features</label>
-          <FeaturesSwitchGrid handleFeatureSwitch={handleFeatureSwitch} />
+          <label className="block text-sm font-medium text-gray-300 mb-2">{t('superAdminModule.subscriptions.features.included')}</label>
+          <FeaturesSwitchGrid handleFeatureSwitch={handleFeatureSwitch} t={t} />
           {FEATURE_FIELDS.map(f => (
             <ErrorMessage key={f.key} name={f.key} component="div" className="text-destructive text-xs" />
           ))}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Custom Features</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">{t('superAdminModule.subscriptions.features.custom')}</label>
           <ExtraFeaturesList
             values={values}
             handleExtraFeatureChange={handleExtraFeatureChange}
             handleRemoveExtraFeature={handleRemoveExtraFeature}
             handleAddExtraFeature={handleAddExtraFeature}
+            t={t}
           />
           <ErrorMessage name="extraFeatures" component="div" className="text-destructive text-xs mt-1" />
         </div>
         {errors.submit && <div className="text-destructive text-sm">{errors.submit}</div>}
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="outline" className="border-white/20 text-white hover:bg-white/10">Cancel</Button>
+            <Button type="button" variant="outline" className="border-white/20 text-white hover:bg-white/10">{t('superAdminModule.subscriptions.dialog.cancel')}</Button>
           </DialogClose>
           <Button type="submit" disabled={isSubmitting || loading} className="w-32 bg-emerald-600 hover:bg-emerald-500">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save Changes'}
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('superAdminModule.subscriptions.dialog.saveChanges')}
           </Button>
         </DialogFooter>
       </Form>
@@ -248,8 +254,8 @@ const EditPlanDialog = ({ open, onOpenChange, plan, onSuccess }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-gray-800/80 border-white/10 text-white backdrop-blur-lg sm:max-w-[650px]">
         <DialogHeader>
-          <DialogTitle>Edit Subscription Plan</DialogTitle>
-          <DialogDescription className="text-gray-400">Update the details for the "{plan.name}" plan.</DialogDescription>
+          <DialogTitle>{t('superAdminModule.subscriptions.dialog.editTitle')}</DialogTitle>
+          <DialogDescription className="text-gray-400">{t('superAdminModule.subscriptions.dialog.editDesc', { name: plan.name })}</DialogDescription>
         </DialogHeader>
         <div className="max-h-[65vh] overflow-y-auto pr-4">
           <Formik

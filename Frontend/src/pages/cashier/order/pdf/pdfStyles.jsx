@@ -1,13 +1,27 @@
-import { StyleSheet } from "@react-pdf/renderer";
+import { StyleSheet, Font } from "@react-pdf/renderer";
+
+// Register Font that supports Vietnamese (URLs from Google Fonts CSS API v12)
+Font.register({
+  family: "Be Vietnam Pro",
+  src: "https://fonts.gstatic.com/s/bevietnampro/v12/QdVPSTAyLFyeg_IDWvOJmVES_Eww.ttf",
+  fontWeight: "normal",
+});
+
+Font.register({
+  family: "Be Vietnam Pro",
+  src: "https://fonts.gstatic.com/s/bevietnampro/v12/QdVMSTAyLFyeg_IDWvOJmVES_HSMIF8y.ttf",
+  fontWeight: "bold",
+});
+
 
 // Create PDF styles
 export const pdfStyles = StyleSheet.create({
   page: {
-    fontFamily: "Helvetica",
+    fontFamily: "Be Vietnam Pro",
     fontSize: 10,
-    padding: 30,
-    backgroundColor: '#111827', // dark gray background
-    color: '#D1D5DB', // light gray text
+    padding: 40,
+    backgroundColor: '#FFFFFF', // Changed to white for better print quality
+    color: '#1F2937', // Dark gray text
   },
   header: {
     flexDirection: "row",

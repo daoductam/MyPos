@@ -3,12 +3,14 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, Mail, Phone, MapPin, User, Briefcase } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const EmployeeTable = ({ employees, onEdit, onDelete }) => {
+  const { t } = useTranslation();
   if (!employees || employees.length === 0) {
     return <div className="text-center py-16 text-gray-400">
-      <h3 className="text-xl font-semibold">No Employees Found</h3>
-      <p className="mt-2">Add your first employee to get started.</p>
+      <h3 className="text-xl font-semibold">{t('storeModule.employees.table.noEmployees')}</h3>
+      <p className="mt-2">{t('storeModule.employees.table.noEmployeesDesc')}</p>
     </div>;
   }
 
@@ -17,11 +19,11 @@ const EmployeeTable = ({ employees, onEdit, onDelete }) => {
       <Table>
         <TableHeader>
           <TableRow className="border-white/10">
-            <TableHead className="text-gray-400">Name</TableHead>
-            <TableHead className="text-gray-400">Contact</TableHead>
-            <TableHead className="text-gray-400">Role</TableHead>
-            <TableHead className="text-gray-400">Branch</TableHead>
-            <TableHead className="text-right text-gray-400">Actions</TableHead>
+            <TableHead className="text-gray-400">{t('storeModule.employees.table.name')}</TableHead>
+            <TableHead className="text-gray-400">{t('storeModule.employees.table.contact')}</TableHead>
+            <TableHead className="text-gray-400">{t('storeModule.employees.table.role')}</TableHead>
+            <TableHead className="text-gray-400">{t('storeModule.employees.table.branch')}</TableHead>
+            <TableHead className="text-right text-gray-400">{t('storeModule.employees.table.actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -38,7 +40,9 @@ const EmployeeTable = ({ employees, onEdit, onDelete }) => {
                   <span>{employee.phone}</span>
                 </div>
               </TableCell>
-              <TableCell className="text-gray-300">{employee.role.replace('ROLE_', '').replace('_', ' ')}</TableCell>
+              <TableCell className="text-gray-300">
+                {t(`common.roles.${employee.role}`)}
+              </TableCell>
               <TableCell className="text-gray-300">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-gray-500" />
@@ -55,7 +59,7 @@ const EmployeeTable = ({ employees, onEdit, onDelete }) => {
                     size="sm"
                     onClick={() => {
                       onDelete(employee.id);
-                      toast.success("Employee deleted successfully!");
+                      toast.success(t('storeModule.employees.toast.deleteSuccess'));
                     }}
                     className="bg-transparent border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300"
                   >

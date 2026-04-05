@@ -8,8 +8,10 @@ import { getCategoriesByStore } from "@/Redux Toolkit/features/category/category
 import { toast } from "@/components/ui/use-toast";
 import CategoryTable from "./CategoryTable";
 import CategoryForm from "./CategoryForm";
+import { useTranslation } from "react-i18next";
 
 export default function Categories() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { categories, loading, error } = useSelector((state) => state.category);
   const { store } = useSelector((state) => state.store);
@@ -45,17 +47,17 @@ export default function Categories() {
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Category Management</h1>
-          <p className="text-gray-400 mt-1">Organize your products into categories.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('storeModule.categories.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('storeModule.categories.subtitle')}</p>
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <Button onClick={() => setIsAddDialogOpen(true)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            <Plus className="mr-2 h-4 w-4" /> Add Category
+            <Plus className="mr-2 h-4 w-4" /> {t('storeModule.categories.addCategory')}
           </Button>
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Add New Category</DialogTitle>
-              <p className="text-gray-300 mt-2">Enter the details for the new category.</p>
+              <DialogTitle className="text-3xl font-bold">{t('storeModule.categories.addNewCategory')}</DialogTitle>
+              <p className="text-gray-300 mt-2">{t('storeModule.categories.enterDetails')}</p>
             </DialogHeader>
             <CategoryForm 
               onSubmit={handleAddCategorySuccess} 
@@ -67,8 +69,8 @@ export default function Categories() {
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} >
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Edit Category</DialogTitle>
-              <p className="text-gray-300 mt-2">Update the category details below.</p>
+              <DialogTitle className="text-3xl font-bold">{t('storeModule.categories.editCategory')}</DialogTitle>
+              <p className="text-gray-300 mt-2">{t('storeModule.categories.updateDetails')}</p>
             </DialogHeader><CategoryForm 
               initialValues={currentCategory} 
               onSubmit={handleEditCategorySuccess} 

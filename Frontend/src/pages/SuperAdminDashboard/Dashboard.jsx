@@ -8,6 +8,9 @@ import {
   getStoreStatusDistribution
 } from "../../Redux Toolkit/features/adminDashboard/adminDashboardThunks";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useTranslation } from "react-i18next";
+import { formatDateTime } from "@/utils/formateDate";
+import { getStatusColor } from "@/utils/getStatusColor";
 
 const COLORS = {
   ACTIVE: "hsl(var(--primary))",
@@ -38,6 +41,7 @@ const StatCard = ({ title, value, icon, description, trend }) => (
 );
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
     dashboardSummary,
@@ -60,9 +64,9 @@ export default function Dashboard() {
 
   const pieData = storeStatusDistribution
     ? [
-        { name: "Active", value: storeStatusDistribution.active, color: COLORS.ACTIVE },
-        { name: "Pending", value: storeStatusDistribution.pending, color: COLORS.PENDING },
-        { name: "Blocked", value: storeStatusDistribution.blocked, color: COLORS.BLOCKED },
+        { name: t('superAdminModule.dashboard.charts.active'), value: storeStatusDistribution.active, color: COLORS.ACTIVE },
+        { name: t('superAdminModule.dashboard.charts.pending'), value: storeStatusDistribution.pending, color: COLORS.PENDING },
+        { name: t('superAdminModule.dashboard.charts.blocked'), value: storeStatusDistribution.blocked, color: COLORS.BLOCKED },
       ]
     : [];
 
@@ -78,7 +82,7 @@ export default function Dashboard() {
     return (
       <Alert variant="destructive" className="max-w-lg mx-auto">
         <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
+        <AlertTitle>{t('toast.error')}</AlertTitle>
         <AlertDescription>{error}</AlertDescription>
       </Alert>
     );
@@ -87,40 +91,40 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('superAdminModule.dashboard.title')}</h2>
         <p className="text-gray-400">
-          Overview of all stores and system statistics
+          {t('superAdminModule.dashboard.subtitle')}
         </p>
       </div>
 
       {/* Stat Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Total Stores"
+          title={t('superAdminModule.dashboard.stats.totalStores')}
           value={dashboardSummary?.totalStores ?? "—"}
           icon={<Store className="h-4 w-4 text-gray-400" />}
-          description="from last month"
+          description={t('superAdminModule.dashboard.stats.fromLastMonth')}
           trend={undefined}
         />
         <StatCard
-          title="Active Stores"
+          title={t('superAdminModule.dashboard.stats.activeStores')}
           value={dashboardSummary?.activeStores ?? "—"}
           icon={<TrendingUp className="h-4 w-4 text-gray-400" />}
-          description="currently operational"
+          description={t('superAdminModule.dashboard.stats.currentlyOperational')}
           trend={undefined}
         />
         <StatCard
-          title="Blocked Stores"
+          title={t('superAdminModule.dashboard.stats.blockedStores')}
           value={dashboardSummary?.blockedStores ?? "—"}
           icon={<AlertTriangle className="h-4 w-4 text-gray-400" />}
-          description="suspended accounts"
+          description={t('superAdminModule.dashboard.stats.suspendedAccounts')}
           trend={undefined}
         />
         <StatCard
-          title="Pending Requests"
+          title={t('superAdminModule.dashboard.stats.pendingRequests')}
           value={dashboardSummary?.pendingStores ?? "—"}
           icon={<Clock className="h-4 w-4 text-gray-400" />}
-          description="awaiting approval"
+          description={t('superAdminModule.dashboard.stats.awaitingApproval')}
           trend={undefined}
         />
       </div>
@@ -129,7 +133,7 @@ export default function Dashboard() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4 bg-black/20 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
           <h3 className="text-lg font-semibold text-white mb-4">
-            Store Registrations (Last 7 Days)
+            {t('superAdminModule.dashboard.charts.storeRegistrations')}
           </h3>
           <div className="w-full min-h-[350px]">
             {loading || barData.length === 0 ? (
@@ -177,7 +181,7 @@ export default function Dashboard() {
 
         <div className="col-span-3 bg-black/20 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
           <h3 className="text-lg font-semibold text-white mb-4">
-            Store Status Distribution
+            {t('superAdminModule.dashboard.charts.statusDistribution')}
           </h3>
           <div className="w-full min-h-[350px]">
             {loading || pieData.length === 0 ? (
@@ -233,34 +237,40 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Recent Activity - still mock for now */}
+      {/* Recent Activity */}
       <div className="bg-black/20 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4">
-          Recent Activity
+          {t('superAdminModule.dashboard.activity.title')}
         </h3>
         <div>
           <div className="space-y-4">
-            <div className="flex items-center gap-4 p-4 bg-black/20 rounded-lg">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-white">New store "Zosh Mart" registered</p>
-                <p className="text-xs text-gray-400">2 minutes ago</p>
+            {dashboardSummary?.recentStoreActivity && dashboardSummary.recentStoreActivity.length > 0 ? (
+              dashboardSummary.recentStoreActivity.map((activity) => {
+                let statusKey = 'newStore';
+                if (activity.status === 'PENDING') statusKey = 'pendingStore';
+                else if (activity.status === 'BLOCKED') statusKey = 'blockedStore';
+
+                const statusColor = getStatusColor(activity.status);
+                
+                return (
+                  <div key={activity.id} className="flex items-center gap-4 p-4 bg-black/20 rounded-lg border border-white/5 hover:border-white/10 transition-colors">
+                    <div className={`w-2 h-2 rounded-full animate-pulse`} style={{ backgroundColor: statusColor }}></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-white">
+                        {t(`superAdminModule.dashboard.activity.${statusKey}`, { name: activity.brand })}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {formatDateTime(activity.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-8 text-gray-500 italic">
+                {t('superAdminModule.dashboard.activity.noActivity')}
               </div>
-            </div>
-            <div className="flex items-center gap-4 p-4 bg-black/20 rounded-lg">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-white">Store "ABC Supermarket" pending approval</p>
-                <p className="text-xs text-gray-400">15 minutes ago</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 p-4 bg-black/20 rounded-lg">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-white">Store "XYZ Store" blocked for policy violation</p>
-                <p className="text-xs text-gray-400">1 hour ago</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

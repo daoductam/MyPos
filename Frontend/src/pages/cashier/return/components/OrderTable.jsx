@@ -12,8 +12,10 @@ import {
 import { SearchIcon } from "lucide-react";
 import { formatDate } from "../../order/data";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const OrderTable = ({ handleSelectOrder }) => {
+  const { t } = useTranslation();
   const {
     orders,
     loading,
@@ -24,7 +26,7 @@ const OrderTable = ({ handleSelectOrder }) => {
       <div className="flex-1 overflow-auto">
         {loading ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-            <span>Loading orders...</span>
+            <span>{t('dashboard.cashier.customerDialog.loading')}</span>
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-destructive">
@@ -34,12 +36,12 @@ const OrderTable = ({ handleSelectOrder }) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Date/Time</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Payment Mode</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t('dashboard.branchManager.orders.table.orderId')}</TableHead>
+                <TableHead>{t('dashboard.branchManager.orders.table.date')}</TableHead>
+                <TableHead>{t('dashboard.branchManager.orders.table.customer')}</TableHead>
+                <TableHead>{t('dashboard.branchManager.orders.table.total')}</TableHead>
+                <TableHead>{t('dashboard.branchManager.orders.table.payment')}</TableHead>
+                <TableHead className="text-right">{t('dashboard.branchManager.orders.table.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -47,12 +49,12 @@ const OrderTable = ({ handleSelectOrder }) => {
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">{order.id}</TableCell>
                   <TableCell>{formatDate(order.createdAt)}</TableCell>
-                  <TableCell>{order.customer?.fullName}</TableCell>
-                  <TableCell>₹{order.totalAmount?.toFixed(2)}</TableCell>
-                  <TableCell>{order.paymentType}</TableCell>
+                  <TableCell>{order.customer?.fullName || t('dashboard.cashier.paymentDialog.walkInCustomer')}</TableCell>
+                  <TableCell>VNĐ {order.totalAmount?.toFixed(2)}</TableCell>
+                  <TableCell>{order.paymentType ? t(`dashboard.cashier.paymentDialog.methods.${order.paymentType}`) : t('common.unknown')}</TableCell>
                   <TableCell className="text-right">
                     <Button onClick={() => handleSelectOrder(order)}>
-                      Select for Return
+                      {t('dashboard.cashier.return.selectForReturn')}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -62,9 +64,9 @@ const OrderTable = ({ handleSelectOrder }) => {
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
             <SearchIcon size={48} strokeWidth={1} />
-            <p className="mt-4">No orders found</p>
+            <p className="mt-4">{t('dashboard.cashier.return.noOrders')}</p>
             <p className="text-sm">
-              Try searching by order ID or customer name
+              {t('dashboard.cashier.return.searchTip')}
             </p>
           </div>
         )}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { branchAdminRole } from "../../../utils/userRole";
+import { useTranslation } from "react-i18next";
 
 import EmployeeStats from "./EmployeeStats";
 import EmployeeTable from "./EmployeeTable";
@@ -17,6 +18,7 @@ import {
   createBranchEmployee,
   findBranchEmployees,
   updateEmployee,
+  deleteEmployee,
 } from "../../../Redux Toolkit/features/employee/employeeThunks";
 
 const getStatusColor = (status) => {
@@ -30,7 +32,8 @@ const getStatusColor = (status) => {
 };
 
 const BranchEmployees = () => {
-  // const [employees, setEmployees] = useState([]); // Initialize with empty array
+  const { t } = useTranslation();
+// ... state and hooks ...
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -39,13 +42,9 @@ const BranchEmployees = () => {
   const [isPerformanceDialogOpen, setIsPerformanceDialogOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const dispatch = useDispatch();
-  // const { store } = useSelector((state) => state);
   const { branch } = useSelector((state) => state.branch);
-  const {employees}=useSelector((state)=>state.employee)
+  const { employees } = useSelector((state) => state.employee)
   const { userProfile } = useSelector((state) => state.user);
-
-
-  console.log("branch employees", employees);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -62,7 +61,6 @@ const BranchEmployees = () => {
         branchId: branch.id,
         token: localStorage.getItem("jwt"),
       };
-      console.log("branch employee data ", data);
       dispatch(createBranchEmployee(data));
       setIsAddDialogOpen(false);
     }
@@ -70,12 +68,12 @@ const BranchEmployees = () => {
 
   const handleEditEmployee = (updatedEmployeeData) => {
     if (selectedEmployee?.id && localStorage.getItem("jwt")) {
-      const data={
-          employeeId: selectedEmployee.id,
-          employeeDetails: updatedEmployeeData,
-          token: localStorage.getItem("jwt"),
+      const data = {
+        employeeId: selectedEmployee.id,
+        employeeDetails: updatedEmployeeData,
+        token: localStorage.getItem("jwt"),
 
-        }
+      }
       dispatch(
         updateEmployee(data)
       );
@@ -83,44 +81,40 @@ const BranchEmployees = () => {
     }
   };
 
-    useEffect(() => {
-      if (branch?.id) {
-        dispatch(
-          findBranchEmployees({
-            branchId: branch?.id
-          })
-        );
-      }
-    }, [dispatch, branch?.id]);
+  const handleDeleteEmployee = (employee) => {
+    if (window.confirm(t('dashboard.branchManager.employees.deleteConfirm', `Bạn có chắc chắn muốn xóa nhân viên ${employee.fullName}?`))) {
+      dispatch(deleteEmployee({ employeeId: employee.id, token: localStorage.getItem("jwt") })).then(() => {
+        // Refresh list
+        if (branch?.id) {
+          dispatch(findBranchEmployees({ branchId: branch?.id }));
+        }
+      });
+    }
+  };
 
-  // const handleEditEmployee = (updatedEmployeeData) => {
-  //   const updatedEmployees = employees.map((employee) =>
-  //     employee.id === updatedEmployeeData.id
-  //       ? {
-  //           ...updatedEmployeeData,
-  //           status: updatedEmployeeData.loginAccess ? "Active" : "Inactive",
-  //         }
-  //       : employee
-  //   );
-  //   setEmployees(updatedEmployees);
-  //   setIsEditDialogOpen(false);
-  // };
+  useEffect(() => {
+    if (branch?.id) {
+      dispatch(
+        findBranchEmployees({
+          branchId: branch?.id
+        })
+      );
+    }
+  }, [dispatch, branch?.id]);
 
   const handleToggleAccess = (employee) => {
     const updatedEmployees = employees.map((emp) =>
       emp.id === employee.id
         ? {
-            ...emp,
-            loginAccess: !emp.loginAccess,
-            status: !emp.loginAccess ? "Inactive" : "Active",
-          }
+          ...emp,
+          loginAccess: !emp.loginAccess,
+          status: !emp.loginAccess ? "Inactive" : "Active",
+        }
         : emp
     );
-    // setEmployees(updatedEmployees);
   };
 
   const handleResetPassword = () => {
-    console.log(`Password reset for ${selectedEmployee.name}`);
     setIsResetPasswordDialogOpen(false);
   };
 
@@ -149,12 +143,12 @@ const BranchEmployees = () => {
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Employee Management</h1>
-          <p className="text-gray-400 mt-1">Manage your branch's staff and roles.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.branchManager.employees.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('storeModule.employees.subtitle')}</p>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <Input type="text" placeholder="Search employees..." value={searchTerm} onChange={handleSearch} className="w-full pl-10 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40" />
+          <Input type="text" placeholder={t('dashboard.branchManager.employees.searchPlaceholder')} value={searchTerm} onChange={handleSearch} className="w-full pl-10 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40" />
         </div>
         <AddEmployeeDialog
           isAddDialogOpen={isAddDialogOpen}
@@ -166,12 +160,14 @@ const BranchEmployees = () => {
       <EmployeeStats employees={employees} />
       <div className="bg-black/20 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
         <EmployeeTable
+          userProfile={userProfile}
           employees={filteredEmployees}
           getStatusColor={getStatusColor}
           handleToggleAccess={handleToggleAccess}
           openEditDialog={openEditDialog}
           openResetPasswordDialog={openResetPasswordDialog}
           openPerformanceDialog={openPerformanceDialog}
+          handleDelete={handleDeleteEmployee}
         />
       </div>
 

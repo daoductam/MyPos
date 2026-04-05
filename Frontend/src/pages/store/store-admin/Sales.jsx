@@ -15,8 +15,10 @@ import {
   getSalesByPaymentMethod 
 } from "@/Redux Toolkit/features/storeAnalytics/storeAnalyticsThunks";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 export default function Sales() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
   const { userProfile } = useSelector((state) => state.user);
@@ -43,8 +45,8 @@ export default function Sales() {
       ]);
     } catch (err) {
       toast({
-        title: "Error",
-        description: err || "Failed to fetch sales data",
+        title: t('toast.error'),
+        description: err || t('toast.fetchError'),
         variant: "destructive",
       });
     }
@@ -81,7 +83,7 @@ export default function Sales() {
 
   const salesConfig = {
     sales: {
-      label: "Sales",
+      label: t('storeModule.sales.totalSales'),
       color: "#10b981",
     },
   };
@@ -98,9 +100,9 @@ export default function Sales() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight">Sales Management</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('storeModule.sales.title')}</h1>
         <Button className="bg-emerald-600 hover:bg-emerald-700">
-          <Plus className="mr-2 h-4 w-4" /> New Sale
+          <Plus className="mr-2 h-4 w-4" /> {t('storeModule.sales.newSale')}
         </Button>
       </div>
 
@@ -110,7 +112,7 @@ export default function Sales() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Total Sales</p>
+                <p className="text-sm font-medium text-gray-500">{t('storeModule.sales.totalSales')}</p>
                 <h3 className="text-2xl font-bold mt-1">
                   {loading ? (
                     <div className="h-8 w-20 bg-gray-200 rounded animate-pulse"></div>
@@ -123,7 +125,7 @@ export default function Sales() {
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     formatChange(storeOverview?.totalSales, storeOverview?.previousPeriodSales)
-                  )} from last week
+                  )} {t('storeModule.sales.fromLastWeek')}
                 </p>
               </div>
               <div className="p-3 bg-emerald-100 rounded-full">
@@ -137,7 +139,7 @@ export default function Sales() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Orders Today</p>
+                <p className="text-sm font-medium text-gray-500">{t('storeModule.sales.ordersToday')}</p>
                 <h3 className="text-2xl font-bold mt-1">
                   {loading ? (
                     <div className="h-8 w-16 bg-gray-200 rounded animate-pulse"></div>
@@ -150,7 +152,7 @@ export default function Sales() {
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     formatChange(storeOverview?.todayOrders, storeOverview?.yesterdayOrders)
-                  )} from yesterday
+                  )} {t('storeModule.sales.fromYesterday')}
                 </p>
               </div>
               <div className="p-3 bg-blue-100 rounded-full">
@@ -164,7 +166,7 @@ export default function Sales() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Active Cashiers</p>
+                <p className="text-sm font-medium text-gray-500">{t('storeModule.sales.activeCashiers')}</p>
                 <h3 className="text-2xl font-bold mt-1">
                   {loading ? (
                     <div className="h-8 w-16 bg-gray-200 rounded animate-pulse"></div>
@@ -176,7 +178,7 @@ export default function Sales() {
                   {loading ? (
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
-                    "Same as yesterday"
+                    t('storeModule.sales.sameAsYesterday')
                   )}
                 </p>
               </div>
@@ -191,7 +193,7 @@ export default function Sales() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Avg. Order Value</p>
+                <p className="text-sm font-medium text-gray-500">{t('storeModule.sales.avgOrderValue')}</p>
                 <h3 className="text-2xl font-bold mt-1">
                   {loading ? (
                     <div className="h-8 w-20 bg-gray-200 rounded animate-pulse"></div>
@@ -204,7 +206,7 @@ export default function Sales() {
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     formatChange(storeOverview?.averageOrderValue, storeOverview?.previousPeriodAverageOrderValue)
-                  )} from last week
+                  )} {t('storeModule.sales.fromLastWeek')}
                 </p>
               </div>
               <div className="p-3 bg-orange-100 rounded-full">
@@ -219,14 +221,14 @@ export default function Sales() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Daily Sales (Last 7 Days)</CardTitle>
+            <CardTitle className="text-lg">{t('storeModule.sales.dailySales')}</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="h-80 flex items-center justify-center">
                 <div className="text-center">
                   <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                  <p className="mt-2 text-gray-500">Loading chart data...</p>
+                  <p className="mt-2 text-gray-500">{t('storeModule.sales.loadingChart')}</p>
                 </div>
               </div>
             ) : dailySalesData.length > 0 ? (
@@ -252,7 +254,7 @@ export default function Sales() {
                         <ChartTooltipContent
                           active={active}
                           payload={payload}
-                          formatter={(value) => [formatCurrency(value), "Sales"]}
+                          formatter={(value) => [formatCurrency(value), t('storeModule.sales.totalSales')]}
                         />
                       )}
                     />
@@ -269,7 +271,7 @@ export default function Sales() {
               </ChartContainer>
             ) : (
               <div className="h-80 flex items-center justify-center">
-                <p className="text-gray-500">No sales data available</p>
+                <p className="text-gray-500">{t('storeModule.sales.noSalesData')}</p>
               </div>
             )}
           </CardContent>
@@ -277,14 +279,14 @@ export default function Sales() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Payment Methods</CardTitle>
+            <CardTitle className="text-lg">{t('storeModule.sales.paymentMethods')}</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="h-80 flex items-center justify-center">
                 <div className="text-center">
                   <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                  <p className="mt-2 text-gray-500">Loading chart data...</p>
+                  <p className="mt-2 text-gray-500">{t('storeModule.sales.loadingChart')}</p>
                 </div>
               </div>
             ) : paymentMethodData.length > 0 ? (
@@ -325,7 +327,7 @@ export default function Sales() {
               </ChartContainer>
             ) : (
               <div className="h-80 flex items-center justify-center">
-                <p className="text-gray-500">No payment data available</p>
+                <p className="text-gray-500">{t('storeModule.sales.noPaymentData')}</p>
               </div>
             )}
           </CardContent>

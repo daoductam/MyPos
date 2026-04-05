@@ -11,8 +11,12 @@ import {
 import { Button } from "../../../components/ui/button";
 import { CreditCard } from "lucide-react";
 import { Pause } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { formatVND } from "@/utils/formatCurrency";
+
 
 const PaymentSection = ({ setShowPaymentDialog }) => {
+  const { t } = useTranslation();
   const cartItems = useSelector(selectCartItems);
   const selectedCustomer = useSelector(selectSelectedCustomer);
 
@@ -22,20 +26,11 @@ const PaymentSection = ({ setShowPaymentDialog }) => {
   const dispatch = useDispatch();
 
   const handlePayment = () => {
+    console.log("handlePayment triggered. Cart items:", cartItems.length);
     if (cartItems.length === 0) {
       toast({
-        title: "Empty Cart",
-        description: "Please add items to cart before proceeding to payment",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Check if customer is selected
-    if (!selectedCustomer) {
-      toast({
-        title: "Customer Required",
-        description: "Please select a customer before proceeding to payment",
+        title: t('dashboard.cashier.paymentSection.toast.emptyCart'),
+        description: t('dashboard.cashier.paymentSection.toast.emptyCartDesc'),
         variant: "destructive",
       });
       return;
@@ -47,8 +42,8 @@ const PaymentSection = ({ setShowPaymentDialog }) => {
   const handleHoldOrder = () => {
     if (cartItems.length === 0) {
       toast({
-        title: "Empty Cart",
-        description: "No items in cart to hold",
+        title: t('dashboard.cashier.paymentSection.toast.emptyCart'),
+        description: t('dashboard.cashier.paymentSection.toast.emptyCartDesc'),
         variant: "destructive",
       });
       return;
@@ -57,8 +52,8 @@ const PaymentSection = ({ setShowPaymentDialog }) => {
     dispatch(holdOrder());
 
     toast({
-      title: "Order On Hold",
-      description: "Order placed on hold",
+      title: t('dashboard.cashier.paymentSection.toast.orderOnHold'),
+      description: t('dashboard.cashier.paymentSection.toast.orderOnHoldDesc'),
     });
   };
   return (
@@ -66,9 +61,9 @@ const PaymentSection = ({ setShowPaymentDialog }) => {
       <div className="space-y-4">
         <div className="text-center">
           <div className="text-3xl font-bold text-emerald-400 mb-1">
-            ₹{total.toFixed(2)}
+            VNĐ {formatVND(total)}
           </div>
-          <p className="text-sm text-gray-400">Total Amount</p>
+          <p className="text-sm text-gray-400">{t('dashboard.cashier.paymentSection.totalAmount')}</p>
         </div>
 
         <div className="space-y-2">
@@ -78,7 +73,7 @@ const PaymentSection = ({ setShowPaymentDialog }) => {
             disabled={cartItems.length === 0}
           >
             <CreditCard className="w-5 h-5 mr-2" />
-            Process Payment
+            {t('dashboard.cashier.paymentSection.processPayment')}
           </Button>
 
           <Button
@@ -88,7 +83,7 @@ const PaymentSection = ({ setShowPaymentDialog }) => {
             disabled={cartItems.length === 0}
           >
             <Pause className="w-4 h-4 mr-2" />
-            Hold Order
+            {t('dashboard.cashier.paymentSection.holdOrder')}
           </Button>
         </div>
       </div>

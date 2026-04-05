@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-import { RefreshCw, ArrowUpDown } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import {
   getOrdersByBranch,
   getOrderById,
@@ -18,11 +19,11 @@ import OrdersTable from "./OrdersTable";
 import OrderDetailsDialog from "./OrderDetailsDialog";
 
 const Orders = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const branchId = useSelector((state) => state.branch.branch?.id);
   const { orders, loading } = useSelector((state) => state.order);
   const { selectedOrder } = useSelector((state) => state.order);
-
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -68,8 +69,8 @@ const Orders = () => {
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Order Management</h1>
-          <p className="text-gray-400 mt-1">Review and manage all orders for your branch.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.branchManager.orders.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('dashboard.branchManager.orders.subtitle')}</p>
         </div>
         <Button
           variant="outline"
@@ -78,7 +79,7 @@ const Orders = () => {
           disabled={loading}
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-          Refresh
+          {t('dashboard.branchManager.orders.refresh')}
         </Button>
       </div>
 

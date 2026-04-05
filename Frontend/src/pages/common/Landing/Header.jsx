@@ -2,12 +2,15 @@ import { ShoppingCart, Menu, X, ChevronDown } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { Button } from '../../../components/ui/button'
 import { useLocation, useNavigate } from 'react-router'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from '../../../components/LanguageSwitcher'
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
     const [activeSection, setActiveSection] = useState('')
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     // Handle scroll effect for header
     useEffect(() => {
@@ -57,12 +60,12 @@ const Header = () => {
     }
 
     const navLinks = [
-        { name: 'Features', href: '#features' },
-        { name: 'Why Us', href: '#why-us' },
-        { name: 'Demo', href: '#demo' },
-        { name: 'Pricing', href: '#pricing' },
-        { name: 'Testimonials', href: '#testimonials' },
-        { name: 'Contact', href: '#contact' },
+        { name: t('header.features'), href: '#features' },
+        { name: t('header.whyUs'), href: '#why-us' },
+        { name: t('header.demo'), href: '#demo' },
+        { name: t('header.pricing'), href: '#pricing' },
+        { name: t('header.testimonials'), href: '#testimonials' },
+        { name: t('header.contact'), href: '#contact' },
     ];
 
     const renderNavLink = (link, isMobile = false) => (
@@ -98,14 +101,15 @@ const Header = () => {
               {navLinks.map(link => renderNavLink(link))}
             </nav>
 
-            {/* Right Side: CTA Buttons */}
+            {/* Right Side: CTA Buttons + Language Switcher */}
             <div className="flex-1 hidden md:flex justify-end items-center space-x-4">
+                <LanguageSwitcher />
                 <button onClick={handleLoginButtonClick} className="relative font-medium transition-colors text-muted-foreground hover:text-primary group py-2 px-2">
-                  Sign In
+                  {t('header.login')}
                   <span className="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-full"></span>
                 </button>
                 <button onClick={(e) => handleNavClick(e, '#contact')} className="relative font-medium transition-colors text-muted-foreground hover:text-primary group py-2 px-2">
-                  Request Demo
+                  {t('header.requestDemo')}
                   <span className="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-full"></span>
                 </button>
             </div>
@@ -127,8 +131,9 @@ const Header = () => {
               <nav className="flex flex-col -mt-4">
                 {navLinks.map(link => renderNavLink(link, true))}
                 <div className="flex flex-col space-y-3 p-4">
-                  <Button onClick={handleLoginButtonClick} variant="outline" className="w-full border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white">Sign In</Button>
-                  <Button onClick={() => handleNavClick({ preventDefault: () => {} }, '#contact')} variant="outline" className="w-full border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white">Request Demo</Button>
+                  <LanguageSwitcher className="w-full" />
+                  <Button onClick={handleLoginButtonClick} variant="outline" className="w-full border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white">{t('header.login')}</Button>
+                  <Button onClick={() => handleNavClick({ preventDefault: () => {} }, '#contact')} variant="outline" className="w-full border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white">{t('header.requestDemo')}</Button>
                 </div>
               </nav>
             </div>

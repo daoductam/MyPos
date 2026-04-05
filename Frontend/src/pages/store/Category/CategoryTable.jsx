@@ -1,21 +1,23 @@
 import React from 'react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Tag, Loader2 } from "lucide-react";
+import { Trash2, Tag, Loader2, Edit } from "lucide-react";
 import { useDispatch } from 'react-redux';
 import { deleteCategory } from '@/Redux Toolkit/features/category/categoryThunks';
 import { toast } from '@/components/ui/use-toast';
+import { useTranslation } from 'react-i18next';
 
 const CategoryTable = ({ categories, loading, onEdit }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleDeleteCategory = async (id) => {
     try {
       const token = localStorage.getItem("jwt");
       await dispatch(deleteCategory({ id, token })).unwrap();
-      toast({ title: "Success", description: "Category deleted successfully" });
+      toast({ title: t('toast.success'), description: t('toast.categoryDeleted') || "Category deleted successfully" });
     } catch (err) {
-      toast({ title: "Error", description: err || "Failed to delete category", variant: "destructive" });
+      toast({ title: t('toast.error'), description: err || t('toast.categoryDeletedError'), variant: "destructive" });
     }
   };
 
@@ -23,7 +25,7 @@ const CategoryTable = ({ categories, loading, onEdit }) => {
     return (
       <div className="flex justify-center items-center h-64 text-gray-400">
         <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mr-3" />
-        Loading categories...
+        {t('storeModule.categories.table.loading')}
       </div>
     );
   }
@@ -31,8 +33,8 @@ const CategoryTable = ({ categories, loading, onEdit }) => {
   if (categories.length === 0) {
     return (
       <div className="text-center py-16 text-gray-400">
-        <h3 className="text-xl font-semibold">No Categories Found</h3>
-        <p className="mt-2">Add your first category to get started.</p>
+        <h3 className="text-xl font-semibold">{t('storeModule.categories.table.noCategories')}</h3>
+        <p className="mt-2">{t('storeModule.categories.table.addFirst')}</p>
       </div>
     );
   }
@@ -41,9 +43,9 @@ const CategoryTable = ({ categories, loading, onEdit }) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-gray-400">Category Name</TableHead>
-          <TableHead className="text-gray-400">Description</TableHead>
-          <TableHead className="text-right text-gray-400">Actions</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.categories.table.columns.name')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.categories.table.columns.description')}</TableHead>
+          <TableHead className="text-right text-gray-400">{t('storeModule.categories.table.columns.actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -56,7 +58,7 @@ const CategoryTable = ({ categories, loading, onEdit }) => {
               </div>
             </TableCell>
             <TableCell className="text-gray-400 truncate max-w-xs">
-              {category.description || 'No description'}
+              {category.description || t('storeModule.categories.table.noDescription')}
             </TableCell>
             <TableCell className="text-right">
               <div className="flex justify-end gap-2">

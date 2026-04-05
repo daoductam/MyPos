@@ -7,8 +7,8 @@ export const handleDownloadOrderPDF = async (order, toast) => {
   try {
     if (toast) {
       toast({
-        title: "Generating PDF",
-        description: "Please wait while we generate your PDF...",
+        title: "Đang tạo PDF",
+        description: "Vui lòng đợi trong giây lát...",
       });
     }
 
@@ -18,10 +18,7 @@ export const handleDownloadOrderPDF = async (order, toast) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `order-${order.id}-${formatDate(order.createdAt).replace(
-      /\//g,
-      "-"
-    )}.pdf`;
+    link.download = `order-${order.id}.pdf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -29,16 +26,16 @@ export const handleDownloadOrderPDF = async (order, toast) => {
 
     if (toast) {
       toast({
-        title: "PDF Downloaded",
-        description: `Order ${order.id} has been downloaded as PDF`,
+        title: "Tải xuống thành công",
+        description: `Đơn hàng #${order.id} đã được lưu dưới dạng PDF`,
       });
     }
   } catch (error) {
     console.error("Error generating PDF:", error);
     if (toast) {
       toast({
-        title: "Error",
-        description: "Failed to generate PDF. Please try again.",
+        title: "Lỗi",
+        description: "Không thể tạo PDF. Vui lòng thử lại.",
         variant: "destructive",
       });
     }

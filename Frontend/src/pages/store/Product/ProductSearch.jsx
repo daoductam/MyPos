@@ -6,7 +6,10 @@ import { Search, X } from "lucide-react";
 import { searchProducts } from "@/Redux Toolkit/features/product/productThunks";
 import { useSelector } from "react-redux";
 
+import { useTranslation } from "react-i18next";
+
 const ProductSearch = ({ onSearch }) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const dispatch = useDispatch();
@@ -48,7 +51,7 @@ const ProductSearch = ({ onSearch }) => {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search products..."
+          placeholder={t('storeModule.products.search.placeholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-10 pr-10 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
@@ -68,7 +71,7 @@ const ProductSearch = ({ onSearch }) => {
         disabled={!searchQuery.trim() || isSearching}
         className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50"
       >
-        {isSearching ? "Searching..." : "Search"}
+        {isSearching ? t('storeModule.products.search.searching') : t('storeModule.products.search.button')}
       </Button>
     </form>
   );

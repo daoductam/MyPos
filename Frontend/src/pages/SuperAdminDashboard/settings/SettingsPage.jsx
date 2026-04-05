@@ -6,19 +6,23 @@ import SecuritySettingsForm from "./components/SecuritySettingsForm";
 import NotificationSettingsForm from "./components/NotificationSettingsForm";
 import SystemSettingsForm from "./components/SystemSettingsForm";
 import { getUserProfile } from "../../../Redux Toolkit/features/user/userThunks";
+import { useTranslation } from "react-i18next";
 
 // Configuration for the settings tabs
-const settingsTabs = [
-  { id: 'profile', name: 'Profile', icon: <User className="w-5 h-5" />, description: "Update your photo and personal details." },
-  { id: 'security', name: 'Security', icon: <Shield className="w-5 h-5" />, description: "Change your password and manage security settings." },
-  { id: 'notifications', name: 'Notifications', icon: <Bell className="w-5 h-5" />, description: "Manage how you receive notifications." },
-  { id: 'system', name: 'System', icon: <SettingsIcon className="w-5 h-5" />, description: "Manage general system settings." },
+const getSettingsTabs = (t) => [
+  { id: 'profile', name: t('superAdminModule.settings.tabs.profile'), icon: <User className="w-5 h-5" />, description: t('superAdminModule.settings.tabs.profileDesc') },
+  { id: 'security', name: t('superAdminModule.settings.tabs.security'), icon: <Shield className="w-5 h-5" />, description: t('superAdminModule.settings.tabs.securityDesc') },
+  { id: 'notifications', name: t('superAdminModule.settings.tabs.notifications'), icon: <Bell className="w-5 h-5" />, description: t('superAdminModule.settings.tabs.notificationsDesc') },
+  { id: 'system', name: t('superAdminModule.settings.tabs.system'), icon: <SettingsIcon className="w-5 h-5" />, description: t('superAdminModule.settings.tabs.systemDesc') },
 ];
 
 export default function SettingsPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('profile');
   const dispatch = useDispatch();
   const { userProfile, loading } = useSelector((state) => state.user);
+  
+  const settingsTabs = React.useMemo(() => getSettingsTabs(t), [t]);
 
   // Fetch user profile data when the component mounts
   useEffect(() => {
@@ -57,9 +61,9 @@ export default function SettingsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Settings</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('superAdminModule.settings.title')}</h2>
         <p className="text-gray-400">
-          Manage your account, security, and system settings.
+          {t('superAdminModule.settings.subtitle')}
         </p>
       </div>
 
@@ -89,7 +93,7 @@ export default function SettingsPage() {
           <div className="px-6 py-6 lg:px-8">
             {currentTab && (
               <div>
-                <h3 className="text-lg font-medium leading-6 text-white">{currentTab.name} Settings</h3>
+                <h3 className="text-lg font-medium leading-6 text-white">{currentTab.name} {t('superAdminModule.settings.title')}</h3>
                 <p className="mt-1 text-sm text-gray-400">
                   {currentTab.description}
                 </p>

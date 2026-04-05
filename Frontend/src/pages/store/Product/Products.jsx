@@ -15,8 +15,10 @@ import ProductTable from "./ProductTable";
 import ProductForm from "./ProductForm";
 import ProductSearch from "./ProductSearch";
 import ProductDetails from "./ProductDetails";
+import { useTranslation } from "react-i18next";
 
 export default function Products() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { products, loading, error, searchResults } = useSelector(
     (state) => state.product
@@ -51,8 +53,8 @@ export default function Products() {
       await dispatch(getProductsByStore(store.id)).unwrap();
     } catch (err) {
       toast({
-        title: "Error",
-        description: err || "Failed to fetch products",
+        title: t('toast.error'),
+        description: err || t('toast.fetchError'),
         variant: "destructive",
       });
     }
@@ -98,17 +100,17 @@ export default function Products() {
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Product Management</h1>
-          <p className="text-gray-400 mt-1">Manage your store's entire product catalog.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('storeModule.products.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('storeModule.products.subtitle')}</p>
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <Button onClick={() => setIsAddDialogOpen(true)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            <Plus className="mr-2 h-4 w-4" /> Add Product
+            <Plus className="mr-2 h-4 w-4" /> {t('storeModule.products.addProduct')}
           </Button>
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Add New Product</DialogTitle>
-              <p className="text-gray-300 mt-2">Enter the details for the new product.</p>
+              <DialogTitle className="text-3xl font-bold">{t('storeModule.products.addNewProduct')}</DialogTitle>
+              <p className="text-gray-300 mt-2">{t('storeModule.products.enterDetails')}</p>
             </DialogHeader>
             <ProductForm
               onSubmit={handleAddProductSuccess}
@@ -130,15 +132,14 @@ export default function Products() {
           <RefreshCw
             className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
           />
-          {refreshing ? "Refreshing..." : "Refresh"}
+          {refreshing ? t('storeModule.products.refreshing') : t('storeModule.products.refresh')}
         </Button>
       </div>
 
       {isSearchActive && (
         <div className="bg-amber-900/30 border border-amber-400/50 text-amber-300 px-4 py-2 rounded-lg flex justify-between items-center backdrop-blur-sm">
           <span>
-            Showing search results ({displayedProducts.length}{" "}
-            {displayedProducts.length === 1 ? "product" : "products"} found)
+            {t('storeModule.products.showingResults', { count: displayedProducts.length })}
           </span>
           <Button
             variant="ghost"
@@ -146,7 +147,7 @@ export default function Products() {
             onClick={() => setIsSearchActive(false)}
             className="text-amber-300 hover:text-amber-200 hover:bg-amber-400/20"
           >
-            Show all products
+            {t('storeModule.products.showAll')}
           </Button>
         </div>
       )}
@@ -171,8 +172,8 @@ export default function Products() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg">
           <DialogHeader className="text-center">
-            <DialogTitle className="text-3xl font-bold">Edit Product</DialogTitle>
-            <p className="text-gray-300 mt-2">Update the product details below.</p>
+            <DialogTitle className="text-3xl font-bold">{t('storeModule.products.editProduct')}</DialogTitle>
+            <p className="text-gray-300 mt-2">{t('storeModule.products.updateDetails')}</p>
           </DialogHeader>
           <ProductForm
             initialValues={currentProduct}
@@ -186,7 +187,7 @@ export default function Products() {
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
         <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg">
           <DialogHeader className="text-center">
-            <DialogTitle className="text-3xl font-bold">Product Details</DialogTitle>
+            <DialogTitle className="text-3xl font-bold">{t('storeModule.products.productDetails')}</DialogTitle>
           </DialogHeader>
           <ProductDetails product={currentProduct} />
         </DialogContent>

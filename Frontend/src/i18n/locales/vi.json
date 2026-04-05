@@ -1,0 +1,1778 @@
+{
+  "landing": {
+    "trusted": {
+      "title": "Được tin dùng bởi các doanh nghiệp sáng tạo",
+      "subtitle": "Tham gia cùng hàng nghìn doanh nghiệp thành công sử dụng nền tảng của chúng tôi"
+    }
+  },
+  "dashboard": {
+    "cashier": {
+      "nav": {
+        "pos": "Máy bán hàng POS",
+        "orders": "Lịch sử đơn hàng",
+        "returns": "Trả hàng/Hoàn tiền",
+        "customers": "Khách hàng",
+        "shiftSummary": "Tổng kết ca làm việc",
+        "branchInfo": "Thông tin chi nhánh"
+      },
+      "logout": "Kết thúc ca & Đăng xuất",
+      "logoutConfirmMessage": "Bạn có chắc chắn muốn kết thúc ca làm việc và đăng xuất không?",
+      "logoutConfirmNote": "Hệ thống sẽ tạo báo cáo tổng kết ca làm việc của bạn.",
+      "preparingSummary": "Đang chuẩn bị tổng kết ca",
+      "redirecting": "Đang chuyển hướng đến trang tổng kết ca...",
+      "posTitle": "Máy bán hàng POS",
+      "createOrder": "Tạo đơn hàng mới",
+      "orderHistoryDesc": "Xem lại tất cả các đơn hàng đã xử lý tại quầy này.",
+      "orderSearchPlaceholder": "Tìm theo mã đơn hàng hoặc tên khách hàng...",
+      "orderHistory": {
+        "toast": {
+          "printing": "Đang in hóa đơn",
+          "printingDesc": "Đang chuẩn bị in hóa đơn cho đơn hàng {{id}}",
+          "initiatingReturn": "Đang khởi tạo trả hàng",
+          "initiatingReturnDesc": "Đang chuyển đến trang trả hàng cho đơn hàng {{id}}",
+          "refreshing": "Đang cập nhật danh sách",
+          "refreshingDesc": "Danh sách đơn hàng đang được cập nhật..."
+        },
+        "noOrders": "Không tìm thấy đơn hàng",
+        "noOrdersDesc": "Không có đơn hàng nào khớp với bộ lọc hiện tại."
+      },
+      "return": {
+        "title": "Trả hàng / Hoàn tiền",
+        "selectForReturn": "Chọn để trả hàng",
+        "noOrders": "Không tìm thấy đơn hàng",
+        "searchTip": "Thử tìm kiếm theo mã đơn hàng hoặc tên khách hàng",
+        "backToSearch": "Quay lại tìm kiếm đơn hàng",
+        "orderNumber": "Đơn hàng {{id}}",
+        "orderSummary": "Tóm tắt đơn hàng",
+        "orderItems": "Danh sách sản phẩm",
+        "item": "Sản phẩm",
+        "qty": "SL",
+        "price": "Giá",
+        "total": "Thành tiền",
+        "itemsLabel": "Sản phẩm",
+        "reasons": {
+          "damaged": "Sản phẩm bị hỏng",
+          "wrong": "Sai sản phẩm",
+          "changedMind": "Khách hàng đổi ý",
+          "quality": "Vấn đề chất lượng",
+          "pricing": "Lỗi giá",
+          "other": "Khác"
+        },
+        "reasonLabel": "Lý do trả hàng",
+        "reasonPlaceholder": "Chọn lý do...",
+        "specifyReasonLabel": "Ghi rõ lý do",
+        "specifyReasonPlaceholder": "Vui lòng ghi rõ lý do trả hàng",
+        "refundMethodLabel": "Phương thức hoàn tiền",
+        "refundMethodPlaceholder": "Chọn phương thức...",
+        "originalMethod": "Phương thức thanh toán gốc ({{method}})",
+        "totalRefund": "Tổng tiền hoàn lại",
+        "processButton": "Xử lý hoàn tiền",
+        "toast": {
+          "processed": "Đã xử lý hoàn tiền",
+          "processedDesc": "Hoàn tiền VNĐ {{amount}} thành công qua {{method}}",
+          "failed": "Hoàn tiền thất bại",
+          "failedDesc": "Không thể xử lý hoàn tiền. Vui lòng thử lại."
+        },
+        "receipt": {
+          "title": "Biên lai trả hàng",
+          "returnNumber": "Mã trả hàng",
+          "originalOrder": "Đơn hàng gốc",
+          "thankYou": "Cảm ơn quý khách đã mua hàng!",
+          "policy": "Chính sách trả hàng: Sản phẩm có thể được trả lại trong vòng 7 ngày kể từ ngày mua kèm theo hóa đơn",
+          "printComplete": "In & Hoàn tất"
+        }
+      },
+      "customer": {
+        "title": "Quản lý khách hàng",
+        "desc": "Tìm kiếm, xem và quản lý thông tin khách hàng.",
+        "addCustomer": "Thêm khách hàng",
+        "details": {
+          "title": "Chi tiết khách hàng",
+          "lastOrder": "Đơn hàng cuối",
+          "totalSpent": "Tổng chi tiêu",
+          "points": "Điểm tích lũy",
+          "addPoints": "Thêm điểm",
+          "purchaseHistory": "Lịch sử mua hàng",
+          "noCustomer": "Chọn một khách hàng để xem chi tiết",
+          "avgOrder": "Giá trị đơn hàng trung bình",
+          "lastVisit": "Lần ghé thăm cuối",
+          "noPurchaseHistoryDesc": "Khách hàng này chưa có đơn hàng nào",
+          "currentPoints": "Điểm hiện tại",
+          "pointsToAdd": "Số điểm thêm"
+        },
+        "toast": {
+          "pointsAdded": "Đã thêm điểm",
+          "pointsAddedDesc": "Đã thêm {{points}} điểm vào tài khoản của {{name}}",
+          "invalidPoints": "Điểm không hợp lệ",
+          "createSuccess": "Tạo khách hàng thành công!",
+          "createError": "Không thể tạo khách hàng"
+        },
+        "nameLabel": "Họ và tên *",
+        "namePlaceholder": "Nhập họ và tên khách hàng",
+        "phoneLabel": "Số điện thoại *",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Nhập địa chỉ email",
+        "createButton": "Tạo khách hàng",
+        "creatingButton": "Đang tạo...",
+        "validation": {
+          "nameRequired": "Họ và tên là bắt buộc",
+          "nameMin": "Họ và tên phải có ít nhất 2 ký tự",
+          "nameMax": "Họ và tên phải ít hơn 50 ký tự",
+          "phoneRequired": "Số điện thoại là bắt buộc",
+          "phoneInvalid": "Vui lòng nhập số điện thoại hợp lệ",
+          "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ"
+        }
+      },
+      "shortcuts": "F1: Tìm kiếm | F2: Giảm giá | F3: Khách hàng | Ctrl+Enter: Thanh toán",
+      "notifications": "Thông báo",
+      "newOrderTitle": "Đơn hàng mới",
+      "newOrderDesc": "Một đơn hàng mới trị giá {{amount}} vừa được tạo.",
+      "lowStockTitle": "Cảnh báo tồn kho thấp",
+      "lowStockDesc": "Sản phẩm '{{product}}' sắp hết hàng. Chỉ còn {{count}} sản phẩm.",
+      "shiftSummaryReadyTitle": "Tổng kết ca đã sẵn sàng",
+      "shiftSummaryReadyDesc": "Tổng kết ca làm việc trước đó của bạn đã sẵn sàng để xem lại.",
+      "cart": {
+        "title": "Giỏ hàng",
+        "items": "sản phẩm",
+        "held": "Đã giữ",
+        "clear": "Xóa",
+        "empty": "Giỏ hàng trống",
+        "addProducts": "Thêm sản phẩm để bắt đầu đơn hàng",
+        "summary": {
+          "subtotal": "Tạm tính",
+          "tax": "Thuế (10% VAT)",
+          "discount": "Giảm giá",
+          "total": "Tổng cộng"
+        },
+        "toast": {
+          "cleared": "Đã xóa giỏ hàng",
+          "clearedDesc": "Tất cả sản phẩm đã được xóa khỏi giỏ hàng"
+        }
+      },
+      "pos": {
+        "searchPlaceholder": "Tìm kiếm sản phẩm hoặc quét mã vạch (F1)",
+        "loading": "Đang tải sản phẩm...",
+        "searchResults": "Kết quả tìm kiếm: đã tìm thấy {{count}} sản phẩm",
+        "productsFound": "{{count}} sản phẩm được tìm thấy",
+        "clearSearch": "Xóa",
+        "scan": "Quét",
+        "noProducts": "Không có sản phẩm nào",
+        "noMatchingProducts": "Không tìm thấy sản phẩm phù hợp với tìm kiếm của bạn"
+      },
+      "paymentSection": {
+        "customer": "Khách hàng",
+        "selectCustomer": "Chọn khách hàng",
+        "changeCustomer": "Đổi khách hàng",
+        "discount": "Chiết khấu",
+        "discountPlaceholder": "Số tiền chiết khấu",
+        "orderNote": "Ghi chú đơn hàng",
+        "notePlaceholder": "Thêm ghi chú cho đơn hàng...",
+        "totalAmount": "Tổng số tiền",
+        "processPayment": "Thanh toán",
+        "holdOrder": "Giữ đơn hàng",
+        "toast": {
+          "emptyCart": "Giỏ hàng trống",
+          "emptyCartDesc": "Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán",
+          "customerRequired": "Yêu cầu khách hàng",
+          "customerRequiredDesc": "Vui lòng chọn khách hàng trước khi thanh toán",
+          "orderOnHold": "Đơn hàng đã được giữ",
+          "orderOnHoldDesc": "Đơn hàng đã được đưa vào danh sách chờ"
+        }
+      },
+      "customerDialog": {
+        "title": "Chọn khách hàng",
+        "searchPlaceholder": "Tìm kiếm khách hàng...",
+        "loading": "Đang tải danh sách khách hàng...",
+        "noCustomers": "Không có khách hàng nào.",
+        "noMatching": "Không tìm thấy khách hàng phù hợp với tìm kiếm.",
+        "table": {
+          "name": "Họ tên",
+          "phone": "Điện thoại",
+          "email": "Email",
+          "select": "Chọn"
+        },
+        "addNew": "Thêm khách hàng mới",
+        "cancel": "Hủy",
+        "toast": {
+          "selected": "Đã chọn khách hàng",
+          "selectedDesc": "Đã chọn {{name}} cho đơn hàng này"
+        }
+      },
+      "paymentDialog": {
+        "title": "Thanh toán",
+        "amountToPay": "Số tiền cần thanh toán",
+        "methods": {
+          "CASH": "💵 Tiền mặt",
+          "CARD": "💳 Thẻ",
+          "UPI": "📱 Chuyển khoản / QR"
+        },
+        "cancel": "Hủy",
+        "complete": "Hoàn tất thanh toán",
+        "toast": {
+          "success": "Đơn hàng đã được tạo thành công",
+          "successDesc": "Đơn hàng #{{id}} đã được tạo và thanh toán thành công",
+          "failed": "Tạo đơn hàng thất bại"
+        },
+        "walkInCustomer": "Khách lẻ"
+      },
+      "invoiceDialog": {
+        "title": "Chi tiết đơn hàng - Hóa đơn",
+        "customerInfo": "Thông tin khách hàng",
+        "orderInfo": "Thông tin đơn hàng",
+        "walkIn": "Khách lẻ",
+        "na": "K/H",
+        "paymentMethod": "Phương thức thanh toán",
+        "download": "Tải xuống PDF",
+        "print": "In hóa đơn",
+        "startNew": "Bắt đầu đơn mới",
+        "itemsTable": {
+          "image": "Ảnh",
+          "item": "Sản phẩm",
+          "quantity": "Số lượng",
+          "price": "Giá",
+          "total": "Tổng"
+        },
+        "toast": {
+          "completed": "Đơn hàng đã hoàn thành",
+          "completedDesc": "Biên lai đã được in và đơn hàng được lưu thành công"
+        }
+      },
+      "heldOrdersDialog": {
+        "title": "Đơn hàng đang giữ",
+        "noHeld": "Không có đơn hàng nào đang giữ",
+        "orderNumber": "Đơn hàng #{id}",
+        "items": "sản phẩm",
+        "resume": "Tiếp tục",
+        "close": "Đóng",
+        "toast": {
+          "resumed": "Đã tiếp tục đơn hàng",
+          "resumedDesc": "Đơn hàng #{{id}} đã được khôi phục"
+        }
+      },
+      "shiftSummary": {
+        "title": "Tổng kết ca làm việc",
+        "loading": "Đang tải tổng kết ca...",
+        "noData": "Không có dữ liệu ca làm việc.",
+        "printTitle": "In tổng kết ca làm việc",
+        "printMessage": "Bạn có muốn in báo cáo tổng kết ca làm việc không?",
+        "cashier": "Thu ngân",
+        "startTime": "Bắt đầu ca",
+        "endTime": "Kết thúc ca",
+        "duration": "Thời lượng",
+        "ongoing": "đang diễn ra",
+        "totalOrders": "Tổng đơn hàng",
+        "totalSales": "Tổng doanh số",
+        "totalRefunds": "Tổng hoàn tiền",
+        "netSales": "Doanh số ròng",
+        "transactions": "{{count}} giao dịch",
+        "unitsSold": "đã bán {{count}} sản phẩm",
+        "noRefunds": "Không có yêu cầu hoàn tiền nào trong ca này",
+        "cards": {
+          "information": "Thông tin ca",
+          "sales": "Tóm tắt doanh số",
+          "payments": "Tóm tắt thanh toán",
+          "topProducts": "Sản phẩm bán chạy nhất",
+          "recentOrders": "Đơn hàng gần đây",
+          "refunds": "Hoàn tiền"
+        },
+        "toast": {
+          "printing": "Đang in tổng kết ca",
+          "printingDesc": "Bản tổng kết ca làm việc đang được in",
+          "ended": "Ca làm việc đã kết thúc",
+          "endedDesc": "Bạn đã đăng xuất thành công"
+        }
+      }
+    },
+    "store": {
+      "nav": {
+        "dashboard": "Bảng điều khiển",
+        "sales": "Doanh số",
+        "products": "Sản phẩm",
+        "categories": "Danh mục",
+        "branches": "Chi nhánh",
+        "employees": "Nhân viên",
+        "reports": "Báo cáo",
+        "alerts": "Cảnh báo"
+      },
+      "bottomNav": {
+        "settings": "Cài đặt",
+        "upgradePlan": "Nâng cấp gói",
+        "logout": "Đăng xuất"
+      },
+      "topbar": {
+        "searchPlaceholder": "Tìm kiếm sản phẩm, đơn hàng, hoặc khách hàng...",
+        "myAccount": "Tài khoản của tôi",
+        "profile": "Hồ sơ",
+        "settings": "Cài đặt",
+        "logout": "Đăng xuất",
+        "storeAdmin": "Quản trị viên"
+      },
+      "home": {
+        "title": "Bảng điều khiển cửa hàng",
+        "subtitle": "Tổng quan về hiệu suất cửa hàng của bạn."
+      },
+      "stats": {
+        "totalRevenue": "Tổng Thu Nhập",
+        "totalSales": "Tổng Doanh Số",
+        "newCustomers": "Khách Hàng Mới",
+        "activeBranches": "Chi Nhánh Hoạt Động",
+        "fromLastMonth": "so với tháng trước",
+        "sinceLastMonth": "từ tháng trước"
+      },
+      "charts": {
+        "salesTrend": "Xu hướng doanh số",
+        "recentSales": "Doanh số gần đây",
+        "months": {
+          "jan": "Tháng 1",
+          "feb": "Tháng 2",
+          "mar": "Tháng 3",
+          "apr": "Tháng 4",
+          "may": "Tháng 5",
+          "jun": "Tháng 6",
+          "jul": "Tháng 7"
+        }
+      }
+    },
+    "superAdmin": {
+      "nav": {
+        "dashboard": "Bảng điều khiển",
+        "stores": "Cửa hàng",
+        "subscriptions": "Gói đăng ký",
+        "requests": "Yêu cầu chờ xử lý",
+        "settings": "Cài đặt"
+      },
+      "logout": "Đăng xuất"
+    },
+    "branchManager": {
+      "title": "Quản lý chi nhánh",
+      "nav": {
+        "dashboard": "Bảng điều khiển",
+        "orders": "Đơn hàng",
+        "refunds": "Hoàn tiền",
+        "transactions": "Giao dịch",
+        "inventory": "Kho hàng",
+        "employees": "Nhân viên",
+        "customers": "Khách hàng",
+        "reports": "Báo cáo",
+        "settings": "Cài đặt"
+      },
+      "logout": "Đăng xuất",
+      "dashboard": {
+        "title": "Bảng điều khiển chi nhánh",
+        "paymentBreakdown": "Chi tiết thanh toán",
+        "dailySales": "Doanh số hàng ngày",
+        "productPerformance": "Hiệu suất sản phẩm",
+        "cashierPerformance": "Hiệu suất thu ngân",
+        "topCashiers": "Top 5 thu ngân",
+        "stats": {
+          "todaySales": "Doanh số hôm nay",
+          "totalOrders": "Tổng đơn hàng",
+          "newCustomers": "Khách hàng mới",
+          "activeEmployees": "Nhân viên hoạt động",
+          "totalEmployees": "Tổng nhân viên",
+          "cashiers": "Thu ngân"
+        },
+        "recentOrders": {
+          "title": "Đơn hàng gần đây",
+          "viewAll": "Xem tất cả",
+          "orderId": "Mã đơn hàng",
+          "customer": "Khách hàng",
+          "amount": "Số tiền",
+          "status": "Trạng thái",
+          "time": "Thời gian",
+          "loading": "Đang tải...",
+          "noData": "Không có dữ liệu"
+        }
+      },
+      "inventory": {
+        "title": "Quản lý kho hàng",
+        "addNew": "Thêm sản phẩm mới",
+        "searchPlaceholder": "Tìm kiếm sản phẩm...",
+        "filters": {
+          "allCategories": "Tất cả danh mục",
+          "lowStock": "Sắp hết hàng",
+          "outOfStock": "Hết hàng"
+        },
+        "table": {
+          "product": "Sản phẩm",
+          "category": "Danh mục",
+          "price": "Giá",
+          "stock": "Tồn kho",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        }
+      },
+      "employees": {
+        "title": "Quản lý nhân viên",
+        "addNew": "Thêm nhân viên mới",
+        "searchPlaceholder": "Tìm kiếm nhân viên...",
+        "filters": {
+          "allRoles": "Tất cả vai trò",
+          "active": "Đang hoạt động",
+          "inactive": "Ngừng hoạt động"
+        },
+        "table": {
+          "name": "Họ tên",
+          "contact": "Liên hệ",
+          "role": "Vai trò",
+          "email": "Email",
+          "phone": "Điện thoại",
+          "address": "Địa chỉ",
+          "status": "Trạng thái",
+          "actions": "Thao tác",
+          "loginAccess": "Quyền đăng nhập",
+          "assignedSince": "Ngày bắt đầu",
+          "enabled": "Đã bật",
+          "disabled": "Đã tắt",
+          "noEmployees": "Không tìm thấy nhân viên",
+          "addFirst": "Thêm nhân viên đầu tiên để bắt đầu."
+        },
+        "performance": {
+          "title": "Tổng kết hiệu suất",
+          "ordersProcessed": "Đơn hàng đã xử lý",
+          "totalSales": "Tổng doanh số",
+          "avgOrderValue": "Giá trị đơn hàng TB",
+          "dailyPerformance": "Hiệu suất bán hàng hàng ngày",
+          "stockUpdates": "Cập nhật kho",
+          "productsManaged": "Sản phẩm quản lý",
+          "inventoryAccuracy": "Độ chính xác tồn kho",
+          "activityLog": "Nhật ký hoạt động",
+          "last30Days": "30 ngày qua",
+          "total": "Tổng cộng",
+          "lastAudit": "Kiểm kê cuối"
+        },
+        "resetPassword": {
+          "title": "Đặt lại mật khẩu",
+          "confirm": "Bạn có chắc chắn muốn đặt lại mật khẩu cho {{name}}?",
+          "instruction": "Mật khẩu tạm thời sẽ được tạo và gửi đến email của họ."
+        }
+      },
+      "customers": {
+        "title": "Tổng quan khách hàng",
+        "subtitle": "Xem và quản lý khách hàng của chi nhánh.",
+        "search": "Tìm kiếm khách hàng...",
+        "stats": {
+          "total": "Tổng số khách hàng",
+          "gold": "Hội viên Vàng",
+          "avgOrders": "Đơn hàng TB/Khách",
+          "totalOrders": "Tổng đơn hàng"
+        },
+        "table": {
+          "title": "Danh sách khách hàng",
+          "loyalty": "Trạng thái thân thiết",
+          "noCustomers": "Không tìm thấy khách hàng",
+          "noCustomersDesc": "Không có khách hàng nào khớp với từ khóa tìm kiếm."
+        },
+        "dialog": {
+          "title": "Chi tiết khách hàng",
+          "profile": "Hồ sơ",
+          "history": "Lịch sử đơn hàng"
+        }
+      },
+      "orders": {
+        "title": "Quản lý đơn hàng",
+        "subtitle": "Xem và quản lý tất cả các đơn hàng của chi nhánh.",
+        "refresh": "Làm mới",
+        "table": {
+          "orderId": "Mã đơn hàng",
+          "id": "ID",
+          "date": "Ngày lập",
+          "customer": "Khách hàng",
+          "cashier": "Thu ngân",
+          "total": "Tổng tiền",
+          "amount": "Số tiền",
+          "payment": "Thanh toán",
+          "paymentMode": "Phương thức",
+          "status": "Trạng thái",
+          "actions": "Thao tác",
+          "loading": "Đang tải đơn hàng...",
+          "noOrders": "Không tìm thấy đơn hàng",
+          "noOrdersDesc": "Không có đơn hàng nào khớp với bộ lọc hiện tại.",
+          "viewDetails": "Xem chi tiết",
+          "printInvoice": "In hóa đơn"
+        },
+        "filters": {
+          "allPayments": "Tất cả phương thức",
+          "allCashiers": "Tất cả thu ngân",
+          "allStatus": "Tất cả trạng thái",
+          "completed": "Hoàn thành",
+          "pending": "Chờ xử lý",
+          "cancelled": "Đã hủy",
+          "refunded": "Đã hoàn tiền"
+        },
+
+        "status": {
+          "completed": "Hoàn thành",
+          "pending": "Chờ xử lý",
+          "cancelled": "Đã hủy",
+          "refunded": "Đã hoàn tiền"
+        },
+        "statusLabels": {
+          "completed": "Hoàn thành",
+          "COMPLETED": "Hoàn thành",
+          "pending": "Chờ xử lý",
+          "PENDING": "Chờ xử lý",
+          "cancelled": "Đã hủy",
+          "CANCELLED": "Đã hủy",
+          "refunded": "Đã hoàn tiền",
+          "REFUNDED": "Đã hoàn tiền"
+        },
+        "dialog": {
+          "title": "Chi tiết đơn hàng",
+          "summary": "Tóm tắt đơn hàng",
+          "customer": "Thông tin khách hàng",
+          "cashier": "Thông tin thu ngân",
+          "items": "Sản phẩm trong đơn"
+        }
+      },
+
+
+      "refunds": {
+        "title": "Quản lý hoàn tiền",
+        "subtitle": "Xem tất cả các yêu cầu hoàn tiền của chi nhánh.",
+        "loading": "Đang tải dữ liệu...",
+        "noRefunds": "Không tìm thấy yêu cầu hoàn tiền",
+        "noRefundsDesc": "Hiện tại chi nhánh của bạn chưa có yêu cầu hoàn tiền nào.",
+        "reason": "Lý do",
+        "table": {
+          "id": "ID",
+          "refundId": "Mã hoàn tiền",
+          "orderId": "Mã đơn hàng",
+          "amount": "Số tiền",
+          "reason": "Lý do",
+          "loading": "Đang tải dữ liệu..."
+        }
+      },
+
+      "transactions": {
+        "title": "Giao dịch",
+        "subtitle": "Xem tất cả doanh số và hoàn tiền của chi nhánh.",
+        "export": "Xuất giao dịch",
+        "overview": {
+          "income": "Tổng thu nhập",
+          "expenses": "Tổng chi phí",
+          "net": "Số tiền ròng"
+        },
+        "table": {
+          "dateTime": "Ngày & Giờ",
+          "cashier": "Thu ngân",
+          "customer": "Khách hàng",
+          "amount": "Số tiền",
+          "payment": "Phương thức thanh toán",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "dialog": {
+          "title": "Chi tiết giao dịch",
+          "cashier": "Thu ngân",
+          "dateTime": "Ngày & Giờ",
+          "type": "Loại",
+          "status": "Trạng thái",
+          "payment": "Phương thức thanh toán",
+          "amount": "Số tiền",
+          "customerName": "Tên khách hàng",
+          "saleDetails": "Chi tiết bán hàng",
+          "invoice": "Hóa đơn",
+          "items": "Sản phẩm",
+          "refundDetails": "Chi tiết hoàn tiền",
+          "originalInvoice": "Hóa đơn gốc",
+          "reason": "Lý do",
+          "approvedBy": "Người phê duyệt",
+          "purchaseDetails": "Chi tiết mua hàng",
+          "purchaseOrder": "Đơn đặt hàng",
+          "supplier": "Nhà cung cấp",
+          "expenseDetails": "Chi tiết chi phí",
+          "category": "Danh mục",
+          "print": "In biên lai"
+        }
+      },
+      "reports": {
+        "title": "Báo cáo",
+        "subtitle": "Tạo và tải xuống các báo cáo chi tiết cho chi nhánh.",
+        "today": "Hôm nay",
+        "week": "Tuần này",
+        "month": "Tháng này",
+        "custom": "Tùy chỉnh",
+        "startDate": "Ngày bắt đầu",
+        "endDate": "Ngày kết thúc",
+        "types": {
+          "sales": {
+            "title": "Báo cáo doanh số",
+            "desc": "Chi tiết doanh số, doanh thu và lợi nhuận trong một khoảng thời gian."
+          },
+          "inventory": {
+            "title": "Báo cáo kho hàng",
+            "desc": "Tóm tắt mức tồn kho, các sản phẩm sắp hết hàng và giá trị kho."
+          },
+          "customer": {
+            "title": "Báo cáo khách hàng",
+            "desc": "Phân tích hành vi khách hàng, khách hàng thân thiết và thói quen mua sắm."
+          },
+          "employee": {
+            "title": "Báo cáo nhân viên",
+            "desc": "Theo dõi hiệu suất của từng nhân viên thu ngân và nhân viên kho."
+          },
+          "transaction": {
+            "title": "Báo cáo giao dịch",
+            "desc": "Nhật ký đầy đủ về tất cả các giao dịch, bao gồm phương thức thanh toán và chi tiết."
+          },
+          "tax": {
+            "title": "Báo cáo thuế",
+            "desc": "Báo cáo tuân thủ thuế để dễ dàng kê khai và đối chiếu."
+          }
+        },
+        "generate": "Tạo báo cáo",
+        "placeholderText1": "Đây là nội dung giữ chỗ cho báo cáo.",
+        "placeholderText2": "Trong ứng dụng thực tế, PDF này sẽ được điền dữ liệu báo cáo thật."
+      },
+      "settings": {
+        "title": "Cài đặt chi nhánh",
+        "subtitle": "Tùy chỉnh các cài đặt vận hành của chi nhánh.",
+        "tabs": {
+          "info": "Thông tin chi nhánh",
+          "printer": "Máy in",
+          "tax": "Thuế",
+          "payment": "Thanh toán",
+          "discount": "Giảm giá"
+        },
+        "info": {
+          "title": "Thông tin chi nhánh",
+          "desc": "Cập nhật chi tiết chi nhánh và giờ làm việc.",
+          "name": "Tên chi nhánh",
+          "address": "Địa chỉ",
+          "phone": "Số điện thoại",
+          "email": "Địa chỉ Email",
+          "hours": "Giờ làm việc",
+          "opening": "Giờ mở cửa",
+          "closing": "Giờ đóng cửa",
+          "workingDays": "Ngày làm việc",
+          "days": {
+            "monday": "Thứ Hai",
+            "tuesday": "Thứ Ba",
+            "wednesday": "Thứ Tư",
+            "thursday": "Thứ Năm",
+            "friday": "Thứ Sáu",
+            "saturday": "Thứ Bảy",
+            "sunday": "Chủ Nhật"
+          },
+          "save": "Lưu thay đổi"
+        },
+        "printer": {
+          "title": "Cài đặt máy in POS",
+          "desc": "Cấu hình cài đặt máy in hóa đơn.",
+          "name": "Tên máy in",
+          "paperSize": "Khổ giấy",
+          "printLogo": "In logo lên hóa đơn",
+          "printCustomer": "In chi tiết khách hàng",
+          "printTax": "In chi tiết thuế",
+          "footerText": "Lời nhắn cuối hóa đơn",
+          "save": "Lưu thay đổi"
+        },
+        "tax": {
+          "title": "Cài đặt thuế",
+          "desc": "Cấu hình mức thuế và quy tắc cho chi nhánh.",
+          "enableGst": "Bật Thuế (GST/VAT)",
+          "percentage": "Phần trăm thuế (%)",
+          "applyToAll": "Áp dụng thuế cho tất cả sản phẩm",
+          "showBreakdown": "Hiển thị chi tiết thuế trên hóa đơn",
+          "save": "Lưu thay đổi"
+        },
+        "payment": {
+          "title": "Phương thức thanh toán",
+          "desc": "Cấu hình các phương thức thanh toán được chấp nhận.",
+          "acceptCash": "Chấp nhận tiền mặt",
+          "acceptUpi": "Chấp nhận thanh toán UPI/Chuyển khoản",
+          "upiId": "ID UPI của chi nhánh",
+          "acceptCard": "Chấp nhận thẻ",
+          "terminalId": "ID thiết bị quẹt thẻ",
+          "save": "Lưu thay đổi"
+        },
+        "discount": {
+          "title": "Quy tắc giảm giá",
+          "desc": "Cấu hình chính sách giảm giá cho chi nhánh.",
+          "allow": "Cho phép giảm giá",
+          "maxPercentage": "Phần trăm giảm giá tối đa (%)",
+          "approval": "Yêu cầu quản lý phê duyệt giảm giá",
+          "reasons": "Lý do giảm giá",
+          "addReason": "Thêm lý do",
+          "save": "Lưu thay đổi"
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Chào mừng trở lại",
+      "subtitle": "Đăng nhập vào tài khoản của bạn để tiếp tục",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Nhập email của bạn",
+      "passwordLabel": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "rememberMe": "Ghi nhớ đăng nhập",
+      "forgotPassword": "Quên mật khẩu?",
+      "loginBtn": "Đăng nhập",
+      "orContinueWith": "Hoặc tiếp tục với",
+      "noAccount": "Chưa có tài khoản?",
+      "registerHere": "Đăng ký tại đây",
+      "successTitle": "Thành công",
+      "successDesc": "Đăng nhập thành công!",
+      "errorTitle": "Lỗi",
+      "errorDescFallback": "Đăng nhập thất bại"
+    },
+    "forgotPassword": {
+      "title": "Đặt lại mật khẩu",
+      "subtitle": "Nhập email của bạn để nhận hướng dẫn đặt lại",
+      "sentSubtitle": "Liên kết đặt lại đã được gửi",
+      "checkEmail": "Kiểm tra Email của bạn",
+      "instructionSent": "Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu tới",
+      "backToLogin": "Quay lại Đăng nhập",
+      "didntReceive": "Không nhận được? Kiểm tra hòm thư rác hoặc",
+      "tryAgain": "thử lại",
+      "cancelBtn": "Hủy",
+      "sendLinkBtn": "Gửi liên kết đặt lại",
+      "emailSentTitle": "Thành công",
+      "emailSentDesc": "Email đặt lại mật khẩu đã được gửi!",
+      "errorTitle": "Lỗi",
+      "errorDescFallback": "Gửi email đặt lại thất bại"
+    }
+  },
+  "header": {
+    "features": "Tính năng",
+    "whyUs": "Tại sao chọn chúng tôi",
+    "demo": "Bản demo",
+    "pricing": "Bảng giá",
+    "testimonials": "Đánh giá",
+    "contact": "Liên hệ",
+    "login": "Đăng nhập",
+    "requestDemo": "Yêu cầu Demo"
+  },
+  "hero": {
+    "badge": "Tính năng mới: Đã có quản lý đa cửa hàng",
+    "title": "Một trung tâm điều hành mới cho",
+    "businessTypes": ["Nhà hàng", "Cà phê & Tiệm bánh", "Nhà sách", "Siêu thị", "Chuỗi bán lẻ"],
+    "description": "Hợp nhất dữ liệu bán hàng, tồn kho và khách hàng vào một nền tảng trực quan duy nhất. Đưa ra quyết định thông minh hơn, làm hài lòng khách hàng và chứng kiến doanh nghiệp của bạn phát triển.",
+    "fastCheckout": "Thanh toán nhanh",
+    "realTimeAnalytics": "Phân tích thời gian thực",
+    "secureAccess": "Truy cập bảo mật",
+    "taxReady": "Sẵn sàng cho Thuế (VAT)",
+    "startFreeTrial": "Bắt đầu dùng thử miễn phí",
+    "watchDemo": "Xem cách hoạt động"
+  },
+  "features": {
+    "title": "Mọi thứ bạn cần để vận hành cửa hàng",
+    "subtitle": "Hệ thống POS toàn diện của chúng tôi bao gồm tất cả các tính năng cần thiết để các nhà bán lẻ hiện đại thành công.",
+    "items": [
+      { "title": "Quét mã vạch & Thanh toán", "description": "Quét mã vạch cực nhanh với khả năng tra cứu sản phẩm và thanh toán tức thì" },
+      { "title": "Quản lý Kho & Tồn kho", "description": "Theo dõi tồn kho thời gian thực với cảnh báo tồn kho thấp và tự động đặt hàng" },
+      { "title": "Hồ sơ Khách hàng & Nhân viên", "description": "Hồ sơ toàn diện cho khách hàng và quản lý nhân viên dựa trên vai trò" },
+      { "title": "Kiểm soát truy cập theo vai trò", "description": "Kiểm soát truy cập an toàn với các quyền có thể tùy chỉnh cho các vai trò khác nhau" },
+      { "title": "Báo cáo bán hàng", "description": "Phân tích và báo cáo chi tiết để theo dõi hiệu suất và tăng trưởng" },
+      { "title": "Quản lý đa cửa hàng", "description": "Quản lý nhiều địa điểm từ một bảng điều khiển duy nhất với sự kiểm soát tập trung" }
+    ]
+  },
+  "whyChooseUs": {
+    "title": "Tại sao chọn hệ thống POS của chúng tôi?",
+    "description": "Chúng tôi thiết kế hệ thống POS hướng tới các nhà bán lẻ hiện đại, tập trung vào sự dễ sử dụng, độ tin cậy và các tính năng mạnh mẽ thúc đẩy tăng trưởng kinh doanh.",
+    "benefits": [
+      "Giao diện dễ sử dụng",
+      "Hoạt động ngoại tuyến",
+      "Hóa đơn sẵn sàng cho Thuế (VAT)",
+      "Thiết kế thân thiện với di động",
+      "Hỗ trợ 24/7"
+    ],
+    "blazingFast": "Tốc độ cực nhanh",
+    "blazingFastDesc": "Giao dịch tức thì và đồng bộ dữ liệu thời gian thực.",
+    "bankSecurity": "Bảo mật cấp Ngân hàng",
+    "bankSecurityDesc": "Dữ liệu của bạn luôn tuyệt đối an toàn và được mã hóa.",
+    "support247": "Hỗ trợ 24/7",
+    "support247Desc": "Đội ngũ của chúng tôi luôn sẵn sàng hỗ trợ bạn thành công."
+  },
+  "pricing": {
+    "title": "Gói giá đơn giản, ",
+    "titleHighlight": "minh bạch",
+    "subtitle": "Chọn gói phù hợp nhất với quy mô doanh nghiệp của bạn. Tất cả các gói đều bao gồm dùng thử miễn phí 14 ngày.",
+    "monthly": "Hàng tháng",
+    "yearly": "Hàng năm",
+    "popular": "Phổ biến nhất",
+    "perMonth": "/tháng",
+    "getStarted": "Bắt đầu ngay",
+    "contactSales": "Liên hệ bán hàng",
+    "freeTrial": "Bao gồm dùng thử miễn phí 14 ngày. Không cần thẻ tín dụng.",
+    "moneyBack": "Cam kết hoàn tiền 30 ngày cho tất cả các gói trả phí.",
+    "plans": [
+      {
+        "name": "Cơ bản",
+        "price": "Miễn phí",
+        "description": "Hoàn hảo cho cửa hàng nhỏ mới bắt đầu",
+        "features": ["1 cửa hàng", "Tối đa 100 sản phẩm", "Báo cáo cơ bản", "Hỗ trợ qua email"]
+      },
+      {
+        "name": "Chuyên nghiệp",
+        "price": "499.000đ",
+        "description": "Dành cho doanh nghiệp đang phát triển",
+        "features": ["Tối đa 5 cửa hàng", "Sản phẩm không giới hạn", "Phân tích nâng cao", "Hỗ trợ ưu tiên", "Quản lý nhân viên"]
+      },
+      {
+        "name": "Doanh nghiệp",
+        "price": "Tùy chỉnh",
+        "description": "Dành cho chuỗi cửa hàng lớn",
+        "features": ["Không giới hạn cửa hàng", "Tính năng tùy chỉnh", "Quản lý chuyên biệt", "Cam kết SLA", "Tích hợp API"]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Được tin dùng bởi các doanh nghiệp",
+    "titleHighlight": "giống như bạn",
+    "subtitle": "Đừng chỉ tin vào lời nói của chúng tôi. Hãy xem khách hàng nói gì về việc hệ thống POS của chúng tôi đã thay đổi doanh nghiệp của họ như thế nào.",
+    "readFullStory": "Đọc toàn bộ câu chuyện",
+    "business": "Doanh nghiệp",
+    "teamSize": "Quy mô đội ngũ",
+    "employees": "nhân viên",
+    "usingFor": "Đã sử dụng",
+    "years": "năm",
+    "stats": {
+      "happyCustomers": "Khách hàng tin dùng",
+      "satisfaction": "Sự hài lòng khách hàng",
+      "revenueProcessed": "Doanh thu xử lý",
+      "customerSupport": "Hỗ trợ khách hàng"
+    },
+    "items": [
+      {
+        "name": "Rajesh Kumar",
+        "position": "Chủ sở hữu, Metro Retail",
+        "content": "Việc triển khai hệ thống POS này đã thay đổi hoàn toàn hoạt động kinh doanh của chúng tôi. Riêng tính năng quản lý tồn kho đã giúp chúng tôi tiết kiệm vô số thời gian và giảm 35% sai sót.",
+        "businessType": "Siêu thị"
+      },
+      {
+        "name": "Priya Sharma",
+        "position": "Quản lý, Chuỗi Cà phê",
+        "content": "Các tính năng quản lý khách hàng đã giúp chúng tôi xây dựng mối quan hệ bền chặt hơn với những khách hàng thân thiết.",
+        "businessType": "Nhà hàng"
+      },
+      {
+        "name": "Vikram Singh",
+        "position": "Giám đốc, Trung tâm Kinh doanh",
+        "content": "Bảng điều khiển phân tích cung cấp cho chúng tôi những thông tin chi tiết theo thời gian thực vô cùng quan trọng cho việc ra quyết định.",
+        "businessType": "Điện tử"
+      },
+      {
+        "name": "Ananya Patel",
+        "position": "CEO, Quick Mart",
+        "content": "Khả năng quản lý đa cửa hàng đã tạo nên bước ngoặt cho doanh nghiệp đang mở rộng của chúng tôi.",
+        "businessType": "Cửa hàng tiện lợi"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Sẵn sàng để tối ưu hóa cửa hàng của bạn?",
+    "subtitle": "Gia nhập cùng hàng ngàn nhà bán lẻ tin tưởng hệ thống POS của chúng tôi để phát triển kinh doanh",
+    "form": {
+      "name": "Họ và Tên",
+      "namePlaceholder": "Tên của bạn",
+      "email": "Địa chỉ Email",
+      "emailPlaceholder": "vi-du@email.com",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "+84 123 456 789",
+      "business": "Tên Doanh nghiệp",
+      "businessPlaceholder": "Tên cửa hàng/công ty của bạn",
+      "interest": "Tôi quan tâm về",
+      "selectOption": "Chọn một tùy chọn",
+      "scheduleDemo": "Lên lịch xem demo",
+      "pricingInfo": "Thông tin bảng giá",
+      "startTrial": "Bắt đầu dùng thử miễn phí",
+      "generalQuestion": "Câu hỏi chung",
+      "message": "Nội dung",
+      "messagePlaceholder": "Cho chúng tôi biết về nhu cầu kinh doanh của bạn",
+      "send": "Gửi tin nhắn"
+    },
+    "info": {
+      "title": "Thông tin liên hệ",
+      "phone": "Điện thoại",
+      "email": "Email",
+      "office": "Địa chỉ văn phòng",
+      "hours": "Giờ làm việc",
+      "hoursDetail1": "Thứ Hai - Thứ Sáu: 9:00 AM - 8:00 PM",
+      "hoursDetail2": "Thứ Bảy: 10:00 AM - 6:00 PM"
+    },
+    "benefits": [
+      "Demo cá nhân hóa miễn phí",
+      "14 ngày dùng thử miễn phí đầy đủ tính năng",
+      "Chuyên gia hỗ trợ làm quen tận tâm",
+      "Hỗ trợ khách hàng 24/7"
+    ]
+  },
+  "faq": {
+    "title": "Các câu hỏi",
+    "titleHighlight": "thường gặp",
+    "subtitle": "Mọi thứ bạn cần biết về hệ thống POS của chúng tôi. Không tìm thấy câu trả lời? Hãy trò chuyện với đội ngũ hỗ trợ thân thiện của chúng tôi.",
+    "items": [
+      { "q": "Tôi có thể sử dụng hệ thống POS khi không có mạng không?", "a": "Có! Hệ thống POS của chúng tôi hoạt động hoàn toàn ngoại tuyến. Mọi dữ liệu sẽ tự động đồng bộ khi bạn có mạng trở lại." },
+      { "q": "Hệ thống có tuân thủ quy định về thuế không?", "a": "Chắc chắn rồi! Hệ thống hoàn toàn tuân thủ các quy định về thuế với tính năng tính thuế tự động và định dạng hóa đơn chuẩn." },
+      { "q": "Có những hình thức hỗ trợ nào?", "a": "Chúng tôi cung cấp hỗ trợ khách hàng 24/7 qua điện thoại, email và chat trực tiếp." },
+      { "q": "Tôi có thể quản lý nhiều chi nhánh không?", "a": "Có! Tính năng quản lý đa cửa hàng cho phép bạn kiểm soát tất cả từ một bảng điều khiển tập trung." },
+      { "q": "Dữ liệu kinh doanh bảo mật ra sao?", "a": "Chúng tôi áp dụng bảo mật cấp ngân hàng bao gồm mã hóa đầu cuối và lưu trữ đám mây an toàn." },
+      { "q": "Tôi có thể tùy chỉnh biên lai không?", "a": "Có, bạn có thể tùy chỉnh hoàn toàn biên lai và hóa đơn với logo và thông tin của bạn." },
+      { "q": "Có ứng dụng di động không?", "a": "Có, chúng tôi cung cấp ứng dụng cho cả iOS và Android." },
+      { "q": "Đào tạo nhân viên mới có dễ không?", "a": "Hệ thống rất dễ sử dụng. Nhân viên mới thường học trong vòng 30 phút." }
+    ],
+    "stillHaveQuestions": "Bạn vẫn còn thắc mắc?",
+    "contactSupport": "Liên hệ đội ngũ hỗ trợ",
+    "supportOptions": "Lựa chọn hỗ trợ",
+    "support": [
+      { "title": "Hỗ trợ điện thoại", "desc": "Trao đổi với chuyên gia", "action": "+84 123 456 789", "btn": "Gọi ngay" },
+      { "title": "Hỗ trợ Email", "desc": "Nhận câu trả lời qua email", "action": "support@pospro.com", "btn": "Gửi Email" },
+      { "title": "Chat trực tiếp", "desc": "Trò chuyện với đội ngũ", "action": "Sẵn sàng 24/7", "btn": "Bắt đầu Chat" },
+      { "title": "Trung tâm hỗ trợ", "desc": "Xem các tài nguyên hỗ trợ", "action": "Hướng dẫn & Video", "btn": "Truy cập Trung tâm" }
+    ],
+    "businessHours": "Giờ làm việc",
+    "monFri": "Thứ Hai - Thứ Sáu:",
+    "sat": "Thứ Bảy:",
+    "sun": "Chủ Nhật:",
+    "closed": "Đóng cửa",
+    "save": "Lưu",
+    "search": "Tìm kiếm...",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "loading": "Đang tải...",
+    "noData": "Không có dữ liệu",
+    "validation": {
+      "required": "{{field}} là bắt buộc",
+      "email": "Vui lòng nhập địa chỉ email hợp lệ",
+      "minLength": "{{field}} phải có ít nhất {{min}} ký tự",
+      "maxLength": "{{field}} phải có ít hơn {{max}} ký tự",
+      "phone": "Vui lòng nhập số điện thoại hợp lệ",
+      "number": "Vui lòng nhập số hợp lệ",
+      "min": "{{field}} phải lớn hơn hoặc bằng {{min}}",
+      "max": "{{field}} không được vượt quá {{max}}",
+      "passwordMismatch": "Mật khẩu không khớp",
+      "tooShort": "Quá ngắn",
+      "tooLong": "Quá dài"
+    }
+  },
+  "footer": {
+    "description": "Cung cấp cho các nhà bán lẻ giải pháp điểm bán hàng thông minh giúp tinh giản hoạt động, thúc đẩy doanh số và nâng cao trải nghiệm khách hàng.",
+    "quickLinks": "Liên kết nhanh",
+    "home": "Trang chủ",
+    "resources": "Tài nguyên",
+    "blog": "Blog",
+    "helpCenter": "Trung tâm hỗ trợ",
+    "documentation": "Tài liệu",
+    "apiReference": "Tham chiếu API",
+    "partners": "Đối tác",
+    "contact": "Liên hệ",
+    "stayUpdated": "Cập nhật thông tin",
+    "newsletterDesc": "Nhận thông tin chuyên ngành và cập nhật sản phẩm qua hòm thư của bạn.",
+    "emailPlaceholder": "Địa chỉ email của bạn",
+    "followUs": "Theo dõi chúng tôi",
+    "copyright": "Bảo lưu mọi quyền.",
+    "terms": "Điều khoản dịch vụ",
+    "privacy": "Chính sách bảo mật",
+    "cookies": "Chính sách Cookie"
+  },
+  "liveDemo": {
+    "title": "Khám phá",
+    "titleHighlight": "Hành động",
+    "subtitle": "Trải nghiệm giao diện trực quan và các tính năng mạnh mẽ thông qua bản demo tương tác của chúng tôi",
+    "exploreFeatures": "Khám phá tính năng",
+    "keyFeatures": "Tính năng chính:",
+    "requestFullDemo": "Yêu cầu Demo đầy đủ",
+    "demoPlaying": "Đang chạy Demo",
+    "clickToPlay": "Nhấn để xem",
+    "clickToPlayDemo": "Nhấn để xem Demo tương tác",
+    "wantMore": "Bạn muốn xem thêm? Hãy đặt lịch hẹn demo cá nhân hóa với đội ngũ của chúng tôi.",
+    "bookLiveDemo": "Đặt lịch Demo trực tiếp",
+    "tabs": {
+      "pos": "Máy POS",
+      "analytics": "Phân tích",
+      "inventory": "Kho hàng",
+      "customers": "Khách hàng"
+    },
+    "screenTitles": {
+      "pos": "Máy bán hàng POS - Thanh toán",
+      "analytics": "Bảng điều khiển phân tích",
+      "inventory": "Quản lý kho hàng",
+      "customers": "Quản lý khách hàng"
+    },
+    "featureLists": {
+      "pos": ["Giao diện cảm ứng trực quan", "Quét mã vạch cực nhanh", "Tìm kiếm sản phẩm nhanh chóng", "Phím tắt có thể tùy chỉnh", "Nhiều phương thức thanh toán", "Tùy chỉnh biên lai hóa đơn"],
+      "analytics": ["Bảng điều khiển doanh số thời gian thực", "Chỉ số hiệu suất sản phẩm", "Theo dõi hiệu suất nhân viên", "Tự động tạo báo cáo tùy chỉnh", "Tùy chọn xuất dữ liệu đa dạng", "Biểu diễn dữ liệu trực quan"],
+      "inventory": ["Theo dõi tồn kho thời gian thực", "Cảnh báo khi sắp hết hàng", "Tự động tạo đơn đặt hàng", "Quản lý nhà cung cấp", "Chuyển kho giữa các chi nhánh", "Theo dõi lô hàng và hạn dùng"],
+      "customers": ["Hồ sơ khách hàng chi tiết", "Lịch sử mua hàng đầy đủ", "Tích hợp chương trình thành viên", "Tiếp thị tự động hóa", "Phân khúc khách hàng thông minh", "Thu thập phản hồi khách hàng"]
+    }
+  },
+  "comparison": {
+    "title": "So sánh tính năng",
+    "subtitle": "Xem gói dịch vụ nào phù hợp nhất với nhu cầu kinh doanh của bạn",
+    "viewAll": "Xem tất cả tính năng",
+    "feature": "Tính năng",
+    "basic": "Cơ bản",
+    "pro": "Chuyên nghiệp",
+    "enterprise": "Doanh nghiệp",
+    "categories": [
+      {
+        "name": "Tính năng POS cốt lõi",
+        "features": ["Quét mã vạch", "In biên lai", "Quản lý sản phẩm", "Cơ sở dữ liệu khách hàng", "Chế độ Ngoại tuyến"]
+      },
+      {
+        "name": "Tính năng nâng cao",
+        "features": ["Quản lý đa cửa hàng", "Báo cáo chuyên sâu", "Dự báo tồn kho", "Quản lý nhân viên", "Truy cập API"]
+      },
+      {
+        "name": "Tính năng doanh nghiệp",
+        "features": ["White Labeling", "Phát triển theo yêu cầu", "Triển khai tại chỗ", "Cam kết SLA", "Quản lý tài khoản riêng"]
+      }
+    ]
+  },
+  "mobileApp": {
+    "badge": "Ứng dụng di động",
+    "title": "Quản lý kinh doanh",
+    "titleHighlight": "ở mọi nơi",
+    "titleSuffix": "với ứng dụng di động",
+    "description": "Ứng dụng di động của chúng tôi cho phép bạn tự do quản lý cơ sở kinh doanh từ bất cứ đâu. Kiểm tra doanh số, cập nhật tồn kho và luôn kết nối với đội ngũ — tất cả từ điện thoại của bạn.",
+    "downloadIOS": "Tải cho iOS",
+    "downloadAndroid": "Tải cho Android",
+    "scanToDownload": "Quét để tải về",
+    "appFeatures": [
+      "Theo dõi doanh số thời gian thực",
+      "Quản lý tồn kho mọi lúc mọi nơi",
+      "Thông báo đẩy khi sắp hết hàng",
+      "Tạo biên lai trên di động",
+      "Quản lý khách hàng",
+      "Hoạt động ngoại tuyến"
+    ],
+    "phone": {
+      "dashboard": "Bảng điều khiển",
+      "todaySales": "Doanh số hôm nay",
+      "vsYesterday": "so với hôm qua",
+      "orders": "Đơn hàng",
+      "newOrders": "đơn mới hôm nay",
+      "recentOrders": "Đơn hàng gần đây",
+      "viewAll": "Xem tất cả",
+      "order": "Đơn hàng",
+      "minsAgo": "phút trước",
+      "quickActions": "Chức năng nhanh",
+      "newSale": "Bán mới",
+      "inventory": "Tồn kho",
+      "reports": "Báo cáo",
+      "navHome": "Trang chủ",
+      "navSales": "Doanh số",
+      "navProducts": "Sản phẩm",
+      "navMore": "Thêm"
+    }
+  },
+  "common": {
+    "refresh": "Làm mới",
+    "unknown": "Không xác định",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "failed": "Thất bại",
+    "language": "Ngôn ngữ",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "close": "Đóng",
+    "confirm": "Xác nhận",
+    "search": "Tìm kiếm...",
+    "loading": "Đang tải...",
+    "noData": "Không có dữ liệu",
+    "actions": "Hành động",
+    "back": "Quay lại",
+    "roles": {
+      "ROLE_STORE_MANAGER": "Chủ cửa hàng (Store Manager)",
+      "ROLE_BRANCH_MANAGER": "Quản lý chi nhánh (Branch Manager)",
+      "ROLE_BRANCH_ADMIN": "Quản trị viên (Branch Admin)",
+      "ROLE_BRANCH_CASHIER": "Thu ngân (Cashier)"
+    },
+    "validation": {
+      "required": "{{field}} là bắt buộc",
+      "email": "Vui lòng nhập địa chỉ email hợp lệ",
+      "minLength": "{{field}} phải có ít nhất {{min}} ký tự",
+      "maxLength": "{{field}} phải ít hơn {{max}} ký tự",
+      "phone": "Vui lòng nhập số điện thoại hợp lệ",
+      "number": "Vui lòng nhập một số hợp lệ",
+      "min": "{{field}} phải từ {{min}} trở lên",
+      "max": "{{field}} không được vượt quá {{max}}",
+      "passwordMismatch": "Mật khẩu không khớp",
+      "tooShort": "Quá ngắn",
+      "tooLong": "Quá dài"
+    }
+  },
+
+  "toast": {
+    "success": "Thành công",
+    "error": "Lỗi",
+    "productAdded": "Thêm sản phẩm thành công",
+    "productUpdated": "Cập nhật sản phẩm thành công",
+    "productDeleted": "Xóa sản phẩm thành công",
+    "productDeletedError": "Lỗi khi xóa sản phẩm",
+    "categoryDeleted": "Xóa danh mục thành công",
+    "categoryDeletedError": "Lỗi khi xóa danh mục",
+    "fetchError": "Lỗi khi tải dữ liệu",
+    "storeInfoUpdated": "Cập nhật thông tin cửa hàng thành công"
+  },
+  "storeModule": {
+    "products": {
+      "title": "Quản lý sản phẩm",
+      "subtitle": "Quản lý toàn bộ danh mục sản phẩm của cửa hàng.",
+      "addProduct": "Thêm sản phẩm",
+      "addNewProduct": "Thêm sản phẩm mới",
+      "enterDetails": "Nhập thông tin cho sản phẩm mới.",
+      "refreshing": "Đang làm mới...",
+      "refresh": "Làm mới",
+      "showingResults": "Đang hiển thị kết quả tìm kiếm ({count} sản phẩm)",
+      "showAll": "Hiển thị tất cả",
+      "editProduct": "Chỉnh sửa sản phẩm",
+      "updateDetails": "Cập nhật thông tin sản phẩm dưới đây.",
+      "productDetails": "Chi tiết sản phẩm",
+      "search": {
+        "placeholder": "Tìm kiếm sản phẩm...",
+        "button": "Tìm kiếm",
+        "searching": "Đang tìm..."
+      },
+      "form": {
+        "image": "URL Hình ảnh",
+        "pasteUrl": "Dán URL hình ảnh",
+        "productName": "Tên sản phẩm",
+        "enterName": "Nhập tên sản phẩm",
+        "sku": "Mã SKU",
+        "enterSku": "Nhập mã SKU",
+        "brand": "Thương hiệu",
+        "enterBrand": "Nhập thương hiệu",
+        "category": "Danh mục",
+        "selectCategory": "Chọn danh mục",
+        "color": "Màu sắc",
+        "enterColor": "Nhập màu sắc",
+        "mrp": "Giá gốc (MRP)",
+        "sellingPrice": "Giá bán",
+        "description": "Mô tả",
+        "enterDescription": "Nhập mô tả sản phẩm",
+        "cancel": "Hủy",
+        "updating": "Đang cập nhật...",
+        "adding": "Đang thêm...",
+        "updateBtn": "Cập nhật Sản phẩm",
+        "addBtn": "Thêm Sản phẩm",
+        "uploading": "Đang tải lên..."
+      },
+      "table": {
+        "loading": "Đang tải sản phẩm...",
+        "noProducts": "Không tìm thấy sản phẩm nào",
+        "addFirst": "Thêm sản phẩm đầu tiên để bắt đầu.",
+        "columns": {
+          "id": "ID",
+          "image": "Hình ảnh",
+          "product": "Sản phẩm",
+          "category": "Danh mục",
+          "price": "Giá",
+          "actions": "Thao tác"
+        }
+      }
+    },
+    "categories": {
+      "title": "Quản lý danh mục",
+      "subtitle": "Sắp xếp sản phẩm của bạn vào các danh mục.",
+      "addCategory": "Thêm danh mục",
+      "addNewCategory": "Thêm danh mục mới",
+      "enterDetails": "Nhập thông tin cho danh mục mới.",
+      "editCategory": "Chỉnh sửa danh mục",
+      "updateDetails": "Cập nhật thông tin danh mục dưới đây.",
+      "form": {
+        "categoryName": "Tên danh mục",
+        "enterName": "Nhập tên danh mục",
+        "description": "Mô tả",
+        "enterDescription": "Nhập mô tả danh mục",
+        "cancel": "Hủy",
+        "updating": "Đang cập nhật...",
+        "adding": "Đang thêm...",
+        "updateBtn": "Cập nhật danh mục",
+        "addBtn": "Thêm danh mục"
+      },
+      "table": {
+        "loading": "Đang tải danh mục...",
+        "noCategories": "Không tìm thấy danh mục nào",
+        "addFirst": "Thêm danh mục đầu tiên để bắt đầu.",
+        "noDescription": "Không có mô tả",
+        "columns": {
+          "name": "Tên danh mục",
+          "description": "Mô tả",
+          "actions": "Thao tác"
+        }
+      }
+    },
+    "sales": {
+      "title": "Quản lý doanh số",
+      "newSale": "Đơn hàng mới",
+      "totalSales": "Tổng doanh số",
+      "fromLastWeek": "so với tuần trước",
+      "ordersToday": "Đơn hàng hôm nay",
+      "fromYesterday": "so với hôm qua",
+      "activeCashiers": "Thu ngân đang hoạt động",
+      "sameAsYesterday": "Bằng với hôm qua",
+      "avgOrderValue": "Giá trị trung bình đơn",
+      "dailySales": "Doanh số hàng ngày (7 ngày qua)",
+      "loadingChart": "Đang tải dữ liệu biểu đồ...",
+      "noSalesData": "Không có dữ liệu doanh số",
+      "paymentMethods": "Phương thức thanh toán",
+      "noPaymentData": "Không có dữ liệu thanh toán"
+    },
+    "reports": {
+      "title": "Báo cáo",
+      "subtitle": "Tạo và tải xuống các báo cáo tổng hợp cho toàn bộ cửa hàng của bạn.",
+      "generateReport": "Tạo báo cáo",
+      "types": {
+        "overallSales": {
+          "title": "Báo cáo tổng doanh số",
+          "desc": "Dữ liệu bán hàng tổng hợp từ tất cả các chi nhánh, bao gồm doanh thu và lợi nhuận."
+        },
+        "branchPerformance": {
+          "title": "Hiệu suất chi nhánh",
+          "desc": "So sánh doanh số, đơn đặt hàng và doanh thu giữa các chi nhánh khác nhau."
+        },
+        "productPerformance": {
+          "title": "Hiệu suất sản phẩm",
+          "desc": "Thông tin chi tiết về các sản phẩm bán chạy nhất và hiệu suất từng nhóm danh mục."
+        },
+        "employeeSales": {
+          "title": "Báo cáo bán hàng của nhân viên",
+          "desc": "Theo dõi hiệu suất bán hàng cho từng nhân viên trên tất cả các chi nhánh."
+        },
+        "inventorySummary": {
+          "title": "Tóm tắt tồn kho",
+          "desc": "Một cái nhìn tổng quan đầy đủ về mức tồn kho cho tất cả sản phẩm ở tất cả chi nhánh."
+        },
+        "taxReport": {
+          "title": "Báo cáo Thuế & GST",
+          "desc": "Báo cáo thuế hợp nhất để dễ dàng khai báo và gửi đối chiếu."
+        }
+      }
+    },
+    "settings": {
+      "title": "Cài đặt",
+      "subtitle": "Quản lý cửa hàng, hồ sơ cá nhân và các cài đặt tài khoản.",
+      "tabs": {
+        "storeDetails": "Thông tin cửa hàng",
+        "myProfile": "Hồ sơ của tôi",
+        "security": "Bảo mật",
+        "notifications": "Thông báo"
+      },
+      "storeInfo": {
+        "storeName": "Tên cửa hàng",
+        "storeType": "Loại cửa hàng",
+        "address": "Địa chỉ",
+        "saveChanges": "Lưu thay đổi",
+        "updateSuccess": "Cập nhật thông tin cửa hàng thành công."
+      },
+      "security": {
+        "title": "Cài đặt Bảo mật",
+        "desc": "Cấu hình tùy chọn bảo mật cho cửa hàng",
+        "twoFactorAuth": "Xác thực hai yếu tố",
+        "twoFactorAuthDesc": "Thêm một lớp bảo mật",
+        "ipRestriction": "Hạn chế IP",
+        "ipRestrictionDesc": "Giới hạn truy cập từ các địa chỉ IP cụ thể",
+        "passwordExpiry": "Thời hạn mật khẩu (ngày)",
+        "sessionTimeout": "Thời gian chờ phiên (phút)"
+      },
+      "notifications": {
+        "title": "Cài đặt Thông báo",
+        "desc": "Cấu hình cách bạn nhận cảnh báo và thông báo",
+        "email": "Thông báo qua Email",
+        "emailDesc": "Nhận thông báo qua email",
+        "sms": "Thông báo qua SMS",
+        "smsDesc": "Nhận thông báo qua SMS",
+        "lowStock": "Cảnh báo tồn kho thấp",
+        "lowStockDesc": "Nhận thông báo khi hàng tồn kho sắp hết",
+        "salesReports": "Báo cáo doanh số",
+        "salesReportsDesc": "Nhận báo cáo doanh số định kỳ",
+        "employeeActivity": "Hoạt động của nhân viên",
+        "employeeActivityDesc": "Nhận thông báo về các hoạt động của nhân viên"
+      },
+      "payment": {
+        "title": "Cài đặt Thanh toán",
+        "desc": "Cấu hình các phương thức và tùy chọn thanh toán",
+        "acceptCash": "Chấp nhận Tiền mặt",
+        "acceptCashDesc": "Cho phép thanh toán bằng tiền mặt",
+        "acceptCredit": "Chấp nhận Thẻ tín dụng",
+        "acceptCreditDesc": "Cho phép thanh toán bằng thẻ tín dụng",
+        "acceptDebit": "Chấp nhận Thẻ ghi nợ",
+        "acceptDebitDesc": "Cho phép thanh toán bằng thẻ ghi nợ",
+        "acceptMobile": "Chấp nhận Thanh toán Di động",
+        "acceptMobileDesc": "Cho phép các phương thức thanh toán di động",
+        "stripe": "Tích hợp Stripe",
+        "stripeDesc": "Bật cổng thanh toán Stripe",
+        "paypal": "Tích hợp PayPal",
+        "paypalDesc": "Bật cổng thanh toán PayPal"
+      }
+    },
+    "employees": {
+      "title": "Quản lý nhân viên",
+      "subtitle": "Quản lý đội ngũ nhân viên và vai trò trong cửa hàng của bạn.",
+      "addEmployee": "Thêm nhân viên",
+      "editEmployee": "Chỉnh sửa nhân viên",
+      "addNewTitle": "Thêm nhân viên mới",
+      "addNewSubtitle": "Nhập thông tin chi tiết cho nhân viên mới.",
+      "editTitle": "Chỉnh sửa nhân viên",
+      "editSubtitle": "Cập nhật thông tin nhân viên bên dưới.",
+      "table": {
+        "name": "Họ tên",
+        "contact": "Liên hệ",
+        "role": "Vai trò",
+        "branch": "Chi nhánh",
+        "actions": "Hành động",
+        "noEmployees": "Không tìm thấy nhân viên",
+        "noEmployeesDesc": "Thêm nhân viên đầu tiên để bắt đầu."
+      },
+      "form": {
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Nhập tên nhân viên",
+        "email": "Email",
+        "emailPlaceholder": "Nhập địa chỉ email",
+        "password": "Mật khẩu",
+        "passwordPlaceholder": "Nhập mật khẩu",
+        "phone": "Điện thoại",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "role": "Vai trò",
+        "rolePlaceholder": "Chọn vai trò",
+        "branch": "Chi nhánh",
+        "branchPlaceholder": "Chọn chi nhánh",
+        "saveChanges": "Lưu thay đổi"
+      },
+      "toast": {
+        "deleteSuccess": "Đã xóa nhân viên thành công!",
+        "addSuccess": "Đã thêm nhân viên thành công!",
+        "updateSuccess": "Đã cập nhật nhân viên thành công!"
+      },
+      "validation": {
+        "nameRequired": "Tên nhân viên là bắt buộc",
+        "emailInvalid": "Địa chỉ email không hợp lệ",
+        "emailRequired": "Email là bắt buộc",
+        "phoneRequired": "Số điện thoại là bắt buộc",
+        "roleRequired": "Vai trò là bắt buộc",
+        "branchRequired": "Chi nhánh là bắt buộc",
+        "passwordMin": "Mật khẩu phải có ít nhất 8 ký tự",
+        "passwordRequired": "Mật khẩu là bắt buộc"
+      }
+    },
+    "branches": {
+      "title": "Quản lý chi nhánh",
+      "subtitle": "Giám sát tất cả các địa điểm cửa hàng của bạn.",
+      "addBranch": "Thêm chi nhánh",
+      "editBranch": "Chỉnh sửa chi nhánh",
+      "addNewTitle": "Thêm chi nhánh mới",
+      "addNewSubtitle": "Nhập thông tin chi tiết cho chi nhánh mới.",
+      "editTitle": "Chỉnh sửa chi nhánh",
+      "editSubtitle": "Cập nhật thông tin chi tiết chi nhánh bên dưới.",
+      "table": {
+        "name": "Tên chi nhánh",
+        "address": "Địa chỉ",
+        "manager": "Quản lý",
+        "phone": "Điện thoại",
+        "actions": "Hành động",
+        "loading": "Đang tải chi nhánh...",
+        "noBranches": "Không tìm thấy chi nhánh",
+        "noBranchesDesc": "Thêm chi nhánh đầu tiên để bắt đầu.",
+        "notAssigned": "Chưa chỉ định"
+      },
+      "form": {
+        "name": "Tên chi nhánh",
+        "namePlaceholder": "Nhập tên chi nhánh",
+        "address": "Địa chỉ",
+        "addressPlaceholder": "Nhập địa chỉ chi nhánh",
+        "manager": "Tên quản lý",
+        "managerPlaceholder": "Nhập tên quản lý",
+        "phone": "Số điện thoại",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "cancel": "Hủy",
+        "adding": "Đang thêm...",
+        "updating": "Đang cập nhật...",
+        "updateBranch": "Cập nhật chi nhánh"
+      },
+      "toast": {
+        "deleteSuccess": "Đã xóa chi nhánh thành công",
+        "updateSuccess": "Đã cập nhật chi nhánh thành công",
+        "createSuccess": "Đã tạo chi nhánh thành công",
+        "idMissing": "Thiếu ID chi nhánh hoặc JWT xác thực",
+        "storeMissing": "Thiếu thông tin cửa hàng hoặc JWT xác thực!"
+      },
+      "validation": {
+        "nameRequired": "Tên chi nhánh là bắt buộc",
+        "addressRequired": "Địa chỉ là bắt buộc",
+        "managerRequired": "Tên quản lý là bắt buộc",
+        "phoneRequired": "Số điện thoại là bắt buộc"
+      }
+    },
+    "alerts": {
+      "title": "Cảnh báo",
+      "subtitle": "Các cảnh báo quan trọng và nguy cấp cho hoạt động cửa hàng của bạn.",
+      "lowStock": {
+        "title": "Sản phẩm sắp hết hàng",
+        "description": "Các sản phẩm này sắp hết hàng và có thể cần được nhập thêm sớm.",
+        "productName": "Tên sản phẩm",
+        "sku": "Mã SKU",
+        "stockRemaining": "Số lượng còn lại"
+      },
+      "inactiveCashiers": {
+        "title": "Thu ngân không hoạt động",
+        "description": "Các nhân viên thu ngân này đã không hoạt động trong hơn 3 ngày.",
+        "cashierName": "Tên thu ngân",
+        "branch": "Chi nhánh",
+        "lastActive": "Hoạt động lần cuối"
+      },
+      "noSaleBranches": {
+        "title": "Chi nhánh không có doanh thu hôm nay",
+        "description": "Các chi nhánh này chưa ghi nhận bất kỳ giao dịch bán hàng nào trong hôm nay.",
+        "branchName": "Tên chi nhánh",
+        "lastSaleDate": "Ngày bán hàng cuối cùng"
+      },
+      "refundSpikes": {
+        "title": "Hoạt động hoàn tiền bất thường",
+        "description": "Các chi nhánh này có số lượng hoàn tiền hôm nay cao hơn đáng kể so với mức trung bình hàng ngày.",
+        "branchName": "Tên chi nhánh",
+        "refundsToday": "Số lượt hoàn tiền hôm nay",
+        "dailyAverage": "Trung bình hàng ngày"
+      }
+    },
+    "upgrade": {
+      "title": "Nâng cấp gói dịch vụ",
+      "subtitle": "Chọn gói dịch vụ phù hợp với nhu cầu kinh doanh của bạn và mở khóa thêm nhiều tính năng.",
+      "currentPlan": "Gói hiện tại",
+      "billingCycle": {
+        "monthly": "tháng",
+        "yearly": "năm"
+      },
+      "currentlyActive": "Đang hoạt động",
+      "choosePlan": "Chọn gói",
+      "loading": "Đang tải các gói dịch vụ..."
+    }
+  },
+  "superAdminModule": {
+    "topbar": {
+      "searchPlaceholder": "Tìm kiếm cửa hàng, yêu cầu, hoặc cài đặt...",
+      "myAccount": "Tài khoản của tôi",
+      "profile": "Hồ sơ",
+      "settings": "Cài đặt",
+      "logout": "Đăng xuất",
+      "admin": "Quản trị viên",
+      "role": "Siêu quản trị"
+    },
+    "dashboard": {
+      "title": "Bảng điều khiển",
+      "subtitle": "Tổng quan về tất cả cửa hàng và thống kê hệ thống",
+      "stats": {
+        "totalStores": "Tổng số cửa hàng",
+        "activeStores": "Cửa hàng hoạt động",
+        "blockedStores": "Cửa hàng bị chặn",
+        "pendingRequests": "Yêu cầu chờ duyệt",
+        "fromLastMonth": "so với tháng trước",
+        "currentlyOperational": "đang hoạt động",
+        "suspendedAccounts": "tài khoản bị đình chỉ",
+        "awaitingApproval": "đang chờ phê duyệt"
+      },
+      "charts": {
+        "storeRegistrations": "Đăng ký cửa hàng (7 ngày qua)",
+        "statusDistribution": "Phân bổ trạng thái cửa hàng",
+        "active": "Hoạt động",
+        "pending": "Chờ duyệt",
+        "blocked": "Bị chặn"
+      },
+      "activity": {
+        "title": "Hoạt động gần đây",
+        "noActivity": "Không tìm thấy hoạt động gần đây.",
+        "newStore": "Cửa hàng mới \"{{name}}\" đã đăng ký",
+        "pendingStore": "Cửa hàng \"{{name}}\" đang chờ phê duyệt",
+        "blockedStore": "Cửa hàng \"{{name}}\" đã bị chặn do vi phạm chính sách",
+        "timeAgo": "{{time}} trước"
+      }
+    },
+    "commissions": {
+      "title": "Hoa hồng",
+      "subtitle": "Quản lý tỷ lệ hoa hồng cho tất cả các cửa hàng",
+      "stats": {
+        "totalEarnings": "Tổng thu nhập",
+        "averageRate": "Tỷ lệ trung bình",
+        "activeStores": "Cửa hàng hoạt động",
+        "rateSetHint": "Tất cả các cửa hàng đã được thiết lập tỷ lệ hoa hồng"
+      },
+      "table": {
+        "title": "Tỷ lệ hoa hồng cửa hàng",
+        "storeName": "Tên cửa hàng",
+        "currentRate": "Tỷ lệ hiện tại",
+        "rateChange": "Thay đổi tỷ lệ",
+        "totalEarnings": "Tổng thu nhập",
+        "lastUpdated": "Cập nhật lần cuối",
+        "actions": "Hành động",
+        "editRate": "Sửa tỷ lệ"
+      },
+      "dialog": {
+        "editTitle": "Chỉnh sửa tỷ lệ hoa hồng",
+        "editDesc": "Cập nhật tỷ lệ hoa hồng cho {{name}}",
+        "currentRateLabel": "Tỷ lệ hiện tại",
+        "newRateLabel": "Tỷ lệ mới (%)",
+        "placeholder": "Nhập tỷ lệ hoa hồng mới",
+        "rateLimitHint": "Tỷ lệ phải nằm trong khoảng từ 0% đến 10%",
+        "cancel": "Hủy",
+        "update": "Cập nhật tỷ lệ"
+      },
+      "toast": {
+        "invalidRate": "Tỷ lệ không hợp lệ",
+        "invalidRateDesc": "Tỷ lệ hoa hồng phải từ 0% đến 10%",
+        "updated": "Đã cập nhật hoa hồng",
+        "updatedDesc": "Tỷ lệ hoa hồng cho {{name}} đã được cập nhật thành {{rate}}%"
+      }
+    },
+    "exports": {
+      "title": "Xuất dữ liệu",
+      "subtitle": "Xuất dữ liệu cửa hàng và tạo báo cáo",
+      "create": {
+        "title": "Tạo bản xuất mới",
+        "typeLabel": "Loại xuất bản",
+        "typePlaceholder": "Chọn loại muốn xuất",
+        "fromLabel": "Từ ngày",
+        "toLabel": "Đến ngày",
+        "button": "Tạo bản xuất",
+        "exporting": "Đang xuất...",
+        "started": "Đã bắt đầu xuất",
+        "startedDesc": "Bản xuất {{name}} đã được bắt đầu. Bạn sẽ nhận được thông báo khi hoàn tất."
+      },
+      "available": {
+        "title": "Các loại xuất bản có sẵn",
+        "types": {
+          "store-list": {
+            "name": "Danh sách cửa hàng",
+            "desc": "Danh sách đầy đủ tất cả các cửa hàng với thông tin cơ bản"
+          },
+          "store-status": {
+            "name": "Tóm tắt trạng thái cửa hàng",
+            "desc": "Tóm tắt trạng thái cửa hàng và ngày đăng ký"
+          },
+          "commission-report": {
+            "name": "Báo cáo hoa hồng",
+            "desc": "Chi tiết thu nhập hoa hồng và tỷ lệ cho tất cả các cửa hàng"
+          },
+          "pending-requests": {
+            "name": "Yêu cầu chờ xử lý",
+            "desc": "Danh sách tất cả các yêu cầu đăng ký cửa hàng đang chờ xử lý"
+          }
+        }
+      },
+      "recent": {
+        "title": "Các bản xuất gần đây",
+        "noExports": "Không tìm thấy bản xuất gần đây.",
+        "downloads": "lượt tải",
+        "downloadButton": "Tải xuống",
+        "toast": {
+          "selectType": "Chọn loại xuất bản",
+          "selectTypeDesc": "Vui lòng chọn loại xuất bản để tiếp tục.",
+          "downloadStarted": "Đã bắt đầu tải xuống",
+          "downloadStartedDesc": "Tệp của bạn đang được tải xuống."
+        }
+      }
+    },
+    "stores": {
+      "title": "Cửa hàng",
+      "subtitle": "Xem và quản lý tất cả các cửa hàng đã đăng ký",
+      "searchPlaceholder": "Tìm kiếm theo tên cửa hàng hoặc ID...",
+      "filterPlaceholder": "Lọc theo trạng thái",
+      "allStatuses": "Tất cả trạng thái",
+      "statuses": {
+        "active": "Đang hoạt động",
+        "pending": "Chờ duyệt",
+        "blocked": "Đã chặn",
+        "inactive": "Ngừng hoạt động"
+      },
+      "table": {
+        "id": "ID Cửa hàng",
+        "name": "Tên cửa hàng",
+        "owner": "Chủ sở hữu",
+        "regDate": "Ngày đăng ký",
+        "status": "Trạng thái",
+        "actions": "Hành động",
+        "viewDetails": "Xem chi tiết"
+      },
+      "pagination": {
+        "previous": "Trước",
+        "next": "Tiếp",
+        "pageOf": "Trang {{current}} trên {{total}}"
+      },
+      "pendingRequests": {
+        "title": "Yêu cầu đăng ký cửa hàng",
+        "subtitle": "Xem xét và phê duyệt các yêu cầu đăng ký cửa hàng mới",
+        "count": "{{count}} đang chờ",
+        "table": {
+          "name": "Tên cửa hàng",
+          "owner": "Chủ sở hữu",
+          "contact": "Liên hệ",
+          "type": "Loại hình kinh doanh",
+          "submitted": "Đã gửi vào",
+          "actions": "Hành động",
+          "approve": "Phê duyệt",
+          "approving": "Đang phê duyệt...",
+          "reject": "Từ chối",
+          "rejecting": "Đang từ chối..."
+        },
+        "noRequests": "Hiện tại không có yêu cầu nào đang chờ xử lý.",
+        "dialog": {
+          "approveTitle": "Phê duyệt đăng ký cửa hàng",
+          "approveDesc": "Bạn có chắc chắn muốn phê duyệt {{name}}? Hành động này sẽ kích hoạt tài khoản của họ.",
+          "rejectTitle": "Từ chối đăng ký cửa hàng",
+          "rejectDesc": "Vui lòng cung cấp lý do từ chối {{name}}. Lý do này sẽ được gửi tới chủ cửa hàng.",
+          "rejectPlaceholder": "Nhập lý do từ chối...",
+          "cancel": "Hủy",
+          "confirmApprove": "Phê duyệt cửa hàng",
+          "confirmReject": "Từ chối cửa hàng"
+        },
+        "toast": {
+          "approved": "Cửa hàng đã được phê duyệt",
+          "approvedDesc": "{{name}} đã được phê duyệt thành công.",
+          "approveFailed": "Phê duyệt thất bại",
+          "rejected": "Cửa hàng đã bị từ chối",
+          "rejectedDesc": "{{name}} đã bị từ chối.",
+          "rejectFailed": "Từ chối thất bại"
+        }
+      },
+      "drawer": {
+        "ownerDetails": "Chi tiết chủ sở hữu",
+        "ownerName": "Tên chủ sở hữu",
+        "ownerEmail": "Email",
+        "ownerMobile": "Số điện thoại",
+        "storeInfo": "Thông tin cửa hàng",
+        "address": "Địa chỉ",
+        "regDate": "Ngày đăng ký",
+        "reject": "Từ chối",
+        "approve": "Phê duyệt",
+        "block": "Chặn cửa hàng",
+        "unblock": "Bỏ chặn cửa hàng"
+      }
+    },
+    "subscriptions": {
+      "title": "Gói đăng ký",
+      "subtitle": "Tạo, xem và quản lý các gói đăng ký cho cửa hàng",
+      "searchPlaceholder": "Tìm kiếm gói theo tên...",
+      "addPlan": "Thêm gói mới",
+      "table": {
+        "name": "Tên",
+        "price": "Giá",
+        "billingCycle": "Chu kỳ thanh toán",
+        "branches": "Chi nhánh",
+        "users": "Người dùng",
+        "products": "Sản phẩm",
+        "status": "Trạng thái",
+        "features": "Tính năng",
+        "actions": "Hành động",
+        "noPlans": "Không tìm thấy gói nào."
+      },
+      "billingCycles": {
+        "monthly": "Hàng tháng",
+        "yearly": "Hàng năm"
+      },
+      "features": {
+        "advancedReports": "Báo cáo nâng cao",
+        "inventory": "Hệ thống kho",
+        "integrations": "Tích hợp",
+        "ecommerce": "Thương mại điện tử",
+        "invoiceBranding": "Thương hiệu hóa hóa đơn",
+        "prioritySupport": "Hỗ trợ ưu tiên",
+        "multiLocation": "Đa chi nhánh",
+        "custom": "Tính năng tùy chỉnh",
+        "included": "Tính năng bao gồm",
+        "addFeature": "Thêm tính năng"
+      },
+      "dialog": {
+        "addTitle": "Thêm gói đăng ký",
+        "addDesc": "Tạo gói mới với các tính năng và giới hạn cụ thể.",
+        "editTitle": "Chỉnh sửa gói đăng ký",
+        "editDesc": "Cập nhật chi tiết cho gói \"{{name}}\".",
+        "labels": {
+          "name": "Tên gói",
+          "description": "Mô tả",
+          "price": "Giá (VNĐ )",
+          "billingCycle": "Chu kỳ thanh toán",
+          "branches": "Số chi nhánh tối đa",
+          "users": "Số người dùng tối đa",
+          "products": "Số sản phẩm tối đa"
+        },
+        "placeholders": {
+          "name": "VD: Gói chuyên nghiệp",
+          "description": "Mô tả ngắn gọn về gói",
+          "price": "VD: 1999",
+          "selectCycle": "Chọn chu kỳ",
+          "branches": "VD: 5",
+          "users": "VD: 20",
+          "products": "VD: 10000",
+          "custom": "VD: Điểm cuối API tùy chỉnh"
+        },
+        "cancel": "Hủy",
+        "save": "Lưu gói",
+        "saveChanges": "Lưu thay đổi"
+      },
+      "toast": {
+        "deleted": "Đã xóa gói",
+        "deletedDesc": "Gói đăng ký đã được xóa thành công",
+        "statusUpdated": "Đã cập nhật trạng thái",
+        "statusDesc": "Gói hiện đang {{status}}",
+        "createFailed": "Không thể tạo gói",
+        "updateFailed": "Không thể cập nhật gói",
+        "deleteFailed": "Không thể xóa gói"
+      },
+      "confirmDelete": "Bạn có chắc chắn muốn xóa gói đăng ký này không?",
+      "active": "Đang hoạt động",
+      "inactive": "Ngừng hoạt động",
+      "validation": {
+        "nameRequired": "Tên là bắt buộc",
+        "descRequired": "Mô tả là bắt buộc",
+        "priceRequired": "Giá là bắt buộc",
+        "priceNumber": "Giá phải là một con số",
+        "billingRequired": "Chu kỳ thanh toán là bắt buộc",
+        "branchesRequired": "Chi nhánh là bắt buộc",
+        "branchesNumber": "Chi nhánh phải là một con số",
+        "usersRequired": "Người dùng là bắt buộc",
+        "usersNumber": "Người dùng phải là một con số",
+        "productsRequired": "Sản phẩm là bắt buộc",
+        "productsNumber": "Sản phẩm phải là một con số",
+        "featureEmpty": "Tính năng không được để trống",
+        "featureAtLeastOne": "Phải có ít nhất một tính năng bổ sung"
+      }
+    },
+    "settings": {
+      "title": "Cài đặt",
+      "subtitle": "Quản lý tài khoản, bảo mật và cài đặt hệ thống.",
+      "tabs": {
+        "profile": "Hồ sơ",
+        "profileDesc": "Cập nhật ảnh và thông tin cá nhân của bạn.",
+        "security": "Bảo mật",
+        "securityDesc": "Thay đổi mật khẩu và quản lý cài đặt bảo mật.",
+        "notifications": "Thông báo",
+        "notificationsDesc": "Quản lý cách bạn nhận thông báo.",
+        "system": "Hệ thống",
+        "systemDesc": "Quản lý các cài đặt hệ thống chung."
+      },
+      "profile": {
+        "changeAvatar": "Thay đổi ảnh đại diện",
+        "avatarHint": "JPG, GIF hoặc PNG. Tối đa 1MB.",
+        "fullName": "Họ và tên",
+        "email": "Địa chỉ Email",
+        "save": "Lưu thay đổi"
+      },
+      "security": {
+        "currentPassword": "Mật khẩu hiện tại",
+        "newPassword": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu mới",
+        "updateButton": "Cập nhật mật khẩu"
+      },
+      "notifications": {
+        "newStore": "Đăng ký cửa hàng mới",
+        "newStoreDesc": "Nhận thông báo email khi có cửa hàng đăng ký mới.",
+        "subscriptionRenewal": "Gia hạn gói đăng ký",
+        "subscriptionRenewalDesc": "Nhận thông báo email khi có yêu cầu gia hạn gói.",
+        "systemAlerts": "Cảnh báo & Cập nhật hệ thống",
+        "systemAlertsDesc": "Nhận thông báo về các cảnh báo và cập nhật hệ thống.",
+        "save": "Lưu tùy chọn"
+      },
+      "system": {
+        "maintenanceMode": "Chế độ bảo trì",
+        "maintenanceModeDesc": "Tạm thời vô hiệu hóa quyền truy cập đối với người dùng không phải quản trị viên để cập nhật hệ thống.",
+        "save": "Lưu cài đặt hệ thống"
+      }
+    }
+  }
+}

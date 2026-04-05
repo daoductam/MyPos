@@ -7,17 +7,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCategory, updateCategory } from '@/Redux Toolkit/features/category/categoryThunks';
 import { useToast } from '@/components/ui/use-toast';
-
-const validationSchema = Yup.object({
-  name: Yup.string().required('Category name is required'),
-  description: Yup.string().optional(),
-});
+import { useTranslation } from 'react-i18next';
 
 const CategoryForm = ({ initialValues, onSubmit, onCancel, isEditing = false }) => {
   const dispatch = useDispatch();
   const { toast } = useToast();
   const { loading } = useSelector((state) => state.category);
   const { store } = useSelector((state) => state.store);
+  const { t } = useTranslation();
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t('toast.error') + ': ' + t('storeModule.categories.form.categoryName')),
+    description: Yup.string().optional(),
+  });
 
   const defaultValues = {
     name: '',
@@ -35,18 +37,18 @@ const CategoryForm = ({ initialValues, onSubmit, onCancel, isEditing = false }) 
 
       if (isEditing && initialValues?.id) {
         await dispatch(updateCategory({ id: initialValues.id, dto, token })).unwrap();
-        toast({ title: 'Success', description: 'Category updated successfully' });
+        toast({ title: t('toast.success'), description: t('toast.categoryUpdated') || 'Category updated successfully' });
       } else {
         await dispatch(createCategory({ dto, token })).unwrap();
-        toast({ title: 'Success', description: 'Category added successfully' });
+        toast({ title: t('toast.success'), description: t('toast.categoryAdded') || 'Category added successfully' });
         resetForm();
       }
 
       if (onSubmit) onSubmit();
     } catch (err) {
       toast({ 
-        title: 'Error', 
-        description: err || `Failed to ${isEditing ? 'update' : 'add'} category`, 
+        title: t('toast.error'), 
+        description: err || t('toast.fetchError'), 
         variant: 'destructive' 
       });
     } finally {
@@ -64,25 +66,25 @@ const CategoryForm = ({ initialValues, onSubmit, onCancel, isEditing = false }) 
       {({ isSubmitting, touched, errors }) => (
         <Form className="space-y-4 py-2 pr-2">
           <div className="space-y-2"> 
-            <label htmlFor="name" className="block text-sm font-medium text-gray-300">Category Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-300">{t('storeModule.categories.form.categoryName')}</label>
             <Field
               as={Input}
               id="name"
               name="name"
-              placeholder="Enter category name"
+              placeholder={t('storeModule.categories.form.enterName')}
               className={`w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 ${touched.name && errors.name ? "border-red-500" : "border-white/20 hover:border-white/40"}`}
             />
             <ErrorMessage name="name" component="div" className="text-red-400 text-sm" />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-300">Description</label>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-300">{t('storeModule.categories.form.description')}</label>
             <Field
               as={Textarea}
               id="description"
               name="description"
               className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 resize-none"
-              placeholder="Enter category description"
+              placeholder={t('storeModule.categories.form.enterDescription')}
               rows={3}
             />
             <ErrorMessage name="description" component="div" className="text-red-500 text-sm" />
@@ -96,7 +98,7 @@ const CategoryForm = ({ initialValues, onSubmit, onCancel, isEditing = false }) 
                 className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
                 onClick={onCancel}
               >
-                Cancel
+                {t('storeModule.categories.form.cancel')}
               </Button>
             )}
             <Button 
@@ -110,10 +112,10 @@ const CategoryForm = ({ initialValues, onSubmit, onCancel, isEditing = false }) 
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  {isEditing ? 'Updating...' : 'Adding...'}
+                  {isEditing ? t('storeModule.categories.form.updating') : t('storeModule.categories.form.adding')}
                 </span>
               ) : (
-                isEditing ? 'Update Category' : 'Add Category'
+                isEditing ? t('storeModule.categories.form.updateBtn') : t('storeModule.categories.form.addBtn')
               )}
             </Button>
           </div>

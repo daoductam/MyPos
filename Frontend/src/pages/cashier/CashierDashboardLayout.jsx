@@ -11,36 +11,39 @@ import {
 import CashierSideBar from "./Sidebar/CashierSideBar";
 import { SidebarProvider } from "../../context/SidebarProvider";
 import { useSidebar } from "../../context/hooks/useSidebar";
-
-const navItems = [
-  {
-    path: "/cashier",
-    icon: <ShoppingCartIcon size={20} />,
-    label: "POS Terminal",
-  },
-  {
-    path: "/cashier/orders",
-    icon: <ClockIcon size={20} />,
-    label: "Order History",
-  },
-  {
-    path: "/cashier/returns",
-    icon: <RotateCcwIcon size={20} />,
-    label: "Returns/Refunds",
-  },
-  {
-    path: "/cashier/customers",
-    icon: <UsersIcon size={20} />,
-    label: "Customers",
-  },
-  {
-    path: "/cashier/shift-summary",
-    icon: <ReceiptIcon size={20} />,
-    label: "Shift Summary",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const LayoutContent = () => {
+  const { t } = useTranslation();
+  
+  const navItems = [
+    {
+      path: "/cashier",
+      icon: <ShoppingCartIcon size={20} />,
+      label: t('dashboard.cashier.nav.pos'),
+    },
+    {
+      path: "/cashier/orders",
+      icon: <ClockIcon size={20} />,
+      label: t('dashboard.cashier.nav.orders'),
+    },
+    {
+      path: "/cashier/returns",
+      icon: <RotateCcwIcon size={20} />,
+      label: t('dashboard.cashier.nav.returns'),
+    },
+    {
+      path: "/cashier/customers",
+      icon: <UsersIcon size={20} />,
+      label: t('dashboard.cashier.nav.customers'),
+    },
+    {
+      path: "/cashier/shift-summary",
+      icon: <ReceiptIcon size={20} />,
+      label: t('dashboard.cashier.nav.shiftSummary'),
+    },
+  ];
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const { sidebarOpen, setSidebarOpen } = useSidebar();
@@ -59,8 +62,8 @@ const LayoutContent = () => {
 
   const handleLogout = () => {
     toast({
-      title: "Preparing Shift Summary",
-      description: "Redirecting to shift summary page...",
+      title: t('dashboard.cashier.preparingSummary'),
+      description: t('dashboard.cashier.redirecting'),
     });
     navigate("/cashier/shift-summary");
   };

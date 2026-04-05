@@ -1,17 +1,19 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Loader2, ShoppingBagIcon, CalendarIcon, DollarSignIcon } from 'lucide-react';
 import { formatDate, getStatusColor } from '../../order/data';
+import { useTranslation } from "react-i18next";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
 
 const PurchaseHistory = ({ orders, loading = false }) => {
+  const { t } = useTranslation();
 
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center p-4 text-center text-gray-400">
         <Loader2 className="animate-spin h-8 w-8 mb-4 text-emerald-500" />
-        <p>Loading purchase history...</p>
+        <p>{t('dashboard.cashier.customerDialog.loading')}</p>
       </div>
     );
   }
@@ -20,8 +22,8 @@ const PurchaseHistory = ({ orders, loading = false }) => {
     return (
       <div className="flex flex-col items-center justify-center p-4 text-center text-gray-400">
         <ShoppingBagIcon size={48} strokeWidth={1} />
-        <p className="mt-4">No purchase history found</p>
-        <p className="text-sm">This customer hasn't made any orders yet</p>
+        <p className="mt-4">{t('dashboard.cashier.return.noOrders')}</p>
+        <p className="text-sm">{t('dashboard.cashier.customer.details.noPurchaseHistoryDesc')}</p>
       </div>
     );
   }
@@ -35,7 +37,7 @@ const PurchaseHistory = ({ orders, loading = false }) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-white">
             <ShoppingBagIcon className="h-5 w-5 text-emerald-400" />
-            Purchase History
+            {t('dashboard.cashier.customer.details.purchaseHistory')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -44,7 +46,7 @@ const PurchaseHistory = ({ orders, loading = false }) => {
               <div key={order.id} className="border border-white/10 rounded-lg p-4 bg-black/20">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h3 className="font-medium text-white">Order #{order.id}</h3>
+                    <h3 className="font-medium text-white">{t('dashboard.cashier.return.orderNumber', { id: order.id })}</h3>
                     <div className="flex items-center gap-2 text-sm text-gray-400 mt-1">
                       <CalendarIcon className="h-4 w-4" />
                       {formatDate(order.createdAt)}
@@ -53,31 +55,31 @@ const PurchaseHistory = ({ orders, loading = false }) => {
                   <div className="text-right">
                     <div className="flex items-center gap-2 mb-1">
                       <DollarSignIcon className="h-4 w-4 text-emerald-400" />
-                      <span className="font-bold text-emerald-400">₹{order.totalAmount?.toFixed(2) || '0.00'}</span>
+                      <span className="font-bold text-emerald-400">VNĐ {order.totalAmount?.toFixed(2) || '0.00'}</span>
                     </div>
                     {order.status && (
                       <Badge className={`${getStatusColor(order.status)} bg-opacity-20 border border-opacity-30`}>
-                        {order.status}
+                        {t(`dashboard.branchManager.orders.status.${order.status.toLowerCase()}`)}
                       </Badge>
                     )}
                   </div>
                 </div>
                 
-                {order.paymentMethod && (
+                {order.paymentType && (
                   <div className="text-sm text-gray-400 mb-2">
-                    Payment: {order.paymentMethod}
+                    {t('dashboard.branchManager.orders.table.payment')}: {t(`dashboard.cashier.paymentDialog.methods.${order.paymentType}`)}
                   </div>
                 )}
                 
                 {order.items && order.items.length > 0 && (
                   <div className="border-t border-white/10 pt-3">
-                    <h4 className="text-sm font-medium mb-2 text-gray-200">Items:</h4>
+                    <h4 className="text-sm font-medium mb-2 text-gray-200">{t('dashboard.cashier.return.itemsLabel')}:</h4>
                     <div className="space-y-1">
                       {order.items.map((item, index) => (
                         <div key={index} className="flex justify-between text-sm">
-                          <span className="text-gray-300">{item.product.name || item.productName || 'Unknown Product'}</span>
+                          <span className="text-gray-300">{item.product?.name || item.productName || t('common.unknown')}</span>
                           <span className="text-gray-400">
-                            {item.quantity || 1} × ₹{(item.price || 0).toFixed(2)}
+                            {item.quantity || 1} × VNĐ {(item.price || 0).toFixed(2)}
                           </span>
                         </div>
                       ))}

@@ -3,18 +3,21 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Shield } from "lucide-react";
 import ToggleSwitch from "./ToggleSwitch";
+import { useTranslation } from "react-i18next";
 
 const SecuritySettings = ({ settings, onChange }) => {
+  const { t } = useTranslation();
+
   const securityOptions = [
     {
       name: "twoFactorAuth",
-      title: "Two-Factor Authentication",
-      description: "Add an extra layer of security"
+      title: t('storeModule.settings.security.twoFactorAuth'),
+      description: t('storeModule.settings.security.twoFactorAuthDesc')
     },
     {
       name: "ipRestriction",
-      title: "IP Restriction",
-      description: "Limit access to specific IP addresses"
+      title: t('storeModule.settings.security.ipRestriction'),
+      description: t('storeModule.settings.security.ipRestrictionDesc')
     }
   ];
 
@@ -33,10 +36,10 @@ const SecuritySettings = ({ settings, onChange }) => {
       <CardHeader>
         <CardTitle className="flex items-center">
           <Shield className="mr-2 h-5 w-5 text-emerald-500" />
-          Security Settings
+          {t('storeModule.settings.security.title')}
         </CardTitle>
         <CardDescription>
-          Configure security options for your store
+          {t('storeModule.settings.security.desc')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -58,7 +61,7 @@ const SecuritySettings = ({ settings, onChange }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label htmlFor="passwordExpiry" className="text-sm font-medium">
-                Password Expiry (days)
+                {t('storeModule.settings.security.passwordExpiry')}
               </label>
               <Input
                 id="passwordExpiry"
@@ -70,7 +73,7 @@ const SecuritySettings = ({ settings, onChange }) => {
             </div>
             <div className="space-y-2">
               <label htmlFor="sessionTimeout" className="text-sm font-medium">
-                Session Timeout (minutes)
+                {t('storeModule.settings.security.sessionTimeout')}
               </label>
               <Input
                 id="sessionTimeout"

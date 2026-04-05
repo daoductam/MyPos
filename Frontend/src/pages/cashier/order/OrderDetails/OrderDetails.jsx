@@ -1,14 +1,15 @@
-
-import OrderInformation from "./OrderInformation";
-import CustomerInformation from "./CustomerInformation";
 import OrderItemTable from "../../../common/Order/OrderItemTable";
 import { Card, CardContent } from "../../../../components/ui/card";
+import { useTranslation } from "react-i18next";
+import OrderInformation from "./OrderInformation";
+import CustomerInformation from "./CustomerInformation";
 
 const OrderDetails = ({ selectedOrder }) => {
+  const { t } = useTranslation();
   if (!selectedOrder) {
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground">
-        Select an order to see details
+        {t('dashboard.cashier.orderHistory.noOrders')}
       </div>
     );
   }
@@ -21,7 +22,7 @@ const OrderDetails = ({ selectedOrder }) => {
 
       <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white flex-grow">
         <CardContent className="p-4 h-full flex flex-col">
-          <h3 className="font-semibold mb-2 text-white">Order Items</h3>
+          <h3 className="font-semibold mb-2 text-white">{t('dashboard.cashier.return.orderItems')}</h3>
           <div className="flex-grow overflow-auto"><OrderItemTable selectedOrder={selectedOrder} /></div>
         </CardContent>
       </Card>

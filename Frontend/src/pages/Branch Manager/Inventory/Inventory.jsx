@@ -9,8 +9,10 @@ import InventoryTable from "./InventoryTable";
 import InventoryStats from "./InventoryStats";
 import InventoryFilters from "./InventoryFilters";
 import InventoryFormDialog from "./InventoryFormDialog";
+import { useTranslation } from "react-i18next";
 
 const Inventory = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const branch = useSelector((state) => state.branch.branch);
   const inventories = useSelector((state) => state.inventory.inventories);
@@ -37,7 +39,7 @@ const Inventory = () => {
     return {
       id: inv?.id,
       sku: product.sku || inv.productId,
-      name: product.name || "Unknown",
+      name: product.name || t('auth.noData'),
       quantity: inv.quantity,
       category: product.category || "",
       productId: inv.productId,
@@ -47,7 +49,6 @@ const Inventory = () => {
   // Filter inventory based on search and filters
   const filteredRows = inventoryRows.filter((row) => {
     const matchesSearch =
-      // row?.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row?.name?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
       category === "all" || !category || row.category === category;
@@ -100,17 +101,17 @@ const Inventory = () => {
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Inventory Management</h1>
-          <p className="text-gray-400 mt-1">Track and manage stock levels for your branch.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.branchManager.inventory.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('dashboard.branchManager.orders.subtitle')}</p>
         </div>
         <div className="flex gap-2">
           <Button className="gap-2 bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105" onClick={() => setIsAddDialogOpen(true)}>
             <Plus className="h-4 w-4" />
-            Add Inventory
+            {t('dashboard.branchManager.inventory.addNew')}
           </Button>
           <Button variant="outline" className="gap-2 bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
             <Upload className="h-4 w-4" />
-            Import CSV
+            {t('superAdminModule.exports.recent.downloadButton')}
           </Button>
         </div>
       </div>

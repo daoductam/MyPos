@@ -1,7 +1,9 @@
-import React from 'react'
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const TrustedLogos = ({ scrollY }) => {
-  const logos = ["Venture Co", "Innovate Inc.", "Quantum Leap", "Starlight", "Meridian"];
+  const { t } = useTranslation();
+  const logos = ["Thế Giới Di Động", "Highlands Coffee", "Sài Gòn Co.op", "Thực phẩm Vissan", "FPT Shop"];
 
   return (
     <section className="py-16 relative">
@@ -11,9 +13,9 @@ const TrustedLogos = ({ scrollY }) => {
         >
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-              Trusted by leading innovators
+              {t('landing.trusted.title', 'Được tin dùng bởi các doanh nghiệp sáng tạo')}
             </h2>
-            <p className="text-gray-300">Join thousands of successful businesses using our platform</p>
+            <p className="text-gray-300">{t('landing.trusted.subtitle', 'Tham gia cùng hàng nghìn doanh nghiệp thành công sử dụng nền tảng của chúng tôi')}</p>
           </div>
           
           <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">

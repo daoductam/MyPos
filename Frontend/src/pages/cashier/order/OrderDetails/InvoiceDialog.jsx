@@ -15,8 +15,10 @@ import { useSelector } from "react-redux";
 import OrderDetails from "./OrderDetails";
 import { useDispatch } from "react-redux";
 import { resetOrder } from "../../../../Redux Toolkit/features/cart/cartSlice";
+import { useTranslation } from "react-i18next";
 
 const InvoiceDialog = ({ showInvoiceDialog, setShowInvoiceDialog }) => {
+  const { t } = useTranslation();
   let { selectedOrder } = useSelector((state) => state.order);
 //   selectedOrder={customer:{fullName:""},items:[{}]}
 //   showInvoiceDialog=true
@@ -36,8 +38,8 @@ const InvoiceDialog = ({ showInvoiceDialog, setShowInvoiceDialog }) => {
     dispatch(resetOrder());
 
     toast({
-      title: "Order Completed",
-      description: "Receipt printed and order saved successfully",
+      title: t('dashboard.cashier.invoiceDialog.toast.completed'),
+      description: t('dashboard.cashier.invoiceDialog.toast.completedDesc'),
     });
   };
 
@@ -46,14 +48,14 @@ const InvoiceDialog = ({ showInvoiceDialog, setShowInvoiceDialog }) => {
       {selectedOrder && (
         <DialogContent className="max-w-3xl bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
           <DialogHeader className="text-center">
-            <DialogTitle className="text-3xl font-bold">Order Details - Invoice</DialogTitle>
+            <DialogTitle className="text-3xl font-bold">{t('dashboard.cashier.invoiceDialog.title')}</DialogTitle>
           </DialogHeader>
           <OrderDetails selectedOrder={selectedOrder} />
 
           <DialogFooter className="gap-2 sm:gap-0 space-x-3">
             <Button variant="outline" onClick={handleDownloadPDF} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
               <Download className="h-4 w-4 mr-2" />
-              Download PDF
+              {t('dashboard.cashier.invoiceDialog.download')}
             </Button>
             <Button
               variant="outline"
@@ -61,10 +63,10 @@ const InvoiceDialog = ({ showInvoiceDialog, setShowInvoiceDialog }) => {
               className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
             >
               <PrinterIcon className="h-4 w-4 mr-2" />
-              Print Invoice
+              {t('dashboard.cashier.invoiceDialog.print')}
             </Button>
 
-            <Button onClick={finishOrder} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">Start New Order</Button>
+            <Button onClick={finishOrder} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">{t('dashboard.cashier.invoiceDialog.startNew')}</Button>
           </DialogFooter>
         </DialogContent>
       )}

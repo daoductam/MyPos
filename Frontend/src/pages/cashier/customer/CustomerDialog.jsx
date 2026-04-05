@@ -9,11 +9,13 @@ import { getAllCustomers } from '@/Redux Toolkit/features/customer/customerThunk
 import CustomerForm from './CustomerForm';
 import { setSelectedCustomer } from '../../../Redux Toolkit/features/cart/cartSlice';
 import { useToast } from '../../../components/ui/use-toast';
+import { useTranslation } from "react-i18next";
 
 const CustomerDialog = ({
   showCustomerDialog,
   setShowCustomerDialog
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
   const { customers, loading } = useSelector(state => state.customer);
@@ -37,10 +39,10 @@ const CustomerDialog = ({
 
     const handleCustomerSelect = (customer) => {
       dispatch(setSelectedCustomer(customer));
-      setShowCustomerDialog(false);
+       setShowCustomerDialog(false);
       toast({
-        title: "Customer Selected",
-        description: `${customer.name} selected for this order`,
+        title: t('dashboard.cashier.customerDialog.toast.selected'),
+        description: t('dashboard.cashier.customerDialog.toast.selectedDesc', { name: customer.fullName }),
       });
     };
 
@@ -49,14 +51,14 @@ const CustomerDialog = ({
   return (
     <Dialog open={showCustomerDialog} onOpenChange={setShowCustomerDialog}>
       <DialogContent className="max-w-2xl bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
-        <DialogHeader className="text-center">
-          <DialogTitle className="text-3xl font-bold">Select Customer</DialogTitle>
+         <DialogHeader className="text-center">
+          <DialogTitle className="text-3xl font-bold">{t('dashboard.cashier.customerDialog.title')}</DialogTitle>
         </DialogHeader>
         
-        <div className="relative mb-4">
+         <div className="relative mb-4">
           <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <Input 
-            placeholder="Search customers..." 
+            placeholder={t('dashboard.cashier.customerDialog.searchPlaceholder')} 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
@@ -65,23 +67,23 @@ const CustomerDialog = ({
         
         <div className="max-h-96 overflow-y-auto">
           {loading ? (
-            <div className="flex items-center justify-center py-8 text-gray-400">
+             <div className="flex items-center justify-center py-8 text-gray-400">
               <Loader2 className="animate-spin h-6 w-6 mr-2 text-emerald-500" />
-              <p>Loading customers...</p>
+              <p>{t('dashboard.cashier.customerDialog.loading')}</p>
             </div>
           ) : filteredCustomers.length === 0 ? (
-            <div className="flex items-center justify-center py-8 text-gray-400">
+             <div className="flex items-center justify-center py-8 text-gray-400">
               <p>
-                {searchTerm ? 'No customers found matching your search.' : 'No customers available.'}
+                {searchTerm ? t('dashboard.cashier.customerDialog.noMatching') : t('dashboard.cashier.customerDialog.noCustomers')}
               </p>
             </div>
           ) : (
             <Table>
-              <TableHeader>
+               <TableHeader>
                 <TableRow className="border-white/10">
-                  <TableHead className="text-gray-400">Name</TableHead>
-                  <TableHead className="text-gray-400">Phone</TableHead>
-                  <TableHead className="text-gray-400">Email</TableHead>
+                  <TableHead className="text-gray-400">{t('dashboard.cashier.customerDialog.table.name')}</TableHead>
+                  <TableHead className="text-gray-400">{t('dashboard.cashier.customerDialog.table.phone')}</TableHead>
+                  <TableHead className="text-gray-400">{t('dashboard.cashier.customerDialog.table.email')}</TableHead>
                   <TableHead className="text-right text-gray-400"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -91,9 +93,9 @@ const CustomerDialog = ({
                     <TableCell className="text-white">{customer.fullName}</TableCell>
                     <TableCell className="text-gray-300">{customer.phone}</TableCell>
                     <TableCell className="text-gray-300">{customer.email}</TableCell>
-                    <TableCell className="text-right">
+                     <TableCell className="text-right">
                       <Button size="sm" onClick={() => handleCustomerSelect(customer)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                        Select
+                        {t('dashboard.cashier.customerDialog.table.select')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -109,9 +111,13 @@ const CustomerDialog = ({
        
         />
         
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowCustomerDialog(false)} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">Cancel</Button>
-          <Button onClick={() => setShowCustomerForm(true)} className="bg-gradient-to-r from-blue-600 to-cyan-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">Add New Customer</Button>
+         <DialogFooter>
+          <Button variant="outline" onClick={() => setShowCustomerDialog(false)} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
+            {t('dashboard.cashier.customerDialog.cancel')}
+          </Button>
+          <Button onClick={() => setShowCustomerForm(true)} className="bg-gradient-to-r from-blue-600 to-cyan-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+            {t('dashboard.cashier.customerDialog.addNew')}
+          </Button>
         </DialogFooter>
         
         

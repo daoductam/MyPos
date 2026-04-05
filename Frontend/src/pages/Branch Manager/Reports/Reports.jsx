@@ -3,64 +3,71 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, BarChart2, Users, Package, Download } from "lucide-react";
 import jsPDF from "jspdf";
-
-const reportTypes = [
-  {
-    title: "Sales Report",
-    description: "Detailed breakdown of sales, revenue, and profit over a selected period.",
-    icon: <BarChart2 className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Inventory Report",
-    description: "Summary of stock levels, low-stock items, and inventory valuation.",
-    icon: <Package className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Customer Report",
-    description: "Insights into customer behavior, purchase history, and loyalty.",
-    icon: <Users className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Employee Performance",
-    description: "Track sales per employee, shift performance, and other metrics.",
-    icon: <FileText className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Transaction Report",
-    description: "A complete log of all transactions, including payment methods and details.",
-    icon: <FileText className="w-6 h-6 text-emerald-400" />,
-  },
-  {
-    title: "Tax Report",
-    description: "GST-compliant reports for easy tax filing and reconciliation.",
-    icon: <FileText className="w-6 h-6 text-emerald-400" />,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function Reports() {
-  const handleGenerateReport = (reportTitle) => {
-    // Create a new PDF document
-    const doc = new jsPDF();
+  const { t } = useTranslation();
 
-    // Add content to the PDF
+  const reportTypes = [
+    {
+      id: "sales",
+      title: t('dashboard.branchManager.reports.types.sales.title'),
+      description: t('dashboard.branchManager.reports.types.sales.desc'),
+      icon: <BarChart2 className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      id: "inventory",
+      title: t('dashboard.branchManager.reports.types.inventory.title'),
+      description: t('dashboard.branchManager.reports.types.inventory.desc'),
+      icon: <Package className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      id: "customer",
+      title: t('dashboard.branchManager.reports.types.customer.title'),
+      description: t('dashboard.branchManager.reports.types.customer.desc'),
+      icon: <Users className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      id: "employee",
+      title: t('dashboard.branchManager.reports.types.employee.title'),
+      description: t('dashboard.branchManager.reports.types.employee.desc'),
+      icon: <FileText className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      id: "transaction",
+      title: t('dashboard.branchManager.reports.types.transaction.title'),
+      description: t('dashboard.branchManager.reports.types.transaction.desc'),
+      icon: <FileText className="w-6 h-6 text-emerald-400" />,
+    },
+    {
+      id: "tax",
+      title: t('dashboard.branchManager.reports.types.tax.title'),
+      description: t('dashboard.branchManager.reports.types.tax.desc'),
+      icon: <FileText className="w-6 h-6 text-emerald-400" />,
+    },
+  ];
+
+  const handleGenerateReport = (reportTitle) => {
+    const doc = new jsPDF();
     doc.setFontSize(22);
     doc.text(`${reportTitle}`, 105, 20, null, null, "center");
 
     doc.setFontSize(12);
-    doc.text("This is a placeholder for the report content.", 105, 30, null, null, "center");
-    doc.text("In a real application, this PDF would be populated with actual report data.", 105, 35, null, null, "center");
+    doc.text(t('dashboard.branchManager.reports.placeholderText1'), 105, 30, null, null, "center");
+    doc.text(t('dashboard.branchManager.reports.placeholderText2'), 105, 35, null, null, "center");
 
-    // Save the PDF with a dynamic filename
     doc.save(`${reportTitle.replace(/ /g, "_")}.pdf`);
   };
 
   return (
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-3xl font-bold tracking-tight text-white">Reports</h2>
-        <p className="text-gray-400">
-          Generate and download detailed reports for your branch.
-        </p>
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.branchManager.reports.title')}</h2>
+          <p className="text-gray-400 mt-1">
+            {t('dashboard.branchManager.reports.subtitle')}
+          </p>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -82,7 +89,7 @@ export default function Reports() {
                 onClick={() => handleGenerateReport(report.title)}
               >
                 <Download className="w-4 h-4 mr-2" />
-                Generate Report
+                {t('dashboard.branchManager.reports.generate')}
               </Button>
             </div>
           </Card>

@@ -9,10 +9,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getOrdersByBranch } from "../../../Redux Toolkit/features/order/orderThunks";
 import OrderTable from "./components/OrderTable";
+import { useTranslation } from "react-i18next";
 
 // Return reasons
 
 const ReturnOrderPage = () => {
+  const { t } = useTranslation();
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showReceiptDialog, setShowReceiptDialog] = useState(false);
 
@@ -37,7 +39,7 @@ const ReturnOrderPage = () => {
   return (
     <div className="h-full flex flex-col">
       <div className="p-4 bg-card border-b">
-        <h1 className="text-2xl font-bold">Return / Refund</h1>
+        <h1 className="text-2xl font-bold">{t('dashboard.cashier.return.title')}</h1>
       </div>
 
       <div className="flex-1 flex overflow-hidden">

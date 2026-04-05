@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { 
@@ -14,14 +13,43 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { 
-  StoreSettingsValidationSchema, 
   CURRENCY_OPTIONS, 
   TIMEZONE_OPTIONS, 
-  DATE_FORMAT_OPTIONS 
 } from "./validation";
 import { transformSettingsToApiFormat } from "./formUtils";
+import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
 
 const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) => {
+  const { t } = useTranslation();
+
+  const validationSchema = Yup.object().shape({
+    storeName: Yup.string()
+      .min(2, t('common.validation.minLength', { field: t('storeModule.settings.storeInfo.storeName'), min: 2 }))
+      .max(100, t('common.validation.maxLength', { field: t('storeModule.settings.storeInfo.storeName'), max: 100 }))
+      .required(t('common.validation.required', { field: t('storeModule.settings.storeInfo.storeName') })),
+    storeEmail: Yup.string()
+      .email(t('common.validation.email'))
+      .required(t('common.validation.required', { field: "Email" })),
+    storePhone: Yup.string()
+      .matches(/^[\+]?[1-9][\d]{0,15}$/, t('common.validation.phone'))
+      .required(t('common.validation.required', { field: "Phone" })),
+    storeAddress: Yup.string()
+      .min(10, t('common.validation.minLength', { field: t('storeModule.settings.storeInfo.address'), min: 10 }))
+      .max(200, t('common.validation.maxLength', { field: t('storeModule.settings.storeInfo.address'), max: 200 }))
+      .required(t('common.validation.required', { field: t('storeModule.settings.storeInfo.address') })),
+    storeDescription: Yup.string()
+      .max(500, t('common.validation.maxLength', { field: "Description", max: 500 })),
+    currency: Yup.string()
+      .required(t('common.validation.required', { field: "Currency" })),
+    taxRate: Yup.number()
+      .min(0, t('common.validation.min', { field: "Tax rate", min: 0 }))
+      .max(100, t('common.validation.max', { field: "Tax rate", max: 100 }))
+      .required(t('common.validation.required', { field: "Tax rate" })),
+    timezone: Yup.string()
+      .required(t('common.validation.required', { field: "Timezone" })),
+  });
+
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       // Transform settings data to API format
@@ -38,7 +66,7 @@ const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) =
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={StoreSettingsValidationSchema}
+      validationSchema={validationSchema}
       onSubmit={handleSubmit}
       enableReinitialize
     >
@@ -47,19 +75,19 @@ const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) =
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-3">
-                <Label htmlFor="storeName">Store Name *</Label>
+                <Label htmlFor="storeName">{t('storeModule.settings.storeInfo.storeName')} *</Label>
                 <Field
                   as={Input}
                   id="storeName"
                   name="storeName"
-                  placeholder="Enter store name"
+                  placeholder={t('storeModule.settings.storeInfo.storeName')}
                   className={errors.storeName && touched.storeName ? "border-red-500" : ""}
                 />
                 <ErrorMessage name="storeName" component="div" className="text-red-500 text-sm mt-1" />
               </div>
 
               <div className="space-y-3">
-                <Label htmlFor="storeEmail">Store Email *</Label>
+                <Label htmlFor="storeEmail">Email *</Label>
                 <Field
                   as={Input}
                   id="storeEmail"
@@ -72,7 +100,7 @@ const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) =
               </div>
 
               <div className="space-y-3">
-                <Label htmlFor="storePhone">Store Phone *</Label>
+                <Label htmlFor="storePhone">Phone *</Label>
                 <Field
                   as={Input}
                   id="storePhone"
@@ -156,12 +184,12 @@ const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) =
             </div>
 
             <div className="space-y-3">
-              <Label htmlFor="storeAddress">Store Address *</Label>
+              <Label htmlFor="storeAddress">{t('storeModule.settings.storeInfo.address')} *</Label>
               <Field
                 as={Input}
                 id="storeAddress"
                 name="storeAddress"
-                placeholder="Enter store address"
+                placeholder={t('storeModule.settings.storeInfo.address')}
                 className={errors.storeAddress && touched.storeAddress ? "border-red-500" : ""}
               />
               <ErrorMessage name="storeAddress" component="div" className="text-red-500 text-sm mt-1" />
@@ -187,10 +215,10 @@ const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) =
               {formikSubmitting || isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Updating...
+                  {t('storeModule.settings.storeInfo.updating') || "Updating..."}
                 </>
               ) : (
-                "Update Store Settings"
+                t('storeModule.settings.storeInfo.saveChanges')
               )}
             </Button>
           </div>

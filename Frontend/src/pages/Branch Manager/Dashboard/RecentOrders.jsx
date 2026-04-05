@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { getRecentOrdersByBranch } from "@/Redux Toolkit/features/order/orderThunks";
 import { getStatusColor } from "../../../utils/getStatusColor";
 import { formatDateTime } from "../../../utils/formateDate";
+import { useTranslation } from "react-i18next";
 
 const RecentOrders = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const branchId = useSelector((state) => state.branch.branch?.id);
   const { recentOrders, loading } = useSelector((state) => state.order);
@@ -23,18 +25,18 @@ const RecentOrders = () => {
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader className="border-b border-white/10">
-        <CardTitle className="text-xl font-semibold text-white">Recent Orders</CardTitle>
+        <CardTitle className="text-xl font-semibold text-white">{t('dashboard.branchManager.dashboard.recentOrders.title')}</CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="border-t border-white/10 -mx-6">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-black/40 border-b-white/10">
-                <TableHead className="text-white">Order ID</TableHead>
-                <TableHead className="text-white">Customer</TableHead>
-                <TableHead className="text-white">Amount</TableHead>
-                <TableHead className="text-white">Status</TableHead>
-                <TableHead className="text-right text-white">Time</TableHead>
+                <TableHead className="text-white">{t('dashboard.branchManager.dashboard.recentOrders.orderId')}</TableHead>
+                <TableHead className="text-white">{t('dashboard.branchManager.dashboard.recentOrders.customer')}</TableHead>
+                <TableHead className="text-white">{t('dashboard.branchManager.dashboard.recentOrders.amount')}</TableHead>
+                <TableHead className="text-white">{t('dashboard.branchManager.dashboard.recentOrders.status')}</TableHead>
+                <TableHead className="text-right text-white">{t('dashboard.branchManager.dashboard.recentOrders.time')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -42,7 +44,7 @@ const RecentOrders = () => {
                 <TableRow key={order.id} className="hover:bg-white/5 border-b-white/10">
                   <TableCell className="font-medium text-gray-400">{order.id}</TableCell>
                   <TableCell className="text-white">{order.customer?.fullName || order.customerName || "—"}</TableCell>
-                  <TableCell className="text-white">{order.amount ? `₹${order.amount}` : order.totalAmount ? `₹${order.totalAmount}` : "—"}</TableCell>
+                  <TableCell className="text-white">{order.amount ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.amount) : order.totalAmount ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.totalAmount) : "—"}</TableCell>
                   <TableCell>
                     <Badge className={getStatusColor(order.status)} variant="outline">
                       {order.status}
@@ -54,7 +56,7 @@ const RecentOrders = () => {
             </TableBody>
           </Table>
         </div>
-        {loading && <div className="text-center text-xs text-gray-400 pt-4">Loading...</div>}
+        {loading && <div className="text-center text-xs text-gray-400 pt-4">{t('dashboard.branchManager.dashboard.recentOrders.loading')}</div>}
       </CardContent>
     </Card>
   );

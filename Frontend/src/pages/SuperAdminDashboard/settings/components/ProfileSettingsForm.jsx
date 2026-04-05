@@ -3,8 +3,10 @@ import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import { User, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function ProfileSettingsForm({ userProfile }) {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState({ name: '', email: '' });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -36,14 +38,14 @@ export default function ProfileSettingsForm({ userProfile }) {
           <User className="w-10 h-10" />
         </div>
         <div className="space-y-2">
-          <Button type="button" variant="outline" className="border-white/20 text-white hover:bg-white/10">Change Avatar</Button>
-          <p className="text-xs text-gray-400">JPG, GIF or PNG. 1MB max.</p>
+          <Button type="button" variant="outline" className="border-white/20 text-white hover:bg-white/10">{t('superAdminModule.settings.profile.changeAvatar')}</Button>
+          <p className="text-xs text-gray-400">{t('superAdminModule.settings.profile.avatarHint')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="profile-name" className="text-gray-300">Full Name</Label>
+          <Label htmlFor="profile-name" className="text-gray-300">{t('superAdminModule.settings.profile.fullName')}</Label>
           <Input
             id="profile-name"
             value={profile.name}
@@ -52,7 +54,7 @@ export default function ProfileSettingsForm({ userProfile }) {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="profile-email" className="text-gray-300">Email Address</Label>
+          <Label htmlFor="profile-email" className="text-gray-300">{t('superAdminModule.settings.profile.email')}</Label>
           <Input
             id="profile-email"
             type="email"
@@ -65,7 +67,7 @@ export default function ProfileSettingsForm({ userProfile }) {
 
       <div className="flex justify-end">
         <Button type="submit" disabled={isSaving} className="w-32 bg-emerald-600 hover:bg-emerald-500">
-          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : t('superAdminModule.settings.profile.save')}
         </Button>
       </div>
     </form>

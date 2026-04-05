@@ -4,14 +4,16 @@ import { selectSelectedCustomer } from '../../../Redux Toolkit/features/cart/car
 import { User } from 'lucide-react';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
+import { useTranslation } from "react-i18next";
 
 const CustomerSection = ({setShowCustomerDialog}) => {
+    const { t } = useTranslation();
     const selectedCustomer = useSelector(selectSelectedCustomer);
   return (
          <div className="p-4 border-b border-white/10">
         <h2 className="text-lg font-semibold mb-3 flex items-center text-white">
           <User className="w-5 h-5 mr-2" />
-          Customer
+          {t('dashboard.cashier.paymentSection.customer')}
         </h2>
         {selectedCustomer ? (
           <Card className="bg-emerald-500/10 border border-emerald-500/30">
@@ -28,7 +30,7 @@ const CustomerSection = ({setShowCustomerDialog}) => {
                 className="mt-2 w-full bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
                 onClick={() => setShowCustomerDialog(true)}
               >
-                Change Customer
+                {t('dashboard.cashier.paymentSection.changeCustomer')}
               </Button>
             </CardContent>
           </Card>
@@ -39,7 +41,7 @@ const CustomerSection = ({setShowCustomerDialog}) => {
             onClick={() => setShowCustomerDialog(true)}
           >
             <User className="w-4 h-4 mr-2" />
-            Select Customer
+            {t('dashboard.cashier.paymentSection.selectCustomer')}
           </Button>
         )}
       </div>

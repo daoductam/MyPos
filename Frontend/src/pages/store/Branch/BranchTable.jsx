@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Edit, Trash2, MapPin, Phone, Users, Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { deleteBranch, getAllBranchesByStore } from "@/Redux Toolkit/features/branch/branchThunks";
+import { useTranslation } from "react-i18next";
 
 const BranchTable = ({ branches, loading, onEdit }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { store } = useSelector((state) => state.store);
 
@@ -15,8 +17,8 @@ const BranchTable = ({ branches, loading, onEdit }) => {
       const jwt = localStorage.getItem("jwt");
       if (!id || !jwt) {
         toast({
-          title: "Error",
-          description: "Branch ID or authentication JWT missing",
+          title: t('toast.error'),
+          description: t('storeModule.branches.toast.idMissing'),
           variant: "destructive",
         });
         return;
@@ -25,16 +27,16 @@ const BranchTable = ({ branches, loading, onEdit }) => {
       await dispatch(deleteBranch({ id, jwt })).unwrap();
 
       toast({
-        title: "Success",
-        description: "Branch deleted successfully",
+        title: t('toast.success'),
+        description: t('storeModule.branches.toast.deleteSuccess'),
       });
 
       // Refresh branches list
       dispatch(getAllBranchesByStore({ storeId: store.id, jwt }));
     } catch (error) {
       toast({
-        title: "Error",
-        description: error.message || "Failed to delete branch",
+        title: t('toast.error'),
+        description: error.message || t('storeModule.branches.toast.deleteError') || "Failed to delete branch",
         variant: "destructive",
       });
     }
@@ -44,11 +46,11 @@ const BranchTable = ({ branches, loading, onEdit }) => {
     <Table>
       <TableHeader>
         <TableRow className="border-white/10">
-          <TableHead className="text-gray-400">Branch Name</TableHead>
-          <TableHead className="text-gray-400">Address</TableHead>
-          <TableHead className="text-gray-400">Manager</TableHead>
-          <TableHead className="text-gray-400">Phone</TableHead>
-          <TableHead className="text-right text-gray-400">Actions</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.branches.table.name')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.branches.table.address')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.branches.table.manager')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.branches.table.phone')}</TableHead>
+          <TableHead className="text-right text-gray-400">{t('storeModule.branches.table.actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -57,7 +59,7 @@ const BranchTable = ({ branches, loading, onEdit }) => {
             <TableCell colSpan={5} className="text-center py-8">
               <div className="flex justify-center items-center h-64 text-gray-400">
                 <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mr-3" />
-                Loading branches...
+                {t('storeModule.branches.table.loading')}
               </div>
             </TableCell>
           </TableRow>
@@ -65,8 +67,8 @@ const BranchTable = ({ branches, loading, onEdit }) => {
           <TableRow>
             <TableCell colSpan={5} className="text-center py-8">
               <div className="text-center py-16 text-gray-400">
-                <h3 className="text-xl font-semibold">No Branches Found</h3>
-                <p className="mt-2">Add your first branch to get started.</p>
+                <h3 className="text-xl font-semibold">{t('storeModule.branches.table.noBranches')}</h3>
+                <p className="mt-2">{t('storeModule.branches.table.noBranchesDesc')}</p>
               </div>
             </TableCell>
           </TableRow>
@@ -85,7 +87,7 @@ const BranchTable = ({ branches, loading, onEdit }) => {
               <TableCell className="text-gray-300">
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-gray-400" />
-                  {branch.manager || "Not Assigned"}
+                  {branch.manager || t('storeModule.branches.table.notAssigned')}
                 </div>
               </TableCell>
               <TableCell className="text-gray-300">

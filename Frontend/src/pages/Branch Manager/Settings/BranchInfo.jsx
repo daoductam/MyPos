@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -6,23 +6,20 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../components/ui/card";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { updateBranch } from "../../../Redux Toolkit/features/branch/branchThunks";
-import { useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
-import { Phone } from "lucide-react";
-import { Mail } from "lucide-react";
-import { Clock } from "lucide-react";
-import { Save } from "lucide-react";
+import { Phone, Mail, Clock, Save } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Separator } from "../../../components/ui/separator";
 import { Checkbox } from "../../../components/ui/checkbox";
+import { useTranslation } from "react-i18next";
 
 const BranchInfo = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { branch } = useSelector((state) => state.branch);
+  
   const [branchInfo, setBranchInfo] = useState({
     name: "",
     address: "",
@@ -46,6 +43,7 @@ const BranchInfo = () => {
       });
     }
   }, [branch]);
+
   const handleBranchInfoChange = (field, value) => {
     setBranchInfo({
       ...branchInfo,
@@ -53,10 +51,8 @@ const BranchInfo = () => {
     });
   };
 
-  const handleSaveSettings = (settingType) => {
-    // In a real app, this would make an API call to save the settings
-    console.log(`Saving ${settingType} settings`);
-    if (settingType === "branch-info") {
+  const handleSaveSettings = () => {
+    if (branch?.id) {
       dispatch(
         updateBranch({
           id: branch.id,
@@ -64,15 +60,25 @@ const BranchInfo = () => {
           jwt: localStorage.getItem("jwt"),
         })
       );
-      console.log("Saving branch info:", branchInfo);
     }
   };
+
+  const daysOfWeek = [
+    { id: "monday", label: t('dashboard.branchManager.settings.info.days.monday'), value: "Monday" },
+    { id: "tuesday", label: t('dashboard.branchManager.settings.info.days.tuesday'), value: "Tuesday" },
+    { id: "wednesday", label: t('dashboard.branchManager.settings.info.days.wednesday'), value: "Wednesday" },
+    { id: "thursday", label: t('dashboard.branchManager.settings.info.days.thursday'), value: "Thursday" },
+    { id: "friday", label: t('dashboard.branchManager.settings.info.days.friday'), value: "Friday" },
+    { id: "saturday", label: t('dashboard.branchManager.settings.info.days.saturday'), value: "Saturday" },
+    { id: "sunday", label: t('dashboard.branchManager.settings.info.days.sunday'), value: "Sunday" },
+  ];
+
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader>
-        <CardTitle className="text-white">Branch Information</CardTitle>
+        <CardTitle className="text-white">{t('dashboard.branchManager.settings.info.title')}</CardTitle>
         <CardDescription className="text-gray-400">
-          Update your branch details and business hours.
+          {t('dashboard.branchManager.settings.info.desc')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -80,7 +86,7 @@ const BranchInfo = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <label htmlFor="branch-name" className="text-sm font-medium text-gray-300">
-                Branch Name
+                {t('dashboard.branchManager.settings.info.name')}
               </label>
               <Input
                 id="branch-name"
@@ -91,22 +97,20 @@ const BranchInfo = () => {
             </div>
             <div className="space-y-2">
               <label htmlFor="branch-address" className="text-sm font-medium text-gray-300">
-                Address
+                {t('dashboard.branchManager.settings.info.address')}
               </label>
               <Input
                 id="branch-address"
                 className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
                 value={branchInfo.address}
-                onChange={(e) =>
-                  handleBranchInfoChange("address", e.target.value)
-                }
+                onChange={(e) => handleBranchInfoChange("address", e.target.value)}
               />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <label htmlFor="branch-phone" className="text-sm font-medium text-gray-300">
-                Phone Number
+                {t('dashboard.branchManager.settings.info.phone')}
               </label>
               <div className="flex items-center">
                 <Phone className="mr-2 h-4 w-4 text-gray-500" />
@@ -114,15 +118,13 @@ const BranchInfo = () => {
                   id="branch-phone"
                   className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
                   value={branchInfo.phone}
-                  onChange={(e) =>
-                    handleBranchInfoChange("phone", e.target.value)
-                  }
+                  onChange={(e) => handleBranchInfoChange("phone", e.target.value)}
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label htmlFor="branch-email" className="text-sm font-medium text-gray-300">
-                Email Address
+                {t('dashboard.branchManager.settings.info.email')}
               </label>
               <div className="flex items-center">
                 <Mail className="mr-2 h-4 w-4 text-gray-500" />
@@ -131,9 +133,7 @@ const BranchInfo = () => {
                   className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
                   type="email"
                   value={branchInfo.email}
-                  onChange={(e) =>
-                    handleBranchInfoChange("email", e.target.value)
-                  }
+                  onChange={(e) => handleBranchInfoChange("email", e.target.value)}
                 />
               </div>
             </div>
@@ -143,11 +143,11 @@ const BranchInfo = () => {
         <Separator className="bg-white/10"/>
 
         <div>
-          <h3 className="text-lg font-medium mb-4 text-gray-200">Business Hours</h3>
+          <h3 className="text-lg font-medium mb-4 text-gray-200">{t('dashboard.branchManager.settings.info.hours')}</h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <label htmlFor="opening-time" className="text-sm font-medium text-gray-300">
-                Opening Time
+                {t('dashboard.branchManager.settings.info.opening')}
               </label>
               <div className="flex items-center">
                 <Clock className="mr-2 h-4 w-4 text-gray-500" />
@@ -156,15 +156,13 @@ const BranchInfo = () => {
                   className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
                   type="time"
                   value={branchInfo.openingTime}
-                  onChange={(e) =>
-                    handleBranchInfoChange("openingTime", e.target.value)
-                  }
+                  onChange={(e) => handleBranchInfoChange("openingTime", e.target.value)}
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label htmlFor="closing-time" className="text-sm font-medium text-gray-300">
-                Closing Time
+                {t('dashboard.branchManager.settings.info.closing')}
               </label>
               <div className="flex items-center">
                 <Clock className="mr-2 h-4 w-4 text-gray-500" />
@@ -173,49 +171,36 @@ const BranchInfo = () => {
                   className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
                   type="time"
                   value={branchInfo.closingTime}
-                  onChange={(e) =>
-                    handleBranchInfoChange("closingTime", e.target.value)
-                  }
+                  onChange={(e) => handleBranchInfoChange("closingTime", e.target.value)}
                 />
               </div>
             </div>
           </div>
 
           <div className="mt-4">
-            <label className="text-sm font-medium text-gray-300">Working Days</label>
+            <label className="text-sm font-medium text-gray-300">{t('dashboard.branchManager.settings.info.workingDays')}</label>
             <div className="grid grid-cols-2 gap-2 mt-2 md:grid-cols-4">
-              {[
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
-              ].map((day) => (
-                <div key={day} className="flex items-center space-x-2">
+              {daysOfWeek.map((day) => (
+                <div key={day.id} className="flex items-center space-x-2">
                   <Checkbox
-                    checked={branchInfo.workingDays.includes(day)}
+                    id={`day-${day.id}`}
+                    checked={branchInfo.workingDays.includes(day.value)}
                     onCheckedChange={(checked) => {
                       if (checked) {
                         handleBranchInfoChange("workingDays", [
                           ...branchInfo.workingDays,
-                          day,
+                          day.value,
                         ]);
                       } else {
                         handleBranchInfoChange(
                           "workingDays",
-                          branchInfo.workingDays.filter((d) => d !== day)
+                          branchInfo.workingDays.filter((d) => d !== day.value)
                         );
                       }
                     }}
                   />
-               
-                  <label
-                    htmlFor={`day-${day}`}
-                    className="text-sm text-gray-300"
-                  >
-                    {day}
+                  <label htmlFor={`day-${day.id}`} className="text-sm text-gray-300">
+                    {day.label}
                   </label>
                 </div>
               ))}
@@ -226,10 +211,10 @@ const BranchInfo = () => {
         <div className="flex justify-end">
           <Button
             className="gap-2 bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            onClick={() => handleSaveSettings("branch-info")}
+            onClick={handleSaveSettings}
           >
             <Save className="h-4 w-4" />
-            Save Changes
+            {t('dashboard.branchManager.settings.info.save')}
           </Button>
         </div>
       </CardContent>

@@ -1,54 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const TestimonialCarousel = () => {
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Rajesh Kumar',
-      position: 'Owner, Metro Retail',
-      image: '/testimonial-1.jpg', // These would be actual images in production
-      content: 'Implementing this POS system has transformed our business operations. The inventory management features alone have saved us countless hours and reduced errors by 35%.',
-      rating: 5,
-      businessType: 'Supermarket',
-      employeeCount: '50+',
-      yearsSince: 2
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      position: 'Manager, Café Chain',
-      image: '/testimonial-2.jpg',
-      content: 'The customer management features have helped us build stronger relationships with our regulars. We can now personalize our service based on purchase history and preferences.',
-      rating: 5,
-      businessType: 'Restaurant',
-      employeeCount: '25-50',
-      yearsSince: 1.5
-    },
-    {
-      id: 3,
-      name: 'Vikram Singh',
-      position: 'Director, Business Hub',
-      image: '/testimonial-3.jpg',
-      content: `'The analytics dashboard gives us real-time insights that have been crucial for our decision-making. We've optimized our product offerings and increased revenue by 28% in just six months.'`,
-      rating: 4,
-      businessType: 'Electronics',
-      employeeCount: '10-25',
-      yearsSince: 1
-    },
-    {
-      id: 4,
-      name: 'Ananya Patel',
-      position: 'CEO, Quick Mart',
-      image: '/testimonial-4.jpg',
-      content: 'The multi-store management capability has been a game-changer for our expanding business. We can now efficiently manage inventory across locations while maintaining centralized control.',
-      rating: 5,
-      businessType: 'Convenience Store',
-      employeeCount: '100+',
-      yearsSince: 3
-    },
-  ];
+  const { t } = useTranslation();
+  const testimonialItems = t('testimonials.items', { returnObjects: true });
+  const testimonials = testimonialItems.map((item, idx) => ({
+    id: idx + 1,
+    name: item.name,
+    position: item.position,
+    image: `/testimonial-${idx + 1}.jpg`,
+    content: item.content,
+    rating: [5, 5, 4, 5][idx],
+    businessType: item.businessType,
+    employeeCount: ['50+', '25-50', '10-25', '100+'][idx],
+    yearsSince: [2, 1.5, 1, 3][idx],
+  }));
+
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -80,10 +49,10 @@ const TestimonialCarousel = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Trusted by Businesses <span className="text-emerald-400">Like Yours</span>
+            {t('testimonials.title')} <span className="text-emerald-400">{t('testimonials.titleHighlight')}</span>
           </h2>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            Don't just take our word for it. See what our customers have to say about how our POS system has transformed their businesses.
+            {t('testimonials.subtitle')}
           </p>
         </div>
 
@@ -135,16 +104,16 @@ const TestimonialCarousel = () => {
                         
                         <div className="space-y-2 text-sm text-gray-300 mb-6">
                           <div className="flex items-center space-x-2">
-                            <span className="font-medium text-white">Business:</span>
+                            <span className="font-medium text-white">{t('testimonials.business')}:</span>
                             <span>{testimonial.businessType}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span className="font-medium text-white">Team Size:</span>
-                            <span>{testimonial.employeeCount} employees</span>
+                            <span className="font-medium text-white">{t('testimonials.teamSize')}:</span>
+                            <span>{testimonial.employeeCount} {t('testimonials.employees')}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span className="font-medium text-white">Using for:</span>
-                            <span>{testimonial.yearsSince} {testimonial.yearsSince === 1 ? 'year' : 'years'}</span>
+                            <span className="font-medium text-white">{t('testimonials.usingFor')}:</span>
+                            <span>{testimonial.yearsSince} {t('testimonials.years')}</span>
                           </div>
                         </div>
                       </div>
@@ -157,7 +126,7 @@ const TestimonialCarousel = () => {
                         
                         <div className="mt-auto">
                           <Button variant="outline" size="sm" className="text-emerald-400 border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-300">
-                            Read Full Story
+                            {t('testimonials.readFullStory')}
                           </Button>
                         </div>
                       </div>
@@ -205,19 +174,19 @@ const TestimonialCarousel = () => {
         <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="text-center">
             <p className="text-4xl font-bold text-emerald-400 mb-2">500+</p>
-            <p className="text-gray-300">Happy Customers</p>
+            <p className="text-gray-300">{t('testimonials.stats.happyCustomers')}</p>
           </div>
           <div className="text-center">
             <p className="text-4xl font-bold text-emerald-400 mb-2">98%</p>
-            <p className="text-gray-300">Customer Satisfaction</p>
+            <p className="text-gray-300">{t('testimonials.stats.satisfaction')}</p>
           </div>
           <div className="text-center">
-            <p className="text-4xl font-bold text-emerald-400 mb-2">₹2.5M+</p>
-            <p className="text-gray-300">Revenue Processed</p>
+            <p className="text-4xl font-bold text-emerald-400 mb-2">$2.5B+</p>
+            <p className="text-gray-300">{t('testimonials.stats.revenueProcessed')}</p>
           </div>
           <div className="text-center">
             <p className="text-4xl font-bold text-emerald-400 mb-2">24/7</p>
-            <p className="text-gray-300">Customer Support</p>
+            <p className="text-gray-300">{t('testimonials.stats.customerSupport')}</p>
           </div>
         </div>
       </div>

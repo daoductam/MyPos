@@ -1,5 +1,4 @@
-import React from "react";
-import { formatDate, getPaymentModeLabel, getStatusColor } from "./data";
+import { formatDate, getStatusColor, formatCurrency } from "./data";
 import {
   Table,
   TableBody,
@@ -13,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { EyeIcon } from "lucide-react";
 import { PrinterIcon } from "lucide-react";
 import { RotateCcwIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const OrderTable = ({
   orders,
@@ -21,24 +21,25 @@ const OrderTable = ({
   handleInitiateReturn,
   loading,
 }) => {
+  const { t } = useTranslation();
   return (
     <Table>
       <TableHeader>
         <TableRow className="border-white/10">
-          <TableHead className="text-gray-400">Order ID</TableHead>
-          <TableHead className="text-gray-400">Date/Time</TableHead>
-          <TableHead className="text-gray-400">Customer</TableHead>
-          <TableHead className="text-gray-400">Amount</TableHead>
-          <TableHead className="text-gray-400">Payment Mode</TableHead>
-          <TableHead className="text-gray-400">Status</TableHead>
-          <TableHead className="text-right text-gray-400">Actions</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.orderId')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.date')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.customer')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.total')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.payment')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.orders.table.status')}</TableHead>
+          <TableHead className="text-right text-gray-400">{t('dashboard.branchManager.orders.table.actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {loading ? (
           <TableRow>
             <TableCell colSpan={7} className="text-center py-16 text-gray-400">
-              Loading orders...
+              {t('dashboard.cashier.customerDialog.loading')}
             </TableCell>
           </TableRow>
         ) : orders.length > 0 ? (
@@ -47,15 +48,17 @@ const OrderTable = ({
               <TableCell className="font-medium text-white">#{order.id}</TableCell>
               <TableCell className="text-gray-300">{formatDate(order.createdAt)}</TableCell>
               <TableCell className="text-gray-300">
-                {order.customer?.fullName || "Walk-in Customer"}
+                {order.customer?.fullName || t('dashboard.cashier.paymentDialog.walkInCustomer')}
               </TableCell>
-              <TableCell className="font-medium text-emerald-400">₹{order.totalAmount?.toFixed(2) || "0.00"}</TableCell>
-              <TableCell className="text-gray-300">{getPaymentModeLabel(order.paymentType)}</TableCell>
+              <TableCell className="font-medium text-emerald-400">VNĐ {formatCurrency(order.totalAmount)}</TableCell>
+              <TableCell className="text-gray-300">
+                {order.paymentType ? t(`dashboard.cashier.paymentDialog.methods.${order.paymentType}`) : t('common.unknown')}
+              </TableCell>
               <TableCell>
                 <Badge
                   className={`${getStatusColor(order.status)} bg-opacity-20 border border-opacity-30 capitalize`}
                 >
-                  {order.status || "COMPLETE"}
+                  {order.status ? t(`dashboard.branchManager.orders.status.${order.status.toLowerCase()}`) : t('dashboard.branchManager.orders.status.completed')}
                 </Badge>
               </TableCell>
               <TableCell className="text-right">
@@ -76,8 +79,8 @@ const OrderTable = ({
         ) : (
           <TableRow>
             <TableCell colSpan={7} className="text-center py-16 text-gray-400">
-              <h3 className="text-xl font-semibold">No Orders Found</h3>
-              <p className="mt-2">No orders match the current filter criteria.</p>
+              <h3 className="text-xl font-semibold">{t('dashboard.cashier.orderHistory.noOrders')}</h3>
+              <p className="mt-2">{t('dashboard.cashier.orderHistory.noOrdersDesc')}</p>
             </TableCell>
           </TableRow>
         )}

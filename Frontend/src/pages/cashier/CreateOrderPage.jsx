@@ -12,8 +12,10 @@ import PaymentDialog from "./payment/PaymentDialog";
 import HeldOrdersDialog from "./components/HeldOrdersDialog";
 import CustomerDialog from "./customer/CustomerDialog";
 import InvoiceDialog from "./order/OrderDetails/InvoiceDialog";
+import { useTranslation } from "react-i18next";
 
 const CreateOrderPage = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const searchInputRef = useRef(null);
 
@@ -27,7 +29,7 @@ const CreateOrderPage = () => {
   useEffect(() => {
     if (orderError) {
       toast({
-        title: "Order Error",
+        title: t('dashboard.cashier.paymentDialog.toast.failed'),
         description: orderError,
         variant: "destructive",
       });

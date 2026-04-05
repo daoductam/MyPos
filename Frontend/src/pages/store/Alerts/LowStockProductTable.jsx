@@ -16,23 +16,20 @@ import {
 } from "../../../components/ui/table";
 import { Badge } from "../../../components/ui/badge";
 import { AlertTriangle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-const lowStockProducts = [
-  { name: "Product A", sku: "SKU001", stock: 5 },
-  { name: "Product B", sku: "SKU002", stock: 2 },
-  { name: "Product C", sku: "SKU003", stock: 8 },
-];
+const LowStockProductTable = ({ products }) => {
+  const { t } = useTranslation();
 
-const LowStockProductTable = () => {
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-yellow-400">
           <AlertTriangle />
-          Low Stock Products
+          {t('storeModule.alerts.lowStock.title')}
         </CardTitle>
         <CardDescription className="text-gray-400">
-          These products are running low on stock and may need to be reordered soon.
+          {t('storeModule.alerts.lowStock.description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -40,23 +37,34 @@ const LowStockProductTable = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-black/30 hover:bg-black/40 border-b-white/10">
-                <TableHead className="text-white">Product Name</TableHead>
-                <TableHead className="text-white">SKU</TableHead>
-                <TableHead className="text-right text-white">Stock Remaining</TableHead>
+                <TableHead className="text-white">{t('storeModule.alerts.lowStock.productName')}</TableHead>
+                <TableHead className="text-white">{t('storeModule.alerts.lowStock.sku')}</TableHead>
+                <TableHead className="text-right text-white">{t('storeModule.alerts.lowStock.stockRemaining')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {lowStockProducts.map((product, index) => (
-                <TableRow key={index} className="hover:bg-white/5 border-b-white/10">
-                  <TableCell className="font-medium text-white">{product.name}</TableCell>
-                  <TableCell className="text-gray-400">{product.sku}</TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant="destructive" className="bg-yellow-500/10 text-yellow-300 border-yellow-500/20">
-                      {product.stock}
-                    </Badge>
+              {products.length > 0 ? (
+                products.map((product, index) => (
+                  <TableRow key={product.id || index} className="hover:bg-white/5 border-b-white/10">
+                    <TableCell className="font-medium text-white">{product.name}</TableCell>
+                    <TableCell className="text-gray-400">{product.sku}</TableCell>
+                    <TableCell className="text-right">
+                      <Badge variant="destructive" className="bg-yellow-500/10 text-yellow-300 border-yellow-500/20">
+                        {/* Assuming stock quantity is not directly in ProductDTO if fetched from certain endpoints, 
+                            but findLowStockProducts returns ProductDTO list. 
+                            Low stock threshold items might need inventory check. */}
+                        {product.quantity !== undefined ? product.quantity : "—"}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center py-8 text-gray-500 italic">
+                    {t('common.noData')}
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>

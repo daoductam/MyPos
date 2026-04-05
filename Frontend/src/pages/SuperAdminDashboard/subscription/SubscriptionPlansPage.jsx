@@ -7,6 +7,8 @@ import {
   deleteSubscriptionPlan,
   updateSubscriptionPlan,
 } from "@/Redux Toolkit/features/subscriptionPlan/subscriptionPlanThunks";
+import { useTranslation } from "react-i18next";
+import { formatVND } from "@/utils/formatCurrency";
 
 import { toast} from "../../../components/ui/use-toast";
 import { Button } from "../../../components/ui/button";
@@ -24,33 +26,35 @@ import EditPlanDialog from "./EditPlanDialog";
 import { AlertTriangle, Check, CheckCircle, Edit, Loader2, PlusCircle, Trash2, X } from "lucide-react";
 
 const FEATURE_FLAGS = [
-  { key: "enableAdvancedReports", label: "Advanced Reports" },
-  { key: "enableInventory", label: "Inventory System" },
-  { key: "enableIntegrations", label: "Integrations" },
-  { key: "enableEcommerce", label: "eCommerce" },
-  { key: "enableInvoiceBranding", label: "Invoice Branding" },
-  { key: "prioritySupport", label: "Priority Support" },
-  { key: "enableMultiLocation", label: "Multi-location" },
+  { key: "enableAdvancedReports", labelKey: "superAdminModule.subscriptions.features.advancedReports" },
+  { key: "enableInventory", labelKey: "superAdminModule.subscriptions.features.inventory" },
+  { key: "enableIntegrations", labelKey: "superAdminModule.subscriptions.features.integrations" },
+  { key: "enableEcommerce", labelKey: "superAdminModule.subscriptions.features.ecommerce" },
+  { key: "enableInvoiceBranding", labelKey: "superAdminModule.subscriptions.features.invoiceBranding" },
+  { key: "prioritySupport", labelKey: "superAdminModule.subscriptions.features.prioritySupport" },
+  { key: "enableMultiLocation", labelKey: "superAdminModule.subscriptions.features.multiLocation" },
 ];
 
 
-const columns = [
-  { key: "name", label: "Name" },
-  { key: "price", label: "Price" },
-  { key: "billingCycle", label: "Billing Cycle" },
-  { key: "maxBranches", label: "Branches" },
-  { key: "maxUsers", label: "Users" },
-  { key: "maxProducts", label: "Products" },
-  { key: "status", label: "Status" },
-  { key: "features", label: "Features" },
-  { key: "actions", label: "Actions" },
+const getColumns = (t) => [
+  { key: "name", label: t("superAdminModule.subscriptions.table.name") },
+  { key: "price", label: t("superAdminModule.subscriptions.table.price") },
+  { key: "billingCycle", label: t("superAdminModule.subscriptions.table.billingCycle") },
+  { key: "maxBranches", label: t("superAdminModule.subscriptions.table.branches") },
+  { key: "maxUsers", label: t("superAdminModule.subscriptions.table.users") },
+  { key: "maxProducts", label: t("superAdminModule.subscriptions.table.products") },
+  { key: "status", label: t("superAdminModule.subscriptions.table.status") },
+  { key: "features", label: t("superAdminModule.subscriptions.table.features") },
+  { key: "actions", label: t("superAdminModule.subscriptions.table.actions") },
 ];
 
 const SubscriptionPlansPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { plans, loading, error } = useSelector(
     (state) => state.subscriptionPlan
   );
+  const columns = useMemo(() => getColumns(t), [t]);
 
   const [search, setSearch] = useState("");
 
@@ -76,19 +80,19 @@ const SubscriptionPlansPage = () => {
 
   const handleDelete = async (id) => {
     if (
-      window.confirm("Are you sure you want to delete this subscription plan?")
+      window.confirm(t("superAdminModule.subscriptions.confirmDelete"))
     ) {
       const res = await dispatch(deleteSubscriptionPlan(id));
       if (res.meta.requestStatus === "fulfilled") {
         toast({
-          title: "Plan Deleted",
-          description: "Subscription plan deleted successfully",
+          title: t("superAdminModule.subscriptions.toast.deleted"),
+          description: t("superAdminModule.subscriptions.toast.deletedDesc"),
           variant: "success",
         });
       } else {
         toast({
-          title: "Error",
-          description: res.payload || "Failed to delete plan",
+          title: t("superAdminModule.common.error"),
+          description: res.payload || t("superAdminModule.subscriptions.toast.deleteFailed"),
           variant: "destructive",
         });
       }
@@ -101,19 +105,27 @@ const SubscriptionPlansPage = () => {
     const res = await dispatch(updateSubscriptionPlan({ id: plan.id, plan: updated }));
     setStatusLoadingId(null);
     if (res.meta.requestStatus === 'fulfilled') {
-      toast({ title: 'Status Updated', description: `Plan is now ${updated.active ? 'Active' : 'Inactive'}`, variant: 'success' });
+      toast({ 
+        title: t('superAdminModule.subscriptions.toast.statusUpdated'), 
+        description: t('superAdminModule.subscriptions.toast.statusDesc', { status: updated.active ? t('superAdminModule.subscriptions.active') : t('superAdminModule.subscriptions.inactive') }), 
+        variant: 'success' 
+      });
       dispatch(getAllSubscriptionPlans());
     } else {
-      toast({ title: 'Error', description: res.payload || 'Failed to update status', variant: 'destructive' });
+      toast({ 
+        title: t('superAdminModule.common.error'), 
+        description: res.payload || t('superAdminModule.subscriptions.toast.updateFailed'), 
+        variant: 'destructive' 
+      });
     }
   };
 
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Subscription Plans</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('superAdminModule.subscriptions.title')}</h2>
         <p className="text-gray-400">
-          Create, view, and manage subscription plans for stores
+          {t('superAdminModule.subscriptions.subtitle')}
         </p>
       </div>
       <AddPlanDialog
@@ -134,14 +146,14 @@ const SubscriptionPlansPage = () => {
       <div className="bg-black/20 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
         <div className="flex items-center justify-between mb-6">
           <Input
-            placeholder="Search plans by name..."
+            placeholder={t('superAdminModule.subscriptions.searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full max-w-sm bg-white/5 border-white/20 text-white placeholder-gray-500"
           />
           <Button onClick={() => setAddDialogOpen(true)} className="bg-emerald-600 hover:bg-emerald-500">
             <PlusCircle className="w-4 h-4 mr-2" />
-            Add New Plan
+            {t('superAdminModule.subscriptions.addPlan')}
           </Button>
         </div>
 
@@ -168,15 +180,15 @@ const SubscriptionPlansPage = () => {
                 {filteredPlans.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={columns.length} className="text-center h-24 text-gray-400">
-                      No plans found.
+                      {t('superAdminModule.subscriptions.table.noPlans')}
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredPlans.map((plan) => (
                     <TableRow key={plan.id} className="hover:bg-white/5 border-b-white/10">
                       <TableCell className="font-medium text-white">{plan.name}</TableCell>
-                      <TableCell className="text-gray-300">₹{plan.price.toLocaleString()}</TableCell>
-                      <TableCell className="capitalize text-gray-400">{plan.billingCycle.toLowerCase()}</TableCell>
+                      <TableCell className="text-gray-300">{formatVND(plan.price) + " ₫"}</TableCell>
+                      <TableCell className="text-gray-400">{t('superAdminModule.subscriptions.billingCycles.' + plan.billingCycle.toLowerCase())}</TableCell>
                       <TableCell className="text-gray-300">{plan.maxBranches}</TableCell>
                       <TableCell className="text-gray-300">{plan.maxUsers}</TableCell>
                       <TableCell className="text-gray-300">{plan.maxProducts}</TableCell>
@@ -188,7 +200,7 @@ const SubscriptionPlansPage = () => {
                             disabled={statusLoadingId === plan.id}
                           />
                           <span className={plan.active ? 'text-green-400' : 'text-red-400'}>
-                            {plan.active ? 'Active' : 'Inactive'}
+                            {plan.active ? t('superAdminModule.subscriptions.active') : t('superAdminModule.subscriptions.inactive')}
                           </span>
                           {statusLoadingId === plan.id && <Loader2 className="w-4 h-4 animate-spin" />}
                         </div>
@@ -201,7 +213,7 @@ const SubscriptionPlansPage = () => {
                                 <TooltipTrigger>
                                   {plan[f.key] ? <Check className="w-4 h-4 text-green-400" /> : <X className="w-4 h-4 text-gray-500" />}
                                 </TooltipTrigger>
-                                <TooltipContent>{f.label}</TooltipContent>
+                                <TooltipContent>{t(f.labelKey)}</TooltipContent>
                               </Tooltip>
                             ))}
                           </div>

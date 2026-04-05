@@ -13,15 +13,17 @@ import {
 } from "../../../Redux Toolkit/features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 import { useToast } from "../../../components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 const CartSection = ({setShowHeldOrdersDialog}) => {
+  const { t } = useTranslation();
   // Global cart state
   const cartItems = useSelector(selectCartItems);
 
   console.log("Cart items:", cartItems);
   const heldOrders = useSelector(selectHeldOrders);
   const dispatch = useDispatch();
-  const toast = useToast();
+  const { toast } = useToast();
 
   const handleUpdateCartItemQuantity = (id, newQuantity) => {
     dispatch(updateCartItemQuantity({ id, quantity: newQuantity }));
@@ -34,8 +36,8 @@ const CartSection = ({setShowHeldOrdersDialog}) => {
   const handleClearCart = () => {
     dispatch(clearCart());
     toast({
-      title: "Cart Cleared",
-      description: "All items removed from cart",
+      title: t('dashboard.cashier.cart.toast.cleared'),
+      description: t('dashboard.cashier.cart.toast.clearedDesc'),
     });
   };
 
@@ -45,7 +47,7 @@ const CartSection = ({setShowHeldOrdersDialog}) => {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold flex items-center text-white">
             <ShoppingCart className="w-5 h-5 mr-2" />
-            Cart ({cartItems.length} items)
+            {t('dashboard.cashier.cart.title')} ({t('dashboard.cashier.cart.items', { count: cartItems.length })})
           </h2>
           <div className="flex space-x-2">
             <Button
@@ -55,11 +57,11 @@ const CartSection = ({setShowHeldOrdersDialog}) => {
               onClick={() => setShowHeldOrdersDialog(true)}
             >
               <Pause className="w-4 h-4 mr-1" />
-              Held ({heldOrders.length})
+              {t('dashboard.cashier.cart.held')} ({heldOrders.length})
             </Button>
             <Button variant="outline" size="sm" onClick={handleClearCart} className="bg-transparent border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300">
               <Trash2 className="w-4 h-4 mr-1" />
-              Clear
+              {t('dashboard.cashier.cart.clear')}
             </Button>
           </div>
         </div>
@@ -70,8 +72,8 @@ const CartSection = ({setShowHeldOrdersDialog}) => {
         {cartItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-400">
             <ShoppingCart className="w-16 h-16 mb-4 opacity-30" />
-            <p className="text-lg font-medium">Cart is empty</p>
-            <p className="text-sm">Add products to start an order</p>
+            <p className="text-lg font-medium">{t('dashboard.cashier.cart.empty')}</p>
+            <p className="text-sm">{t('dashboard.cashier.cart.addProducts')}</p>
           </div>
         ) : (
           <div className="p-4 space-y-3">

@@ -20,12 +20,14 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea"; 
 import { CheckCircle, XCircle, Clock, Loader2, AlertTriangle } from "lucide-react";
-
 import { useToast } from "@/components/ui/use-toast";
+
 import { getAllStores, moderateStore } from "@/Redux Toolkit/features/store/storeThunks";
 import { formatDateTime } from "@/utils/formateDate";
+import { useTranslation } from "react-i18next";
 
 export default function PendingRequestsPage() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { stores, loading, error } = useSelector((state) => state.store);
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -55,13 +57,13 @@ export default function PendingRequestsPage() {
       try {
         await dispatch(moderateStore({ storeId: selectedRequest.id, action: "ACTIVE" })).unwrap();
         toast({
-          title: "Store Approved",
-          description: `${selectedRequest.brand} has been approved successfully.`,
+          title: t('superAdminModule.stores.pendingRequests.toast.approved'),
+          description: t('superAdminModule.stores.pendingRequests.toast.approvedDesc', { name: selectedRequest.brand }),
         });
       } catch (e) {
         toast({
-          title: "Approval Failed",
-          description: e?.message || "Failed to approve store.",
+          title: t('superAdminModule.stores.pendingRequests.toast.approveFailed'),
+          description: e?.message || t('superAdminModule.stores.pendingRequests.toast.approveFailed'),
           variant: "destructive",
         });
       } finally {
@@ -78,13 +80,13 @@ export default function PendingRequestsPage() {
       try {
         await dispatch(moderateStore({ storeId: selectedRequest.id, action: "BLOCKED" })).unwrap();
         toast({
-          title: "Store Rejected",
-          description: `${selectedRequest.brand} has been rejected.`,
+          title: t('superAdminModule.stores.pendingRequests.toast.rejected'),
+          description: t('superAdminModule.stores.pendingRequests.toast.rejectedDesc', { name: selectedRequest.brand }),
         });
       } catch (e) {
         toast({
-          title: "Rejection Failed",
-          description: e?.message || "Failed to reject store.",
+          title: t('superAdminModule.stores.pendingRequests.toast.rejectFailed'),
+          description: e?.message || t('superAdminModule.stores.pendingRequests.toast.rejectFailed'),
           variant: "destructive",
         });
       } finally {
@@ -102,14 +104,14 @@ export default function PendingRequestsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-white">Pending Store Requests</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-white">{t('superAdminModule.stores.pendingRequests.title')}</h2>
           <p className="text-gray-400">
-            Review and approve new store registration requests
+            {t('superAdminModule.stores.pendingRequests.subtitle')}
           </p>
         </div>
         <Badge variant="secondary" className="flex items-center gap-1 bg-yellow-500/10 text-yellow-300 border-yellow-500/20">
           <Clock className="w-3 h-3" />
-          {stores.length} Pending
+          {t('superAdminModule.stores.pendingRequests.count', { count: stores.length })}
         </Badge>
       </div>
 
@@ -128,13 +130,13 @@ export default function PendingRequestsPage() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-black/30 hover:bg-black/40 border-b-white/10">
-                    <TableHead>Store Name</TableHead>
-                    <TableHead>Owner</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Business Type</TableHead>
-                    <TableHead>Submitted On</TableHead>
+                    <TableHead>{t('superAdminModule.stores.pendingRequests.table.name')}</TableHead>
+                    <TableHead>{t('superAdminModule.stores.pendingRequests.table.owner')}</TableHead>
+                    <TableHead>{t('superAdminModule.stores.pendingRequests.table.contact')}</TableHead>
+                    <TableHead>{t('superAdminModule.stores.pendingRequests.table.type')}</TableHead>
+                    <TableHead>{t('superAdminModule.stores.pendingRequests.table.submitted')}</TableHead>
                    
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="text-right">{t('superAdminModule.stores.pendingRequests.table.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -144,8 +146,8 @@ export default function PendingRequestsPage() {
                       <TableCell className="text-gray-400">{store.storeAdmin?.fullName}</TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          <div className="text-gray-300">{store.contact?.phone}</div>
-                          <div className="text-gray-400">{store.contact?.email}</div>
+                          <div className="text-gray-300">{store.storeAdmin?.mobile || store.contact?.phone || "-"}</div>
+                          <div className="text-gray-400">{store.storeAdmin?.email || store.contact?.email || "-"}</div>
                         </div>
                       </TableCell>
                       <TableCell>{store.storeType || "-"}</TableCell>
@@ -162,7 +164,7 @@ export default function PendingRequestsPage() {
                             disabled={updatingId === store.id}
                           >
                             <CheckCircle className="w-4 h-4 mr-1" />
-                            {updatingId === store.id ? "Approving..." : "Approve"}
+                            {updatingId === store.id ? t('superAdminModule.stores.pendingRequests.table.approving') : t('superAdminModule.stores.pendingRequests.table.approve')}
                           </Button>
                           <Button
                             variant="outline"
@@ -172,7 +174,7 @@ export default function PendingRequestsPage() {
                             disabled={updatingId === store.id}
                           >
                             <XCircle className="w-4 h-4 mr-1" />
-                            {updatingId === store.id ? "Rejecting..." : "Reject"}
+                            {updatingId === store.id ? t('superAdminModule.stores.pendingRequests.table.rejecting') : t('superAdminModule.stores.pendingRequests.table.reject')}
                           </Button>
                         </div>
                       </TableCell>
@@ -183,7 +185,7 @@ export default function PendingRequestsPage() {
           </div>
         ) : (
           <div className="text-center py-16 text-gray-400">
-            <p>No pending requests at the moment.</p>
+            <p>{t('superAdminModule.stores.pendingRequests.noRequests')}</p>
           </div>
         )}
       </div>
@@ -192,18 +194,18 @@ export default function PendingRequestsPage() {
       <Dialog open={approvalDialogOpen} onOpenChange={setApprovalDialogOpen}>
         <DialogContent className="bg-gray-800/80 border-white/10 text-white backdrop-blur-lg">
           <DialogHeader>
-            <DialogTitle>Approve Store Registration</DialogTitle>
+            <DialogTitle>{t('superAdminModule.stores.pendingRequests.dialog.approveTitle')}</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Are you sure you want to approve {selectedRequest?.brand}? This will activate their account and allow them to start using the platform.
+              {t('superAdminModule.stores.pendingRequests.dialog.approveDesc', { name: selectedRequest?.brand })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" className="border-white/20 text-white hover:bg-white/10" onClick={() => setApprovalDialogOpen(false)}>
-              Cancel
+              {t('superAdminModule.stores.pendingRequests.dialog.cancel')}
             </Button>
             <Button onClick={confirmApprove} className="bg-emerald-600 hover:bg-emerald-500">
               <CheckCircle className="w-4 h-4 mr-2" />
-              Approve Store
+              {t('superAdminModule.stores.pendingRequests.dialog.confirmApprove')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -213,14 +215,14 @@ export default function PendingRequestsPage() {
       <Dialog open={rejectionDialogOpen} onOpenChange={setRejectionDialogOpen}>
         <DialogContent className="bg-gray-800/80 border-white/10 text-white backdrop-blur-lg">
           <DialogHeader>
-            <DialogTitle>Reject Store Registration</DialogTitle>
+            <DialogTitle>{t('superAdminModule.stores.pendingRequests.dialog.rejectTitle')}</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Please provide a reason for rejecting {selectedRequest?.brand}. This will be communicated to the store owner.
+              {t('superAdminModule.stores.pendingRequests.dialog.rejectDesc', { name: selectedRequest?.brand })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <Textarea
-              placeholder="Enter rejection reason..."
+              placeholder={t('superAdminModule.stores.pendingRequests.dialog.rejectPlaceholder')}
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
               rows={3}
@@ -229,7 +231,7 @@ export default function PendingRequestsPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" className="border-white/20 text-white hover:bg-white/10" onClick={() => setRejectionDialogOpen(false)}>
-              Cancel
+              {t('superAdminModule.stores.pendingRequests.dialog.cancel')}
             </Button>
             <Button
               onClick={confirmReject}
@@ -237,7 +239,7 @@ export default function PendingRequestsPage() {
               disabled={!rejectionReason.trim()}
             >
               <XCircle className="w-4 h-4 mr-2" />
-              Reject Store
+              {t('superAdminModule.stores.pendingRequests.dialog.confirmReject')}
             </Button>
           </DialogFooter>
         </DialogContent>

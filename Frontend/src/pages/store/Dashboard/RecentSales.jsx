@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
+import { useTranslation } from "react-i18next";
 
 const sales = [
   { name: "Olivia Martin", email: "olivia.martin@email.com", amount: "+₹1,999.00" },
@@ -11,10 +12,11 @@ const sales = [
 ];
 
 const RecentSales = () => {
+  const { t } = useTranslation();
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white h-full rounded-2xl">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-white">Recent Sales</CardTitle>
+        <CardTitle className="text-lg font-semibold text-white">{t('dashboard.store.charts.recentSales')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/components/ui/use-toast";
 import {
   getAllCustomers,
-  
+  updateCustomer,
 } from "@/Redux Toolkit/features/customer/customerThunks";
 import {
   getOrdersByCustomer,
@@ -24,8 +24,10 @@ import {
 } from "./components";
 import { clearCustomerOrders } from "../../../Redux Toolkit/features/order/orderSlice";
 import CustomerForm from "./CustomerForm";
+import { useTranslation } from "react-i18next";
 
 const CustomerLookupPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
 
@@ -59,7 +61,7 @@ const CustomerLookupPage = () => {
   useEffect(() => {
     if (customerError) {
       toast({
-        title: "Error",
+        title: t('common.error'),
         description: customerError,
         variant: "destructive",
       });
@@ -69,7 +71,7 @@ const CustomerLookupPage = () => {
   useEffect(() => {
     if (orderError) {
       toast({
-        title: "Error",
+        title: t('common.error'),
         description: orderError,
         variant: "destructive",
       });
@@ -93,19 +95,34 @@ const CustomerLookupPage = () => {
     const error = validatePoints(pointsToAdd);
     if (error) {
       toast({
-        title: "Invalid Points",
+        title: t('dashboard.cashier.customer.toast.invalidPoints'),
         description: error,
         variant: "destructive",
       });
       return;
     }
 
-    // In a real app, this would update the customer's loyalty points in the database
-    toast({
-      title: "Points Added",
-      description: `${pointsToAdd} points added to ${
-        selectedCustomer.fullName || selectedCustomer.name
-      }'s account`,
+    // Update customer points in database
+    const newPoints = (selectedCustomer.loyaltyPoints || 0) + pointsToAdd;
+    
+    dispatch(updateCustomer({
+      id: selectedCustomer.id,
+      customer: { ...selectedCustomer, loyaltyPoints: newPoints }
+    })).then(() => {
+      setSelectedCustomer(prev => ({ ...prev, loyaltyPoints: newPoints }));
+      toast({
+        title: t('dashboard.cashier.customer.toast.pointsAdded'),
+        description: t('dashboard.cashier.customer.toast.pointsAddedDesc', {
+          points: pointsToAdd,
+          name: selectedCustomer.fullName || selectedCustomer.name
+        }),
+      });
+    }).catch(err => {
+       toast({
+        title: "Lỗi",
+        description: "Không thể cộng điểm, vui lòng thử lại.",
+        variant: "destructive",
+      });
     });
 
     setShowAddPointsDialog(false);
@@ -136,8 +153,8 @@ const CustomerLookupPage = () => {
     <div className="h-full flex flex-col bg-gray-900 text-white">
       <div className="p-4 bg-black/20 backdrop-blur-lg border-b border-white/10">
         <div>
-          <h1 className="text-2xl font-bold text-white">Customer Management</h1>
-          <p className="text-sm text-gray-400">Search, view, and manage customer details.</p>
+          <h1 className="text-2xl font-bold text-white">{t('dashboard.cashier.customer.title')}</h1>
+          <p className="text-sm text-gray-400">{t('dashboard.cashier.customer.desc')}</p>
         </div>
       </div>
 

@@ -19,8 +19,10 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import BranchTable from "./BranchTable";
 import BranchForm from "./BranchForm";
+import { useTranslation } from "react-i18next";
 
 export default function Branches() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { branches, loading, error } = useSelector((state) => state.branch);
   const { store } = useSelector((state) => state.store);
@@ -64,18 +66,18 @@ export default function Branches() {
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Branch Management</h1>
-          <p className="text-gray-400 mt-1">Oversee all your store locations.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('storeModule.branches.title')}</h1>
+          <p className="text-gray-400 mt-1">{t('storeModule.branches.subtitle')}</p>
         </div>
 
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <Button onClick={() => setIsAddDialogOpen(true)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            <Plus className="mr-2 h-4 w-4" /> Add Branch
+            <Plus className="mr-2 h-4 w-4" /> {t('storeModule.branches.addBranch')}
           </Button>
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Add New Branch</DialogTitle>
-              <p className="text-gray-300 mt-2">Enter the details for the new branch.</p>
+              <DialogTitle className="text-3xl font-bold">{t('storeModule.branches.addNewTitle')}</DialogTitle>
+              <p className="text-gray-300 mt-2">{t('storeModule.branches.addNewSubtitle')}</p>
             </DialogHeader>
             <BranchForm 
               onSubmit={handleAddBranchSuccess} 
@@ -87,8 +89,8 @@ export default function Branches() {
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
             <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">Edit Branch</DialogTitle>
-              <p className="text-gray-300 mt-2">Update the branch details below.</p>
+              <DialogTitle className="text-3xl font-bold">{t('storeModule.branches.editTitle')}</DialogTitle>
+              <p className="text-gray-300 mt-2">{t('storeModule.branches.editSubtitle')}</p>
             </DialogHeader>
             <BranchForm 
               initialValues={currentBranch} 

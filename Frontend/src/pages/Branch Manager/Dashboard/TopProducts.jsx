@@ -10,10 +10,12 @@ import {
   ChartLegendContent,
 } from "@/components/ui/chart";
 import { getTopProductsByQuantity } from "@/Redux Toolkit/features/branchAnalytics/branchAnalyticsThunks";
+import { useTranslation } from "react-i18next";
 
 const COLORS = ["#10b981", "#34d399", "#6ee7b7", "#a7f3d0", "#d1fae5"];
 
 const TopProducts = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const branchId = useSelector((state) => state.branch.branch?.id);
   const { topProducts, loading } = useSelector((state) => state.branchAnalytics);
@@ -70,7 +72,7 @@ const TopProducts = () => {
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader className="border-b border-white/10">
         <CardTitle className="text-xl font-semibold text-white">
-          Product Performance
+          {t('dashboard.branchManager.dashboard.productPerformance')}
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-6">

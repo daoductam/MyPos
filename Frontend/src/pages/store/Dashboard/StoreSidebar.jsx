@@ -16,24 +16,10 @@ import {
   GitBranch,
   ArrowUpCircle,
 } from "lucide-react";
-
-const navLinks = [
-  { name: "Dashboard", path: "dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
-  { name: "Sales", path: "sales", icon: <ShoppingCart className="w-5 h-5" /> },
-  { name: "Products", path: "products", icon: <Package className="w-5 h-5" /> },
-  { name: "Categories", path: "categories", icon: <Tag className="w-5 h-5" /> },
-  { name: "Branches", path: "branches", icon: <GitBranch className="w-5 h-5" /> },
-  { name: "Employees", path: "employees", icon: <Users className="w-5 h-5" /> },
-  { name: "Reports", path: "reports", icon: <BarChart2 className="w-5 h-5" /> },
-  { name: "Alerts", path: "alerts", icon: <Bell className="w-5 h-5" /> },
-];
-
-const bottomLinks = [
-  { name: "Settings", path: "settings", icon: <Settings className="w-5 h-5" /> },
-  { name: "Upgrade Plan", path: "upgrade", icon: <ArrowUpCircle className="w-5 h-5" /> },
-];
+import { useTranslation } from "react-i18next";
 
 const StoreSidebar = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { store } = useSelector((state) => state.store);
@@ -42,6 +28,22 @@ const StoreSidebar = () => {
     dispatch(logout());
     navigate("/auth/login");
   };
+
+  const navLinks = [
+    { name: t('dashboard.store.nav.dashboard'), path: "dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.sales'), path: "sales", icon: <ShoppingBag className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.products'), path: "products", icon: <Package className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.categories'), path: "categories", icon: <Tag className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.branches'), path: "branches", icon: <GitBranch className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.employees'), path: "employees", icon: <Users className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.reports'), path: "reports", icon: <BarChart2 className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.alerts'), path: "alerts", icon: <Bell className="w-5 h-5" /> },
+  ];
+
+  const bottomLinks = [
+    { name: t('dashboard.store.bottomNav.settings'), path: "settings", icon: <Settings className="w-5 h-5" /> },
+    { name: t('dashboard.store.bottomNav.upgradePlan'), path: "upgrade", icon: <ArrowUpCircle className="w-5 h-5" /> },
+  ];
 
   return (
     <aside className="w-64 flex-shrink-0 p-4 z-20">
@@ -95,7 +97,7 @@ const StoreSidebar = () => {
             className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
           >
             <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+            <span className="font-medium">{t('dashboard.store.bottomNav.logout')}</span>
           </button>
         </div>
       </div>

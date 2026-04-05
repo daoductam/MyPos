@@ -9,9 +9,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit, UserX, Key, BarChart } from "lucide-react";
-
-const loginAccess=true
+import { Edit, UserX, Key, BarChart, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const EmployeeTable = ({
   employees,
@@ -19,18 +18,24 @@ const EmployeeTable = ({
   openResetPasswordDialog,
   openPerformanceDialog,
   openEditDialog,
+  handleDelete,
+  userProfile,
 }) => {
+  const { t } = useTranslation();
+  // Note: loginAccess is hardcoded to true in the original file, I'll keep that but localize the text
+  const loginAccess = true;
+
   return (
     <Table>
       <TableHeader>
         <TableRow className="border-white/10">
-          <TableHead className="text-gray-400">Name</TableHead>
-          <TableHead className="text-gray-400">Role</TableHead>
-          <TableHead className="text-gray-400">Email</TableHead>
-          <TableHead className="text-gray-400">Login Access</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.employees.table.name')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.employees.table.role')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.employees.table.email')}</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.employees.table.loginAccess')}</TableHead>
          
-          <TableHead className="text-gray-400">Assigned Since</TableHead>
-          <TableHead className="text-right text-gray-400">Actions</TableHead>
+          <TableHead className="text-gray-400">{t('dashboard.branchManager.employees.table.assignedSince')}</TableHead>
+          <TableHead className="text-right text-gray-400">{t('dashboard.branchManager.employees.table.actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -49,7 +54,7 @@ const EmployeeTable = ({
                   }
                   variant="secondary"
                 >
-                  {loginAccess ? "Enabled" : "Disabled"}
+                  {loginAccess ? t('dashboard.branchManager.employees.table.enabled') : t('dashboard.branchManager.employees.table.disabled')}
                 </Badge>
               </TableCell>
             
@@ -62,8 +67,8 @@ const EmployeeTable = ({
                     onClick={() => handleToggleAccess(employee)}
                     title={
                       employee.loginAccess
-                        ? "Disable Access"
-                        : "Enable Access"
+                        ? t('dashboard.branchManager.employees.table.disabled')
+                        : t('dashboard.branchManager.employees.table.enabled')
                     }
                     className="bg-transparent border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/20 hover:text-yellow-300"
                   >
@@ -73,7 +78,7 @@ const EmployeeTable = ({
                     variant="outline"
                     size="sm"
                     onClick={() => openResetPasswordDialog(employee)}
-                    title="Reset Password"
+                    title={t('dashboard.branchManager.employees.resetPassword.title')}
                     className="bg-transparent border-orange-500/50 text-orange-400 hover:bg-orange-500/20 hover:text-orange-300"
                   >
                     <Key className="h-4 w-4" />
@@ -82,7 +87,7 @@ const EmployeeTable = ({
                     variant="outline"
                     size="sm"
                     onClick={() => openPerformanceDialog(employee)}
-                    title="View Performance"
+                    title={t('dashboard.branchManager.employees.performance.title')}
                     className="bg-transparent border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300"
                   >
                     <BarChart className="h-4 w-4" />
@@ -91,11 +96,22 @@ const EmployeeTable = ({
                     variant="outline"
                     size="sm"
                     onClick={() => openEditDialog(employee)}
-                    title="Edit Employee"
+                    title={t('common.edit')}
                     className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
+                  {userProfile?.role === 'ROLE_BRANCH_ADMIN' && handleDelete && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDelete(employee)}
+                      title={t('common.delete', 'Xóa')}
+                      className="bg-transparent border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               </TableCell>
             </TableRow>
@@ -103,8 +119,8 @@ const EmployeeTable = ({
         ) : (
           <TableRow>
             <TableCell colSpan={7} className="text-center py-16 text-gray-400">
-              <h3 className="text-xl font-semibold">No Employees Found</h3>
-              <p className="mt-2">Add your first employee to get started.</p>
+              <h3 className="text-xl font-semibold">{t('dashboard.branchManager.employees.table.noEmployees')}</h3>
+              <p className="mt-2">{t('dashboard.branchManager.employees.table.addFirst')}</p>
             </TableCell>
           </TableRow>
         )}

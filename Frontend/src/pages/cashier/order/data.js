@@ -26,7 +26,7 @@
         };
 
    export const formatDate = (date) => {
-    return new Date(date).toLocaleString('en-US', {
+    return new Date(date).toLocaleString('vi-VN', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -38,12 +38,17 @@
     export const getPaymentModeLabel = (mode) => {
       switch (mode) {
         case 'CASH':
-          return 'Cash';
+          return 'Tiền mặt';
         case 'CARD':
-          return 'Card';
+          return 'Thẻ';
         case 'UPI':
-          return 'UPI';
+          return 'Chuyển khoản/UPI';
         default:
           return mode;
       }
     };
+
+    export const formatCurrency = (amount) => {
+      if (amount === undefined || amount === null || isNaN(amount)) return "0";
+      return new Intl.NumberFormat('vi-VN').format(Math.round(amount));
+    };

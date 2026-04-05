@@ -15,60 +15,63 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
-
-const navLinks = [
-  {
-    name: "Dashboard",
-    path: "/branch/dashboard",
-    icon: <LayoutDashboard className="w-5 h-5" />,
-  },
-  {
-    name: "Orders",
-    path: "/branch/orders",
-    icon: <ShoppingBag className="w-5 h-5" />,
-  },
-  {
-    name: "Refunds",
-    path: "/branch/refunds",
-    icon: <RefreshCw className="w-5 h-5" />,
-  },
-  {
-    name: "Transactions",
-    path: "/branch/transactions",
-    icon: <CreditCard className="w-5 h-5" />,
-  },
-  {
-    name: "Inventory",
-    path: "/branch/inventory",
-    icon: <Package className="w-5 h-5" />,
-  },
-  {
-    name: "Employees",
-    path: "/branch/employees",
-    icon: <Users className="w-5 h-5" />,
-  },
-  {
-    name: "Customers",
-    path: "/branch/customers",
-    icon: <UserCircle className="w-5 h-5" />,
-  },
-  {
-    name: "Reports",
-    path: "/branch/reports",
-    icon: <FileText className="w-5 h-5" />,
-  },
-  {
-    name: "Settings",
-    path: "/branch/settings",
-    icon: <Settings className="w-5 h-5" />,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function BranchManagerSidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { branch } = useSelector((state) => state.branch);
+  const { userProfile } = useSelector((state) => state.user);
+
+  const navLinks = [
+    {
+      name: t('dashboard.branchManager.nav.dashboard'),
+      path: "/branch/dashboard",
+      icon: <LayoutDashboard className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.orders'),
+      path: "/branch/orders",
+      icon: <ShoppingBag className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.refunds'),
+      path: "/branch/refunds",
+      icon: <RefreshCw className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.transactions'),
+      path: "/branch/transactions",
+      icon: <CreditCard className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.inventory'),
+      path: "/branch/inventory",
+      icon: <Package className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.employees'),
+      path: "/branch/employees",
+      icon: <Users className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.customers'),
+      path: "/branch/customers",
+      icon: <UserCircle className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.reports'),
+      path: "/branch/reports",
+      icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.branchManager.nav.settings'),
+      path: "/branch/settings",
+      icon: <Settings className="w-5 h-5" />,
+    },
+  ];
 
   const handleLogout = () => {
     dispatch(logout());
@@ -82,7 +85,9 @@ export default function BranchManagerSidebar() {
           <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-600/30">
             <Package className="w-6 h-6 text-white" />
           </div>
-          <span className="text-xl font-bold text-white">Branch Manager</span>
+          <span className="text-xl font-bold text-white">
+            {userProfile?.role === 'ROLE_BRANCH_ADMIN' ? t('dashboard.branchAdmin.title', 'Quản trị chi nhánh') : t('dashboard.branchManager.title')}
+          </span>
         </div>
         {branch && (
           <div className="mb-6 px-4 py-3 bg-white/5 rounded-lg border border-white/10">
@@ -124,7 +129,7 @@ export default function BranchManagerSidebar() {
             className="w-full flex items-center justify-start gap-3 rounded-lg transition-colors text-red-400 hover:bg-red-500/10 hover:text-red-300 text-base font-medium"
           >
             <LogOut className="w-5 h-5" />
-            Logout
+            {t('dashboard.branchManager.logout')}
           </Button>
         </div>
       </div>

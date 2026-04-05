@@ -79,7 +79,7 @@ const cartSlice = createSlice({
           customer: state.selectedCustomer,
           note: state.note,
           discount: state.discount,
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
         };
 
         state.heldOrders.push(heldOrder);
@@ -138,7 +138,7 @@ export const selectSubtotal = (state) => {
 
 export const selectTax = (state) => {
   const subtotal = selectSubtotal(state);
-  return subtotal * 0.18; // 18% GST
+  return subtotal * 0.10; // 10% VAT Vietnam
 };
 
 export const selectDiscountAmount = (state) => {

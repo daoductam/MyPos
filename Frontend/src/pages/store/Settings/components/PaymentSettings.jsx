@@ -2,38 +2,40 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { CreditCard } from "lucide-react";
 import ToggleSwitch from "./ToggleSwitch";
+import { useTranslation } from "react-i18next";
 
 const PaymentSettings = ({ settings, onChange }) => {
+  const { t } = useTranslation();
   const paymentOptions = [
     {
       name: "acceptCash",
-      title: "Accept Cash",
-      description: "Allow cash payments"
+      title: t('storeModule.settings.payment.acceptCash'),
+      description: t('storeModule.settings.payment.acceptCashDesc')
     },
     {
       name: "acceptCredit",
-      title: "Accept Credit Cards",
-      description: "Allow credit card payments"
+      title: t('storeModule.settings.payment.acceptCredit'),
+      description: t('storeModule.settings.payment.acceptCreditDesc')
     },
     {
       name: "acceptDebit",
-      title: "Accept Debit Cards",
-      description: "Allow debit card payments"
+      title: t('storeModule.settings.payment.acceptDebit'),
+      description: t('storeModule.settings.payment.acceptDebitDesc')
     },
     {
       name: "acceptMobile",
-      title: "Accept Mobile Payments",
-      description: "Allow mobile payment methods"
+      title: t('storeModule.settings.payment.acceptMobile'),
+      description: t('storeModule.settings.payment.acceptMobileDesc')
     },
     {
       name: "stripeEnabled",
-      title: "Stripe Integration",
-      description: "Enable Stripe payment gateway"
+      title: t('storeModule.settings.payment.stripe'),
+      description: t('storeModule.settings.payment.stripeDesc')
     },
     {
       name: "paypalEnabled",
-      title: "PayPal Integration",
-      description: "Enable PayPal payment gateway"
+      title: t('storeModule.settings.payment.paypal'),
+      description: t('storeModule.settings.payment.paypalDesc')
     }
   ];
 
@@ -47,10 +49,10 @@ const PaymentSettings = ({ settings, onChange }) => {
       <CardHeader>
         <CardTitle className="flex items-center">
           <CreditCard className="mr-2 h-5 w-5 text-emerald-500" />
-          Payment Settings
+          {t('storeModule.settings.payment.title')}
         </CardTitle>
         <CardDescription>
-          Configure payment methods and options
+          {t('storeModule.settings.payment.desc')}
         </CardDescription>
       </CardHeader>
       <CardContent>

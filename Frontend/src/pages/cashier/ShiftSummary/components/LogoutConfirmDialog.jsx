@@ -1,24 +1,25 @@
-import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from "react-i18next";
 
 const LogoutConfirmDialog = ({ isOpen, onClose, onConfirm }) => {
+  const { t } = useTranslation();
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>End Shift & Logout</DialogTitle>
+          <DialogTitle>{t('dashboard.cashier.logout')}</DialogTitle>
         </DialogHeader>
         
         <div className="py-4">
-          <p>Are you sure you want to end your shift and logout?</p>
-          <p className="text-sm text-muted-foreground mt-2">This will generate your shift summary report.</p>
+          <p>{t('dashboard.cashier.logoutConfirmMessage')}</p>
+          <p className="text-sm text-muted-foreground mt-2">{t('dashboard.cashier.logoutConfirmNote')}</p>
         </div>
         
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="destructive" onClick={onConfirm}>
-            End Shift & Logout
+            {t('dashboard.cashier.logout')}
           </Button>
         </DialogFooter>
       </DialogContent>

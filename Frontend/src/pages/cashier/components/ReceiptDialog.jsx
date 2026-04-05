@@ -16,6 +16,9 @@ import {
 } from "../../../Redux Toolkit/features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 import { useToast } from "../../../components/ui/use-toast";
+import { formatVND } from "@/utils/formatCurrency";
+import { DialogDescription } from "@/components/ui/dialog";
+
 
 const ReceiptDialog = ({ showReceiptDialog, setShowReceiptDialog }) => {
   const paymentMethod = useSelector(selectPaymentMethod);
@@ -39,7 +42,11 @@ const ReceiptDialog = ({ showReceiptDialog, setShowReceiptDialog }) => {
       <DialogContent className="max-w-md bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
         <DialogHeader className="text-center">
           <DialogTitle className="text-2xl font-bold">Receipt</DialogTitle>
+          <DialogDescription className="sr-only">
+            Success confirmation and summary of the completed transaction.
+          </DialogDescription>
         </DialogHeader>
+
 
         <div className="space-y-4">
           <div className="text-center">
@@ -52,7 +59,7 @@ const ReceiptDialog = ({ showReceiptDialog, setShowReceiptDialog }) => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-400">Order Total:</span>
-                <span className="font-semibold text-white">₹{total.toFixed(2)}</span>
+                <span className="font-semibold text-white">VNĐ {formatVND(total)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Payment Method:</span>

@@ -1,21 +1,23 @@
 import React from 'react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Tag, DollarSign, Eye, Loader2 } from "lucide-react";
+import { Trash2, Tag, DollarSign, Eye, Loader2, Edit } from "lucide-react";
 import { useDispatch } from 'react-redux';
 import { deleteProduct } from '@/Redux Toolkit/features/product/productThunks';
 import { toast } from '@/components/ui/use-toast';
+import { useTranslation } from "react-i18next";
 
 const ProductTable = ({ products, loading, onEdit, onView }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleDeleteProduct = async (id) => {
     try {
       const token = localStorage.getItem("jwt");
       await dispatch(deleteProduct({ id, token })).unwrap();
-      toast({ title: "Success", description: "Product deleted successfully" });
+      toast({ title: t('toast.success'), description: t('toast.productDeleted') });
     } catch (err) {
-      toast({ title: "Error", description: err || "Failed to delete product", variant: "destructive" });
+      toast({ title: t('toast.error'), description: err || t('toast.productDeletedError'), variant: "destructive" });
     }
   };
 
@@ -23,7 +25,7 @@ const ProductTable = ({ products, loading, onEdit, onView }) => {
     return (
       <div className="flex justify-center items-center h-64 text-gray-400">
         <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mr-3" />
-        Loading products...
+        {t('storeModule.products.table.loading')}
       </div>
     );
   }
@@ -31,8 +33,8 @@ const ProductTable = ({ products, loading, onEdit, onView }) => {
   if (products.length === 0) {
     return (
       <div className="text-center py-16 text-gray-400">
-        <h3 className="text-xl font-semibold">No Products Found</h3>
-        <p className="mt-2">Add your first product to get started.</p>
+        <h3 className="text-xl font-semibold">{t('storeModule.products.table.noProducts')}</h3>
+        <p className="mt-2">{t('storeModule.products.table.addFirst')}</p>
       </div>
     );
   }
@@ -41,13 +43,13 @@ const ProductTable = ({ products, loading, onEdit, onView }) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-gray-400">ID</TableHead>
-          <TableHead className="text-gray-400">Image</TableHead>
-          <TableHead className="text-gray-400">Product</TableHead>
-          <TableHead className="text-gray-400">Category</TableHead>
-          <TableHead className="text-gray-400">Price</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.products.table.columns.id')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.products.table.columns.image')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.products.table.columns.product')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.products.table.columns.category')}</TableHead>
+          <TableHead className="text-gray-400">{t('storeModule.products.table.columns.price')}</TableHead>
           
-          <TableHead className="text-right text-gray-400">Actions</TableHead>
+          <TableHead className="text-right text-gray-400">{t('storeModule.products.table.columns.actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -77,7 +79,7 @@ const ProductTable = ({ products, loading, onEdit, onView }) => {
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-1 text-gray-300">
-                <DollarSign className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-400 font-medium">VNĐ </span>
                 {product.price?.toFixed ? product.price.toFixed(2) : product.sellingPrice}
               </div>
             </TableCell>

@@ -22,22 +22,7 @@ import { PhoneOutgoing } from "lucide-react";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { uploadToCloudinary } from "../../../utils/uploadToCloudinary";
-
-const validationSchema = Yup.object({
-  name: Yup.string().required("Product name is required"),
-  sku: Yup.string().required("SKU is required"),
-  mrp: Yup.number()
-    .required("MRP is required")
-    .positive("MRP must be positive"),
-  sellingPrice: Yup.number()
-    .required("Selling price is required")
-    .positive("Selling price must be positive"),
-  categoryId: Yup.string().required("Category is required"),
-  description: Yup.string().optional(),
-  brand: Yup.string().optional(),
-  color: Yup.string().optional(),
-  image: Yup.string().optional(),
-});
+import { useTranslation } from "react-i18next";
 
 const ProductForm = ({
   initialValues,
@@ -51,6 +36,26 @@ const ProductForm = ({
   const { store } = useSelector((state) => state.store);
   const { categories: categoryList } = useSelector((state) => state.category);
   const [uploadImage, setUploadingImage] = useState(false);
+  const { t } = useTranslation();
+
+  // Validate form using i18n inside component or just inline since validation outside doesn't have hooks easily without recreating.
+  // We recreate validationSchema inside to use t()
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t('toast.error') + ": " + t('storeModule.products.form.productName')),
+    sku: Yup.string().required(t('toast.error') + ": " + t('storeModule.products.form.sku')),
+    mrp: Yup.number()
+      .required(t('toast.error') + ": " + t('storeModule.products.form.mrp'))
+      .positive(),
+    sellingPrice: Yup.number()
+      .required(t('toast.error') + ": " + t('storeModule.products.form.sellingPrice'))
+      .positive(),
+    categoryId: Yup.string().required(t('toast.error') + ": " + t('storeModule.products.form.category')),
+    description: Yup.string().optional(),
+    brand: Yup.string().optional(),
+    color: Yup.string().optional(),
+    image: Yup.string().optional(),
+  });
+
   const defaultValues = {
     name: "",
     sku: "",
@@ -65,37 +70,41 @@ const ProductForm = ({
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    console.log("Submit triggered with values:", values);
     try {
+      if (!store?.id) {
+        throw new Error(t('toast.fetchError') + ": Store ID is missing");
+      }
       const token = localStorage.getItem("jwt");
       const dto = {
         ...values,
-        mrp: parseFloat(values.mrp),
-        sellingPrice: parseFloat(values.sellingPrice),
+        mrp: parseFloat(values.mrp) || 0,
+        sellingPrice: parseFloat(values.sellingPrice) || 0,
         storeId: store.id,
         categoryId: parseInt(values.categoryId),
       };
-
-      console.log("Product form data:", dto);
+      
+      console.log("Submitting product DTO:", dto);
 
       if (isEditing && initialValues?.id) {
         await dispatch(
           updateProduct({ id: initialValues.id, dto, token })
         ).unwrap();
         toast({
-          title: "Success",
-          description: "Product updated successfully",
+          title: t('toast.success'),
+          description: t('toast.productUpdated'),
         });
       } else {
         await dispatch(createProduct(dto)).unwrap();
-        toast({ title: "Success", description: "Product added successfully" });
+        toast({ title: t('toast.success'), description: t('toast.productAdded') });
         resetForm();
       }
 
       if (onSubmit) onSubmit();
     } catch (err) {
       toast({
-        title: "Error",
-        description: err || `Failed to ${isEditing ? "update" : "add"} product`,
+        title: t('toast.error'),
+        description: err || t('toast.fetchError'),
         variant: "destructive",
       });
     } finally {
@@ -125,8 +134,16 @@ const ProductForm = ({
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      {({ isSubmitting, touched, errors, values, setFieldValue }) => (
-        <Form className="space-y-4 py-2 pr-2">
+      {({ isSubmitting, touched, errors, values, setFieldValue }) => {
+        // Debugging: Log validation errors if submission is attempted and fails
+        React.useEffect(() => {
+          if (Object.keys(errors).length > 0 && isSubmitting) {
+            console.error("Form validation failed:", errors);
+          }
+        }, [errors, isSubmitting]);
+
+        return (
+          <Form className="space-y-4 py-2 pr-2">
           <div className="flex flex-wrap gap-5" item xs={12}>
             {!values.image ? (
               <>
@@ -144,7 +161,7 @@ const ProductForm = ({
                   </span>
                   {uploadImage && (
                     <div className="absolute inset-0 w-24 h-24 flex justify-center items-center bg-black/50 rounded-lg">
-                      <p className="text-white">Uploading...</p>
+                      <p className="text-white">{t('storeModule.products.form.uploading')}</p>
                     </div>
                   )}
                 </label>
@@ -175,26 +192,26 @@ const ProductForm = ({
 
           <div className="space-y-2">
             <label htmlFor="image" className="block text-sm font-medium text-gray-300">
-              Image URL
+              {t('storeModule.products.form.image')}
             </label>
             <Field
               as={Input}
               id="image"
               name="image"
               className={`w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40`}
-              placeholder="Paste image URL"
+              placeholder={t('storeModule.products.form.pasteUrl')}
             />
           </div>
 
           <div className="space-y-2">
             <label htmlFor="name" className="block text-sm font-medium text-gray-300">
-              Product Name
+              {t('storeModule.products.form.productName')}
             </label>
             <Field
               as={Input}
               id="name"
               name="name"
-              placeholder="Enter product name"
+              placeholder={t('storeModule.products.form.enterName')}
               className={`w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 ${touched.name && errors.name ? "border-red-500" : "border-white/20 hover:border-white/40"}`}
             />
             <ErrorMessage
@@ -206,13 +223,13 @@ const ProductForm = ({
 
           <div className="space-y-2">
             <label htmlFor="sku" className="block text-sm font-medium text-gray-300">
-              SKU
+              {t('storeModule.products.form.sku')}
             </label>
             <Field
               as={Input}
               id="sku"
               name="sku"
-              placeholder="Enter SKU"
+              placeholder={t('storeModule.products.form.enterSku')}
               className={`w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 ${touched.sku && errors.sku ? "border-red-500" : "border-white/20 hover:border-white/40"}`}
             />
             <ErrorMessage
@@ -224,21 +241,21 @@ const ProductForm = ({
 
           <div className="space-y-2"> 
             <label htmlFor="brand" className="block text-sm font-medium text-gray-300">
-              Brand
+              {t('storeModule.products.form.brand')}
             </label>
             <Field
               as={Input}
               id="brand"
               name="brand"
               className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
-              placeholder="Enter brand"
+              placeholder={t('storeModule.products.form.enterBrand')}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label htmlFor="categoryId" className="block text-sm font-medium text-gray-300">
-                Category
+                {t('storeModule.products.form.category')}
               </label>
               <Field name="categoryId">
                 {({ field }) => (
@@ -251,7 +268,7 @@ const ProductForm = ({
                     <SelectTrigger
                       className={`w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 ${touched.categoryId && errors.categoryId ? "border-red-500" : "border-white/20"}`}
                     >
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={t('storeModule.products.form.selectCategory')} />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
                       {categoryList.map((category) => (
@@ -275,14 +292,14 @@ const ProductForm = ({
             </div>
             <div className="space-y-2">
               <label htmlFor="color" className="block text-sm font-medium text-gray-300">
-                Color
+                {t('storeModule.products.form.color')}
               </label>
               <Field
                 as={Input}
                 id="color"
                 name="color"
                 className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
-                placeholder="Enter color"
+                placeholder={t('storeModule.products.form.enterColor')}
               />
             </div>
           </div>
@@ -290,7 +307,7 @@ const ProductForm = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label htmlFor="mrp" className="block text-sm font-medium text-gray-300">
-                MRP
+                {t('storeModule.products.form.mrp')}
               </label>
               <Field
                 as={Input}
@@ -313,7 +330,7 @@ const ProductForm = ({
                 htmlFor="sellingPrice"
                 className="block text-sm font-medium text-gray-300"
               >
-                Selling Price
+                {t('storeModule.products.form.sellingPrice')}
               </label>
               <Field
                 as={Input}
@@ -335,13 +352,13 @@ const ProductForm = ({
 
           <div className="space-y-2">
             <label htmlFor="description" className="block text-sm font-medium text-gray-300">
-              Description
+              {t('storeModule.products.form.description')}
             </label>
             <Field
               as={Textarea}
               id="description"
               name="description"
-              placeholder="Enter product description"
+              placeholder={t('storeModule.products.form.enterDescription')}
               className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 resize-none"
               rows={3}
             />
@@ -350,7 +367,7 @@ const ProductForm = ({
           <div className="flex justify-end gap-3 pt-4">
             {onCancel && (
               <Button type="button" variant="outline" onClick={onCancel} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
-                Cancel
+                {t('storeModule.products.form.cancel')}
               </Button>
             )}
             <Button
@@ -380,17 +397,18 @@ const ProductForm = ({
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  {isEditing ? "Updating..." : "Adding..."}
+                  {isEditing ? t('storeModule.products.form.updating') : t('storeModule.products.form.adding')}
                 </span>
               ) : isEditing ? (
-                "Update Product"
+                t('storeModule.products.form.updateBtn')
               ) : (
-                "Add Product"
+                t('storeModule.products.form.addBtn')
               )}
             </Button>
           </div>
         </Form>
-      )}
+      );
+    }}
     </Formik>
   );
 };

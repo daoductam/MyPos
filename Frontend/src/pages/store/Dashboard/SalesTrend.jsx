@@ -9,22 +9,24 @@ import {
   CartesianGrid,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
-
-const data = [
-  { name: "Jan", sales: 4000 },
-  { name: "Feb", sales: 3000 },
-  { name: "Mar", sales: 5000 },
-  { name: "Apr", sales: 4500 },
-  { name: "May", sales: 6000 },
-  { name: "Jun", sales: 5500 },
-  { name: "Jul", sales: 7000 },
-];
+import { useTranslation } from "react-i18next";
 
 const SalesTrend = () => {
+  const { t } = useTranslation();
+
+  const data = [
+    { name: t('dashboard.store.charts.months.jan'), sales: 4000 },
+    { name: t('dashboard.store.charts.months.feb'), sales: 3000 },
+    { name: t('dashboard.store.charts.months.mar'), sales: 5000 },
+    { name: t('dashboard.store.charts.months.apr'), sales: 4500 },
+    { name: t('dashboard.store.charts.months.may'), sales: 6000 },
+    { name: t('dashboard.store.charts.months.jun'), sales: 5500 },
+    { name: t('dashboard.store.charts.months.jul'), sales: 7000 },
+  ];
   return (
     <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-white">Sales Trend</CardTitle>
+        <CardTitle className="text-lg font-semibold text-white">{t('dashboard.store.charts.salesTrend')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>

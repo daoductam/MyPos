@@ -5,79 +5,77 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { Badge } from "../../components/ui/badge";
-import { Download, FileText, Calendar, Filter, CheckCircle } from "lucide-react";
+import { Download, FileText, Calendar, Filter, CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "../../components/ui/use-toast";
-// import { useToast } from "../../hooks/use-toast";
-
-const exportTypes = [
-  {
-    id: "store-list",
-    name: "Store List",
-    description: "Complete list of all stores with basic information",
-    format: "CSV",
-    icon: <FileText className="w-5 h-5" />,
-  },
-  {
-    id: "store-status",
-    name: "Store Status Summary",
-    description: "Summary of store statuses and registration dates",
-    format: "Excel",
-    icon: <FileText className="w-5 h-5" />,
-  },
-  {
-    id: "commission-report",
-    name: "Commission Report",
-    description: "Detailed commission earnings and rates for all stores",
-    format: "Excel",
-    icon: <FileText className="w-5 h-5" />,
-  },
-  {
-    id: "pending-requests",
-    name: "Pending Requests",
-    description: "List of all pending store registration requests",
-    format: "CSV",
-    icon: <FileText className="w-5 h-5" />,
-  },
-];
-
-const recentExports = [
-  {
-    id: 1,
-    type: "Store List",
-    date: "2025-01-15 14:30",
-    status: "completed",
-    size: "2.3 MB",
-    downloads: 3,
-  },
-  {
-    id: 2,
-    type: "Commission Report",
-    date: "2025-01-14 09:15",
-    status: "completed",
-    size: "1.8 MB",
-    downloads: 1,
-  },
-  {
-    id: 3,
-    type: "Store Status Summary",
-    date: "2025-01-13 16:45",
-    status: "completed",
-    size: "1.2 MB",
-    downloads: 2,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function ExportsPage() {
-  const [selectedType, setSelectedType] = useState("");
-  const [dateRange, setDateRange] = useState({ from: "", to: "" });
-  const [isExporting, setIsExporting] = useState(false);
+  const { t } = useTranslation();
   const { toast } = useToast();
+
+  const exportTypes = [
+    {
+      id: "store-list",
+      name: t('superAdminModule.exports.available.types.store-list.name'),
+      description: t('superAdminModule.exports.available.types.store-list.desc'),
+      format: "CSV",
+      icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      id: "store-status",
+      name: t('superAdminModule.exports.available.types.store-status.name'),
+      description: t('superAdminModule.exports.available.types.store-status.desc'),
+      format: "Excel",
+      icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      id: "commission-report",
+      name: t('superAdminModule.exports.available.types.commission-report.name'),
+      description: t('superAdminModule.exports.available.types.commission-report.desc'),
+      format: "Excel",
+      icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      id: "pending-requests",
+      name: t('superAdminModule.exports.available.types.pending-requests.name'),
+      description: t('superAdminModule.exports.available.types.pending-requests.desc'),
+      format: "CSV",
+      icon: <FileText className="w-5 h-5" />,
+    },
+  ];
+
+  const recentExports = [
+    {
+      id: 1,
+      type: t('superAdminModule.exports.available.types.store-list.name'),
+      date: "2025-01-15 14:30",
+      status: "completed",
+      size: "2.3 MB",
+      downloads: 3,
+    },
+    {
+      id: 2,
+      type: t('superAdminModule.exports.available.types.commission-report.name'),
+      date: "2025-01-14 09:15",
+      status: "completed",
+      size: "1.8 MB",
+      downloads: 1,
+    },
+    {
+      id: 3,
+      type: t('superAdminModule.exports.available.types.store-status.name'),
+      date: "2025-01-13 16:45",
+      status: "completed",
+      size: "1.2 MB",
+      downloads: 2,
+    },
+  ];
 
   const handleExport = async () => {
     if (!selectedType) {
       toast({
-        title: "Select Export Type",
-        description: "Please select an export type to continue.",
+        title: t('superAdminModule.exports.recent.toast.selectType'),
+        description: t('superAdminModule.exports.recent.toast.selectTypeDesc'),
         variant: "destructive",
       });
       return;
@@ -89,8 +87,8 @@ export default function ExportsPage() {
     setTimeout(() => {
       const exportType = exportTypes.find(type => type.id === selectedType);
       toast({
-        title: "Export Started",
-        description: `${exportType.name} export has been initiated. You'll receive a notification when it's ready.`,
+        title: t('superAdminModule.exports.create.started'),
+        description: t('superAdminModule.exports.create.startedDesc', { name: exportType.name }),
       });
       setIsExporting(false);
       setSelectedType("");
@@ -100,17 +98,17 @@ export default function ExportsPage() {
 
   const handleDownload = (exportId) => {
     toast({
-      title: "Download Started",
-      description: "Your file download has begun.",
+      title: t('superAdminModule.exports.recent.toast.downloadStarted'),
+      description: t('superAdminModule.exports.recent.toast.downloadStartedDesc'),
     });
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-white">Exports</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-white">{t('superAdminModule.exports.title')}</h2>
         <p className="text-gray-400">
-          Export store data and generate reports
+          {t('superAdminModule.exports.subtitle')}
         </p>
       </div>
 
@@ -120,15 +118,15 @@ export default function ExportsPage() {
           <CardHeader className="border-b border-white/10">
             <CardTitle className="flex items-center gap-2 text-white">
               <Download className="w-5 h-5" />
-              Create New Export
+              {t('superAdminModule.exports.create.title')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="export-type" className="text-gray-300">Export Type</Label>
+              <Label htmlFor="export-type" className="text-gray-300">{t('superAdminModule.exports.create.typeLabel')}</Label>
               <Select value={selectedType} onValueChange={setSelectedType}>
                 <SelectTrigger className="bg-white/5 border-white/20 text-white">
-                  <SelectValue placeholder="Select export type" />
+                  <SelectValue placeholder={t('superAdminModule.exports.create.typePlaceholder')} />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-800/80 border-white/10 text-white backdrop-blur-lg">
                   {exportTypes.map((type) => (
@@ -150,7 +148,7 @@ export default function ExportsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="date-from" className="text-gray-300">From Date</Label>
+                <Label htmlFor="date-from" className="text-gray-300">{t('superAdminModule.exports.create.fromLabel')}</Label>
                 <Input
                   id="date-from"
                   type="date"
@@ -160,7 +158,7 @@ export default function ExportsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="date-to" className="text-gray-300">To Date</Label>
+                <Label htmlFor="date-to" className="text-gray-300">{t('superAdminModule.exports.create.toLabel')}</Label>
                 <Input
                   id="date-to"
                   type="date"
@@ -179,12 +177,12 @@ export default function ExportsPage() {
               {isExporting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Exporting...
+                  {t('superAdminModule.exports.create.exporting')}
                 </>
               ) : (
                 <>
                   <Download className="w-4 h-4 mr-2" />
-                  Generate Export
+                  {t('superAdminModule.exports.create.button')}
                 </>
               )}
             </Button>
@@ -194,7 +192,7 @@ export default function ExportsPage() {
         {/* Export Types Info */}
         <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
           <CardHeader className="border-b border-white/10">
-            <CardTitle className="text-white">Available Export Types</CardTitle>
+            <CardTitle className="text-white">{t('superAdminModule.exports.available.title')}</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-3">
@@ -227,7 +225,7 @@ export default function ExportsPage() {
       {/* Recent Exports */}
       <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white">
         <CardHeader className="border-b border-white/10">
-          <CardTitle className="text-white">Recent Exports</CardTitle>
+          <CardTitle className="text-white">{t('superAdminModule.exports.recent.title')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="space-y-3">
@@ -248,7 +246,7 @@ export default function ExportsPage() {
                         {exportItem.date}
                       </span>
                       <span>{exportItem.size}</span>
-                      <span>{exportItem.downloads} downloads</span>
+                      <span>{exportItem.downloads} {t('superAdminModule.exports.recent.downloads')}</span>
                     </div>
                   </div>
                 </div>
@@ -266,7 +264,7 @@ export default function ExportsPage() {
                     onClick={() => handleDownload(exportItem.id)}
                   >
                     <Download className="w-4 h-4 mr-1" />
-                    Download
+                    {t('superAdminModule.exports.recent.downloadButton')}
                   </Button>
                 </div>
               </div>
@@ -275,7 +273,7 @@ export default function ExportsPage() {
 
           {recentExports.length === 0 && (
             <div className="text-center py-8 text-gray-400">
-              No recent exports found.
+              {t('superAdminModule.exports.recent.noExports')}
             </div>
           )}
         </CardContent>

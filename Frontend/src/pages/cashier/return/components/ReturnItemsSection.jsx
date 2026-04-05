@@ -20,21 +20,22 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { createRefund } from "../../../../Redux Toolkit/features/refund/refundThunks";
-import { useDispatch } from "react-redux";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-const returnReasons = [
-  "Damaged product",
-  "Wrong product",
-  "Customer changed mind",
-  "Product quality issue",
-  "Pricing error",
-  "Other",
+const returnReasonsKeys = [
+  "damaged",
+  "wrong",
+  "changedMind",
+  "quality",
+  "pricing",
+  "other",
 ];
 
 const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog }) => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const { userProfile } = useSelector((state) => state.user);
   const { branch } = useSelector((state) => state.branch);
@@ -54,20 +55,20 @@ const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog }) => {
       branchId: branch?.id,
       cashierId: userProfile?.id,
 
-      reason: returnReason === "Other" ? otherReason : returnReason,
+      reason: returnReason === "other" ? otherReason : t(`dashboard.cashier.return.reasons.${returnReason}`),
       refundMethod:
         refundMethod === "original" ? selectedOrder.paymentType : refundMethod,
     };
     try {
       await dispatch(createRefund(refundDTO)).unwrap();
       toast({
-        title: "Refund Processed",
-        description: `Refund of ₹${selectedOrder.totalAmount} processed via ${refundDTO.refundMethod}`,
+        title: t('dashboard.cashier.return.toast.processed'),
+        description: t('dashboard.cashier.return.toast.processedDesc', { amount: selectedOrder.totalAmount, method: refundDTO.refundMethod }),
       });
     } catch (error) {
       toast({
-        title: "Refund Failed",
-        description: error || "Failed to process refund. Please try again.",
+        title: t('dashboard.cashier.return.toast.failed'),
+        description: error || t('dashboard.cashier.return.toast.failedDesc'),
         variant: "destructive",
       });
     }
@@ -80,32 +81,32 @@ const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog }) => {
           <div className="space-y-4">
             <div>
               <Label htmlFor="return-reason" className="mb-2 block">
-                Return Reason
+                {t('dashboard.cashier.return.reasonLabel')}
               </Label>
               <Select
                 value={returnReason}
                 onValueChange={(value) => setReturnReason(value)}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a reason..." />
+                  <SelectValue placeholder={t('dashboard.cashier.return.reasonPlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
-                  {returnReasons.map((reason) => (
-                    <SelectItem key={reason} value={reason}>
-                      {reason}
+                  {returnReasonsKeys.map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {t(`dashboard.cashier.return.reasons.${key}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            {returnReason === "Other" && (
+            {returnReason === "other" && (
               <div>
                 <Label htmlFor="other-reason" className="mb-2 block">
-                  Specify Reason
+                  {t('dashboard.cashier.return.specifyReasonLabel')}
                 </Label>
                 <Textarea
                   id="other-reason"
-                  placeholder="Please specify the return reason"
+                  placeholder={t('dashboard.cashier.return.specifyReasonPlaceholder')}
                   value={otherReason}
                   onChange={(e) => setOtherReason(e.target.value)}
                 />
@@ -113,31 +114,31 @@ const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog }) => {
             )}
             <div>
               <Label htmlFor="refund-method" className="mb-2 block">
-                Refund Method
+                {t('dashboard.cashier.return.refundMethodLabel')}
               </Label>
               <Select value={refundMethod} onValueChange={setRefundMethod}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select refund method..." />
+                  <SelectValue placeholder={t('dashboard.cashier.return.refundMethodPlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="original">
-                    Original Payment Method ({selectedOrder.paymentMode})
+                    {t('dashboard.cashier.return.originalMethod', { method: selectedOrder.paymentType })}
                   </SelectItem>
-                  <SelectItem value="cash">Cash</SelectItem>
-                  {selectedOrder.paymentMode !== "card" && (
-                    <SelectItem value="card">Card</SelectItem>
+                  <SelectItem value="cash">{t('dashboard.cashier.paymentDialog.methods.CASH')}</SelectItem>
+                  {selectedOrder.paymentType !== "CARD" && (
+                    <SelectItem value="card">{t('dashboard.cashier.paymentDialog.methods.CARD')}</SelectItem>
                   )}
                 </SelectContent>
               </Select>
             </div>
             <div className="pt-4 border-t">
               <div className="flex justify-between text-lg font-semibold">
-                <span>Total Refund Amount:</span>
-                <span>₹{selectedOrder.totalAmount}</span>
+                <span>{t('dashboard.cashier.return.totalRefund')}:</span>
+                <span>VNĐ {selectedOrder.totalAmount}</span>
               </div>
             </div>
             <Button className="w-full" onClick={processRefund}>
-              Process Refund
+              {t('dashboard.cashier.return.processButton')}
             </Button>
           </div>
         </CardContent>

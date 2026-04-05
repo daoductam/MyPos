@@ -1,7 +1,6 @@
-import React from "react";
-import { Badge } from "@/components/ui/badge";
 import { StarIcon, UserIcon, Loader2 } from "lucide-react";
 import CustomerCard from "./CustomerCard";
+import { useTranslation } from "react-i18next";
 
 const CustomerList = ({
   customers,
@@ -9,11 +8,12 @@ const CustomerList = ({
   onSelectCustomer,
   loading = false,
 }) => {
+  const { t } = useTranslation();
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 p-4">
         <Loader2 className="animate-spin h-8 w-8 mb-4 text-emerald-500" />
-        <p>Loading customers...</p>
+        <p>{t('dashboard.cashier.customerDialog.loading')}</p>
       </div>
     );
   }
@@ -22,8 +22,8 @@ const CustomerList = ({
     return (
       <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 p-4">
         <UserIcon size={48} strokeWidth={1} />
-        <p className="mt-4">No customers found</p>
-        <p className="text-sm">Try a different search term</p>
+        <p className="mt-4">{t('dashboard.cashier.customerDialog.noCustomers')}</p>
+        <p className="text-sm">{t('dashboard.cashier.return.searchTip')}</p>
       </div>
     );
   }

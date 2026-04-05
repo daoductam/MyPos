@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../Redux Toolkit/features/user/userThunks";
+
 import {
   LayoutDashboard,
   Store,
@@ -11,38 +12,40 @@ import {
   LogOut,
   ShoppingCart,
 } from "lucide-react";
-
-const navLinks = [
-  {
-    name: "Dashboard",
-    path: "dashboard",
-    icon: <LayoutDashboard className="w-5 h-5" />,
-  },
-  {
-    name: "Stores",
-    path: "stores",
-    icon: <Store className="w-5 h-5" />,
-  },
-  {
-    name: "Subscription Plans",
-    path: "subscriptions",
-    icon: <FileText className="w-5 h-5" />,
-  },
-  {
-    name: "Pending Requests",
-    path: "requests",
-    icon: <Clock className="w-5 h-5" />,
-  },
-  {
-    name: "Settings",
-    path: "settings",
-    icon: <Settings className="w-5 h-5" />,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function SuperAdminSidebar() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const navLinks = [
+    {
+      name: t('dashboard.superAdmin.nav.dashboard'),
+      path: "dashboard",
+      icon: <LayoutDashboard className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.superAdmin.nav.stores'),
+      path: "stores",
+      icon: <Store className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.superAdmin.nav.subscriptions'),
+      path: "subscriptions",
+      icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.superAdmin.nav.requests'),
+      path: "requests",
+      icon: <Clock className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.superAdmin.nav.settings'),
+      path: "settings",
+      icon: <Settings className="w-5 h-5" />,
+    },
+  ];
 
   const handleLogout = () => {
     dispatch(logout());
@@ -85,7 +88,7 @@ export default function SuperAdminSidebar() {
             className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
           >
             <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+            <span className="font-medium">{t('dashboard.superAdmin.logout')}</span>
           </button>
         </div>
       </div>

@@ -1,35 +1,38 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { DollarSign, ShoppingCart, Users, TrendingUp } from "lucide-react";
-
-const stats = [
-  {
-    title: "Total Revenue",
-    value: "₹4,52,318",
-    change: "+20.1% from last month",
-    icon: <DollarSign className="h-4 w-4 text-gray-400" />,
-  },
-  {
-    title: "Total Sales",
-    value: "+1,230",
-    change: "+18.1% from last month",
-    icon: <ShoppingCart className="h-4 w-4 text-gray-400" />,
-  },
-  {
-    title: "New Customers",
-    value: "+573",
-    change: "+19% from last month",
-    icon: <Users className="h-4 w-4 text-gray-400" />,
-  },
-  {
-    title: "Active Branches",
-    value: "12",
-    change: "+2 since last month",
-    icon: <TrendingUp className="h-4 w-4 text-gray-400" />,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const DashboardStats = () => {
+  const { t } = useTranslation();
+
+  const stats = [
+    {
+      title: t('dashboard.store.stats.totalRevenue'),
+      value: "₹4,52,318",
+      change: "+20.1% " + t('dashboard.store.stats.fromLastMonth'),
+      icon: <DollarSign className="h-4 w-4 text-gray-400" />,
+    },
+    {
+      title: t('dashboard.store.stats.totalSales'),
+      value: "+1,230",
+      change: "+18.1% " + t('dashboard.store.stats.fromLastMonth'),
+      icon: <ShoppingCart className="h-4 w-4 text-gray-400" />,
+    },
+    {
+      title: t('dashboard.store.stats.newCustomers'),
+      value: "+573",
+      change: "+19% " + t('dashboard.store.stats.fromLastMonth'),
+      icon: <Users className="h-4 w-4 text-gray-400" />,
+    },
+    {
+      title: t('dashboard.store.stats.activeBranches'),
+      value: "12",
+      change: "+2 " + t('dashboard.store.stats.sinceLastMonth'),
+      icon: <TrendingUp className="h-4 w-4 text-gray-400" />,
+    },
+  ];
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat, index) => (
