@@ -1,0 +1,1747 @@
+{
+  "dashboard": {
+    "cashier": {
+      "nav": {
+        "pos": "POS Terminal",
+        "orders": "Order History",
+        "returns": "Returns/Refunds",
+        "customers": "Customers",
+        "shiftSummary": "Shift Summary",
+        "branchInfo": "Branch Info"
+      },
+      "logout": "End Shift & Logout",
+      "logoutConfirmMessage": "Are you sure you want to end your shift and logout?",
+      "logoutConfirmNote": "This will generate your shift summary report.",
+      "preparingSummary": "Preparing Shift Summary",
+      "redirecting": "Redirecting to shift summary page...",
+      "posTitle": "POS Terminal",
+      "createOrder": "Create New Order",
+      "orderHistoryDesc": "Review all past orders processed at this terminal.",
+      "orderSearchPlaceholder": "Search by order ID or customer...",
+      "orderHistory": {
+        "toast": {
+          "printing": "Printing Invoice",
+          "printingDesc": "Printing invoice for order {{id}}",
+          "initiatingReturn": "Initiating Return",
+          "initiatingReturnDesc": "Navigating to returns page for order {{id}}",
+          "refreshing": "Refreshing Orders",
+          "refreshingDesc": "Orders are being refreshed..."
+        },
+        "noOrders": "No Orders Found",
+        "noOrdersDesc": "No orders match the current filter criteria."
+      },
+      "return": {
+        "title": "Return / Refund",
+        "selectForReturn": "Select for Return",
+        "noOrders": "No orders found",
+        "searchTip": "Try searching by order ID or customer name",
+        "backToSearch": "Back to Order Search",
+        "orderNumber": "Order {{id}}",
+        "orderSummary": "Order Summary",
+        "orderItems": "Order Items",
+        "item": "Item",
+        "qty": "Qty",
+        "price": "Price",
+        "total": "Total",
+        "itemsLabel": "Items",
+        "reasons": {
+          "damaged": "Damaged product",
+          "wrong": "Wrong product",
+          "changedMind": "Customer changed mind",
+          "quality": "Product quality issue",
+          "pricing": "Pricing error",
+          "other": "Other"
+        },
+        "reasonLabel": "Return Reason",
+        "reasonPlaceholder": "Select a reason...",
+        "specifyReasonLabel": "Specify Reason",
+        "specifyReasonPlaceholder": "Please specify the return reason",
+        "refundMethodLabel": "Refund Method",
+        "refundMethodPlaceholder": "Select refund method...",
+        "originalMethod": "Original Payment Method ({{method}})",
+        "totalRefund": "Total Refund Amount",
+        "processButton": "Process Refund",
+        "toast": {
+          "processed": "Refund Processed",
+          "processedDesc": "Refund of VNĐ {{amount}} processed via {{method}}",
+          "failed": "Refund Failed",
+          "failedDesc": "Failed to process refund. Please try again."
+        },
+        "receipt": {
+          "title": "Return Receipt",
+          "returnNumber": "Return #",
+          "originalOrder": "Original Order",
+          "thankYou": "Thank you for shopping with us!",
+          "policy": "Return Policy: Items can be returned within 7 days of purchase with receipt",
+          "printComplete": "Print & Complete"
+        }
+      },
+      "customer": {
+        "title": "Customer Management",
+        "desc": "Search, view, and manage customer details.",
+        "addCustomer": "Add Customer",
+        "details": {
+          "title": "Customer Details",
+          "lastOrder": "Last Order",
+          "totalSpent": "Total Spent",
+          "points": "Loyalty Points",
+          "addPoints": "Add Points",
+          "purchaseHistory": "Purchase History",
+          "noCustomer": "Select a customer to view details",
+          "avgOrder": "Average Order Value",
+          "lastVisit": "Last Visit",
+          "noPurchaseHistoryDesc": "This customer hasn't made any orders yet",
+          "currentPoints": "Current Points",
+          "pointsToAdd": "Points to Add"
+        },
+        "toast": {
+          "pointsAdded": "Points Added",
+          "pointsAddedDesc": "{{points}} points added to {{name}}'s account",
+          "invalidPoints": "Invalid Points",
+          "createSuccess": "Customer created successfully!",
+          "createError": "Failed to create customer"
+        },
+        "nameLabel": "Full Name *",
+        "namePlaceholder": "Enter customer full name",
+        "phoneLabel": "Phone Number *",
+        "phonePlaceholder": "Enter phone number",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Enter email address",
+        "createButton": "Create Customer",
+        "creatingButton": "Creating...",
+        "validation": {
+          "nameRequired": "Full name is required",
+          "nameMin": "Full name must be at least 2 characters",
+          "nameMax": "Full name must be less than 50 characters",
+          "phoneRequired": "Phone number is required",
+          "phoneInvalid": "Please enter a valid phone number",
+          "emailInvalid": "Please enter a valid email address"
+        }
+      },
+      "shortcuts": "F1: Search | F2: Discount | F3: Customer | Ctrl+Enter: Pay",
+      "notifications": "Notifications",
+      "newOrderTitle": "New Order",
+      "newOrderDesc": "A new order worth {{amount}} has just been created.",
+      "lowStockTitle": "Low Stock Alert",
+      "lowStockDesc": "Product '{{product}}' is running low. Only {{count}} left.",
+      "shiftSummaryReadyTitle": "Shift Summary Ready",
+      "shiftSummaryReadyDesc": "Your previous shift summary is ready to review.",
+      "cart": {
+        "title": "Cart",
+        "items": "items",
+        "held": "Held",
+        "clear": "Clear",
+        "empty": "Cart is empty",
+        "addProducts": "Add products to start an order",
+        "summary": {
+          "subtotal": "Subtotal",
+          "tax": "Tax (10% VAT)",
+          "discount": "Discount",
+          "total": "Total"
+        },
+        "toast": {
+          "cleared": "Cart Cleared",
+          "clearedDesc": "All items removed from cart"
+        }
+      },
+      "pos": {
+        "searchPlaceholder": "Search products or scan barcode (F1)",
+        "loading": "Loading products...",
+        "searchResults": "Search results: {{count}} products found",
+        "productsFound": "{{count}} products found",
+        "clearSearch": "Clear",
+        "scan": "Scan",
+        "noProducts": "No products available",
+        "noMatchingProducts": "No products found matching your search"
+      },
+      "paymentSection": {
+        "customer": "Customer",
+        "selectCustomer": "Select Customer",
+        "changeCustomer": "Change Customer",
+        "discount": "Discount",
+        "discountPlaceholder": "Discount amount",
+        "orderNote": "Order Note",
+        "notePlaceholder": "Add order note...",
+        "totalAmount": "Total Amount",
+        "processPayment": "Process Payment",
+        "holdOrder": "Hold Order",
+        "toast": {
+          "emptyCart": "Empty Cart",
+          "emptyCartDesc": "Please add items to cart before proceeding",
+          "customerRequired": "Customer Required",
+          "customerRequiredDesc": "Please select a customer before proceeding",
+          "orderOnHold": "Order On Hold",
+          "orderOnHoldDesc": "Order placed on hold"
+        }
+      },
+      "customerDialog": {
+        "title": "Select Customer",
+        "searchPlaceholder": "Search customers...",
+        "loading": "Loading customers...",
+        "noCustomers": "No customers available.",
+        "noMatching": "No customers found matching your search.",
+        "table": {
+          "name": "Name",
+          "phone": "Phone",
+          "email": "Email",
+          "select": "Select"
+        },
+        "addNew": "Add New Customer",
+        "cancel": "Cancel",
+        "toast": {
+          "selected": "Customer Selected",
+          "selectedDesc": "{{name}} selected for this order"
+        }
+      },
+      "paymentDialog": {
+        "title": "Payment",
+        "amountToPay": "Amount to be paid",
+        "methods": {
+          "CASH": "💵 Cash",
+          "CARD": "💳 Card",
+          "UPI": "📱 Transfer / QR"
+        },
+        "cancel": "Cancel",
+        "complete": "Complete Payment",
+        "toast": {
+          "success": "Order Created Successfully",
+          "successDesc": "Order #{{id}} created and payment processed",
+          "failed": "Order Creation Failed"
+        },
+        "walkInCustomer": "Walk-in Customer"
+      },
+      "invoiceDialog": {
+        "title": "Order Details - Invoice",
+        "customerInfo": "Customer Information",
+        "orderInfo": "Order Information",
+        "walkIn": "Walk-in Customer",
+        "na": "N/A",
+        "paymentMethod": "Payment Method",
+        "download": "Download PDF",
+        "print": "Print Invoice",
+        "startNew": "Start New Order",
+        "itemsTable": {
+          "image": "Image",
+          "item": "Item",
+          "quantity": "Quantity",
+          "price": "Price",
+          "total": "Total"
+        },
+        "toast": {
+          "completed": "Order Completed",
+          "completedDesc": "Receipt printed and order saved successfully"
+        }
+      },
+      "heldOrdersDialog": {
+        "title": "Held Orders",
+        "noHeld": "No held orders",
+        "orderNumber": "Order #{id}",
+        "items": "items",
+        "resume": "Resume",
+        "close": "Close",
+        "toast": {
+          "resumed": "Order Resumed",
+          "resumedDesc": "Order #{{id}} has been resumed"
+        }
+      },
+      "shiftSummary": {
+        "title": "Shift Summary",
+        "loading": "Loading shift summary...",
+        "noData": "No shift data available.",
+        "printTitle": "Print Shift Summary",
+        "printMessage": "Do you want to print your shift summary report?",
+        "cashier": "Cashier",
+        "startTime": "Shift Start",
+        "endTime": "Shift End",
+        "duration": "Duration",
+        "ongoing": "ongoing",
+        "totalOrders": "Total Orders",
+        "totalSales": "Total Sales",
+        "totalRefunds": "Total Refunds",
+        "netSales": "Net Sales",
+        "transactions": "{{count}} transactions",
+        "unitsSold": "{{count}} units sold",
+        "noRefunds": "No refunds processed during this shift",
+        "cards": {
+          "information": "Shift Information",
+          "sales": "Sales Summary",
+          "payments": "Payment Summary",
+          "topProducts": "Top Selling Items",
+          "recentOrders": "Recent Orders",
+          "refunds": "Refunds"
+        },
+        "toast": {
+          "printing": "Printing Shift Summary",
+          "printingDesc": "Shift summary is being printed",
+          "ended": "Shift Ended",
+          "endedDesc": "You have been logged out successfully"
+        }
+      }
+    },
+    "store": {
+      "nav": {
+        "dashboard": "Dashboard",
+        "sales": "Sales",
+        "products": "Products",
+        "categories": "Categories",
+        "branches": "Branches",
+        "employees": "Employees",
+        "reports": "Reports",
+        "alerts": "Alerts"
+      },
+      "bottomNav": {
+        "settings": "Settings",
+        "upgradePlan": "Upgrade Plan",
+        "logout": "Logout"
+      },
+      "topbar": {
+        "searchPlaceholder": "Search products, orders, or customers...",
+        "myAccount": "My Account",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "storeAdmin": "Store Admin"
+      },
+      "home": {
+        "title": "Store Dashboard",
+        "subtitle": "An overview of your store's performance."
+      },
+      "stats": {
+        "totalRevenue": "Total Revenue",
+        "totalSales": "Total Sales",
+        "newCustomers": "New Customers",
+        "activeBranches": "Active Branches",
+        "fromLastMonth": "from last month",
+        "sinceLastMonth": "since last month"
+      },
+      "charts": {
+        "salesTrend": "Sales Trend",
+        "recentSales": "Recent Sales",
+        "months": {
+          "jan": "Jan",
+          "feb": "Feb",
+          "mar": "Mar",
+          "apr": "Apr",
+          "may": "May",
+          "jun": "Jun",
+          "jul": "Jul"
+        }
+      }
+    },
+    "superAdmin": {
+      "nav": {
+        "dashboard": "Dashboard",
+        "stores": "Stores",
+        "subscriptions": "Subscription Plans",
+        "requests": "Pending Requests",
+        "settings": "Settings"
+      },
+      "logout": "Logout"
+    },
+    "branchManager": {
+      "title": "Branch Manager",
+      "nav": {
+        "dashboard": "Dashboard",
+        "orders": "Orders",
+        "refunds": "Refunds",
+        "transactions": "Transactions",
+        "inventory": "Inventory",
+        "employees": "Employees",
+        "customers": "Customers",
+        "reports": "Reports",
+        "settings": "Settings"
+      },
+      "logout": "Logout",
+      "dashboard": {
+        "stats": {
+          "todaySales": "Today's Sales",
+          "totalOrders": "Total Orders",
+          "newCustomers": "New Customers",
+          "activeEmployees": "Active Employees",
+          "totalEmployees": "Total Employees",
+          "cashiers": "Cashiers"
+        },
+        "recentOrders": {
+          "title": "Recent Orders",
+          "viewAll": "View All",
+          "customer": "Customer",
+          "amount": "Amount",
+          "status": "Status"
+        }
+      },
+      "inventory": {
+        "title": "Inventory Management",
+        "addNew": "Add New Product",
+        "searchPlaceholder": "Search products...",
+        "filters": {
+          "allCategories": "All Categories",
+          "lowStock": "Low Stock",
+          "outOfStock": "Out of Stock"
+        },
+        "table": {
+          "product": "Product",
+          "category": "Category",
+          "price": "Price",
+          "stock": "Stock",
+          "status": "Status",
+          "actions": "Actions"
+        }
+      },
+      "employees": {
+        "title": "Employee Management",
+        "addNew": "Add New Employee",
+        "searchPlaceholder": "Search employees...",
+        "filters": {
+          "allRoles": "All Roles",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "table": {
+          "name": "Full Name",
+          "role": "Role",
+          "email": "Email",
+          "phone": "Phone",
+          "address": "Address",
+          "status": "Status",
+          "actions": "Actions",
+          "loginAccess": "Login Access",
+          "assignedSince": "Assigned Since",
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "noEmployees": "No Employees Found",
+          "addFirst": "Add your first employee to get started."
+        },
+        "performance": {
+          "title": "Performance Summary",
+          "ordersProcessed": "Orders Processed",
+          "totalSales": "Total Sales",
+          "avgOrderValue": "Avg. Order Value",
+          "dailyPerformance": "Daily Sales Performance",
+          "stockUpdates": "Stock Updates",
+          "productsManaged": "Products Managed",
+          "inventoryAccuracy": "Inventory Accuracy",
+          "activityLog": "Activity Log",
+          "last30Days": "Last 30 days",
+          "total": "Total",
+          "lastAudit": "Last audit"
+        },
+        "resetPassword": {
+          "title": "Reset Password",
+          "confirm": "Are you sure you want to reset the password for {{name}}?",
+          "instruction": "A temporary password will be generated and sent to their email address."
+        }
+      },
+      "customers": {
+        "title": "Customer Overview",
+        "subtitle": "View and manage your branch's customers.",
+        "search": "Search customers...",
+        "stats": {
+          "total": "Total Customers",
+          "gold": "Gold Members",
+          "avgOrders": "Avg. Orders per Customer"
+        },
+        "table": {
+          "title": "Customer List",
+          "loyalty": "Loyalty Status",
+          "noCustomers": "No Customers Found",
+          "noCustomersDesc": "No customers match the current search term."
+        },
+        "dialog": {
+          "title": "Customer Details",
+          "profile": "Profile",
+          "history": "Order History"
+        }
+      },
+      "orders": {
+        "title": "Order Management",
+        "subtitle": "Review and manage all orders for your branch.",
+        "refresh": "Refresh",
+        "statusLabels": {
+          "completed": "Completed",
+          "pending": "Pending",
+          "cancelled": "Cancelled",
+          "refunded": "Refunded"
+        },
+        "filters": {
+          "allPayments": "All Payment Modes",
+          "allCashiers": "All Cashiers",
+          "allStatus": "All Status",
+          "completed": "Completed",
+          "pending": "Pending",
+          "cancelled": "Cancelled",
+          "refunded": "Refunded"
+        },
+        "table": {
+          "id": "Order ID",
+          "orderId": "Order ID",
+          "customer": "Customer",
+          "cashier": "Cashier",
+          "date": "Date",
+          "amount": "Amount",
+          "total": "Total",
+          "payment": "Payment Method",
+          "paymentMode": "Payment Mode",
+          "status": "Status",
+          "actions": "Actions",
+          "loading": "Loading orders...",
+          "noOrders": "No Orders Found",
+          "noOrdersDesc": "No orders match the current filter criteria.",
+          "viewDetails": "View Details",
+          "printInvoice": "Print Invoice"
+        },
+        "dialog": {
+          "title": "Order Details",
+          "summary": "Order Summary",
+          "customer": "Customer Details",
+          "cashier": "Cashier Details",
+          "items": "Order Items"
+        }
+      },
+      "refunds": {
+        "title": "Refund Management",
+        "subtitle": "Review all processed refunds for your branch.",
+        "loading": "Loading refunds...",
+        "noRefunds": "No Refunds Found",
+        "noRefundsDesc": "There are no refunds to display for this branch.",
+        "reason": "Reason",
+        "table": {
+          "id": "ID",
+          "refundId": "Refund ID",
+          "orderId": "Order ID",
+          "amount": "Amount",
+          "reason": "Reason",
+          "loading": "Loading refunds..."
+        }
+      },
+
+      "transactions": {
+        "title": "Transactions",
+        "subtitle": "Review all sales and refunds for your branch.",
+        "export": "Export Transactions",
+        "overview": {
+          "income": "Total Income",
+          "expenses": "Total Expenses",
+          "net": "Net Amount"
+        },
+        "table": {
+          "dateTime": "Date & Time",
+          "cashier": "Cashier",
+          "customer": "Customer",
+          "amount": "Amount",
+          "payment": "Payment Method",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "dialog": {
+          "title": "Transaction Details",
+          "cashier": "Cashier",
+          "dateTime": "Date & Time",
+          "type": "Type",
+          "status": "Status",
+          "payment": "Payment Method",
+          "amount": "Amount",
+          "customerName": "Customer Name",
+          "saleDetails": "Sale Details",
+          "invoice": "Invoice",
+          "items": "Items",
+          "refundDetails": "Refund Details",
+          "originalInvoice": "Original Invoice",
+          "reason": "Reason",
+          "approvedBy": "Approved by",
+          "purchaseDetails": "Purchase Details",
+          "purchaseOrder": "Purchase Order",
+          "supplier": "Supplier",
+          "expenseDetails": "Expense Details",
+          "category": "Category",
+          "print": "Print Receipt"
+        }
+      },
+      "reports": {
+        "title": "Reports",
+        "subtitle": "Generate and download detailed reports for your branch.",
+        "today": "Today",
+        "week": "This Week",
+        "month": "This Month",
+        "custom": "Custom",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "types": {
+          "sales": {
+            "title": "Sales Report",
+            "desc": "Detailed breakdown of sales, revenue, and profit over a selected period."
+          },
+          "inventory": {
+            "title": "Inventory Report",
+            "desc": "Summary of stock levels, low-stock items, and inventory valuation."
+          },
+          "customer": {
+            "title": "Customer Report",
+            "desc": "Insights into customer behavior, purchase history, and loyalty."
+          },
+          "employee": {
+            "title": "Employee Performance",
+            "desc": "Track sales per employee, shift performance, and other metrics."
+          },
+          "transaction": {
+            "title": "Transaction Report",
+            "desc": "A complete log of all transactions, including payment methods and details."
+          },
+          "tax": {
+            "title": "Tax Report",
+            "desc": "GST-compliant reports for easy tax filing and reconciliation."
+          }
+        },
+        "generate": "Generate Report",
+        "placeholderText1": "This is a placeholder for the report content.",
+        "placeholderText2": "In a real application, this PDF would be populated with actual report data."
+      },
+      "settings": {
+        "title": "Branch Settings",
+        "subtitle": "Customize your branch's operational settings.",
+        "tabs": {
+          "info": "Branch Info",
+          "printer": "Printer",
+          "tax": "Tax",
+          "payment": "Payment",
+          "discount": "Discount"
+        },
+        "info": {
+          "title": "Branch Information",
+          "desc": "Update your branch details and business hours.",
+          "name": "Branch Name",
+          "address": "Address",
+          "phone": "Phone Number",
+          "email": "Email Address",
+          "hours": "Business Hours",
+          "opening": "Opening Time",
+          "closing": "Closing Time",
+          "workingDays": "Working Days",
+          "days": {
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday"
+          },
+          "save": "Save Changes"
+        },
+        "printer": {
+          "title": "POS Printer Settings",
+          "desc": "Configure your receipt printer settings.",
+          "name": "Printer Name",
+          "paperSize": "Paper Size",
+          "printLogo": "Print Logo on Receipt",
+          "printCustomer": "Print Customer Details",
+          "printTax": "Print Itemized Tax",
+          "footerText": "Receipt Footer Text",
+          "save": "Save Changes"
+        },
+        "tax": {
+          "title": "Tax Settings",
+          "desc": "Configure tax rates and rules for your branch.",
+          "enableGst": "Enable GST",
+          "percentage": "GST Percentage (%)",
+          "applyToAll": "Apply GST to All Products",
+          "showBreakdown": "Show Tax Breakdown on Receipt",
+          "save": "Save Changes"
+        },
+        "payment": {
+          "title": "Payment Methods",
+          "desc": "Configure accepted payment methods for your branch.",
+          "acceptCash": "Accept Cash Payments",
+          "acceptUpi": "Accept UPI Payments",
+          "upiId": "Branch UPI ID",
+          "acceptCard": "Accept Card Payments",
+          "terminalId": "Card Terminal ID",
+          "save": "Save Changes"
+        },
+        "discount": {
+          "title": "Discount Rules",
+          "desc": "Configure discount policies for your branch.",
+          "allow": "Allow Discounts",
+          "maxPercentage": "Maximum Discount Percentage (%)",
+          "approval": "Require Manager Approval for Discounts",
+          "reasons": "Discount Reasons",
+          "addReason": "Add Reason",
+          "save": "Save Changes"
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account to continue",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "loginBtn": "Sign In",
+      "orContinueWith": "Or continue with",
+      "noAccount": "Don't have an account?",
+      "registerHere": "Sign up here",
+      "successTitle": "Success",
+      "successDesc": "Login successful!",
+      "errorTitle": "Error",
+      "errorDescFallback": "Login failed"
+    },
+    "forgotPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your email to receive reset instructions",
+      "sentSubtitle": "Reset link has been sent",
+      "checkEmail": "Check your email",
+      "instructionSent": "We've sent password reset instructions to",
+      "backToLogin": "Back to Login",
+      "didntReceive": "Didn't receive it? Check your spam folder or",
+      "tryAgain": "try again",
+      "cancelBtn": "Cancel",
+      "sendLinkBtn": "Send Reset Link",
+      "emailSentTitle": "Success",
+      "emailSentDesc": "Password reset email has been sent!",
+      "errorTitle": "Error",
+      "errorDescFallback": "Failed to send reset email"
+    },
+    "save": "Save",
+    "search": "Search...",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "validation": {
+      "required": "{{field}} is required",
+      "email": "Please enter a valid email address",
+      "minLength": "{{field}} must be at least {{min}} characters",
+      "maxLength": "{{field}} must be less than {{max}} characters",
+      "phone": "Please enter a valid phone number",
+      "number": "Please enter a valid number",
+      "min": "{{field}} must be {{min}} or greater",
+      "max": "{{field}} cannot exceed {{max}}",
+      "passwordMismatch": "Passwords do not match",
+      "tooShort": "Too short",
+      "tooLong": "Too long"
+    }
+  },
+  "header": {
+    "features": "Features",
+    "whyUs": "Why Us",
+    "demo": "Demo",
+    "pricing": "Pricing",
+    "testimonials": "Testimonials",
+    "contact": "Contact",
+    "login": "Login",
+    "requestDemo": "Request Demo"
+  },
+  "hero": {
+    "badge": "New Feature: Multi-store management is now available",
+    "title": "A new command center for",
+    "businessTypes": ["Restaurants", "Cafés & Bakeries", "Bookstores", "Supermarkets", "Retail Chains"],
+    "description": "Unify your sales, inventory, and customer data into one intuitive platform. Make smarter decisions, delight customers, and watch your business grow.",
+    "fastCheckout": "Fast Checkout",
+    "realTimeAnalytics": "Real-time Analytics",
+    "secureAccess": "Secure Access",
+    "taxReady": "Tax (VAT) Ready",
+    "startFreeTrial": "Start Free Trial",
+    "watchDemo": "Watch How It Works"
+  },
+  "features": {
+    "title": "Everything you need to run your store",
+    "subtitle": "Our comprehensive POS system includes all the features modern retailers need to succeed.",
+    "items": [
+      { "title": "Barcode Scanning & Checkout", "description": "Lightning-fast barcode scanning with product lookup and instant checkout" },
+      { "title": "Stock & Inventory Management", "description": "Real-time inventory tracking with low stock alerts and auto-reorder" },
+      { "title": "Customer & Staff Profiles", "description": "Comprehensive profiles for customers and role-based staff management" },
+      { "title": "Role-Based Access Control", "description": "Secure access control with customizable permissions for different roles" },
+      { "title": "Sales Reports", "description": "Detailed analytics and reports to track performance and growth" },
+      { "title": "Multi-Store Management", "description": "Manage multiple locations from a single dashboard with centralized control" }
+    ]
+  },
+  "whyChooseUs": {
+    "title": "Why Choose Our POS System?",
+    "description": "We've designed our POS system with modern retailers in mind, focusing on ease of use, reliability, and powerful features that drive business growth.",
+    "benefits": [
+      "Easy-to-use interface",
+      "Offline functionality",
+      "Tax (VAT) ready invoicing",
+      "Mobile-friendly design",
+      "24/7 Support"
+    ],
+    "blazingFast": "Blazing Fast",
+    "blazingFastDesc": "Instant transactions and real-time data sync.",
+    "bankSecurity": "Bank-Grade Security",
+    "bankSecurityDesc": "Your data is always safe and encrypted.",
+    "support247": "24/7 Support",
+    "support247Desc": "Our team is always here to help you succeed."
+  },
+  "pricing": {
+    "title": "Simple, ",
+    "titleHighlight": "transparent pricing",
+    "subtitle": "Choose the plan that best fits your business size. All plans include a free 14-day trial.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "popular": "Most Popular",
+    "perMonth": "/month",
+    "getStarted": "Get Started",
+    "contactSales": "Contact Sales",
+    "freeTrial": "Includes a free 14-day trial. No credit card required.",
+    "moneyBack": "30-day money-back guarantee for all paid plans.",
+    "plans": [
+      {
+        "name": "Basic",
+        "price": "Free",
+        "description": "Perfect for small stores just getting started",
+        "features": ["1 store", "Up to 100 products", "Basic reports", "Email support"]
+      },
+      {
+        "name": "Professional",
+        "price": "$19.99",
+        "description": "For growing businesses",
+        "features": ["Up to 5 stores", "Unlimited products", "Advanced analytics", "Priority support", "Staff management"]
+      },
+      {
+        "name": "Enterprise",
+        "price": "Custom",
+        "description": "For large retail chains",
+        "features": ["Unlimited stores", "Custom features", "Dedicated management", "SLA guarantee", "API integration"]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Trusted by Businesses",
+    "titleHighlight": "Like Yours",
+    "subtitle": "Don't just take our word for it. See what our customers have to say about how our POS system has transformed their businesses.",
+    "readFullStory": "Read Full Story",
+    "business": "Business",
+    "teamSize": "Team Size",
+    "employees": "employees",
+    "usingFor": "Using for",
+    "years": "years",
+    "stats": {
+      "happyCustomers": "Happy Customers",
+      "satisfaction": "Customer Satisfaction",
+      "revenueProcessed": "Revenue Processed",
+      "customerSupport": "Customer Support"
+    },
+    "items": [
+      {
+        "name": "Rajesh Kumar",
+        "position": "Owner, Metro Retail",
+        "content": "Implementing this POS system has transformed our business operations. The inventory management features alone have saved us countless hours and reduced errors by 35%.",
+        "businessType": "Supermarket"
+      },
+      {
+        "name": "Priya Sharma",
+        "position": "Manager, Café Chain",
+        "content": "The customer management features have helped us build stronger relationships with our regulars.",
+        "businessType": "Restaurant"
+      },
+      {
+        "name": "Vikram Singh",
+        "position": "Director, Business Hub",
+        "content": "The analytics dashboard gives us real-time insights that have been crucial for our decision-making.",
+        "businessType": "Electronics"
+      },
+      {
+        "name": "Ananya Patel",
+        "position": "CEO, Quick Mart",
+        "content": "The multi-store management capability has been a game-changer for our expanding business.",
+        "businessType": "Convenience Store"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Ready to optimize your store?",
+    "subtitle": "Join thousands of retailers who trust our POS system to grow their business",
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "Your name",
+      "email": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+84 123 456 789",
+      "business": "Business Name",
+      "businessPlaceholder": "Your store/company name",
+      "interest": "I'm interested in",
+      "selectOption": "Select an option",
+      "scheduleDemo": "Schedule a demo",
+      "pricingInfo": "Pricing information",
+      "startTrial": "Start free trial",
+      "generalQuestion": "General question",
+      "message": "Message",
+      "messagePlaceholder": "Tell us about your business needs",
+      "send": "Send Message"
+    },
+    "info": {
+      "title": "Contact Information",
+      "phone": "Phone",
+      "email": "Email",
+      "office": "Office Address",
+      "hours": "Business Hours",
+      "hoursDetail1": "Mon - Fri: 9:00 AM - 8:00 PM",
+      "hoursDetail2": "Saturday: 10:00 AM - 6:00 PM"
+    },
+    "benefits": [
+      "Free personalized demo",
+      "14-day full-feature free trial",
+      "Dedicated onboarding specialist",
+      "24/7 customer support"
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked",
+    "titleHighlight": "Questions",
+    "subtitle": "Everything you need to know about our POS system. Can't find an answer? Chat with our friendly support team.",
+    "items": [
+      { "q": "Can I use the POS system without internet?", "a": "Yes! Our POS system works fully offline. All data will sync automatically when you're back online." },
+      { "q": "Is the system tax compliant?", "a": "Absolutely! Fully compliant with tax regulations, automatic tax calculation, and standard invoice formatting." },
+      { "q": "What support options are available?", "a": "We offer 24/7 customer support via phone, email, and live chat." },
+      { "q": "Can I manage multiple branches?", "a": "Yes! Multi-store management lets you control everything from one centralized dashboard." },
+      { "q": "How secure is my business data?", "a": "We use bank-grade security including end-to-end encryption and secure cloud storage." },
+      { "q": "Can I customize receipts?", "a": "Yes, fully customize receipts and invoices with your logo and business information." },
+      { "q": "Is there a mobile app?", "a": "Yes, we offer apps for both iOS and Android." },
+      { "q": "Is it easy to train new staff?", "a": "Very easy to use. New staff typically learn the basics within 30 minutes." }
+    ],
+    "stillHaveQuestions": "Still have questions?",
+    "contactSupport": "Contact Support Team",
+    "supportOptions": "Support Options",
+    "support": [
+      { "title": "Phone Support", "desc": "Talk to an expert", "action": "+84 123 456 789", "btn": "Call Now" },
+      { "title": "Email Support", "desc": "Get answers via email", "action": "support@pospro.com", "btn": "Send Email" },
+      { "title": "Live Chat", "desc": "Chat with our team", "action": "Available 24/7", "btn": "Start Chat" },
+      { "title": "Help Center", "desc": "Browse support resources", "action": "Guides & Videos", "btn": "Visit Center" }
+    ],
+    "businessHours": "Business Hours",
+    "monFri": "Monday - Friday:",
+    "sat": "Saturday:",
+    "sun": "Sunday:",
+    "closed": "Closed"
+  },
+  "footer": {
+    "description": "Empowering retailers with intelligent point-of-sale solutions that streamline operations, boost sales, and enhance customer experiences.",
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "resources": "Resources",
+    "blog": "Blog",
+    "helpCenter": "Help Center",
+    "documentation": "Documentation",
+    "apiReference": "API Reference",
+    "partners": "Partners",
+    "contact": "Contact",
+    "stayUpdated": "Stay Updated",
+    "newsletterDesc": "Get industry insights and product updates delivered to your inbox.",
+    "emailPlaceholder": "Your email address",
+    "followUs": "Follow Us",
+    "copyright": "All rights reserved.",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy"
+  },
+  "liveDemo": {
+    "title": "See It",
+    "titleHighlight": "In Action",
+    "subtitle": "Experience our intuitive interface and powerful features through our interactive demo",
+    "exploreFeatures": "Explore Features",
+    "keyFeatures": "Key Features:",
+    "requestFullDemo": "Request Full Demo",
+    "demoPlaying": "Demo Playing",
+    "clickToPlay": "Click to Play",
+    "clickToPlayDemo": "Click to Play Interactive Demo",
+    "wantMore": "Want to see more? Schedule a personalized demo with our team.",
+    "bookLiveDemo": "Book a Live Demo",
+    "tabs": {
+      "pos": "POS Terminal",
+      "analytics": "Analytics",
+      "inventory": "Inventory",
+      "customers": "Customers"
+    },
+    "screenTitles": {
+      "pos": "POS Terminal - Checkout",
+      "analytics": "Analytics Dashboard",
+      "inventory": "Inventory Management",
+      "customers": "Customer Management"
+    },
+    "featureLists": {
+      "pos": ["Intuitive touch interface", "Lightning-fast barcode scanning", "Quick product search", "Customizable shortcuts", "Multiple payment methods", "Custom receipt formatting"],
+      "analytics": ["Real-time sales dashboard", "Product performance metrics", "Staff performance tracking", "Auto-generated custom reports", "Multiple export options", "Visual data representation"],
+      "inventory": ["Real-time stock tracking", "Low stock alerts", "Auto-generated purchase orders", "Supplier management", "Inter-branch stock transfers", "Batch tracking & expiry dates"],
+      "customers": ["Detailed customer profiles", "Full purchase history", "Loyalty program integration", "Automated marketing", "Smart customer segmentation", "Customer feedback collection"]
+    }
+  },
+  "comparison": {
+    "title": "Compare Features",
+    "subtitle": "See which plan is right for your business needs",
+    "viewAll": "View All Features",
+    "feature": "Feature",
+    "basic": "Basic",
+    "pro": "Pro",
+    "enterprise": "Enterprise",
+    "categories": [
+      {
+        "name": "Core POS Features",
+        "features": ["Barcode Scanning", "Receipt Printing", "Product Management", "Customer Database", "Offline Mode"]
+      },
+      {
+        "name": "Advanced Features",
+        "features": ["Multi-store Management", "Advanced Reporting", "Inventory Forecasting", "Staff Management", "API Access"]
+      },
+      {
+        "name": "Enterprise Features",
+        "features": ["White Labeling", "Custom Development", "On-premise Deployment", "SLA Guarantee", "Dedicated Account Manager"]
+      }
+    ]
+  },
+  "mobileApp": {
+    "badge": "Mobile App",
+    "title": "Take Your Business",
+    "titleHighlight": "Anywhere",
+    "titleSuffix": "With Our Mobile App",
+    "description": "Our mobile app gives you the freedom to manage your business from anywhere. Check sales, update inventory, and stay connected with your team—all from your smartphone.",
+    "downloadIOS": "Download for iOS",
+    "downloadAndroid": "Download for Android",
+    "scanToDownload": "Scan to download",
+    "appFeatures": [
+      "Real-time sales tracking",
+      "Manage inventory on the go",
+      "Push notifications for low stock",
+      "Mobile receipt generation",
+      "Customer management",
+      "Offline functionality"
+    ],
+    "phone": {
+      "dashboard": "Dashboard",
+      "todaySales": "Today's Sales",
+      "vsYesterday": "vs yesterday",
+      "orders": "Orders",
+      "newOrders": "new orders today",
+      "recentOrders": "Recent Orders",
+      "viewAll": "View All",
+      "order": "Order",
+      "minsAgo": "mins ago",
+      "quickActions": "Quick Actions",
+      "newSale": "New Sale",
+      "inventory": "Inventory",
+      "reports": "Reports",
+      "navHome": "Home",
+      "navSales": "Sales",
+      "navProducts": "Products",
+      "navMore": "More"
+    }
+  },
+  "common": {
+    "refresh": "Refresh",
+    "unknown": "Unknown",
+    "error": "Error",
+    "success": "Success",
+    "failed": "Failed",
+    "language": "Language",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "confirm": "Confirm",
+    "search": "Search...",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "actions": "Actions",
+    "back": "Back",
+    "roles": {
+      "ROLE_STORE_MANAGER": "Store Manager",
+      "ROLE_BRANCH_MANAGER": "Branch Manager",
+      "ROLE_BRANCH_ADMIN": "Branch Admin",
+      "ROLE_BRANCH_CASHIER": "Cashier"
+    },
+    "validation": {
+      "required": "{{field}} is required",
+      "email": "Please enter a valid email address",
+      "minLength": "{{field}} must be at least {{min}} characters",
+      "maxLength": "{{field}} must be less than {{max}} characters",
+      "phone": "Please enter a valid phone number",
+      "number": "Please enter a valid number",
+      "min": "{{field}} must be {{min}} or greater",
+      "max": "{{field}} cannot exceed {{max}}",
+      "passwordMismatch": "Passwords do not match",
+      "tooShort": "Too short",
+      "tooLong": "Too long"
+    }
+  },
+
+  "toast": {
+    "success": "Success",
+    "error": "Error",
+    "productAdded": "Product added successfully",
+    "productUpdated": "Product updated successfully",
+    "productDeleted": "Product deleted successfully",
+    "productDeletedError": "Failed to delete product",
+    "categoryDeleted": "Category deleted successfully",
+    "categoryDeletedError": "Failed to delete category",
+    "fetchError": "Failed to fetch data",
+    "storeInfoUpdated": "Store information updated successfully"
+  },
+  "storeModule": {
+    "products": {
+      "title": "Product Management",
+      "subtitle": "Manage your store's entire product catalog.",
+      "addProduct": "Add Product",
+      "addNewProduct": "Add New Product",
+      "enterDetails": "Enter the details for the new product.",
+      "refreshing": "Refreshing...",
+      "refresh": "Refresh",
+      "showingResults": "Showing search results ({count} products found)",
+      "showAll": "Show all products",
+      "editProduct": "Edit Product",
+      "updateDetails": "Update the product details below.",
+      "productDetails": "Product Details",
+      "search": {
+        "placeholder": "Search products...",
+        "button": "Search",
+        "searching": "Searching..."
+      },
+      "form": {
+        "image": "Image URL",
+        "pasteUrl": "Paste image URL",
+        "productName": "Product Name",
+        "enterName": "Enter product name",
+        "sku": "SKU",
+        "enterSku": "Enter SKU",
+        "brand": "Brand",
+        "enterBrand": "Enter brand",
+        "category": "Category",
+        "selectCategory": "Select category",
+        "color": "Color",
+        "enterColor": "Enter color",
+        "mrp": "MRP",
+        "sellingPrice": "Selling Price",
+        "description": "Description",
+        "enterDescription": "Enter product description",
+        "cancel": "Cancel",
+        "updating": "Updating...",
+        "adding": "Adding...",
+        "updateBtn": "Update Product",
+        "addBtn": "Add Product",
+        "uploading": "Uploading..."
+      },
+      "table": {
+        "loading": "Loading products...",
+        "noProducts": "No Products Found",
+        "addFirst": "Add your first product to get started.",
+        "columns": {
+          "id": "ID",
+          "image": "Image",
+          "product": "Product",
+          "category": "Category",
+          "price": "Price",
+          "actions": "Actions"
+        }
+      }
+    },
+    "categories": {
+      "title": "Category Management",
+      "subtitle": "Organize your products into categories.",
+      "addCategory": "Add Category",
+      "addNewCategory": "Add New Category",
+      "enterDetails": "Enter the details for the new category.",
+      "editCategory": "Edit Category",
+      "updateDetails": "Update the category details below.",
+      "form": {
+        "categoryName": "Category Name",
+        "enterName": "Enter category name",
+        "description": "Description",
+        "enterDescription": "Enter category description",
+        "cancel": "Cancel",
+        "updating": "Updating...",
+        "adding": "Adding...",
+        "updateBtn": "Update Category",
+        "addBtn": "Add Category"
+      },
+      "table": {
+        "loading": "Loading categories...",
+        "noCategories": "No Categories Found",
+        "addFirst": "Add your first category to get started.",
+        "noDescription": "No description",
+        "columns": {
+          "name": "Category Name",
+          "description": "Description",
+          "actions": "Actions"
+        }
+      }
+    },
+    "sales": {
+      "title": "Sales Management",
+      "newSale": "New Sale",
+      "totalSales": "Total Sales",
+      "fromLastWeek": "from last week",
+      "ordersToday": "Orders Today",
+      "fromYesterday": "from yesterday",
+      "activeCashiers": "Active Cashiers",
+      "sameAsYesterday": "Same as yesterday",
+      "avgOrderValue": "Avg. Order Value",
+      "dailySales": "Daily Sales (Last 7 Days)",
+      "loadingChart": "Loading chart data...",
+      "noSalesData": "No sales data available",
+      "paymentMethods": "Payment Methods",
+      "noPaymentData": "No payment data available"
+    },
+    "reports": {
+      "title": "Reports",
+      "subtitle": "Generate and download consolidated reports for your entire store.",
+      "generateReport": "Generate Report",
+      "types": {
+        "overallSales": {
+          "title": "Overall Sales Report",
+          "desc": "Aggregated sales data from all branches, including revenue and profit."
+        },
+        "branchPerformance": {
+          "title": "Branch Performance",
+          "desc": "Compare sales, orders, and revenue between different branches."
+        },
+        "productPerformance": {
+          "title": "Product Performance",
+          "desc": "Insights into top-selling products and category performance across the store."
+        },
+        "employeeSales": {
+          "title": "Employee Sales Report",
+          "desc": "Track sales performance for individual employees across all branches."
+        },
+        "inventorySummary": {
+          "title": "Inventory Summary",
+          "desc": "A complete overview of stock levels for all products in all branches."
+        },
+        "taxReport": {
+          "title": "Tax & GST Report",
+          "desc": "Consolidated tax reports for easy filing and reconciliation."
+        }
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Manage your store, profile, and account settings.",
+      "tabs": {
+        "storeDetails": "Store Details",
+        "myProfile": "My Profile",
+        "security": "Security",
+        "notifications": "Notifications"
+      },
+      "storeInfo": {
+        "storeName": "Store Name",
+        "storeType": "Store Type",
+        "address": "Address",
+        "saveChanges": "Save Changes",
+        "updateSuccess": "Store information updated successfully."
+      },
+      "security": {
+        "title": "Security Settings",
+        "desc": "Configure security options for your store",
+        "twoFactorAuth": "Two-Factor Authentication",
+        "twoFactorAuthDesc": "Add an extra layer of security",
+        "ipRestriction": "IP Restriction",
+        "ipRestrictionDesc": "Limit access to specific IP addresses",
+        "passwordExpiry": "Password Expiry (days)",
+        "sessionTimeout": "Session Timeout (minutes)"
+      },
+      "notifications": {
+        "title": "Notification Settings",
+        "desc": "Configure how you receive alerts and notifications",
+        "email": "Email Notifications",
+        "emailDesc": "Receive notifications via email",
+        "sms": "SMS Notifications",
+        "smsDesc": "Receive notifications via SMS",
+        "lowStock": "Low Stock Alerts",
+        "lowStockDesc": "Get notified when inventory is low",
+        "salesReports": "Sales Reports",
+        "salesReportsDesc": "Receive periodic sales reports",
+        "employeeActivity": "Employee Activity",
+        "employeeActivityDesc": "Get notified about employee activities"
+      },
+      "payment": {
+        "title": "Payment Settings",
+        "desc": "Configure payment methods and options",
+        "acceptCash": "Accept Cash",
+        "acceptCashDesc": "Allow cash payments",
+        "acceptCredit": "Accept Credit Cards",
+        "acceptCreditDesc": "Allow credit card payments",
+        "acceptDebit": "Accept Debit Cards",
+        "acceptDebitDesc": "Allow debit card payments",
+        "acceptMobile": "Accept Mobile Payments",
+        "acceptMobileDesc": "Allow mobile payment methods",
+        "stripe": "Stripe Integration",
+        "stripeDesc": "Enable Stripe payment gateway",
+        "paypal": "PayPal Integration",
+        "paypalDesc": "Enable PayPal payment gateway"
+      }
+    },
+    "employees": {
+      "title": "Employee Management",
+      "subtitle": "Manage your store's staff and roles.",
+      "addEmployee": "Add Employee",
+      "editEmployee": "Edit Employee",
+      "addNewTitle": "Add New Employee",
+      "addNewSubtitle": "Enter the details for the new employee.",
+      "editTitle": "Edit Employee",
+      "editSubtitle": "Update the employee details below.",
+      "table": {
+        "name": "Name",
+        "contact": "Contact",
+        "role": "Role",
+        "branch": "Branch",
+        "actions": "Actions",
+        "noEmployees": "No Employees Found",
+        "noEmployeesDesc": "Add your first employee to get started."
+      },
+      "form": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter employee name",
+        "email": "Email",
+        "emailPlaceholder": "Enter email address",
+        "password": "Password",
+        "passwordPlaceholder": "Enter password",
+        "phone": "Phone",
+        "phonePlaceholder": "Enter phone number",
+        "role": "Role",
+        "rolePlaceholder": "Select role",
+        "branch": "Branch",
+        "branchPlaceholder": "Select branch",
+        "saveChanges": "Save Changes"
+      },
+      "toast": {
+        "deleteSuccess": "Employee deleted successfully!",
+        "addSuccess": "Employee added successfully!",
+        "updateSuccess": "Employee updated successfully!"
+      },
+      "validation": {
+        "nameRequired": "Employee name is required",
+        "emailInvalid": "Invalid email address",
+        "emailRequired": "Email is required",
+        "phoneRequired": "Phone number is required",
+        "roleRequired": "Role is required",
+        "branchRequired": "Branch is required",
+        "passwordMin": "Password must be at least 8 characters",
+        "passwordRequired": "Password is required"
+      }
+    },
+    "branches": {
+      "title": "Branch Management",
+      "subtitle": "Oversee all your store locations.",
+      "addBranch": "Add Branch",
+      "editBranch": "Edit Branch",
+      "addNewTitle": "Add New Branch",
+      "addNewSubtitle": "Enter the details for the new branch.",
+      "editTitle": "Edit Branch",
+      "editSubtitle": "Update the branch details below.",
+      "table": {
+        "name": "Branch Name",
+        "address": "Address",
+        "manager": "Manager",
+        "phone": "Phone",
+        "actions": "Actions",
+        "loading": "Loading branches...",
+        "noBranches": "No Branches Found",
+        "noBranchesDesc": "Add your first branch to get started.",
+        "notAssigned": "Not Assigned"
+      },
+      "form": {
+        "name": "Branch Name",
+        "namePlaceholder": "Enter branch name",
+        "address": "Address",
+        "addressPlaceholder": "Enter branch address",
+        "manager": "Manager Name",
+        "managerPlaceholder": "Enter manager name",
+        "phone": "Phone Number",
+        "phonePlaceholder": "Enter phone number",
+        "cancel": "Cancel",
+        "adding": "Adding...",
+        "updating": "Updating...",
+        "updateBranch": "Update Branch"
+      },
+      "toast": {
+        "deleteSuccess": "Branch deleted successfully",
+        "updateSuccess": "Branch updated successfully",
+        "createSuccess": "Branch created successfully",
+        "idMissing": "Branch ID or authentication JWT missing",
+        "storeMissing": "Store information or authentication JWT missing!"
+      },
+      "validation": {
+        "nameRequired": "Branch Name is required",
+        "addressRequired": "Address is required",
+        "managerRequired": "Manager Name is required",
+        "phoneRequired": "Phone Number is required"
+      }
+    },
+    "alerts": {
+      "title": "Alerts",
+      "subtitle": "Critical and warning alerts for your store operations.",
+      "lowStock": {
+        "title": "Low Stock Products",
+        "description": "These products are running low on stock and may need to be reordered soon.",
+        "productName": "Product Name",
+        "sku": "SKU",
+        "stockRemaining": "Stock Remaining"
+      },
+      "inactiveCashiers": {
+        "title": "Inactive Cashiers",
+        "description": "These cashiers have been inactive for more than 3 days.",
+        "cashierName": "Cashier Name",
+        "branch": "Branch",
+        "lastActive": "Last Active"
+      },
+      "noSaleBranches": {
+        "title": "Branches with No Sales Today",
+        "description": "These branches have not recorded any sales today.",
+        "branchName": "Branch Name",
+        "lastSaleDate": "Last Sale Date"
+      },
+      "refundSpikes": {
+        "title": "Unusual Refund Activity",
+        "description": "These branches have a significantly higher number of refunds today compared to their daily average.",
+        "branchName": "Branch Name",
+        "refundsToday": "Refunds Today",
+        "dailyAverage": "Daily Average"
+      }
+    },
+    "upgrade": {
+      "title": "Upgrade Your Plan",
+      "subtitle": "Choose a plan that fits your business needs and unlock more features.",
+      "currentPlan": "Current Plan",
+      "billingCycle": {
+        "monthly": "month",
+        "yearly": "year"
+      },
+      "currentlyActive": "Currently Active",
+      "choosePlan": "Choose Plan",
+      "loading": "Loading subscription plans..."
+    }
+  },
+  "superAdminModule": {
+    "topbar": {
+      "searchPlaceholder": "Search stores, requests, or settings...",
+      "myAccount": "My Account",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout",
+      "admin": "Admin",
+      "role": "Super Admin"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overview of all stores and system statistics",
+      "stats": {
+        "totalStores": "Total Stores",
+        "activeStores": "Active Stores",
+        "blockedStores": "Blocked Stores",
+        "pendingRequests": "Pending Requests",
+        "fromLastMonth": "from last month",
+        "currentlyOperational": "currently operational",
+        "suspendedAccounts": "suspended accounts",
+        "awaitingApproval": "awaiting approval"
+      },
+      "charts": {
+        "storeRegistrations": "Store Registrations (Last 7 Days)",
+        "statusDistribution": "Store Status Distribution",
+        "active": "Active",
+        "pending": "Pending",
+        "blocked": "Blocked"
+      },
+      "activity": {
+        "title": "Recent Activity",
+        "noActivity": "No recent activity found.",
+        "newStore": "New store \"{name}\" registered",
+        "pendingStore": "Store \"{name}\" pending approval",
+        "blockedStore": "Store \"{name}\" blocked for policy violation",
+        "timeAgo": "{time} ago"
+      }
+    },
+    "commissions": {
+      "title": "Commissions",
+      "subtitle": "Manage commission rates for all stores",
+      "stats": {
+        "totalEarnings": "Total Earnings",
+        "averageRate": "Average Rate",
+        "activeStores": "Active Stores",
+        "rateSetHint": "All stores have commission rates set"
+      },
+      "table": {
+        "title": "Store Commission Rates",
+        "storeName": "Store Name",
+        "currentRate": "Current Rate",
+        "rateChange": "Rate Change",
+        "totalEarnings": "Total Earnings",
+        "lastUpdated": "Last Updated",
+        "actions": "Actions",
+        "editRate": "Edit Rate"
+      },
+      "dialog": {
+        "editTitle": "Edit Commission Rate",
+        "editDesc": "Update the commission rate for {name}",
+        "currentRateLabel": "Current Rate",
+        "newRateLabel": "New Rate (%)",
+        "placeholder": "Enter new commission rate",
+        "rateLimitHint": "Rate must be between 0% and 10%",
+        "cancel": "Cancel",
+        "update": "Update Rate"
+      },
+      "toast": {
+        "invalidRate": "Invalid Rate",
+        "invalidRateDesc": "Commission rate must be between 0% and 10%",
+        "updated": "Commission Updated",
+        "updatedDesc": "Commission rate for {name} has been updated to {rate}%"
+      }
+    },
+    "exports": {
+      "title": "Exports",
+      "subtitle": "Export store data and generate reports",
+      "create": {
+        "title": "Create New Export",
+        "typeLabel": "Export Type",
+        "typePlaceholder": "Select export type",
+        "fromLabel": "From Date",
+        "toLabel": "To Date",
+        "button": "Generate Export",
+        "exporting": "Exporting...",
+        "started": "Export Started",
+        "startedDesc": "{name} export has been initiated. You'll receive a notification when it's ready."
+      },
+      "available": {
+        "title": "Available Export Types",
+        "types": {
+          "store-list": {
+            "name": "Store List",
+            "desc": "Complete list of all stores with basic information"
+          },
+          "store-status": {
+            "name": "Store Status Summary",
+            "desc": "Summary of store statuses and registration dates"
+          },
+          "commission-report": {
+            "name": "Commission Report",
+            "desc": "Detailed commission earnings and rates for all stores"
+          },
+          "pending-requests": {
+            "name": "Pending Requests",
+            "desc": "List of all pending store registration requests"
+          }
+        }
+      },
+      "recent": {
+        "title": "Recent Exports",
+        "noExports": "No recent exports found.",
+        "downloads": "downloads",
+        "downloadButton": "Download",
+        "toast": {
+          "selectType": "Select Export Type",
+          "selectTypeDesc": "Please select an export type to continue.",
+          "downloadStarted": "Download Started",
+          "downloadStartedDesc": "Your file download has begun."
+        }
+      }
+    },
+    "stores": {
+      "title": "Stores",
+      "subtitle": "View and manage all registered stores",
+      "searchPlaceholder": "Search by store name or ID...",
+      "filterPlaceholder": "Filter by status",
+      "allStatuses": "All Statuses",
+      "statuses": {
+        "active": "Active",
+        "pending": "Pending",
+        "blocked": "Blocked",
+        "inactive": "Inactive"
+      },
+      "table": {
+        "id": "Store ID",
+        "name": "Store Name",
+        "owner": "Owner",
+        "regDate": "Registration Date",
+        "status": "Status",
+        "actions": "Actions",
+        "viewDetails": "View Details"
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {current} of {total}"
+      },
+      "pendingRequests": {
+        "title": "Pending Store Requests",
+        "subtitle": "Review and approve new store registration requests",
+        "count": "{count} Pending",
+        "table": {
+          "name": "Store Name",
+          "owner": "Owner",
+          "contact": "Contact",
+          "type": "Business Type",
+          "submitted": "Submitted On",
+          "actions": "Actions",
+          "approve": "Approve",
+          "approving": "Approving...",
+          "reject": "Reject",
+          "rejecting": "Rejecting..."
+        },
+        "noRequests": "No pending requests at the moment.",
+        "dialog": {
+          "approveTitle": "Approve Store Registration",
+          "approveDesc": "Are you sure you want to approve {name}? This will activate their account and allow them to start using the platform.",
+          "rejectTitle": "Reject Store Registration",
+          "rejectDesc": "Please provide a reason for rejecting {name}. This will be communicated to the store owner.",
+          "rejectPlaceholder": "Enter rejection reason...",
+          "cancel": "Cancel",
+          "confirmApprove": "Approve Store",
+          "confirmReject": "Reject Store"
+        },
+        "toast": {
+          "approved": "Store Approved",
+          "approvedDesc": "{name} has been approved successfully.",
+          "approveFailed": "Approval Failed",
+          "rejected": "Store Rejected",
+          "rejectedDesc": "{name} has been rejected.",
+          "rejectFailed": "Rejection Failed"
+        }
+      },
+      "drawer": {
+        "ownerDetails": "Owner Details",
+        "ownerName": "Owner Name",
+        "ownerEmail": "Owner Email",
+        "ownerMobile": "Owner Mobile",
+        "storeInfo": "Store Information",
+        "address": "Address",
+        "regDate": "Registration Date",
+        "reject": "Reject",
+        "approve": "Approve",
+        "block": "Block Store",
+        "unblock": "Unblock Store"
+      }
+    },
+    "subscriptions": {
+      "title": "Subscription Plans",
+      "subtitle": "Create, view, and manage subscription plans for stores",
+      "searchPlaceholder": "Search plans by name...",
+      "addPlan": "Add New Plan",
+      "table": {
+        "name": "Name",
+        "price": "Price",
+        "billingCycle": "Billing Cycle",
+        "branches": "Branches",
+        "users": "Users",
+        "products": "Products",
+        "status": "Status",
+        "features": "Features",
+        "actions": "Actions",
+        "noPlans": "No plans found."
+      },
+      "billingCycles": {
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "features": {
+        "advancedReports": "Advanced Reports",
+        "inventory": "Inventory System",
+        "integrations": "Integrations",
+        "ecommerce": "eCommerce",
+        "invoiceBranding": "Invoice Branding",
+        "prioritySupport": "Priority Support",
+        "multiLocation": "Multi-location",
+        "custom": "Custom Features",
+        "included": "Included Features",
+        "addFeature": "Add Feature"
+      },
+      "dialog": {
+        "addTitle": "Add Subscription Plan",
+        "addDesc": "Create a new plan with specific features and limits.",
+        "editTitle": "Edit Subscription Plan",
+        "editDesc": "Update the details for the \"{name}\" plan.",
+        "labels": {
+          "name": "Plan Name",
+          "description": "Description",
+          "price": "Price (VNĐ )",
+          "billingCycle": "Billing Cycle",
+          "branches": "Max Branches",
+          "users": "Max Users",
+          "products": "Max Products"
+        },
+        "placeholders": {
+          "name": "e.g., Professional Plan",
+          "description": "A short description of the plan",
+          "price": "e.g., 1999",
+          "selectCycle": "Select cycle",
+          "branches": "e.g., 5",
+          "users": "e.g., 20",
+          "products": "e.g., 10000",
+          "custom": "e.g., Custom API endpoint"
+        },
+        "cancel": "Cancel",
+        "save": "Save Plan",
+        "saveChanges": "Save Changes"
+      },
+      "toast": {
+        "deleted": "Plan Deleted",
+        "deletedDesc": "Subscription plan deleted successfully",
+        "statusUpdated": "Status Updated",
+        "statusDesc": "Plan is now {status}",
+        "createFailed": "Failed to create plan",
+        "updateFailed": "Failed to update plan",
+        "deleteFailed": "Failed to delete plan"
+      },
+      "confirmDelete": "Are you sure you want to delete this subscription plan?",
+      "active": "Active",
+      "inactive": "Inactive",
+      "validation": {
+        "nameRequired": "Name is required",
+        "descRequired": "Description is required",
+        "priceRequired": "Price is required",
+        "priceNumber": "Price must be a number",
+        "billingRequired": "Billing cycle is required",
+        "branchesRequired": "Branches is required",
+        "branchesNumber": "Branches must be a number",
+        "usersRequired": "Users is required",
+        "usersNumber": "Users must be a number",
+        "productsRequired": "Products is required",
+        "productsNumber": "Products must be a number",
+        "featureEmpty": "Feature cannot be empty",
+        "featureAtLeastOne": "At least one extra feature is required"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Manage your account, security, and system settings.",
+      "tabs": {
+        "profile": "Profile",
+        "profileDesc": "Update your photo and personal details.",
+        "security": "Security",
+        "securityDesc": "Change your password and manage security settings.",
+        "notifications": "Notifications",
+        "notificationsDesc": "Manage how you receive notifications.",
+        "system": "System",
+        "systemDesc": "Manage general system settings."
+      },
+      "profile": {
+        "changeAvatar": "Change Avatar",
+        "avatarHint": "JPG, GIF or PNG. 1MB max.",
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "save": "Save Changes"
+      },
+      "security": {
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "updateButton": "Update Password"
+      },
+      "notifications": {
+        "newStore": "New Store Registrations",
+        "newStoreDesc": "Receive email notifications for new store registrations.",
+        "subscriptionRenewal": "Subscription Renewals",
+        "subscriptionRenewalDesc": "Receive email notifications for subscription renewals.",
+        "systemAlerts": "System Alerts & Updates",
+        "systemAlertsDesc": "Receive email notifications for system alerts & updates.",
+        "save": "Save Preferences"
+      },
+      "system": {
+        "maintenanceMode": "Maintenance Mode",
+        "maintenanceModeDesc": "Temporarily disable access for non-admin users for system updates.",
+        "save": "Save System Settings"
+      }
+    }
+  }
+}
