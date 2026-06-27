@@ -34,6 +34,13 @@ app:
     secret: ${JWT_SECRET:asdfghjklpoiuytrewqzxcvbnmlkjhglpouhggfdsawqwertyyuiioplmnbvcxzasdfgh}
   frontend:
     reset-url: http://localhost:5173/auth/reset-password?token=
+  security:
+    cors:
+      allowed-origins:
+        - http://localhost:3000
+        - http://localhost:5173
+        - https://zosh-pos.vercel.app
+        - https://pos-sytem-bcs6.vercel.app
 
 server:
   port: 5000

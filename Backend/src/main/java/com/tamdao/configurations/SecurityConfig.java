@@ -25,7 +25,7 @@ public class SecurityConfig {
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	private final JwtValidator jwtValidator;
 
-	@org.springframework.beans.factory.annotation.Value("${app.security.cors.allowed-origins}")
+	@org.springframework.beans.factory.annotation.Value("${app.security.cors.allowed-origins:http://localhost:3000,http://localhost:5173,https://zosh-pos.vercel.app,https://pos-sytem-bcs6.vercel.app}")
 	private java.util.List<String> allowedOrigins;
 	
 	@Bean
