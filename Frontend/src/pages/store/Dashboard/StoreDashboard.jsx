@@ -4,6 +4,7 @@ import StoreSidebar from "./StoreSidebar";
 import StoreTopbar from "./StoreTopbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getStoreByAdmin } from "../../../Redux Toolkit/features/store/storeThunks";
+import { getStoreOverview, getMonthlySales } from "../../../Redux Toolkit/features/storeAnalytics/storeAnalyticsThunks";
 
 const StoreDashboard = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,8 @@ const StoreDashboard = () => {
   useEffect(() => {
     if (userProfile?.id) {
       dispatch(getStoreByAdmin());
+      dispatch(getStoreOverview(userProfile.id));
+      dispatch(getMonthlySales(userProfile.id));
     }
   }, [dispatch, userProfile]);
 

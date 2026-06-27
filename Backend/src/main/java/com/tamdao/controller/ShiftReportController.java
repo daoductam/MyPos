@@ -8,6 +8,7 @@ import com.tamdao.service.ShiftReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class ShiftReportController {
      * 🔄 Start a new shift (only once per day)
      */
     @PostMapping("/start")
+    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
     public ResponseEntity<ShiftReport> startShift(
             @RequestParam Long branchId
     ) throws UserException {
@@ -41,6 +43,7 @@ public class ShiftReportController {
      * 🛑 End the current shift for logged-in cashier
      */
     @PatchMapping("/end")
+    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
     public ResponseEntity<ShiftReportDTO> endShift() throws UserException {
         ShiftReport ended = shiftReportService.endShift(
                 null,
@@ -53,6 +56,7 @@ public class ShiftReportController {
      * 📊 Get current shift progress (live data) by cashierId
      */
     @GetMapping("/current")
+    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
     public ResponseEntity<ShiftReportDTO> getCurrentShiftProgress(
            ) throws UserException {
         ShiftReport shift = shiftReportService.getCurrentShiftProgress(null);
@@ -63,6 +67,7 @@ public class ShiftReportController {
      * 📅 Get shift report by date (for cashier)
      */
     @GetMapping("/cashier/{cashierId}/by-date")
+    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<ShiftReportDTO> getShiftReportByDate(
             @PathVariable Long cashierId,
             @RequestParam
@@ -78,6 +83,7 @@ public class ShiftReportController {
      * 👤 Get all shift reports for a cashier
      */
     @GetMapping("/cashier/{cashierId}")
+    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<ShiftReportDTO>> getShiftsByCashier(
             @PathVariable Long cashierId
     ) {
@@ -92,6 +98,7 @@ public class ShiftReportController {
      * 🏬 Get all shift reports for a branch
      */
     @GetMapping("/branch/{branchId}")
+    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<ShiftReportDTO>> getShiftsByBranch(
             @PathVariable Long branchId
     ) {
@@ -105,6 +112,7 @@ public class ShiftReportController {
      * 📋 Get all shift reports (admin use)
      */
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
     public ResponseEntity<List<ShiftReportDTO>> getAllShifts() {
         List<ShiftReport> shifts=shiftReportService.getAllShiftReports();
 
@@ -127,6 +135,7 @@ public class ShiftReportController {
      * ❌ Delete a shift report (admin use)
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_ADMIN', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<?> deleteShift(@PathVariable Long id) {
         shiftReportService.deleteShiftReport(id);
         return ResponseEntity.ok().build();

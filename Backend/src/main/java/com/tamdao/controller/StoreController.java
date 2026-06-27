@@ -66,8 +66,11 @@ public class StoreController {
 
     // ✅ Get Stores by Admin User ID
     @GetMapping("/admin")
-    public ResponseEntity<StoreDTO> getStoresByAdminId() throws UserException {
+    public ResponseEntity<StoreDTO> getStoresByAdminId() throws UserException, ResourceNotFoundException {
         Store store=storeService.getStoreByAdminId();
+        if (store == null) {
+            throw new ResourceNotFoundException("No store found for the logged-in admin. Please onboard and create a store.");
+        }
         return ResponseEntity.ok(StoreMapper.toDto(store));
     }
 
@@ -86,7 +89,7 @@ public class StoreController {
     }
 
     @PostMapping("/add/employee")
-    @PreAuthorize("hasAnyAuthority('STORE_MANAGER','STORE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<UserDTO> addEmployee(
             @RequestBody UserDTO userDTO) throws UserException {
         UserDTO user=storeService.addEmployee(null, userDTO);

@@ -57,16 +57,15 @@ const ProductForm = ({
   });
 
   const defaultValues = {
-    name: "",
-    sku: "",
-    description: "",
-    mrp: "",
-    sellingPrice: "",
-    brand: "",
-    categoryId: "",
-    color: "",
-    image: null,
-    ...initialValues,
+    name: initialValues?.name || "",
+    sku: initialValues?.sku || "",
+    description: initialValues?.description || "",
+    mrp: initialValues?.mrp || "",
+    sellingPrice: initialValues?.sellingPrice || "",
+    brand: initialValues?.brand || "",
+    categoryId: initialValues?.categoryId?.toString() || "",
+    color: initialValues?.color || "",
+    image: initialValues?.image || "",
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -144,7 +143,7 @@ const ProductForm = ({
 
         return (
           <Form className="space-y-4 py-2 pr-2">
-          <div className="flex flex-wrap gap-5" item xs={12}>
+          <div className="flex flex-wrap gap-5">
             {!values.image ? (
               <>
                 {" "}

@@ -34,6 +34,7 @@ public class Product {
 
     private String brand;
 
+    @Column(columnDefinition = "TEXT")
     private String image;
 
     @ManyToOne

@@ -7,9 +7,11 @@ import { deleteProduct } from '@/Redux Toolkit/features/product/productThunks';
 import { toast } from '@/components/ui/use-toast';
 import { useTranslation } from "react-i18next";
 
-const ProductTable = ({ products, loading, onEdit, onView }) => {
+const ProductTable = ({ products, loading, onEdit, onView, userRole }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  const isStoreAdmin = userRole === "ROLE_STORE_ADMIN";
 
   const handleDeleteProduct = async (id) => {
     try {

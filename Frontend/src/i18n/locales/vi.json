@@ -314,9 +314,13 @@
       },
       "stats": {
         "totalRevenue": "Tổng Thu Nhập",
+        "totalRevenueDesc": "Tổng doanh thu tích lũy từ các chi nhánh",
         "totalSales": "Tổng Doanh Số",
+        "totalSalesDesc": "Tổng số đơn đặt hàng đã thanh toán",
         "newCustomers": "Khách Hàng Mới",
+        "newCustomersDesc": "Khách hàng đăng ký thành viên",
         "activeBranches": "Chi Nhánh Hoạt Động",
+        "activeBranchesDesc": "Số chi nhánh đang hoạt động",
         "fromLastMonth": "so với tháng trước",
         "sinceLastMonth": "từ tháng trước"
       },

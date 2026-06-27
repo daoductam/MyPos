@@ -69,13 +69,25 @@ public class GlobalExceptionHandler {
 
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<Map<String, Object>> handleDataIntegrityViolationException(
-			DataIntegrityViolationException ex,WebRequest req) {
+	public ResponseEntity<ExceptionResponse> handleDataIntegrityViolationException(
+			DataIntegrityViolationException ex, WebRequest req) {
+		
+		String errorMessage = "Dữ liệu bị trùng lặp hoặc vi phạm ràng buộc hệ thống.";
+		String rootMsg = ex.getRootCause() != null ? ex.getRootCause().getMessage() : ex.getMessage();
+		
+		if (rootMsg != null) {
+			if (rootMsg.contains("products.sku") || rootMsg.contains("products.UK") || rootMsg.contains("UKfhmd06dsmj6k0n90swsh8ie9g")) {
+				errorMessage = "Mã sản phẩm (SKU) đã tồn tại trong hệ thống. Vui lòng sử dụng mã SKU khác.";
+			} else if (rootMsg.contains("users.email") || rootMsg.contains("users.UK")) {
+				errorMessage = "Địa chỉ email này đã được sử dụng bởi một tài khoản khác.";
+			}
+		}
 
-		Map<String, Object> response = new HashMap<>();
-		response.put("message", ex.getMessage());
-		response.put("error", req.getDescription(false));
-		response.put("timestamp", LocalDateTime.now());
+		ExceptionResponse response = new ExceptionResponse(
+				errorMessage,
+				req.getDescription(false),
+				LocalDateTime.now()
+		);
 		return new ResponseEntity<>(response, HttpStatus.CONFLICT);
 	}
 

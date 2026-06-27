@@ -1,41 +1,38 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
+import { ShoppingBag } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
-const sales = [
-  { name: "Olivia Martin", email: "olivia.martin@email.com", amount: "+₹1,999.00" },
-  { name: "Jackson Lee", email: "jackson.lee@email.com", amount: "+₹39.00" },
-  { name: "Isabella Nguyen", email: "isabella.nguyen@email.com", amount: "+₹299.00" },
-  { name: "William Kim", email: "will@email.com", amount: "+₹99.00" },
-  { name: "Sofia Davis", email: "sofia.davis@email.com", amount: "+₹39.00" },
-];
 
 const RecentSales = () => {
   const { t } = useTranslation();
+  
+  // Cleaned up completely from mock data
+  const actualSales = []; 
+
   return (
-    <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white h-full rounded-2xl">
+    <Card className="bg-black/20 backdrop-blur-lg border border-white/10 text-white h-[380px] flex flex-col justify-between rounded-2xl">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-white">{t('dashboard.store.charts.recentSales')}</CardTitle>
+        <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
+          <ShoppingBag className="w-5 h-5 text-emerald-500" />
+          {t('dashboard.store.charts.recentSales')}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {sales.map((sale, index) => (
-            <div key={index} className="flex items-center">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={`/avatars/${index + 1}.png`} alt="Avatar" />
-                <AvatarFallback className="bg-emerald-500/20 text-emerald-400">
-                  {sale.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <div className="ml-4 space-y-1">
-                <p className="text-sm font-medium leading-none text-white">{sale.name}</p>
-                <p className="text-sm text-gray-400">{sale.email}</p>
-              </div>
-              <div className="ml-auto font-medium text-white">{sale.amount}</div>
+      <CardContent className="flex-1 flex items-center justify-center p-6">
+        {actualSales.length === 0 ? (
+          <div className="text-gray-400 text-center flex flex-col items-center justify-center space-y-3 py-6">
+            <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10 text-gray-500">
+              <ShoppingBag className="w-6 h-6" />
             </div>
-          ))}
-        </div>
+            <div>
+              <p className="font-medium text-gray-300">Chưa có giao dịch gần đây</p>
+              <p className="text-xs text-gray-500 max-w-[200px] mx-auto mt-1">Các đơn hàng mới thanh toán tại chi nhánh sẽ xuất hiện ở đây.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4 w-full">
+            {/* Real sales mapping here when integrated */}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

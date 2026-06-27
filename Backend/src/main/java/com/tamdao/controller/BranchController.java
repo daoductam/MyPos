@@ -7,6 +7,7 @@ import com.tamdao.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class BranchController {
 
     // 🔹 Create Branch
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
     public ResponseEntity<BranchDTO> createBranch(
             @Valid @RequestBody BranchDTO dto,
 
@@ -48,6 +50,7 @@ public class BranchController {
 
     // 🔹 Update Branch
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
     public ResponseEntity<BranchDTO> updateBranch(
             @PathVariable Long id,
             @RequestBody BranchDTO dto,
@@ -58,6 +61,7 @@ public class BranchController {
 
     // 🔹 Delete Branch
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
     public ResponseEntity<Void> deleteBranch(@PathVariable Long id) {
         branchService.deleteBranch(id);
         return ResponseEntity.noContent().build();

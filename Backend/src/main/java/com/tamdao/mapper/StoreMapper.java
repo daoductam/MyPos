@@ -11,6 +11,9 @@ public class StoreMapper {
 
 
         public static StoreDTO toDto(Store store) {
+            if (store == null) {
+                return null;
+            }
             return StoreDTO.builder()
                     .id(store.getId())
                     .brand(store.getBrand())

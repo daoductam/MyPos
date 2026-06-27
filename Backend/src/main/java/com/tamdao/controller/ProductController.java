@@ -10,6 +10,7 @@ import com.tamdao.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class ProductController {
     private final UserService userService;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<ProductDTO> create(
             @Valid @RequestBody ProductDTO dto,
             @RequestHeader("Authorization") String jwt
@@ -38,6 +40,7 @@ public class ProductController {
 
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id,
                                              @RequestBody ProductDTO dto,
 
@@ -47,6 +50,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id,
                                        @RequestHeader("Authorization") String jwt) throws UserException, AccessDeniedException {
         User user = userService.getUserFromJwtToken(jwt);

@@ -20,7 +20,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_CASHIER')")
+    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO dto) throws UserException {
         return ResponseEntity.ok(orderService.createOrder(dto));
     }

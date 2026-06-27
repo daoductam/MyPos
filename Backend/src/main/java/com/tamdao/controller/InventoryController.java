@@ -20,20 +20,20 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('STORE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_STORE_MANAGER')")
     public ResponseEntity<InventoryDTO> create(@RequestBody InventoryDTO dto) throws AccessDeniedException, UserException {
         return ResponseEntity.ok(inventoryService.createInventory(dto));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('STORE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_STORE_MANAGER')")
     public ResponseEntity<InventoryDTO> update(@PathVariable Long id,
                                                @RequestBody InventoryDTO dto) throws AccessDeniedException, UserException {
         return ResponseEntity.ok(inventoryService.updateInventory(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('STORE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_STORE_MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) throws AccessDeniedException, UserException {
         inventoryService.deleteInventory(id);
         return ResponseEntity.noContent().build();

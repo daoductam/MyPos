@@ -54,11 +54,9 @@ export default function Sales() {
 
   // Format currency
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
+    return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      currency: 'VND',
     }).format(amount || 0);
   };
 
@@ -72,7 +70,7 @@ export default function Sales() {
 
   // Prepare chart data
   const dailySalesData = dailySales?.map(item => ({
-    date: new Date(item.date)?.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    date: new Date(item.date)?.toLocaleDateString('vi-VN', { month: 'short', day: 'numeric' }),
     sales: item.totalAmount
   })) || [];
 
@@ -101,9 +99,6 @@ export default function Sales() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">{t('storeModule.sales.title')}</h1>
-        <Button className="bg-emerald-600 hover:bg-emerald-700">
-          <Plus className="mr-2 h-4 w-4" /> {t('storeModule.sales.newSale')}
-        </Button>
       </div>
 
       {/* Stats Cards */}
@@ -247,7 +242,7 @@ export default function Sales() {
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
-                      tickFormatter={(value) => `₹${value}`}
+                      tickFormatter={(value) => `${value.toLocaleString()} ₫`}
                     />
                     <ChartTooltip
                       content={({ active, payload }) => (
@@ -276,7 +271,7 @@ export default function Sales() {
             )}
           </CardContent>
         </Card>
-
+ 
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">{t('storeModule.sales.paymentMethods')}</CardTitle>
@@ -305,7 +300,7 @@ export default function Sales() {
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
-                      tickFormatter={(value) => `₹${value}`}
+                      tickFormatter={(value) => `${value.toLocaleString()} ₫`}
                     />
                     <ChartTooltip
                       content={({ active, payload }) => (

@@ -20,7 +20,7 @@ public class BranchAnalyticsController {
     private final BranchAnalyticsService branchAnalyticsService;
 
     // ✅ Allow only BRANCH_MANAGER or BRANCH_ADMIN
-    private static final String ALLOWED_ROLES = "hasRole('BRANCH_MANAGER') or hasRole('BRANCH_ADMIN')";
+    private static final String ALLOWED_ROLES = "hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')";
 
     /**
      * Get daily sales chart data (last n days)
@@ -69,7 +69,7 @@ public class BranchAnalyticsController {
     }
 
     @GetMapping("/today-overview")
-    @PreAuthorize("hasRole('BRANCH_MANAGER') or hasRole('BRANCH_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<BranchDashboardOverviewDTO> getTodayOverview(
             @RequestParam Long branchId
     ) {
@@ -78,7 +78,7 @@ public class BranchAnalyticsController {
 
 
     @GetMapping("/payment-breakdown")
-    @PreAuthorize("hasRole('BRANCH_MANAGER') or hasRole('BRANCH_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<PaymentSummary>> getPaymentBreakdown(
             @RequestParam Long branchId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date

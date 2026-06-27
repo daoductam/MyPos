@@ -24,6 +24,7 @@ export default function Products() {
     (state) => state.product
   );
   const { store } = useSelector((state) => state.store);
+  const { userProfile } = useSelector((state) => state.user);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -32,6 +33,8 @@ export default function Products() {
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
+  const isStoreAdmin = userProfile?.role === "ROLE_STORE_ADMIN";
 
   // Fetch products on mount or when store changes
   useEffect(() => {
@@ -165,6 +168,7 @@ export default function Products() {
             loading={loading || refreshing}
             onEdit={openEditDialog}
             onView={openViewDialog}
+            userRole={userProfile?.role}
           />
         </CardContent>
       </Card>
