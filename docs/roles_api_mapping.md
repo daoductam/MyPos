@@ -17,7 +17,23 @@ Hệ thống hỗ trợ 7 vai trò chính:
 
 ---
 
-## 2. Chi Tiết Chức Năng & Danh Sách API Theo Từng Vai Trò
+## 2. Tài Khoản Demo Khởi Tạo Sẵn (Demo Accounts Credentials)
+
+Dưới đây là thông tin đăng nhập của các tài khoản mẫu được khởi tạo tự động ở môi trường phát triển:
+
+| Vai Trò | Email Đăng Nhập | Mật Khẩu Mẫu | Tên Hiển Thị |
+| :--- | :--- | :--- | :--- |
+| `ROLE_ADMIN` | `tam@gmail.com` | `tam123456` | Tam Super Admin |
+| `ROLE_STORE_ADMIN` | `store.admin@dmart.com` | `StoreAdmin@123` | Store Admin |
+| `ROLE_STORE_MANAGER` | `store.manager@dmart.com` | `StoreManager@123` | Store Manager |
+| `ROLE_BRANCH_MANAGER` | `branch.manager@dmart.com` | `BranchManager@123` | Branch Manager |
+| `ROLE_BRANCH_ADMIN` | `branch.admin@dmart.com` | `BranchAdmin@123` | Branch Admin |
+| `ROLE_BRANCH_CASHIER` | `cashier@dmart.com` | `Cashier@123` | Branch Cashier |
+| `ROLE_CUSTOMER` | `customer@gmail.com` | `Customer@123` | Customer Guest |
+
+---
+
+## 3. Chi Tiết Chức Năng & Danh Sách API Theo Từng Vai Trò
 
 ### 🔑 ROLE_ADMIN (Super Admin)
 Quản trị viên toàn hệ thống, chịu trách nhiệm phê duyệt cửa hàng mới, quản lý các gói đăng ký dịch vụ (Subscription Plans) và xem thống kê tăng trưởng của toàn hệ thống.
