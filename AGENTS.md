@@ -32,6 +32,9 @@ Mọi hành động của AI phải tuân thủ nghiêm ngặt các tài nguyên
 - **Workflows**: Tham khảo `.agent/workflows/` (`feature.md`, `debug.md`, `improve.md`).
 - **Coding Rules**: Tuân thủ `code-quality.md` (SOLID, DRY) và `security.md` (Security First).
 - **Special Skills**: Sử dụng các skills chuyên dụng như `api-design`, `database-design`, `code-reviewer` khi thực hiện nhiệm vụ.
+- **CodeGraph**: Cơ sở dữ liệu đồ thị code của dự án được lưu tại `.codegraph/`. Sử dụng `npx @colbymchenry/codegraph query <symbol>` để tra cứu nhanh symbols, references và call graph nhằm giảm chi phí token và tăng tốc độ hiểu codebase.
+
+
 
 ## Conventions & Best Practices
 - **Clean Code**: Ưu tiên Readable Code hơn Clever Code. Tuân thủ nguyên tắc Single Responsibility.
@@ -51,3 +54,7 @@ Mọi hành động của AI phải tuân thủ nghiêm ngặt các tài nguyên
 - `npm run dev` — Khởi chạy môi trường phát triển (Vite)
 - `npm run build` — Build production bundle
 - `npm install` — Cài đặt các gói phụ thuộc
+
+### CodeGraph (Root)
+- `npx @colbymchenry/codegraph index` — Cập nhật/Re-index cơ sở dữ liệu đồ thị code
+- `npx @colbymchenry/codegraph status` — Xem trạng thái index

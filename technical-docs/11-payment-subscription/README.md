@@ -24,10 +24,13 @@ Module Thanh toán & Gói dịch vụ quản lý các gói dịch vụ SaaS cung
 |---|--------|-----|-------|------------|
 | 1 | POST | `/api/subscriptions/subscribe` | Đăng ký gói dùng thử hoặc gói mới | Public (Có JWT) |
 | 2 | POST | `/api/subscriptions/upgrade` | Nâng cấp gói dịch vụ hiện tại | Public (Có JWT) |
-| 3 | PUT | `/api/subscriptions/{id}/activate` | Kích hoạt gói dịch vụ thủ công | `ROLE_ADMIN` (Super Admin) |
-| 4 | PUT | `/api/subscriptions/{id}/cancel` | Hủy gói dịch vụ | `ROLE_ADMIN` (Super Admin) |
-| 5 | GET | `/api/subscriptions/store/{storeId}` | Lấy lịch sử đăng ký gói của cửa hàng | Public (Có JWT) |
-| 6 | GET | `/api/subscriptions/admin` | Xem tất cả đăng ký gói | `ROLE_ADMIN` (Super Admin) |
+| 3 | PUT | `/api/subscriptions/{subscriptionId}/activate` | Kích hoạt gói dịch vụ thủ công | `ROLE_ADMIN` (Super Admin) |
+| 4 | PUT | `/api/subscriptions/{subscriptionId}/cancel` | Hủy gói dịch vụ | `ROLE_ADMIN` (Super Admin) |
+| 5 | PUT | `/api/subscriptions/{subscriptionId}/payment-status` | Cập nhật trạng thái thanh toán gói dịch vụ | `ROLE_ADMIN` (Super Admin) |
+| 6 | GET | `/api/subscriptions/store/{storeId}` | Lấy lịch sử đăng ký gói của cửa hàng | Public (Có JWT) |
+| 7 | GET | `/api/subscriptions/admin` | Xem tất cả đăng ký gói | `ROLE_ADMIN` (Super Admin) |
+| 8 | GET | `/api/subscriptions/admin/expiring` | Xem danh sách các gói đăng ký sắp hết hạn | `ROLE_ADMIN` (Super Admin) |
+| 9 | GET | `/api/subscriptions/admin/count` | Thống kê số lượng gói đăng ký theo trạng thái | `ROLE_ADMIN` (Super Admin) |
 
 ### 2.3 Cấu hình Gói (Super Admin)
 
@@ -35,7 +38,9 @@ Module Thanh toán & Gói dịch vụ quản lý các gói dịch vụ SaaS cung
 |---|--------|-----|-------|------------|
 | 1 | POST | `/api/super-admin/subscription-plans` | Tạo gói dịch vụ mới | `ROLE_ADMIN` (Super Admin) |
 | 2 | PUT | `/api/super-admin/subscription-plans/{id}` | Cập nhật thông tin gói dịch vụ | `ROLE_ADMIN` (Super Admin) |
-| 3 | DELETE | `/api/super-admin/subscription-plans/{id}` | Xóa gói dịch vụ | `ROLE_ADMIN` (Super Admin) |
+| 3 | GET | `/api/super-admin/subscription-plans` | Xem danh sách tất cả các gói dịch vụ | Public (Có JWT) |
+| 4 | GET | `/api/super-admin/subscription-plans/{id}` | Lấy thông tin chi tiết một gói dịch vụ | Public (Có JWT) |
+| 5 | DELETE | `/api/super-admin/subscription-plans/{id}` | Xóa gói dịch vụ | `ROLE_ADMIN` (Super Admin) |
 
 ---
 

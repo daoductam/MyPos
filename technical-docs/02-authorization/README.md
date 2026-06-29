@@ -41,96 +41,187 @@ graph TD
 
 ---
 
-## 3. Ma trận Phân quyền API
+## 3. Ma trận Phân quyền API (Đầy đủ 113 API)
 
-### 3.1 Authentication & User
+Dưới đây là ma trận phân quyền chi tiết cho toàn bộ **113 API Endpoints** được cấu hình trong hệ thống, nhóm theo các phân hệ nghiệp vụ.
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | PUBLIC |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|:------:|
-| POST /auth/signup | — | — | — | — | — | — | ✅ |
-| POST /auth/login | — | — | — | — | — | — | ✅ |
-| GET /api/users/profile | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+### 3.1 Xác thực & Hồ sơ (Auth & User Profiles)
 
-### 3.2 Store Management
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/auth/signup` | `signupHandler` | — | — | — | — | — | — | — | ✅ |
+| `POST` | `/auth/login` | `loginHandler` | — | — | — | — | — | — | — | ✅ |
+| `POST` | `/auth/forgot-password` | `forgotPassword` | — | — | — | — | — | — | — | ✅ |
+| `POST` | `/auth/reset-password` | `resetPassword` | — | — | — | — | — | — | — | ✅ |
+| `GET` | `/api/users/profile` | `getUserProfileFromJwtHandler` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/users/customer` | `getCustomerList` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/users/cashier` | `getCashierList` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/users/list` | `getUsersListHandler` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/users/{userId}` | `getUserByIdHandler` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/stores | — | ✅ | — | — | — | — |
-| PUT /api/stores/{id} | — | ✅ | — | — | — | — |
-| DELETE /api/stores | — | ✅ | — | — | — | — |
-| GET /api/stores (all) | ✅ | — | — | — | — | — |
-| PUT /api/stores/{id}/moderate | ✅ | — | — | — | — | — |
-| POST /api/stores/add/employee | — | ✅ | ✅ | — | — | — |
+### 3.2 Quản lý Cửa hàng (Store Management)
 
-### 3.3 Branch Management
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/stores` | `createStore` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/stores/{id}` | `getStoreById` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/stores/{id}` | `updateStore` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `DELETE` | `/api/stores` | `deleteStore` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/stores/admin` | `getStoresByAdminId` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/stores/employee` | `getStoresByEmployee` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/stores/{storeId}/employee/list` | `getStoreEmployeeList` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `POST` | `/api/stores/add/employee` | `addEmployee` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/stores` | `getAllStores` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/stores/{storeId}/moderate` | `moderateStore` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/branches | — | ✅ | — | — | — | — |
-| PUT /api/branches/{id} | — | ✅ | — | — | — | — |
-| DELETE /api/branches/{id} | — | ✅ | — | — | — | — |
-| GET /api/branches/{id} | — | ✅ | ✅ | ✅ | ✅ | ✅ |
+### 3.3 Quản lý Chi nhánh (Branch Management)
 
-### 3.4 Employee Management
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/branches` | `createBranch` | ✅ | ✅ | — | — | — | — | — | — |
+| `GET` | `/api/branches/{id}` | `getBranch` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/branches/store/{storeId}` | `getAllBranches` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/branches/{id}` | `updateBranch` | ✅ | ✅ | — | — | — | — | — | — |
+| `DELETE` | `/api/branches/{id}` | `deleteBranch` | ✅ | ✅ | — | — | — | — | — | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/employees/store/{id} | — | ✅ | ✅ | — | — | — |
-| POST /api/employees/branch/{id} | — | — | — | ✅ | ✅ | — |
-| PUT /api/employees/{id} | — | ✅ | ✅ | ✅ | ✅ | — |
-| DELETE /api/employees/{id} | — | ✅ | ✅ | ✅ | — | — |
+### 3.4 Quản lý Nhân viên (Employee Management)
 
-### 3.5 Product & Category
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/employees/store/{storeId}` | `createStoreEmployee` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `POST` | `/api/employees/branch/{branchId}` | `createBranchEmployee` | ✅ | — | — | ✅ | ✅ | — | — | — |
+| `PUT` | `/api/employees/{employeeId}` | `updateEmployee` | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — |
+| `DELETE` | `/api/employees/{employeeId}` | `deleteEmployee` | ✅ | ✅ | ✅ | ✅ | — | — | — | — |
+| `GET` | `/api/employees/{employeeId}` | `findEmployeeById` | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — |
+| `GET` | `/api/employees/store/{storeId}` | `findStoreEmployees` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/employees/branch/{branchId}` | `findBranchEmployees` | ✅ | — | — | ✅ | ✅ | — | — | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/products | — | ✅ | ✅ | — | — | — |
-| PATCH /api/products/{id} | — | ✅ | ✅ | — | — | — |
-| DELETE /api/products/{id} | — | ✅ | ✅ | — | — | — |
-| POST /api/categories | — | ✅ | ✅ | — | — | — |
+### 3.5 Sản phẩm & Danh mục (Product & Category)
 
-### 3.6 Inventory
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/categories` | `createCategory` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/categories/store/{storeId}` | `getCategories` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/categories/{id}` | `updateCategory` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `DELETE` | `/api/categories/{id}` | `deleteCategory` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `POST` | `/api/products` | `create` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/products/{id}` | `getById` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PATCH` | `/api/products/{id}` | `update` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `DELETE` | `/api/products/{id}` | `delete` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/products/store/{storeId}` | `getByStore` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/products/store/{storeId}/search` | `searchByKeyword` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/inventories | — | ✅ | ✅ | — | — | — |
-| PUT /api/inventories/{id} | — | ✅ | ✅ | — | — | — |
-| DELETE /api/inventories/{id} | — | ✅ | ✅ | — | — | — |
+### 3.6 Kho hàng (Inventory)
 
-### 3.7 Order
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/inventories` | `create` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `PUT` | `/api/inventories/{id}` | `update` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `DELETE` | `/api/inventories/{id}` | `delete` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/inventories/{id}` | `getById` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/inventories/product/{productId}` | `getInventoryByProduct` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/inventories/branch/{branchId}` | `getByBranch` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/orders | — | — | — | — | — | ✅ |
-| GET /api/orders/recent/{branchId} | — | — | — | ✅ | ✅ | — |
-| DELETE /api/orders/{id} | — | ✅ | ✅ | — | — | — |
+### 3.7 Quản lý Đơn hàng (Order Management)
 
-### 3.8 Refund
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/orders` | `createOrder` | — | — | — | — | — | ✅ | — | — |
+| `GET` | `/api/orders/{id}` | `getOrder` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/orders/branch/{branchId}` | `getOrdersByBranch` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/orders/cashier/{cashierId}` | `getOrdersByCashier` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/orders/today/branch/{branchId}` | `getTodayOrders` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/orders/customer/{customerId}` | `getCustomerOrders` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/orders/recent/{branchId}` | `getRecentOrders` | ✅ | — | — | ✅ | ✅ | — | — | — |
+| `DELETE` | `/api/orders/{id}` | `deleteOrder` | — | — | ✅ | — | — | — | — | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/refunds | — | — | — | — | — | ✅ |
-| GET /api/refunds (all) | — | ✅ | ✅ | — | — | — |
-| GET /api/refunds/branch/{id} | — | — | — | ✅ | ✅ | — |
-| DELETE /api/refunds/{id} | — | ✅ | — | ✅ | — | — |
+### 3.8 Quản lý Hoàn tiền (Refund Management)
 
-### 3.9 Shift Report
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/refunds` | `createRefund` | — | — | — | — | — | ✅ | — | — |
+| `GET` | `/api/refunds` | `getAllRefunds` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/refunds/cashier/{cashierId}` | `getRefundsByCashier` | ✅ | — | — | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/refunds/branch/{branchId}` | `getRefundsByBranch` | ✅ | — | — | ✅ | ✅ | — | — | — |
+| `GET` | `/api/refunds/shift/{shiftReportId}` | `getRefundsByShift` | ✅ | — | — | ✅ | ✅ | — | — | — |
+| `GET` | `/api/refunds/cashier/{cashierId}/range` | `getRefundsByCashierAndDateRange` | ✅ | — | — | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/refunds/{id}` | `getRefundById` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `DELETE` | `/api/refunds/{id}` | `deleteRefund` | ✅ | ✅ | — | ✅ | — | — | — | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/shift-reports/start | — | — | — | — | — | ✅ |
-| PATCH /api/shift-reports/end | — | — | — | — | — | ✅ |
-| GET /api/shift-reports/branch/{id} | — | — | — | ✅ | ✅ | — |
-| GET /api/shift-reports (all) | — | ✅ | ✅ | — | — | — |
-| DELETE /api/shift-reports/{id} | — | ✅ | — | ✅ | — | — |
+### 3.9 Báo cáo Ca (Shift Reports)
 
-### 3.10 Payment & Subscription
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/shift-reports/start` | `startShift` | — | — | — | — | — | ✅ | — | — |
+| `PATCH` | `/api/shift-reports/end` | `endShift` | — | — | — | — | — | ✅ | — | — |
+| `GET` | `/api/shift-reports/current` | `getCurrentShiftProgress` | — | — | — | — | — | ✅ | — | — |
+| `GET` | `/api/shift-reports/cashier/{cashierId}/by-date` | `getShiftReportByDate` | ✅ | — | — | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/shift-reports/cashier/{cashierId}` | `getShiftsByCashier` | ✅ | — | — | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/shift-reports/branch/{branchId}` | `getShiftsByBranch` | ✅ | — | — | ✅ | ✅ | — | — | — |
+| `GET` | `/api/shift-reports` | `getAllShifts` | ✅ | ✅ | ✅ | — | — | — | — | — |
+| `GET` | `/api/shift-reports/{id}` | `getShiftById` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `DELETE` | `/api/shift-reports/{id}` | `deleteShift` | ✅ | ✅ | — | ✅ | — | — | — | — |
 
-| API | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER |
-|-----|:-----:|:-----------:|:---------:|:------------:|:----------:|:-------:|
-| POST /api/payments/create | — | ✅ | — | — | — | — |
-| GET /api/super-admin/subscription-plans | ✅ | — | — | — | — | — |
-| POST /api/super-admin/subscription-plans | ✅ | — | — | — | — | — |
+### 3.10 Thanh toán & Gói dịch vụ (Payment & Subscription)
+
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/payments/create` | `createPaymentLink` | ✅ | ✅ | — | — | — | — | — | — |
+| `PATCH` | `/api/payments/proceed` | `proceedPayment` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `POST` | `/api/subscriptions/subscribe` | `createSubscription` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `POST` | `/api/subscriptions/upgrade` | `upgradePlan` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/subscriptions/{subscriptionId}/activate` | `activateSubscription` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/subscriptions/{subscriptionId}/cancel` | `cancelSubscription` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/subscriptions/{subscriptionId}/payment-status` | `updatePaymentStatus` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/subscriptions/store/{storeId}` | `getStoreSubscriptions` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/subscriptions/admin` | `getAllSubscriptions` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/subscriptions/admin/expiring` | `getExpiringSubscriptions` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/subscriptions/admin/count` | `countByStatus` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `POST` | `/api/super-admin/subscription-plans` | `createPlan` | ✅ | — | — | — | — | — | — | — |
+| `PUT` | `/api/super-admin/subscription-plans/{id}` | `updatePlan` | ✅ | — | — | — | — | — | — | — |
+| `GET` | `/api/super-admin/subscription-plans` | `getAllPlans` | ✅ | — | — | — | — | — | — | — |
+| `GET` | `/api/super-admin/subscription-plans/{id}` | `getPlanById` | ✅ | — | — | — | — | — | — | — |
+| `DELETE` | `/api/super-admin/subscription-plans/{id}` | `deletePlan` | ✅ | — | — | — | — | — | — | — |
+
+### 3.11 Thống kê & Báo cáo (Analytics & Reports)
+
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `GET` | `/api/super-admin/dashboard/summary` | `getDashboardSummary` | ✅ | — | — | — | — | — | — | — |
+| `GET` | `/api/super-admin/dashboard/store-registrations` | `getLast7DayRegistrationStats` | ✅ | — | — | — | — | — | — | — |
+| `GET` | `/api/super-admin/dashboard/store-status-distribution` | `getStoreStatusDistribution` | ✅ | — | — | — | — | — | — | — |
+| `GET` | `/api/branch-analytics/daily-sales` | `getDailySalesChart` | — | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/branch-analytics/top-products` | `getTopProductsByQuantity` | — | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/branch-analytics/top-cashiers` | `getTopCashiersByRevenue` | — | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/branch-analytics/category-sales` | `getCategoryWiseSalesBreakdown` | — | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| `GET` | `/api/branch-analytics/today-overview` | `getTodayOverview` | ✅ | — | — | ✅ | ✅ | — | — | — |
+| `GET` | `/api/branch-analytics/payment-breakdown` | `getPaymentBreakdown` | ✅ | — | — | ✅ | ✅ | — | — | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/overview` | `getStoreOverview` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/sales-trends` | `getSalesTrends` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/sales/monthly` | `getMonthlySales` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/sales/daily` | `getDailySales` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/sales/category` | `getSalesByCategory` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/sales/payment-method` | `getSalesByPaymentMethod` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/sales/branch` | `getSalesByBranch` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/payments` | `getPaymentBreakdown` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/branch-performance` | `getBranchPerformance` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/store/analytics/{storeAdminId}/alerts` | `getStoreAlerts` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+
+### 3.12 Quản lý Khách hàng (Customer Management)
+
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `POST` | `/api/customers` | `create` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `PUT` | `/api/customers/{id}` | `update` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `DELETE` | `/api/customers/{id}` | `delete` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/customers/{id}` | `getById` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `GET` | `/api/customers` | `getAll` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+
+### 3.13 Trạng thái Hệ thống (System Status)
+
+| HTTP Method | Path | Method Name | ADMIN | STORE_ADMIN | STORE_MGR | BRANCH_ADMIN | BRANCH_MGR | CASHIER | CUSTOMER | PUBLIC |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `GET` | `/` | `HomeControllerHandler` | — | — | — | — | — | — | — | ✅ |
 
 ---
 

@@ -17,6 +17,8 @@ Module Xác thực chịu trách nhiệm xử lý toàn bộ quy trình đăng k
 | 2 | POST | `/auth/login` | Đăng nhập | Public |
 | 3 | POST | `/auth/forgot-password` | Yêu cầu đặt lại mật khẩu | Public |
 | 4 | POST | `/auth/reset-password` | Đặt lại mật khẩu bằng token | Public |
+| 5 | GET | `/api/users/profile` | Lấy thông tin tài khoản hiện tại từ JWT token | Public (Có JWT) |
+| 6 | GET | `/` | Home page handler / Kiểm tra trạng thái hệ thống | Public |
 
 ---
 

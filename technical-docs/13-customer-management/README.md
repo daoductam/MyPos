@@ -18,6 +18,7 @@ Module Quản lý Khách hàng lưu giữ thông tin khách hàng thân thiết,
 | 3 | DELETE | `/api/customers/{id}` | Xóa khách hàng | Public (Có JWT) |
 | 4 | GET | `/api/customers/{id}` | Lấy chi tiết thông tin khách hàng | Public (Có JWT) |
 | 5 | GET | `/api/customers` | Lấy danh sách toàn bộ khách hàng | Public (Có JWT) |
+| 6 | GET | `/api/users/customer` | Lấy danh sách tài khoản người dùng có vai trò khách hàng | Public (Có JWT) |
 
 ---
 

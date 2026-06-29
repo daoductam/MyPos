@@ -33,7 +33,9 @@ Module Thống kê & Báo cáo xử lý việc tổng hợp dữ liệu giao d�
 | 5 | GET | `/api/store/analytics/{storeAdminId}/sales/category` | Doanh thu Store theo danh mục sản phẩm | Public (Có JWT) |
 | 6 | GET | `/api/store/analytics/{storeAdminId}/sales/payment-method` | Phân tích thanh toán toàn Store | Public (Có JWT) |
 | 7 | GET | `/api/store/analytics/{storeAdminId}/sales/branch` | So sánh doanh thu giữa các chi nhánh | Public (Có JWT) |
-| 8 | GET | `/api/store/analytics/{storeAdminId}/branch-performance` | Phân tích hiệu suất chi nhánh | Public (Có JWT) |
+| 8 | GET | `/api/store/analytics/{storeAdminId}/payments` | Phân tích doanh thu chi tiết theo phương thức thanh toán toàn Store | Public (Có JWT) |
+| 9 | GET | `/api/store/analytics/{storeAdminId}/branch-performance` | Phân tích hiệu suất chi nhánh | Public (Có JWT) |
+| 10| GET | `/api/store/analytics/{storeAdminId}/alerts` | Lấy các cảnh báo vận hành và sức khỏe của Store | Public (Có JWT) |
 
 ### 2.3 Thống kê Super Admin (`/api/super-admin`)
 

@@ -20,6 +20,9 @@ Module Quản lý Nhân viên chịu trách nhiệm phân quyền tài khoản c
 | 5 | GET | `/api/employees/{employeeId}` | Tìm kiếm nhân viên theo ID | `ROLE_STORE_ADMIN`, `ROLE_STORE_MANAGER`, `ROLE_BRANCH_ADMIN`, `ROLE_BRANCH_MANAGER` |
 | 6 | GET | `/api/employees/store/{storeId}` | Lấy danh sách nhân viên của cửa hàng | `ROLE_STORE_ADMIN`, `ROLE_STORE_MANAGER` |
 | 7 | GET | `/api/employees/branch/{branchId}` | Lấy danh sách nhân viên của chi nhánh | `ROLE_BRANCH_ADMIN`, `ROLE_BRANCH_MANAGER` |
+| 8 | GET | `/api/users/cashier` | Lấy danh sách tài khoản thu ngân | `ROLE_STORE_ADMIN`, `ROLE_STORE_MANAGER`, `ROLE_BRANCH_ADMIN`, `ROLE_BRANCH_MANAGER` |
+| 9 | GET | `/users/list` | Lấy toàn bộ danh sách users trong hệ thống | `ROLE_ADMIN` (Super Admin) |
+| 10| GET | `/users/{userId}` | Lấy thông tin chi tiết một user bất kỳ | `ROLE_ADMIN` (Super Admin) |
 
 ---
 

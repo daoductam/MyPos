@@ -45,3 +45,7 @@ Thumbs.db
 *.dll
 *.so
 *.dylib
+
+# CodeGraph local database
+.codegraph/
+
