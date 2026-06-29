@@ -3,9 +3,11 @@ package com.tamdao.service.impl;
 import com.tamdao.domain.BillingCycle;
 import com.tamdao.domain.StoreStatus;
 import com.tamdao.domain.UserRole;
+import com.tamdao.modal.Branch;
 import com.tamdao.modal.Store;
 import com.tamdao.modal.SubscriptionPlan;
 import com.tamdao.modal.User;
+import com.tamdao.repository.BranchRepository;
 import com.tamdao.repository.StoreRepository;
 import com.tamdao.repository.SubscriptionPlanRepository;
 import com.tamdao.repository.UserRepository;
@@ -14,7 +16,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class DataInitializationComponent implements CommandLineRunner {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
     private final SubscriptionPlanRepository subscriptionPlanRepository;
+    private final BranchRepository branchRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -31,31 +36,42 @@ public class DataInitializationComponent implements CommandLineRunner {
         initializeSubscriptionPlansIfNotExist();
 
         // 1. Super Admin: Quản trị viên tối cao của toàn hệ thống SaaS POS
-        initializeUserIfNotExist("tam@gmail.com", "tam123456", "Tam Super Admin", UserRole.ROLE_ADMIN);
+        initializeUserIfNotExist("tam@gmail.com", "tam123456", "Tam Super Admin", UserRole.ROLE_ADMIN, null, null);
 
         // 2. Store Admin: Quản trị viên cấp chuỗi cửa hàng, quản lý cấu hình và nhân sự cấp cao của chuỗi
-        User storeAdmin = initializeUserIfNotExist("store.admin@dmart.com", "StoreAdmin@123", "Store Admin", UserRole.ROLE_STORE_ADMIN);
+        User storeAdmin = initializeUserIfNotExist("store.admin@dmart.com", "StoreAdmin@123", "Store Admin", UserRole.ROLE_STORE_ADMIN, null, null);
+        Store store = null;
         if (storeAdmin != null) {
-            initializeStoreIfNotExist(storeAdmin, "D Mart HN", "Hệ thống siêu thị tiện ích D Mart Hà Nội", "Supermarket");
+            store = initializeStoreIfNotExist(storeAdmin, "D Mart HN", "Hệ thống siêu thị tiện ích D Mart Hà Nội", "Supermarket");
+            if (storeAdmin.getStore() == null) {
+                storeAdmin.setStore(store);
+                userRepository.save(storeAdmin);
+            }
+        }
+
+        // Initialize a default branch for demo
+        Branch branch = null;
+        if (store != null) {
+            branch = initializeBranchIfNotExist(store, "D Mart Cầu Giấy", "Số 1 Cầu Giấy, Hà Nội", "0987654321");
         }
 
         // 3. Store Manager: Quản lý cấp chuỗi cửa hàng, điều phối hoạt động kinh doanh tổng thể của chuỗi
-        initializeUserIfNotExist("store.manager@dmart.com", "StoreManager@123", "Store Manager", UserRole.ROLE_STORE_MANAGER);
+        initializeUserIfNotExist("store.manager@dmart.com", "StoreManager@123", "Store Manager", UserRole.ROLE_STORE_MANAGER, store, null);
 
         // 4. Branch Manager: Quản lý chi nhánh, phụ trách doanh thu, nhân sự và hàng hóa tại một chi nhánh cụ thể
-        initializeUserIfNotExist("branch.manager@dmart.com", "BranchManager@123", "Branch Manager", UserRole.ROLE_BRANCH_MANAGER);
+        initializeUserIfNotExist("branch.manager@dmart.com", "BranchManager@123", "Branch Manager", UserRole.ROLE_BRANCH_MANAGER, store, branch);
 
         // 5. Branch Admin: Quản trị viên chi nhánh, quản lý kỹ thuật, cấu hình thiết bị/quầy và phân quyền tại chi nhánh
-        initializeUserIfNotExist("branch.admin@dmart.com", "BranchAdmin@123", "Branch Admin", UserRole.ROLE_BRANCH_ADMIN);
+        initializeUserIfNotExist("branch.admin@dmart.com", "BranchAdmin@123", "Branch Admin", UserRole.ROLE_BRANCH_ADMIN, store, branch);
 
         // 6. Branch Cashier: Thu ngân chi nhánh, thực hiện các giao dịch bán hàng, thanh toán và in hóa đơn cho khách
-        initializeUserIfNotExist("cashier@dmart.com", "Cashier@123", "Branch Cashier", UserRole.ROLE_BRANCH_CASHIER);
+        initializeUserIfNotExist("cashier@dmart.com", "Cashier@123", "Branch Cashier", UserRole.ROLE_BRANCH_CASHIER, store, branch);
 
         // 7. Customer: Khách hàng thành viên, tích điểm, nhận ưu đãi và tra cứu lịch sử mua hàng cá nhân
-        initializeUserIfNotExist("customer@gmail.com", "Customer@123", "Customer Guest", UserRole.ROLE_CUSTOMER);
+        initializeUserIfNotExist("customer@gmail.com", "Customer@123", "Customer Guest", UserRole.ROLE_CUSTOMER, null, null);
     }
 
-    private User initializeUserIfNotExist(String email, String rawPassword, String fullName, UserRole role) {
+    private User initializeUserIfNotExist(String email, String rawPassword, String fullName, UserRole role, Store store, Branch branch) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = new User();
@@ -63,12 +79,27 @@ public class DataInitializationComponent implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode(rawPassword));
             user.setFullName(fullName);
             user.setRole(role);
+            user.setStore(store);
+            user.setBranch(branch);
             user = userRepository.save(user);
+        } else {
+            boolean updated = false;
+            if (store != null && user.getStore() == null) {
+                user.setStore(store);
+                updated = true;
+            }
+            if (branch != null && user.getBranch() == null) {
+                user.setBranch(branch);
+                updated = true;
+            }
+            if (updated) {
+                user = userRepository.save(user);
+            }
         }
         return user;
     }
 
-    private void initializeStoreIfNotExist(User storeAdmin, String brand, String description, String storeType) {
+    private Store initializeStoreIfNotExist(User storeAdmin, String brand, String description, String storeType) {
         Store store = storeRepository.findByStoreAdminId(storeAdmin.getId());
         if (store == null) {
             store = Store.builder()
@@ -78,8 +109,29 @@ public class DataInitializationComponent implements CommandLineRunner {
                     .storeType(storeType)
                     .status(StoreStatus.ACTIVE)
                     .build();
-            storeRepository.save(store);
+            store = storeRepository.save(store);
+        } else if (store.getStatus() != StoreStatus.ACTIVE) {
+            store.setStatus(StoreStatus.ACTIVE);
+            store = storeRepository.save(store);
         }
+        return store;
+    }
+
+    private Branch initializeBranchIfNotExist(Store store, String name, String address, String phone) {
+        List<Branch> branches = branchRepository.findByStoreId(store.getId());
+        if (branches.isEmpty()) {
+            Branch branch = Branch.builder()
+                    .name(name)
+                    .address(address)
+                    .phone(phone)
+                    .email("caugiay@dmart.com")
+                    .openTime(LocalTime.of(8, 0))
+                    .closeTime(LocalTime.of(22, 0))
+                    .store(store)
+                    .build();
+            return branchRepository.save(branch);
+        }
+        return branches.get(0);
     }
 
     private void initializeSubscriptionPlansIfNotExist() {

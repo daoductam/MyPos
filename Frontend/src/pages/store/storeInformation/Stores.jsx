@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "@/components/ui/use-toast";
-import { getStoreByAdmin, updateStore } from "@/Redux Toolkit/features/store/storeThunks";
+import { getStoreByAdmin, getStoreByEmployee, updateStore } from "@/Redux Toolkit/features/store/storeThunks";
 import {
   StoreHeader,
   StoreInfoCard,
@@ -15,17 +15,17 @@ import {
 export default function Stores() {
   const dispatch = useDispatch();
   const { store, loading, error } = useSelector((state) => state.store);
-  const { user } = useSelector((state) => state.user);
+  const { userProfile } = useSelector((state) => state.user);
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [storeData, setStoreData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    if (store?.id) {
+    if (userProfile) {
       fetchStoreData();
     }
-  }, [dispatch, user]);
+  }, [dispatch, userProfile]);
   
   useEffect(() => {
     if (store) {
@@ -36,7 +36,11 @@ export default function Stores() {
   const fetchStoreData = async () => {
     setRefreshing(true);
     try {
-      await dispatch(getStoreByAdmin()).unwrap();
+      if (userProfile?.role === "ROLE_STORE_ADMIN") {
+        await dispatch(getStoreByAdmin()).unwrap();
+      } else {
+        await dispatch(getStoreByEmployee()).unwrap();
+      }
     } catch (err) {
       toast({
         title: "Error",

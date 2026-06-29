@@ -27,13 +27,10 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final UserRepository userRepository;
-
-
     private final StoreRepository storeRepository;
-
     private final BranchRepository branchRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final com.tamdao.service.UserService userService;
 
     @Override
     @Transactional
@@ -141,11 +138,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<User> findStoreEmployees(Long storeId, UserRole role) throws Exception {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found with ID: " + storeId));
-        return userRepository.findByStoreAndRoleIn(store, List.of(
-                UserRole.ROLE_STORE_ADMIN,
-                UserRole.ROLE_BRANCH_MANAGER,
-                UserRole.ROLE_STORE_MANAGER
-        ));
+        User currentUser = userService.getCurrentUser();
+        List<User> allEmployees = userRepository.findByStoreId(storeId);
+        return allEmployees.stream()
+                .filter(u -> u.getRole() != UserRole.ROLE_ADMIN)
+                .filter(u -> u.getRole() != UserRole.ROLE_STORE_ADMIN)
+                .filter(u -> !u.getId().equals(currentUser.getId()))
+                .collect(Collectors.toList());
     }
 
     @Override

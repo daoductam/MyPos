@@ -1,6 +1,7 @@
 package com.tamdao.controller;
 
 import com.tamdao.domain.UserRole;
+import com.tamdao.mapper.UserMapper;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.UserDTO;
 import com.tamdao.service.EmployeeService;
@@ -29,20 +30,20 @@ public class EmployeeController {
 
     @PostMapping("/branch/{branchId}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_ADMIN', 'ROLE_BRANCH_MANAGER')")
-    public ResponseEntity<User> createBranchEmployee(@RequestBody User employee, @PathVariable Long branchId) throws Exception {
+    public ResponseEntity<UserDTO> createBranchEmployee(@RequestBody User employee, @PathVariable Long branchId) throws Exception {
         User createdEmployee = employeeService.createBranchEmployee(employee, branchId);
-        return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
+        return new ResponseEntity<>(UserMapper.toDTO(createdEmployee), HttpStatus.CREATED);
     }
 
     @PutMapping("/{employeeId}")
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER', 'ROLE_BRANCH_ADMIN', 'ROLE_BRANCH_MANAGER')")
-    public ResponseEntity<User> updateEmployee(@PathVariable Long employeeId, @RequestBody User employeeDetails) throws Exception {
+    public ResponseEntity<UserDTO> updateEmployee(@PathVariable Long employeeId, @RequestBody User employeeDetails) throws Exception {
         User updatedEmployee = employeeService.updateEmployee(employeeId, employeeDetails);
-        return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
+        return new ResponseEntity<>(UserMapper.toDTO(updatedEmployee), HttpStatus.OK);
     }
 
     @DeleteMapping("/{employeeId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long employeeId) throws Exception {
         employeeService.deleteEmployee(employeeId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -50,25 +51,25 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER', 'ROLE_BRANCH_ADMIN', 'ROLE_BRANCH_MANAGER')")
-    public ResponseEntity<User> findEmployeeById(@PathVariable Long employeeId) throws Exception {
+    public ResponseEntity<UserDTO> findEmployeeById(@PathVariable Long employeeId) throws Exception {
         User employee = employeeService.findEmployeeById(employeeId);
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+        return new ResponseEntity<>(UserMapper.toDTO(employee), HttpStatus.OK);
     }
 
     @GetMapping("/store/{storeId}")
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
-    public ResponseEntity<List<User>> findStoreEmployees(@PathVariable Long storeId) throws Exception {
+    public ResponseEntity<List<UserDTO>> findStoreEmployees(@PathVariable Long storeId) throws Exception {
         List<User> employees = employeeService.findStoreEmployees(storeId, null);
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+        return new ResponseEntity<>(UserMapper.toDTOList(employees), HttpStatus.OK);
     }
 
     @GetMapping("/branch/{branchId}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_ADMIN', 'ROLE_BRANCH_MANAGER')")
-    public ResponseEntity<List<User>> findBranchEmployees(
+    public ResponseEntity<List<UserDTO>> findBranchEmployees(
             @PathVariable Long branchId,
             @RequestParam(required = false) UserRole role
     ) throws Exception {
         List<User> employees = employeeService.findBranchEmployees(branchId,role);
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+        return new ResponseEntity<>(UserMapper.toDTOList(employees), HttpStatus.OK);
     }
 }

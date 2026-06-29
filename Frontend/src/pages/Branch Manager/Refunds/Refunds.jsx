@@ -23,7 +23,7 @@ const Refunds = () => {
   const { refundsByBranch: refunds, loading: refundsLoading } = useSelector((store) => store.refund);
 
   useEffect(() => {
-    if (branch) dispatch(getRefundsByBranch(branch?.id));
+    if (branch) dispatch(getRefundsByBranch({ branchId: branch?.id }));
   }, [branch, dispatch]);
 
   const loading = branchLoading || refundsLoading;

@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import StoreSidebar from "./StoreSidebar";
 import StoreTopbar from "./StoreTopbar";
 import { useDispatch, useSelector } from "react-redux";
-import { getStoreByAdmin } from "../../../Redux Toolkit/features/store/storeThunks";
+import { getStoreByAdmin, getStoreByEmployee } from "../../../Redux Toolkit/features/store/storeThunks";
 import { getStoreOverview, getMonthlySales } from "../../../Redux Toolkit/features/storeAnalytics/storeAnalyticsThunks";
 
 const StoreDashboard = () => {
@@ -13,7 +13,11 @@ const StoreDashboard = () => {
 
   useEffect(() => {
     if (userProfile?.id) {
-      dispatch(getStoreByAdmin());
+      if (userProfile.role === "ROLE_STORE_ADMIN") {
+        dispatch(getStoreByAdmin());
+      } else {
+        dispatch(getStoreByEmployee());
+      }
       dispatch(getStoreOverview(userProfile.id));
       dispatch(getMonthlySales(userProfile.id));
     }

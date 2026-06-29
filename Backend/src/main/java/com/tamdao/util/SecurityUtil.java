@@ -21,11 +21,17 @@ public class SecurityUtil {
     public void checkAuthority(Store store) throws AccessDeniedException,
             UserException {
         User user = userService.getCurrentUser();
-        if (user.getRole() != UserRole.ROLE_STORE_MANAGER) {
-            throw new AccessDeniedException("Only store manager can perform this action.");
+        if (user.getRole() != UserRole.ROLE_STORE_MANAGER && user.getRole() != UserRole.ROLE_STORE_ADMIN) {
+            throw new AccessDeniedException("Only store manager or store admin can perform this action.");
         }
-        if (user.getStore() == null || !user.getStore().getId().equals(store.getId())) {
-            throw new AccessDeniedException("You are not authorized to manage this store.");
+        if (user.getRole() == UserRole.ROLE_STORE_ADMIN) {
+            if (store.getStoreAdmin() == null || !store.getStoreAdmin().getId().equals(user.getId())) {
+                throw new AccessDeniedException("You are not authorized to manage this store.");
+            }
+        } else {
+            if (user.getStore() == null || !user.getStore().getId().equals(store.getId())) {
+                throw new AccessDeniedException("You are not authorized to manage this store.");
+            }
         }
     }
 

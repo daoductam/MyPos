@@ -23,6 +23,7 @@ const StoreSidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { store } = useSelector((state) => state.store);
+  const { userProfile } = useSelector((state) => state.user);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -42,8 +43,11 @@ const StoreSidebar = () => {
 
   const bottomLinks = [
     { name: t('dashboard.store.bottomNav.settings'), path: "settings", icon: <Settings className="w-5 h-5" /> },
-    { name: t('dashboard.store.bottomNav.upgradePlan'), path: "upgrade", icon: <ArrowUpCircle className="w-5 h-5" /> },
   ];
+
+  if (userProfile?.role === "ROLE_STORE_ADMIN") {
+    bottomLinks.push({ name: t('dashboard.store.bottomNav.upgradePlan'), path: "upgrade", icon: <ArrowUpCircle className="w-5 h-5" /> });
+  }
 
   return (
     <aside className="w-64 flex-shrink-0 p-4 z-20">

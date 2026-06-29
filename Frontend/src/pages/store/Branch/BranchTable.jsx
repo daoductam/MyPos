@@ -11,6 +11,7 @@ const BranchTable = ({ branches, loading, onEdit }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { store } = useSelector((state) => state.store);
+  const { userProfile } = useSelector((state) => state.user);
 
   const handleDeleteBranch = async (id) => {
     try {
@@ -42,6 +43,8 @@ const BranchTable = ({ branches, loading, onEdit }) => {
     }
   };
 
+  const isStoreAdmin = userProfile?.role === "ROLE_STORE_ADMIN";
+
   return (
     <Table>
       <TableHeader>
@@ -50,13 +53,15 @@ const BranchTable = ({ branches, loading, onEdit }) => {
           <TableHead className="text-gray-400">{t('storeModule.branches.table.address')}</TableHead>
           <TableHead className="text-gray-400">{t('storeModule.branches.table.manager')}</TableHead>
           <TableHead className="text-gray-400">{t('storeModule.branches.table.phone')}</TableHead>
-          <TableHead className="text-right text-gray-400">{t('storeModule.branches.table.actions')}</TableHead>
+          {isStoreAdmin && (
+            <TableHead className="text-right text-gray-400">{t('storeModule.branches.table.actions')}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
         {loading ? (
           <TableRow>
-            <TableCell colSpan={5} className="text-center py-8">
+            <TableCell colSpan={isStoreAdmin ? 5 : 4} className="text-center py-8">
               <div className="flex justify-center items-center h-64 text-gray-400">
                 <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mr-3" />
                 {t('storeModule.branches.table.loading')}
@@ -65,7 +70,7 @@ const BranchTable = ({ branches, loading, onEdit }) => {
           </TableRow>
         ) : branches.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={5} className="text-center py-8">
+            <TableCell colSpan={isStoreAdmin ? 5 : 4} className="text-center py-8">
               <div className="text-center py-16 text-gray-400">
                 <h3 className="text-xl font-semibold">{t('storeModule.branches.table.noBranches')}</h3>
                 <p className="mt-2">{t('storeModule.branches.table.noBranchesDesc')}</p>
@@ -96,22 +101,24 @@ const BranchTable = ({ branches, loading, onEdit }) => {
                   {branch.phone}
                 </div>
               </TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" size="sm" onClick={() => onEdit(branch)} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="bg-transparent border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300"
-                    onClick={() => handleDeleteBranch(branch.id)}
-                    disabled={loading}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell>
+              {isStoreAdmin && (
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button variant="outline" size="sm" onClick={() => onEdit(branch)} className="bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white">
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-transparent border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                      onClick={() => handleDeleteBranch(branch.id)}
+                      disabled={loading}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           ))
         )}

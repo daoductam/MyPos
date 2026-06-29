@@ -26,13 +26,11 @@ export default function Branches() {
   const dispatch = useDispatch();
   const { branches, loading, error } = useSelector((state) => state.branch);
   const { store } = useSelector((state) => state.store);
-  const { user } = useSelector((state) => state.user);
+  const { userProfile } = useSelector((state) => state.user);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [currentBranch, setCurrentBranch] = useState(null);
-
-
 
   // Fetch branches when component mounts
   useEffect(() => {
@@ -44,7 +42,7 @@ export default function Branches() {
         })
       );
     }
-  }, [dispatch, store, user]);
+  }, [dispatch, store, userProfile]);
 
   console.log("store ", store);
 
@@ -62,6 +60,8 @@ export default function Branches() {
     setIsEditDialogOpen(true);
   };
 
+  const isStoreAdmin = userProfile?.role === "ROLE_STORE_ADMIN";
+
   return (
     <div className="space-y-6 text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -70,21 +70,23 @@ export default function Branches() {
           <p className="text-gray-400 mt-1">{t('storeModule.branches.subtitle')}</p>
         </div>
 
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <Button onClick={() => setIsAddDialogOpen(true)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            <Plus className="mr-2 h-4 w-4" /> {t('storeModule.branches.addBranch')}
-          </Button>
-          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
-            <DialogHeader className="text-center">
-              <DialogTitle className="text-3xl font-bold">{t('storeModule.branches.addNewTitle')}</DialogTitle>
-              <p className="text-gray-300 mt-2">{t('storeModule.branches.addNewSubtitle')}</p>
-            </DialogHeader>
-            <BranchForm 
-              onSubmit={handleAddBranchSuccess} 
-              onCancel={() => setIsAddDialogOpen(false)}
-            />
-          </DialogContent>
-        </Dialog>
+        {isStoreAdmin && (
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+            <Button onClick={() => setIsAddDialogOpen(true)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <Plus className="mr-2 h-4 w-4" /> {t('storeModule.branches.addBranch')}
+            </Button>
+            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
+              <DialogHeader className="text-center">
+                <DialogTitle className="text-3xl font-bold">{t('storeModule.branches.addNewTitle')}</DialogTitle>
+                <p className="text-gray-300 mt-2">{t('storeModule.branches.addNewSubtitle')}</p>
+              </DialogHeader>
+              <BranchForm 
+                onSubmit={handleAddBranchSuccess} 
+                onCancel={() => setIsAddDialogOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
+        )}
 
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
