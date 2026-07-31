@@ -10,9 +10,13 @@ import com.tamdao.payload.response.ApiResponse;
 import com.tamdao.payload.response.AuthResponse;
 import com.tamdao.payload.response.TokenRefreshResponse;
 import com.tamdao.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,31 +31,42 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> signupHandler(
-            @RequestBody @Valid UserDTO req) {
+            @RequestBody @Valid UserDTO req,
+            HttpServletResponse httpServletResponse) {
         AuthResponse response = authService.signup(req);
+        setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> loginHandler(
-            @RequestBody LoginDto req) {
+            @RequestBody LoginDto req,
+            HttpServletResponse httpServletResponse) {
         AuthResponse response = authService.login(req.getEmail(), req.getPassword());
+        setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(
-            @RequestBody @Valid RefreshTokenRequest request) {
-        TokenRefreshResponse response = authService.refreshToken(request.getRefreshToken());
+            @CookieValue(name = "refreshToken", required = false) String cookieRefreshToken,
+            @RequestBody(required = false) RefreshTokenRequest request,
+            HttpServletResponse httpServletResponse) {
+        String tokenToUse = cookieRefreshToken != null ? cookieRefreshToken : (request != null ? request.getRefreshToken() : null);
+        TokenRefreshResponse response = authService.refreshToken(tokenToUse);
+        setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @RequestHeader(value = "Authorization", required = false) String authHeader,
-            @RequestBody(required = false) LogoutRequest request) {
-        String refreshToken = request != null ? request.getRefreshToken() : null;
+            @CookieValue(name = "refreshToken", required = false) String cookieRefreshToken,
+            @RequestBody(required = false) LogoutRequest request,
+            HttpServletResponse httpServletResponse) {
+        String refreshToken = cookieRefreshToken != null ? cookieRefreshToken : (request != null ? request.getRefreshToken() : null);
         authService.logout(authHeader, refreshToken);
+        clearRefreshTokenCookie(httpServletResponse);
         return ResponseEntity.ok(ApiResponse.success("Đăng xuất thành công", null));
     }
 
@@ -68,5 +83,27 @@ public class AuthController {
             @RequestBody ResetPasswordRequest request) {
         authService.resetPassword(request.getToken(), request.getPassword());
         return ResponseEntity.ok("Password reset successful");
+    }
+
+    private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        if (refreshToken == null) return;
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(false) // Set to true in production HTTPS
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60)
+                .sameSite("Lax")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
+
+    private void clearRefreshTokenCookie(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 }
