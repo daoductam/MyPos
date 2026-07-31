@@ -41,4 +41,25 @@ public class SecurityUtil {
     public void checkAuthority(Inventory inventory) {
         checkAuthority(inventory.getBranch());
     }
+
+    public void checkBranchAccess(Branch branch) {
+        if (branch == null) return;
+        User user = userService.getCurrentUser();
+        if (user.getRole() == UserRole.ROLE_ADMIN) return;
+        if (user.getRole() == UserRole.ROLE_STORE_ADMIN || user.getRole() == UserRole.ROLE_STORE_MANAGER) {
+            if (user.getStore() != null && branch.getStore() != null && user.getStore().getId().equals(branch.getStore().getId())) {
+                return;
+            }
+        }
+        if (user.getBranch() != null && user.getBranch().getId().equals(branch.getId())) {
+            return;
+        }
+        throw new BusinessException(ErrorCode.UNAUTHORIZED, "You are not authorized to access data of this branch.");
+    }
+
+    public void checkAuthority(Order order) {
+        if (order != null) {
+            checkBranchAccess(order.getBranch());
+        }
+    }
 }

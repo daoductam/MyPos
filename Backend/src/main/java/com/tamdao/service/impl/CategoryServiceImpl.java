@@ -69,6 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
         User user = userService.getCurrentUser();
         checkAuthority(user, category.getStore());
 
+        category.setDeletedBy(user.getId());
         categoryRepository.delete(category);
     }
 

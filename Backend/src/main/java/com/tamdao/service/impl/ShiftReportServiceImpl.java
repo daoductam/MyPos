@@ -174,10 +174,11 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
     @Override
     public void deleteShiftReport(Long id) {
-        if (!shiftReportRepository.existsById(id)) {
-            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Shift report not found");
-        }
-        shiftReportRepository.deleteById(id);
+        ShiftReport shiftReport = shiftReportRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Shift report not found"));
+        User currentUser = userService.getCurrentUser();
+        shiftReport.setDeletedBy(currentUser.getId());
+        shiftReportRepository.delete(shiftReport);
     }
 
     // ----------------- HELPER METHODS -----------------

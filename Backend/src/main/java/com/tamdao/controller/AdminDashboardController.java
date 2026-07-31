@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/super-admin")
+@RequestMapping("/api/v1/super-admin")
 @RequiredArgsConstructor
 public class AdminDashboardController {
 

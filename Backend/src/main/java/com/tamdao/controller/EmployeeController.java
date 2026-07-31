@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/api/v1/employees")
 public class EmployeeController {
 
     @Autowired
@@ -71,5 +71,18 @@ public class EmployeeController {
     ) throws Exception {
         List<User> employees = employeeService.findBranchEmployees(branchId,role);
         return new ResponseEntity<>(UserMapper.toDTOList(employees), HttpStatus.OK);
+    }
+
+    @GetMapping("/store/{storeId}/trash")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
+    public ResponseEntity<List<UserDTO>> getDeletedEmployees(@PathVariable Long storeId) {
+        return new ResponseEntity<>(employeeService.getDeletedEmployees(storeId), HttpStatus.OK);
+    }
+
+    @PatchMapping("/restore/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
+    public ResponseEntity<Void> restoreEmployee(@PathVariable Long id) {
+        employeeService.restoreEmployee(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

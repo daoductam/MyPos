@@ -27,7 +27,7 @@ export const getStoreOverview = createAsyncThunk(
       console.log('🔄 Fetching store overview...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/overview`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/overview`, { headers });
       
       console.log('✅ Store overview fetched successfully:', {
         storeAdminId,
@@ -58,7 +58,7 @@ export const getSalesTrends = createAsyncThunk(
       console.log('🔄 Fetching sales trends...', { storeAdminId, period });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/sales-trends?period=${period}`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/sales-trends?period=${period}`, { headers });
       
       console.log('✅ Sales trends fetched successfully:', {
         storeAdminId,
@@ -91,7 +91,7 @@ export const getMonthlySales = createAsyncThunk(
       console.log('🔄 Fetching monthly sales...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/sales/monthly`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/sales/monthly`, { headers });
       
       console.log('✅ Monthly sales fetched successfully:', {
         storeAdminId,
@@ -123,7 +123,7 @@ export const getDailySales = createAsyncThunk(
       console.log('🔄 Fetching daily sales...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/sales/daily`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/sales/daily`, { headers });
       
       console.log('✅ Daily sales fetched successfully:', {
         storeAdminId,
@@ -155,7 +155,7 @@ export const getSalesByCategory = createAsyncThunk(
       console.log('🔄 Fetching sales by category...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/sales/category`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/sales/category`, { headers });
       
       console.log('✅ Sales by category fetched successfully:', {
         storeAdminId,
@@ -187,7 +187,7 @@ export const getSalesByPaymentMethod = createAsyncThunk(
       console.log('🔄 Fetching sales by payment method...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/sales/payment-method`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/sales/payment-method`, { headers });
       
       console.log('✅ Sales by payment method fetched successfully:', {
         storeAdminId,
@@ -219,7 +219,7 @@ export const getSalesByBranch = createAsyncThunk(
       console.log('🔄 Fetching sales by branch...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/sales/branch`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/sales/branch`, { headers });
       
       console.log('✅ Sales by branch fetched successfully:', {
         storeAdminId,
@@ -251,7 +251,7 @@ export const getPaymentBreakdown = createAsyncThunk(
       console.log('🔄 Fetching payment breakdown...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/payments`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/payments`, { headers });
       
       console.log('✅ Payment breakdown fetched successfully:', {
         storeAdminId,
@@ -283,7 +283,7 @@ export const getBranchPerformance = createAsyncThunk(
       console.log('🔄 Fetching branch performance...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/branch-performance`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/branch-performance`, { headers });
       
       console.log('✅ Branch performance fetched successfully:', {
         storeAdminId,
@@ -314,7 +314,7 @@ export const getStoreAlerts = createAsyncThunk(
       console.log('🔄 Fetching store alerts...', { storeAdminId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/store/analytics/${storeAdminId}/alerts`, { headers });
+      const res = await api.get(`/api/v1/store/analytics/${storeAdminId}/alerts`, { headers });
       
       console.log('✅ Store alerts fetched successfully:', {
         storeAdminId,

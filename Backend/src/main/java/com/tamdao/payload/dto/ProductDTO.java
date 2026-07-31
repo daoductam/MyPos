@@ -3,13 +3,15 @@ package com.tamdao.payload.dto;
 
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class ProductDTO {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
+public class ProductDTO extends BaseDTO {
     private Long id;
     private String name;
     private String sku;
@@ -21,6 +23,26 @@ public class ProductDTO {
     private String category;
     private Long storeId;
     private String image;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    /**
+     * JPQL constructor used by ProductRepository.findLowStockProducts()
+     */
+    public ProductDTO(Long id, String name, String sku, String description,
+                      Double mrp, Double sellingPrice, String brand,
+                      Long categoryId, String category, Long storeId,
+                      String image, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.sku = sku;
+        this.description = description;
+        this.mrp = mrp;
+        this.sellingPrice = sellingPrice;
+        this.brand = brand;
+        this.categoryId = categoryId;
+        this.category = category;
+        this.storeId = storeId;
+        this.image = image;
+        this.setCreatedAt(createdAt);
+        this.setUpdatedAt(updatedAt);
+    }
 }

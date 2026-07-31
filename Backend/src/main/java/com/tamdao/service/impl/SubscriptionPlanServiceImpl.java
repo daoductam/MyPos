@@ -15,6 +15,7 @@ import java.util.List;
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
 
     private final SubscriptionPlanRepository subscriptionPlanRepository;
+    private final com.tamdao.service.UserService userService;
 
     @Override
     public SubscriptionPlan createPlan(SubscriptionPlan plan) {
@@ -65,9 +66,9 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
 
     @Override
     public void deletePlan(Long id) {
-        if (!subscriptionPlanRepository.existsById(id)) {
-            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Subscription plan not found with id: " + id);
-        }
-        subscriptionPlanRepository.deleteById(id);
+        SubscriptionPlan plan = subscriptionPlanRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Subscription plan not found with id: " + id));
+        plan.setDeletedBy(userService.getCurrentUser().getId());
+        subscriptionPlanRepository.delete(plan);
     }
 }

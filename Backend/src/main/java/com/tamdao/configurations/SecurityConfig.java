@@ -33,8 +33,9 @@ public class SecurityConfig {
 		
 		return http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(Authorize -> Authorize
-						.requestMatchers("/api/super-admin/**").hasAuthority("ROLE_ADMIN")
-						.requestMatchers("/api/**").authenticated()
+						.requestMatchers("/api/v1/auth/**").permitAll()
+						.requestMatchers("/api/v1/super-admin/**").hasAuthority("ROLE_ADMIN")
+						.requestMatchers("/api/v1/**").authenticated()
 						.anyRequest().permitAll())
 			.addFilterBefore(jwtValidator, BasicAuthenticationFilter.class)
 			.csrf(AbstractHttpConfigurer::disable)

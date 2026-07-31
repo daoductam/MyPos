@@ -4,7 +4,7 @@ import api from '@/utils/api';
 // 🔹 Create category
 export const createCategory = createAsyncThunk('category/create', async ({ dto, token }, { rejectWithValue }) => {
   try {
-    const res = await api.post('/api/categories', dto, {
+    const res = await api.post('/api/v1/categories', dto, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
@@ -16,7 +16,7 @@ export const createCategory = createAsyncThunk('category/create', async ({ dto, 
 // 🔹 Get categories by store ID
 export const getCategoriesByStore = createAsyncThunk('category/getByStore', async ({ storeId, token }, { rejectWithValue }) => {
   try {
-    const res = await api.get(`/api/categories/store/${storeId}`, {
+    const res = await api.get(`/api/v1/categories/store/${storeId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
@@ -28,7 +28,7 @@ export const getCategoriesByStore = createAsyncThunk('category/getByStore', asyn
 // 🔹 Update category
 export const updateCategory = createAsyncThunk('category/update', async ({ id, dto, token }, { rejectWithValue }) => {
   try {
-    const res = await api.put(`/api/categories/${id}`, dto, {
+    const res = await api.put(`/api/v1/categories/${id}`, dto, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
@@ -40,7 +40,7 @@ export const updateCategory = createAsyncThunk('category/update', async ({ id, d
 // 🔹 Delete category
 export const deleteCategory = createAsyncThunk('category/delete', async ({ id, token }, { rejectWithValue }) => {
   try {
-    await api.delete(`/api/categories/${id}`, {
+    await api.delete(`/api/v1/categories/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return id;

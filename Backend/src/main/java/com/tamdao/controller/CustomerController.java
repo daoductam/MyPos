@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -47,5 +47,16 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<List<Customer>> getAll() {
         return ResponseEntity.ok(customerService.getAllCustomers());
+    }
+
+    @GetMapping("/trash")
+    public ResponseEntity<List<Customer>> getDeletedCustomers() {
+        return ResponseEntity.ok(customerService.getDeletedCustomers());
+    }
+
+    @PatchMapping("/restore/{id}")
+    public ResponseEntity<Void> restoreCustomer(@PathVariable Long id) {
+        customerService.restoreCustomer(id);
+        return ResponseEntity.ok().build();
     }
 }

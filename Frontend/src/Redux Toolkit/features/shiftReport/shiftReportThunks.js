@@ -56,7 +56,7 @@ export const startShift = createAsyncThunk(
       if (!headers) return rejectWithValue('No JWT token found');
 
       const res = await api.post(
-        `/api/shift-reports/start?branchId=${encodeURIComponent(branchId)}`,
+        `/api/v1/shift-reports/start?branchId=${encodeURIComponent(branchId)}`,
         { cashierId }, // Send cashierId in the request body
         { headers }
       );
@@ -98,7 +98,7 @@ export const endShift = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      const res = await api.patch('/api/shift-reports/end', {}, { headers });
+      const res = await api.patch('/api/v1/shift-reports/end', {}, { headers });
       const data = res?.data ?? null;
 
       console.log('✅ Shift ended successfully:', {
@@ -134,7 +134,7 @@ export const getCurrentShiftProgress = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      const res = await api.get('/api/shift-reports/current', { headers });
+      const res = await api.get('/api/v1/shift-reports/current', { headers });
       console.log('✅ Current shift progress fetched:', res.data);
       return res.data;
     } catch (err) {
@@ -156,7 +156,7 @@ export const getShiftReportByDate = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      const res = await api.get(`/api/shift-reports/branch/${branchId}/date/${date}`, { headers });
+      const res = await api.get(`/api/v1/shift-reports/branch/${branchId}/date/${date}`, { headers });
       console.log('✅ Shift report fetched by date:', res.data);
       return res.data;
     } catch (err) {
@@ -178,7 +178,7 @@ export const getShiftsByCashier = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      const res = await api.get(`/api/shift-reports/cashier/${cashierId}`, { headers });
+      const res = await api.get(`/api/v1/shift-reports/cashier/${cashierId}`, { headers });
       console.log('✅ Shifts fetched by cashier:', res.data);
       return res.data;
     } catch (err) {
@@ -200,7 +200,7 @@ export const getShiftsByBranch = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      const res = await api.get(`/api/shift-reports/branch/${branchId}`, { headers });
+      const res = await api.get(`/api/v1/shift-reports/branch/${branchId}`, { headers });
       console.log('✅ Shifts fetched by branch:', res.data);
       return res.data;
     } catch (err) {
@@ -222,7 +222,7 @@ export const getAllShifts = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      const res = await api.get('/api/shift-reports', { headers });
+      const res = await api.get('/api/v1/shift-reports', { headers });
       console.log('✅ All shifts fetched:', res.data);
       return res.data;
     } catch (err) {
@@ -244,7 +244,7 @@ export const getShiftById = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      const res = await api.get(`/api/shift-reports/${shiftId}`, { headers });
+      const res = await api.get(`/api/v1/shift-reports/${shiftId}`, { headers });
       console.log('✅ Shift fetched by ID:', res.data);
       return res.data;
     } catch (err) {
@@ -266,7 +266,7 @@ export const deleteShift = createAsyncThunk(
       const headers = getAuthHeaders();
       if (!headers) return rejectWithValue('No JWT token found');
 
-      await api.delete(`/api/shift-reports/${shiftId}`, { headers });
+      await api.delete(`/api/v1/shift-reports/${shiftId}`, { headers });
       console.log('✅ Shift deleted successfully:', { shiftId });
       return shiftId; // Return the ID to identify which shift was deleted
     } catch (err) {

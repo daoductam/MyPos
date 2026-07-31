@@ -67,4 +67,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         )
     """)
     List<ProductDTO> findLowStockProducts(@Param("storeAdminId") Long storeAdminId);
+
+    // Soft delete: trash & restore (native queries bypass @SQLRestriction)
+    @Query(value = "SELECT * FROM products WHERE deleted = true AND store_id = :storeId", nativeQuery = true)
+    List<Product> findDeletedByStoreId(@Param("storeId") Long storeId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query(value = "UPDATE products SET deleted = false, deleted_at = NULL, deleted_by = NULL WHERE id = :id AND deleted = true", nativeQuery = true)
+    int restoreById(@Param("id") Long id);
 }

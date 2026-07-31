@@ -41,12 +41,12 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // Handle 401 Unauthorized with Automatic Token Refresh
-    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/auth/')) {
+    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/auth')) {
       originalRequest._retry = true;
       try {
         // Call refresh API (HttpOnly Cookie automatically sent)
         const refreshResponse = await axios.post(
-          'http://localhost:5000/auth/refresh',
+          'http://localhost:5000/api/v1/auth/refresh',
           {},
           { withCredentials: true }
         );

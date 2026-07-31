@@ -4,11 +4,18 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class BranchDTO {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
+public class BranchDTO extends BaseDTO {
     private Long id;
     private String name;
     private String address;
@@ -19,8 +26,6 @@ public class BranchDTO {
     private LocalTime closeTime;
     private Long storeId;
     private StoreDTO store;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private String manager;
 
     public BranchDTO(Long id, String name, String address) {

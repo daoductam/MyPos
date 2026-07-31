@@ -71,4 +71,12 @@ int countByStoreAdminIdAndRoles(@Param("storeAdminId") Long storeAdminId,
 //	List<User> findInactiveCashiers(@Param("storeAdminId") Long storeAdminId,
 //									@Param("cutoffDate") LocalDateTime cutoffDate);
 
+    // Soft delete: trash & restore (native queries bypass @SQLRestriction)
+    @Query(value = "SELECT * FROM users WHERE deleted = true AND store_id = :storeId", nativeQuery = true)
+    List<User> findDeletedByStoreId(@Param("storeId") Long storeId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query(value = "UPDATE users SET deleted = false, deleted_at = NULL, deleted_by = NULL WHERE id = :id AND deleted = true", nativeQuery = true)
+    int restoreById(@Param("id") Long id);
+
 }

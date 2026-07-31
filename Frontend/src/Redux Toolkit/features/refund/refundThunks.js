@@ -27,7 +27,7 @@ export const createRefund = createAsyncThunk(
       console.log('🔄 Creating refund...', { refundDTO });
       
       const headers = getAuthHeaders();
-      const res = await api.post('/api/refunds', refundDTO, { headers });
+      const res = await api.post('/api/v1/refunds', refundDTO, { headers });
       
       console.log('✅ Refund created successfully:', {
         refundId: res.data.id,
@@ -59,7 +59,7 @@ export const getAllRefunds = createAsyncThunk(
       console.log('🔄 Fetching all refunds...');
       
       const headers = getAuthHeaders();
-      const res = await api.get('/api/refunds', { headers });
+      const res = await api.get('/api/v1/refunds', { headers });
       
       console.log('✅ All refunds fetched successfully:', {
         refundCount: res.data.length,
@@ -94,7 +94,7 @@ export const getRefundsByCashier = createAsyncThunk(
       console.log('🔄 Fetching refunds by cashier...', { cashierId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/refunds/cashier/${cashierId}`, { headers });
+      const res = await api.get(`/api/v1/refunds/cashier/${cashierId}`, { headers });
       
       console.log('✅ Refunds by cashier fetched successfully:', {
         cashierId,
@@ -131,7 +131,7 @@ export const getRefundsByBranch = createAsyncThunk(
       console.log('🔄 Fetching refunds by branch...', { branchId, status });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/refunds/branch/${branchId}`, { 
+      const res = await api.get(`/api/v1/refunds/branch/${branchId}`, { 
         headers,
         params: { status } 
       });
@@ -171,7 +171,7 @@ export const getRefundsByShift = createAsyncThunk(
       console.log('🔄 Fetching refunds by shift...', { shiftReportId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/refunds/shift/${shiftReportId}`, { headers });
+      const res = await api.get(`/api/v1/refunds/shift/${shiftReportId}`, { headers });
       
       console.log('✅ Refunds by shift fetched successfully:', {
         shiftReportId,
@@ -210,7 +210,7 @@ export const getRefundsByCashierAndDateRange = createAsyncThunk(
       const headers = getAuthHeaders();
       const formattedFrom = encodeURIComponent(from);
       const formattedTo = encodeURIComponent(to);
-      const res = await api.get(`/api/refunds/cashier/${cashierId}/range?from=${formattedFrom}&to=${formattedTo}`, { headers });
+      const res = await api.get(`/api/v1/refunds/cashier/${cashierId}/range?from=${formattedFrom}&to=${formattedTo}`, { headers });
       
       console.log('✅ Refunds by cashier and date range fetched successfully:', {
         cashierId,
@@ -251,7 +251,7 @@ export const getRefundById = createAsyncThunk(
       console.log('🔄 Fetching refund by ID...', { refundId: id });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/refunds/${id}`, { headers });
+      const res = await api.get(`/api/v1/refunds/${id}`, { headers });
       
       console.log('✅ Refund by ID fetched successfully:', {
         refundId: res.data.id,
@@ -284,7 +284,7 @@ export const deleteRefund = createAsyncThunk(
       console.log('🔄 Deleting refund...', { refundId: id });
       
       const headers = getAuthHeaders();
-      await api.delete(`/api/refunds/${id}`, { headers });
+      await api.delete(`/api/v1/refunds/${id}`, { headers });
       
       console.log('✅ Refund deleted successfully:', { refundId: id });
       

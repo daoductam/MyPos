@@ -77,22 +77,49 @@ public class BranchServiceImpl implements BranchService {
         Branch existing = branchRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found"));
 
+        if (user.getRole() == UserRole.ROLE_STORE_ADMIN) {
+            if (existing.getStore() == null || existing.getStore().getStoreAdmin() == null ||
+                    !existing.getStore().getStoreAdmin().getId().equals(user.getId())) {
+                throw new BusinessException(ErrorCode.UNAUTHORIZED, "You are not authorized to update this branch.");
+            }
+        } else if (user.getRole() != UserRole.ROLE_ADMIN) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "You are not authorized to update branch.");
+        }
+
         existing.setName(branchDto.getName());
         existing.setAddress(branchDto.getAddress());
-        existing.setEmail(branchDto.getEmail());
         existing.setPhone(branchDto.getPhone());
+        existing.setEmail(branchDto.getEmail());
         existing.setCloseTime(branchDto.getCloseTime());
         existing.setOpenTime(branchDto.getOpenTime());
         existing.setWorkingDays(branchDto.getWorkingDays());
+        existing.setUpdatedBy(user.getId());
 
         return BranchMapper.toDto(branchRepository.save(existing));
     }
 
     @Override
     public void deleteBranch(Long id) {
-        if (!branchRepository.existsById(id)) {
-            throw new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found");
+        Branch branch = branchRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found"));
+        User currentUser = userService.getCurrentUser();
+        branch.setDeletedBy(currentUser.getId());
+        branchRepository.delete(branch);
+    }
+
+    @Override
+    public List<BranchDTO> getDeletedBranches(Long storeId) {
+        return branchRepository.findDeletedByStoreId(storeId).stream()
+                .map(BranchMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void restoreBranch(Long id) {
+        int updated = branchRepository.restoreById(id);
+        if (updated == 0) {
+            throw new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found in trash");
         }
-        branchRepository.deleteById(id);
     }
 }

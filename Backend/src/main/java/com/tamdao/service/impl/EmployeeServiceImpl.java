@@ -111,6 +111,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteEmployee(Long employeeId) {
         User employee = findEmployeeById(employeeId);
+        User currentUser = userService.getCurrentUser();
+        employee.setDeletedBy(currentUser.getId());
         userRepository.delete(employee);
     }
 
@@ -143,5 +145,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         return userRepository.findByBranchId(branch.getId()).stream()
                 .filter(user -> role == null || user.getRole() == role)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDTO> getDeletedEmployees(Long storeId) {
+        return userRepository.findDeletedByStoreId(storeId).stream()
+                .map(UserMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void restoreEmployee(Long id) {
+        int updated = userRepository.restoreById(id);
+        if (updated == 0) {
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Employee not found in trash");
+        }
     }
 }

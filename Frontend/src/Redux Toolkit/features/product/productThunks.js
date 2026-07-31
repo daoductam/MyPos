@@ -27,7 +27,7 @@ export const createProduct = createAsyncThunk(
       console.log('🔄 Creating product...', { dto });
       
       const headers = getAuthHeaders();
-      const res = await api.post("/api/products", dto, { headers });
+      const res = await api.post("/api/v1/products", dto, { headers });
       
       console.log('✅ Product created successfully:', res.data);
       
@@ -55,7 +55,7 @@ export const getProductById = createAsyncThunk(
       console.log('🔄 Fetching product by ID...', { productId: id });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/products/${id}`, { headers });
+      const res = await api.get(`/api/v1/products/${id}`, { headers });
       
       console.log('✅ Product fetched successfully:', {
         productId: res.data.id,
@@ -88,7 +88,7 @@ export const updateProduct = createAsyncThunk(
       console.log('🔄 Updating product...', { productId: id, dto });
       
       const headers = getAuthHeaders();
-      const res = await api.patch(`/api/products/${id}`, dto, { headers });
+      const res = await api.patch(`/api/v1/products/${id}`, dto, { headers });
       
       console.log('✅ Product updated successfully:', {
         productId: res.data.id,
@@ -122,7 +122,7 @@ export const deleteProduct = createAsyncThunk(
       console.log('🔄 Deleting product...', { productId: id });
       
       const headers = getAuthHeaders();
-      await api.delete(`/api/products/${id}`, { headers });
+      await api.delete(`/api/v1/products/${id}`, { headers });
       
       console.log('✅ Product deleted successfully:', { productId: id });
       
@@ -150,7 +150,7 @@ export const getProductsByStore = createAsyncThunk(
       console.log('🔄 Fetching products by store...', { storeId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/products/store/${storeId}`, { headers });
+      const res = await api.get(`/api/v1/products/store/${storeId}`, { headers });
       
       console.log('✅ Products fetched successfully:', {
         storeId,
@@ -187,7 +187,7 @@ export const searchProducts = createAsyncThunk(
       console.log('🔄 Searching products...', { query, storeId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/products/store/${storeId}/search?q=${query}`, { headers });
+      const res = await api.get(`/api/v1/products/store/${storeId}/search?q=${query}`, { headers });
       
       console.log('✅ Product search completed:', {
         query,

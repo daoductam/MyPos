@@ -27,7 +27,7 @@ export const createCustomer = createAsyncThunk(
       console.log('🔄 Creating customer...', { customer });
       
       const headers = getAuthHeaders();
-      const res = await api.post('/api/customers', customer, { headers });
+      const res = await api.post('/api/v1/customers', customer, { headers });
       
       console.log('✅ Customer created successfully:', {
         customerId: res.data.id,
@@ -58,7 +58,7 @@ export const updateCustomer = createAsyncThunk(
       console.log('🔄 Updating customer...', { customerId: id, customer });
       
       const headers = getAuthHeaders();
-      const res = await api.put(`/api/customers/${id}`, customer, { headers });
+      const res = await api.put(`/api/v1/customers/${id}`, customer, { headers });
       
       console.log('✅ Customer updated successfully:', {
         customerId: res.data.id,
@@ -90,7 +90,7 @@ export const deleteCustomer = createAsyncThunk(
       console.log('🔄 Deleting customer...', { customerId: id });
       
       const headers = getAuthHeaders();
-      await api.delete(`/api/customers/${id}`, { headers });
+      await api.delete(`/api/v1/customers/${id}`, { headers });
       
       console.log('✅ Customer deleted successfully:', { customerId: id });
       
@@ -116,7 +116,7 @@ export const getCustomerById = createAsyncThunk(
       console.log('🔄 Fetching customer by ID...', { customerId: id });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/customers/${id}`, { headers });
+      const res = await api.get(`/api/v1/customers/${id}`, { headers });
       
       console.log('✅ Customer fetched successfully:', res.data);
       
@@ -142,7 +142,7 @@ export const getAllCustomers = createAsyncThunk(
       console.log('🔄 Fetching all customers...');
       
       const headers = getAuthHeaders();
-      const res = await api.get('/api/customers', { headers });
+      const res = await api.get('/api/v1/customers', { headers });
       
       console.log('✅ All customers fetched successfully:', {
         customerCount: res.data.length,

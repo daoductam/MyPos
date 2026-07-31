@@ -20,7 +20,8 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", "Sản phẩm không tồn tại", HttpStatus.NOT_FOUND),
     OUT_OF_STOCK("OUT_OF_STOCK", "Sản phẩm trong kho không đủ số lượng", HttpStatus.BAD_REQUEST),
 
-    UNCATEGORIZED_EXCEPTION("INTERNAL_SERVER_ERROR", "Lỗi hệ thống chưa được phân loại", HttpStatus.INTERNAL_SERVER_ERROR);
+    UNCATEGORIZED_EXCEPTION("INTERNAL_SERVER_ERROR", "Lỗi hệ thống chưa được phân loại", HttpStatus.INTERNAL_SERVER_ERROR),
+    ALREADY_DELETED("ALREADY_DELETED", "Tài nguyên đã bị xóa", HttpStatus.GONE);
 
     private final String code;
     private final String message;

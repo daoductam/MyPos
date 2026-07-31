@@ -11,4 +11,6 @@ public interface CustomerService {
     Customer getCustomerById(Long id);
     List<Customer> getAllCustomers();
     List<Customer> searchCustomer(String keyword);
+    List<Customer> getDeletedCustomers();
+    void restoreCustomer(Long id);
 }

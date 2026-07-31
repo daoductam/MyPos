@@ -15,9 +15,13 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final com.tamdao.service.UserService userService;
 
     @Override
     public Customer createCustomer(Customer customer) {
+        Long currentUserId = userService.getCurrentUser().getId();
+        customer.setCreatedBy(currentUserId);
+        customer.setUpdatedBy(currentUserId);
         return customerRepository.save(customer);
     }
 
@@ -32,6 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerData.getLoyaltyPoints() != null) {
             customer.setLoyaltyPoints(customerData.getLoyaltyPoints());
         }
+        customer.setUpdatedBy(userService.getCurrentUser().getId());
 
         return customerRepository.save(customer);
     }
@@ -40,6 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteCustomer(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Customer not found with id " + id));
+        customer.setDeletedBy(userService.getCurrentUser().getId());
         customerRepository.delete(customer);
     }
 
@@ -57,5 +63,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> searchCustomer(String keyword) {
         return customerRepository.findByFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(keyword, keyword);
+    }
+
+    @Override
+    public List<Customer> getDeletedCustomers() {
+        return customerRepository.findDeleted();
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void restoreCustomer(Long id) {
+        int updated = customerRepository.restoreById(id);
+        if (updated == 0) {
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Customer not found in trash");
+        }
     }
 }

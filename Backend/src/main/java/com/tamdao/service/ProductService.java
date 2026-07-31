@@ -12,4 +12,6 @@ public interface ProductService {
     void deleteProduct(Long id, User user);
     List<ProductDTO> getProductsByStoreId(Long storeId);
     List<ProductDTO> searchByKeyword(Long storeId, String query);
+    List<ProductDTO> getDeletedProducts(Long storeId);
+    void restoreProduct(Long id);
 }

@@ -28,7 +28,7 @@ export const subscribeToPlan = createAsyncThunk(
       const params = { storeId, planId, gateway };
       if (transactionId) params.transactionId = transactionId;
       const search = new URLSearchParams(params).toString();
-      const res = await api.post(`/api/subscriptions/subscribe?${search}`, {}, { headers });
+      const res = await api.post(`/api/v1/subscriptions/subscribe?${search}`, {}, { headers });
       console.log('✅ Subscribed to plan:', res.data);
       return res.data;
     } catch (err) {
@@ -47,7 +47,7 @@ export const upgradeSubscription = createAsyncThunk(
       const params = { storeId, planId, gateway };
       if (transactionId) params.transactionId = transactionId;
       const search = new URLSearchParams(params).toString();
-      const res = await api.post(`/api/subscriptions/upgrade?${search}`, {}, { headers });
+      const res = await api.post(`/api/v1/subscriptions/upgrade?${search}`, {}, { headers });
       console.log('✅ Upgraded subscription:', res.data);
       return res.data;
     } catch (err) {
@@ -63,7 +63,7 @@ export const activateSubscription = createAsyncThunk(
   async (subscriptionId, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.put(`/api/subscriptions/${subscriptionId}/activate`, {}, { headers });
+      const res = await api.put(`/api/v1/subscriptions/${subscriptionId}/activate`, {}, { headers });
       console.log('✅ Activated subscription:', res.data);
       return res.data;
     } catch (err) {
@@ -79,7 +79,7 @@ export const cancelSubscription = createAsyncThunk(
   async (subscriptionId, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.put(`/api/subscriptions/${subscriptionId}/cancel`, {}, { headers });
+      const res = await api.put(`/api/v1/subscriptions/${subscriptionId}/cancel`, {}, { headers });
       console.log('✅ Cancelled subscription:', res.data);
       return res.data;
     } catch (err) {
@@ -95,7 +95,7 @@ export const updatePaymentStatus = createAsyncThunk(
   async ({ subscriptionId, status }, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.put(`/api/subscriptions/${subscriptionId}/payment-status?status=${status}`, {}, { headers });
+      const res = await api.put(`/api/v1/subscriptions/${subscriptionId}/payment-status?status=${status}`, {}, { headers });
       console.log('✅ Updated payment status:', res.data);
       return res.data;
     } catch (err) {
@@ -111,7 +111,7 @@ export const getStoreSubscriptions = createAsyncThunk(
   async ({ storeId, status }, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      let url = `/api/subscriptions/store/${storeId}`;
+      let url = `/api/v1/subscriptions/store/${storeId}`;
       if (status) url += `?status=${status}`;
       const res = await api.get(url, { headers });
       console.log('✅ fetch  Store subscriptions:', res.data);
@@ -129,7 +129,7 @@ export const getAllSubscriptions = createAsyncThunk(
   async (status, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      let url = '/api/subscriptions/admin';
+      let url = '/api/v1/subscriptions/admin';
       if (status) url += `?status=${status}`;
       const res = await api.get(url, { headers });
       console.log('✅ All subscriptions:', res.data);
@@ -147,7 +147,7 @@ export const getExpiringSubscriptions = createAsyncThunk(
   async (days = 7, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/subscriptions/admin/expiring?days=${days}`, { headers });
+      const res = await api.get(`/api/v1/subscriptions/admin/expiring?days=${days}`, { headers });
       console.log('✅ Expiring subscriptions:', res.data);
       return res.data;
     } catch (err) {
@@ -163,7 +163,7 @@ export const countSubscriptionsByStatus = createAsyncThunk(
   async (status, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/subscriptions/admin/count?status=${status}`, { headers });
+      const res = await api.get(`/api/v1/subscriptions/admin/count?status=${status}`, { headers });
       console.log('✅ Count by status:', res.data);
       return res.data;
     } catch (err) {

@@ -3,14 +3,15 @@ package com.tamdao.payload.dto;
 import com.tamdao.domain.StoreStatus;
 import com.tamdao.modal.StoreContact;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-
-public class StoreDTO {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
+public class StoreDTO extends BaseDTO {
     private Long id;
     private String brand;
     private Long storeAdminId;
@@ -19,7 +20,4 @@ public class StoreDTO {
     private StoreStatus status;
     private String description;
     private StoreContact contact;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
 }

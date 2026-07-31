@@ -5,16 +5,19 @@ import com.tamdao.domain.StoreStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "stores")
+@SQLDelete(sql = "UPDATE stores SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Store {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,10 +29,6 @@ public class Store {
 
     @OneToOne
     private User storeAdmin;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     private String description;
 
@@ -43,14 +42,8 @@ public class Store {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = updatedAt = LocalDateTime.now();
         if (status == null) {
             status = StoreStatus.PENDING;
         }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
     }
 }

@@ -25,7 +25,7 @@ export const getDailySalesChart = createAsyncThunk(
   async ({ branchId, days = 7 }, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/branch-analytics/daily-sales?branchId=${branchId}&days=${days}`, { headers });
+      const res = await api.get(`/api/v1/branch-analytics/daily-sales?branchId=${branchId}&days=${days}`, { headers });
       console.log('✅ Daily sales chart response:', res.data);
       return res.data;
     } catch (err) {
@@ -41,7 +41,7 @@ export const getTopProductsByQuantity = createAsyncThunk(
   async (branchId, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/branch-analytics/top-products?branchId=${branchId}`, { headers });
+      const res = await api.get(`/api/v1/branch-analytics/top-products?branchId=${branchId}`, { headers });
       console.log('✅ Top products by quantity response:', res.data);
       return res.data;
     } catch (err) {
@@ -57,7 +57,7 @@ export const getTopCashiersByRevenue = createAsyncThunk(
   async (branchId, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/branch-analytics/top-cashiers?branchId=${branchId}`, { headers });
+      const res = await api.get(`/api/v1/branch-analytics/top-cashiers?branchId=${branchId}`, { headers });
       console.log('✅ Top cashiers by revenue response:', res.data);
       return res.data;
     } catch (err) {
@@ -73,7 +73,7 @@ export const getCategoryWiseSalesBreakdown = createAsyncThunk(
   async ({ branchId, date }, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/branch-analytics/category-sales?branchId=${branchId}&date=${date}`, { headers });
+      const res = await api.get(`/api/v1/branch-analytics/category-sales?branchId=${branchId}&date=${date}`, { headers });
       console.log('✅ Category-wise sales breakdown response:', res.data);
       return res.data;
     } catch (err) {
@@ -89,7 +89,7 @@ export const getTodayOverview = createAsyncThunk(
   async (branchId, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/branch-analytics/today-overview?branchId=${branchId}`, { headers });
+      const res = await api.get(`/api/v1/branch-analytics/today-overview?branchId=${branchId}`, { headers });
       console.log('✅ Today overview response:', res.data);
       return res.data;
     } catch (err) {
@@ -105,7 +105,7 @@ export const getPaymentBreakdown = createAsyncThunk(
   async ({ branchId, date }, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/branch-analytics/payment-breakdown?branchId=${branchId}&date=${date}`, { headers });
+      const res = await api.get(`/api/v1/branch-analytics/payment-breakdown?branchId=${branchId}&date=${date}`, { headers });
       console.log('✅ Payment breakdown response:', res.data);
       return res.data;
     } catch (err) {

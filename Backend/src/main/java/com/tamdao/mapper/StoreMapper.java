@@ -22,9 +22,14 @@ public class StoreMapper {
                     .storeType(store.getStoreType())
                     .description(store.getDescription())
                     .contact(store.getContact())
-                    .createdAt(store.getCreatedAt())
-                    .updatedAt(store.getUpdatedAt())
                     .status(store.getStatus())
+                    .deleted(store.getDeleted())
+                    .deletedAt(store.getDeletedAt())
+                    .deletedBy(store.getDeletedBy())
+                    .createdAt(store.getCreatedAt())
+                    .createdBy(store.getCreatedBy())
+                    .updatedAt(store.getUpdatedAt())
+                    .updatedBy(store.getUpdatedBy())
                     .build();
         }
 
@@ -33,8 +38,6 @@ public class StoreMapper {
                     .id(dto.getId())
                     .brand(dto.getBrand())
                     .storeAdmin(storeAdmin)
-                    .createdAt(dto.getCreatedAt())
-                    .updatedAt(dto.getUpdatedAt())
                     .storeType(dto.getStoreType())
                     .description(dto.getDescription())
                     .build();

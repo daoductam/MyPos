@@ -24,7 +24,7 @@ export const createStoreEmployee = createAsyncThunk(
   "employee/createStoreEmployee",
   async ({ employee, storeId, token }, { rejectWithValue }) => {
     try {
-      const res = await api.post(`/api/employees/store/${storeId}`, employee, {
+      const res = await api.post(`/api/v1/employees/store/${storeId}`, employee, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("createStoreEmployee fulfilled:", res.data);
@@ -46,7 +46,7 @@ export const createBranchEmployee = createAsyncThunk(
   "employee/createBranchEmployee",
   async ({ employee, branchId, token }, { rejectWithValue }) => {
     try {
-      const res = await api.post(`/api/employees/branch/${branchId}`, employee, {
+      const res = await api.post(`/api/v1/employees/branch/${branchId}`, employee, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("createBranchEmployee fulfilled:", res.data);
@@ -68,7 +68,7 @@ export const updateEmployee = createAsyncThunk(
   "employee/updateEmployee",
   async ({ employeeId, employeeDetails, token }, { rejectWithValue }) => {
     try {
-      const res = await api.put(`/api/employees/${employeeId}`, employeeDetails, {
+      const res = await api.put(`/api/v1/employees/${employeeId}`, employeeDetails, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("updateEmployee fulfilled:", res.data);
@@ -90,7 +90,7 @@ export const deleteEmployee = createAsyncThunk(
   "employee/deleteEmployee",
   async ({ employeeId, token }, { rejectWithValue }) => {
     try {
-      await api.delete(`/api/employees/${employeeId}`, {
+      await api.delete(`/api/v1/employees/${employeeId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("deleteEmployee fulfilled:", employeeId);
@@ -112,7 +112,7 @@ export const findEmployeeById = createAsyncThunk(
   "employee/findEmployeeById",
   async ({ employeeId, token }, { rejectWithValue }) => {
     try {
-      const res = await api.get(`/api/employees/${employeeId}`, {
+      const res = await api.get(`/api/v1/employees/${employeeId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("findEmployeeById fulfilled:", res.data);
@@ -134,7 +134,7 @@ export const findStoreEmployees = createAsyncThunk(
   "employee/findStoreEmployees",
   async ({ storeId, token }, { rejectWithValue }) => {
     try {
-      const res = await api.get(`/api/employees/store/${storeId}`, {
+      const res = await api.get(`/api/v1/employees/store/${storeId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("findStoreEmployees fulfilled:", res.data);
@@ -161,7 +161,7 @@ export const findBranchEmployees = createAsyncThunk(
 
     try {
       const headers=getAuthHeaders();
-      const res = await api.get(`/api/employees/branch/${branchId}${query}`, {headers},
+      const res = await api.get(`/api/v1/employees/branch/${branchId}${query}`, {headers},
       );
       console.log("findBranchEmployees fulfilled:", res.data);
       return res.data;

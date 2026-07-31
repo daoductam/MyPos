@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -27,7 +28,7 @@ public class UserController {
 	private final CustomUserImplementation customUserImplementation;
 	private final UserService userService;
 
-	@GetMapping("/api/users/profile")
+	@GetMapping("/profile")
 	public ResponseEntity<UserDTO> getUserProfileFromJwtHandler(
 			@RequestHeader("Authorization") String jwt) {
 		User user = userService.getUserFromJwtToken(jwt);
@@ -35,7 +36,7 @@ public class UserController {
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
 	}
 
-	@GetMapping("/api/users/customer")
+	@GetMapping("/customer")
 	public ResponseEntity<Set<UserDTO>> getCustomerList(
 			@RequestHeader("Authorization") String jwt) {
 		Set<User> users = userService.getUserByRole(UserRole.ROLE_CUSTOMER);
@@ -43,7 +44,7 @@ public class UserController {
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
 	}
 
-	@GetMapping("/api/users/cashier")
+	@GetMapping("/cashier")
 	public ResponseEntity<Set<UserDTO>> getCashierList(
 			@RequestHeader("Authorization") String jwt) {
 		Set<User> users = userService.getUserByRole(UserRole.ROLE_BRANCH_CASHIER);
@@ -51,14 +52,14 @@ public class UserController {
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
 	}
 
-	@GetMapping("/users/list")
+	@GetMapping("/list")
 	public ResponseEntity<List<User>> getUsersListHandler(
 			@RequestHeader("Authorization") String jwt) {
 		List<User> users = userService.getUsers();
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
-	@GetMapping("/users/{userId}")
+	@GetMapping("/{userId}")
 	public ResponseEntity<UserDTO> getUserByIdHandler(
 			@PathVariable Long userId
 	) {

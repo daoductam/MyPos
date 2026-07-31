@@ -7,16 +7,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql = "UPDATE customer SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +32,4 @@ public class Customer {
     private String phone;
 
     private Integer loyaltyPoints = 0;
-
-
-    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
 }

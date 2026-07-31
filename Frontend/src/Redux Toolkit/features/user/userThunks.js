@@ -4,7 +4,7 @@ import api from '@/utils/api';
 // 🔹 Get user profile from JWT
 export const getUserProfile = createAsyncThunk('user/getProfile', async (token, { rejectWithValue }) => {
   try {
-    const res = await api.get('/api/users/profile', {
+    const res = await api.get('/api/v1/users/profile', {
       headers: { Authorization: `Bearer ${token}` },
     });
     
@@ -19,7 +19,7 @@ export const getUserProfile = createAsyncThunk('user/getProfile', async (token, 
 // 🔹 Get all customers
 export const getCustomers = createAsyncThunk('user/getCustomers', async (token, { rejectWithValue }) => {
   try {
-    const res = await api.get('/api/users/customer', {
+    const res = await api.get('/api/v1/users/customer', {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log('Get customers success:', res.data);
@@ -33,7 +33,7 @@ export const getCustomers = createAsyncThunk('user/getCustomers', async (token, 
 // 🔹 Get all cashiers
 export const getCashiers = createAsyncThunk('user/getCashiers', async (token, { rejectWithValue }) => {
   try {
-    const res = await api.get('/api/users/cashier', {
+    const res = await api.get('/api/v1/users/cashier', {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log('Get cashiers success:', res.data);
@@ -47,7 +47,7 @@ export const getCashiers = createAsyncThunk('user/getCashiers', async (token, { 
 // 🔹 Get all users
 export const getAllUsers = createAsyncThunk('user/getAll', async (_, { rejectWithValue }) => {
   try {
-    const res = await api.get('/users/list');
+    const res = await api.get('/api/v1/users/list');
     console.log('Get all users success:', res.data);
     return res.data;
   } catch (err) {
@@ -59,7 +59,7 @@ export const getAllUsers = createAsyncThunk('user/getAll', async (_, { rejectWit
 // 🔹 Get user by ID
 export const getUserById = createAsyncThunk('user/getById', async (userId, { rejectWithValue }) => {
   try {
-    const res = await api.get(`/users/${userId}`);
+    const res = await api.get(`/api/v1/users/${userId}`);
     console.log('Get user by ID success:', res.data);
     return res.data;
   } catch (err) {

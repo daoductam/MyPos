@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/shift-reports")
+@RequestMapping("/api/v1/shift-reports")
 @RequiredArgsConstructor
 public class ShiftReportController {
 

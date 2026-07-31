@@ -27,7 +27,7 @@ export const createStore = createAsyncThunk(
       console.log('🔄 Creating store...', { storeData });
       
       const headers = getAuthHeaders();
-      const res = await api.post("/api/stores", storeData, { headers });
+      const res = await api.post("/api/v1/stores", storeData, { headers });
       
       console.log('✅ Store created successfully:', {
         storeId: res.data.id,
@@ -60,7 +60,7 @@ export const getStoreById = createAsyncThunk(
       console.log('🔄 Fetching store by ID...', { storeId: id });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/stores/${id}`, { headers });
+      const res = await api.get(`/api/v1/stores/${id}`, { headers });
       
       console.log('✅ Store fetched successfully:', {
         storeId: res.data.id,
@@ -93,7 +93,7 @@ export const getAllStores = createAsyncThunk(
       console.log('🔄 Fetching all stores...');
       
       const headers = getAuthHeaders();
-      const res = await api.get("/api/stores", { headers,
+      const res = await api.get("/api/v1/stores", { headers,
         params: status ? { status } : undefined,
        });
       
@@ -125,7 +125,7 @@ export const updateStore = createAsyncThunk(
       console.log('🔄 Updating store...', { storeId: id, storeData });
       
       const headers = getAuthHeaders();
-      const res = await api.put(`/api/stores/${id}`, storeData, { headers });
+      const res = await api.put(`/api/v1/stores/${id}`, storeData, { headers });
       
       console.log('✅ Store updated successfully:', {
         storeId: res.data.id,
@@ -159,7 +159,7 @@ export const deleteStore = createAsyncThunk(
       console.log('🔄 Deleting store...');
       
       const headers = getAuthHeaders();
-      const res = await api.delete("/api/stores", { headers });
+      const res = await api.delete("/api/v1/stores", { headers });
       
       console.log('✅ Store deleted successfully:', { response: res.data });
       
@@ -186,7 +186,7 @@ export const getStoreByAdmin = createAsyncThunk(
       console.log('🔄 Fetching store by admin...');
       
       const headers = getAuthHeaders();
-      const res = await api.get("/api/stores/admin", { headers });
+      const res = await api.get("/api/v1/stores/admin", { headers });
       
       console.log('✅ Store fetched by admin successfully:', {
         storeId: res.data.id,
@@ -218,7 +218,7 @@ export const getStoreByEmployee = createAsyncThunk(
       console.log('🔄 Fetching store by employee...');
       
       const headers = getAuthHeaders();
-      const res = await api.get("/api/stores/employee", { headers });
+      const res = await api.get("/api/v1/stores/employee", { headers });
       
       console.log('✅ Store fetched by employee successfully:', {
         storeId: res.data.id,
@@ -250,7 +250,7 @@ export const getStoreEmployees = createAsyncThunk(
       console.log('🔄 Fetching store employees...', { storeId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/stores/${storeId}/employee/list`, { headers });
+      const res = await api.get(`/api/v1/stores/${storeId}/employee/list`, { headers });
       
       console.log('✅ Store employees fetched successfully:', {
         storeId,
@@ -286,7 +286,7 @@ export const addEmployee = createAsyncThunk(
       console.log('🔄 Adding employee to store...', { employeeData });
       
       const headers = getAuthHeaders();
-      const res = await api.post("/api/stores/add/employee", employeeData, { headers });
+      const res = await api.post("/api/v1/stores/add/employee", employeeData, { headers });
       
       console.log('✅ Employee added successfully:', {
         employeeId: res.data.id,
@@ -318,7 +318,7 @@ export const moderateStore = createAsyncThunk(
     try {
       console.log('🔄 Moderating store...', { storeId, action });
       const headers = getAuthHeaders();
-      const res = await api.put(`/api/stores/${storeId}/moderate`, null, {
+      const res = await api.put(`/api/v1/stores/${storeId}/moderate`, null, {
         headers,
         params: { action },
       });

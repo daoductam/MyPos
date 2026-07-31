@@ -3,17 +3,19 @@ package com.tamdao.modal;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "password_reset_tokens")
+@SQLDelete(sql = "UPDATE password_reset_tokens SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PasswordResetToken {
+public class PasswordResetToken extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

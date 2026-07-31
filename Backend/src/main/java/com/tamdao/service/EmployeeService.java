@@ -14,4 +14,6 @@ public interface EmployeeService {
     User findEmployeeById(Long employeeId) throws Exception;
     List<User> findStoreEmployees(Long storeId, UserRole role) throws Exception;
     List<User> findBranchEmployees(Long branchId, UserRole role) throws Exception;
+    List<UserDTO> getDeletedEmployees(Long storeId);
+    void restoreEmployee(Long id);
 }

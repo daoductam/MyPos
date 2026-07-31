@@ -11,4 +11,6 @@ public interface BranchService {
     List<BranchDTO> getAllBranchesByStoreId(Long storeId);
     BranchDTO updateBranch(Long id, BranchDTO branchDto, User user);
     void deleteBranch(Long id);
+    List<BranchDTO> getDeletedBranches(Long storeId);
+    void restoreBranch(Long id);
 }

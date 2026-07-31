@@ -4,7 +4,7 @@ import api from '@/utils/api';
 // 🔹 Create Branch
 export const createBranch = createAsyncThunk('branch/create', async ({ dto, jwt }, { rejectWithValue }) => {
   try {
-    const res = await api.post('/api/branches', dto, {
+    const res = await api.post('/api/v1/branches', dto, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     console.log('Create branch success:', res.data);
@@ -18,7 +18,7 @@ export const createBranch = createAsyncThunk('branch/create', async ({ dto, jwt 
 // 🔹 Get Branch by ID
 export const getBranchById = createAsyncThunk('branch/getById', async ({ id, jwt }, { rejectWithValue }) => {
   try {
-    const res = await api.get(`/api/branches/${id}`, {
+    const res = await api.get(`/api/v1/branches/${id}`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     console.log('Get branch by ID success:', res.data);
@@ -32,7 +32,7 @@ export const getBranchById = createAsyncThunk('branch/getById', async ({ id, jwt
 // 🔹 Get All Branches by Store
 export const getAllBranchesByStore = createAsyncThunk('branch/getAllByStore', async ({ storeId, jwt }, { rejectWithValue }) => {
   try {
-    const res = await api.get(`/api/branches/store/${storeId}`, {
+    const res = await api.get(`/api/v1/branches/store/${storeId}`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     console.log('Get all branches by store success:', res.data);
@@ -46,7 +46,7 @@ export const getAllBranchesByStore = createAsyncThunk('branch/getAllByStore', as
 // 🔹 Update Branch
 export const updateBranch = createAsyncThunk('branch/update', async ({ id, dto, jwt }, { rejectWithValue }) => {
   try {
-    const res = await api.put(`/api/branches/${id}`, dto, {
+    const res = await api.put(`/api/v1/branches/${id}`, dto, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     console.log('Update branch success:', res.data);
@@ -60,7 +60,7 @@ export const updateBranch = createAsyncThunk('branch/update', async ({ id, dto, 
 // 🔹 Delete Branch
 export const deleteBranch = createAsyncThunk('branch/delete', async ({ id, jwt }, { rejectWithValue }) => {
   try {
-    await api.delete(`/api/branches/${id}`, {
+    await api.delete(`/api/v1/branches/${id}`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     console.log('Delete branch success:', id);

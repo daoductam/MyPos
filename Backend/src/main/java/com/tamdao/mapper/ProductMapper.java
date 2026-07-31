@@ -8,6 +8,7 @@ import com.tamdao.payload.dto.ProductDTO;
 public class ProductMapper {
 
     public static ProductDTO toDto(Product product) {
+        if (product == null) return null;
         return ProductDTO.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -16,12 +17,17 @@ public class ProductMapper {
                 .mrp(product.getMrp())
                 .sellingPrice(product.getSellingPrice())
                 .brand(product.getBrand())
-                .category(product.getCategory().getName())
-                .categoryId(product.getCategory().getId())
+                .category(product.getCategory() != null ? product.getCategory().getName() : null)
+                .categoryId(product.getCategory() != null ? product.getCategory().getId() : null)
                 .storeId(product.getStore() != null ? product.getStore().getId() : null)
                 .image(product.getImage())
+                .deleted(product.getDeleted())
+                .deletedAt(product.getDeletedAt())
+                .deletedBy(product.getDeletedBy())
                 .createdAt(product.getCreatedAt())
+                .createdBy(product.getCreatedBy())
                 .updatedAt(product.getUpdatedAt())
+                .updatedBy(product.getUpdatedBy())
                 .build();
     }
 
@@ -37,11 +43,8 @@ public class ProductMapper {
                 .sellingPrice(dto.getSellingPrice())
                 .brand(dto.getBrand())
                 .category(category)
-
                 .store(store)
                 .image(dto.getImage())
-                .createdAt(dto.getCreatedAt())
-                .updatedAt(dto.getUpdatedAt())
                 .build();
     }
 }

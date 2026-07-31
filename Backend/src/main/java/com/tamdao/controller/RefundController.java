@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/refunds")
+@RequestMapping("/api/v1/refunds")
 @RequiredArgsConstructor
 public class RefundController {
 

@@ -2,17 +2,19 @@ package com.tamdao.modal;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "inventories")
+@SQLDelete(sql = "UPDATE inventories SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Inventory {
+public class Inventory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

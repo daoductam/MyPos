@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/branches")
+@RequestMapping("/api/v1/branches")
 @RequiredArgsConstructor
 public class BranchController {
 
@@ -22,10 +22,8 @@ public class BranchController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
-    public ResponseEntity<BranchDTO> createBranch(
-            @Valid @RequestBody BranchDTO dto,
-            @RequestHeader("Authorization") String jwt) {
-        User user = userService.getUserFromJwtToken(jwt);
+    public ResponseEntity<BranchDTO> createBranch(@Valid @RequestBody BranchDTO dto) {
+        User user = userService.getCurrentUser();
         return ResponseEntity.ok(branchService.createBranch(dto, user));
     }
 
@@ -35,11 +33,7 @@ public class BranchController {
     }
 
     @GetMapping("/store/{storeId}")
-    public ResponseEntity<List<BranchDTO>> getAllBranches(
-            @RequestHeader("Authorization") String jwt,
-            @PathVariable Long storeId
-    ) {
-        User user = userService.getUserFromJwtToken(jwt);
+    public ResponseEntity<List<BranchDTO>> getAllBranches(@PathVariable Long storeId) {
         return ResponseEntity.ok(branchService.getAllBranchesByStoreId(storeId));
     }
 
@@ -47,9 +41,8 @@ public class BranchController {
     @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
     public ResponseEntity<BranchDTO> updateBranch(
             @PathVariable Long id,
-            @RequestBody BranchDTO dto,
-            @RequestHeader("Authorization") String jwt) {
-        User user = userService.getUserFromJwtToken(jwt);
+            @RequestBody BranchDTO dto) {
+        User user = userService.getCurrentUser();
         return ResponseEntity.ok(branchService.updateBranch(id, dto, user));
     }
 
@@ -58,5 +51,18 @@ public class BranchController {
     public ResponseEntity<Void> deleteBranch(@PathVariable Long id) {
         branchService.deleteBranch(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/store/{storeId}/trash")
+    @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
+    public ResponseEntity<List<BranchDTO>> getDeletedBranches(@PathVariable Long storeId) {
+        return ResponseEntity.ok(branchService.getDeletedBranches(storeId));
+    }
+
+    @PatchMapping("/restore/{id}")
+    @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
+    public ResponseEntity<Void> restoreBranch(@PathVariable Long id) {
+        branchService.restoreBranch(id);
+        return ResponseEntity.ok().build();
     }
 }

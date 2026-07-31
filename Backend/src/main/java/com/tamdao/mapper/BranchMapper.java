@@ -8,6 +8,7 @@ import com.tamdao.payload.dto.BranchDTO;
 public class BranchMapper {
 
     public static BranchDTO toDto(Branch branch) {
+        if (branch == null) return null;
         return BranchDTO.builder()
                 .id(branch.getId())
                 .name(branch.getName())
@@ -19,10 +20,14 @@ public class BranchMapper {
                 .workingDays(branch.getWorkingDays())
                 .storeId(branch.getStore() != null ? branch.getStore().getId() : null)
                 .store(StoreMapper.toDto(branch.getStore()))
+                .manager(branch.getManager() != null ? branch.getManager().getFullName() : null)
+                .deleted(branch.getDeleted())
+                .deletedAt(branch.getDeletedAt())
+                .deletedBy(branch.getDeletedBy())
                 .createdAt(branch.getCreatedAt())
+                .createdBy(branch.getCreatedBy())
                 .updatedAt(branch.getUpdatedAt())
-                .manager(branch.getManager()!=null?
-                        branch.getManager().getFullName():null)
+                .updatedBy(branch.getUpdatedBy())
                 .build();
     }
 
@@ -37,9 +42,6 @@ public class BranchMapper {
                 .closeTime(dto.getCloseTime())
                 .openTime(dto.getOpenTime())
                 .workingDays(dto.getWorkingDays())
-                .createdAt(dto.getCreatedAt())
-                .updatedAt(dto.getUpdatedAt())
-
                 .build();
     }
 }

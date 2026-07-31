@@ -7,15 +7,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql = "UPDATE refund SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Refund {
+public class Refund extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,8 +38,6 @@ public class Refund {
 
     @ManyToOne
     private Branch branch;
-
-    private LocalDateTime createdAt;
 
     private PaymentType paymentType;
 

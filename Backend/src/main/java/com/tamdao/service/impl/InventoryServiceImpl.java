@@ -26,6 +26,7 @@ public class InventoryServiceImpl implements InventoryService {
     private final BranchRepository branchRepository;
     private final ProductRepository productRepository;
     private final SecurityUtil securityUtil;
+    private final com.tamdao.service.UserService userService;
 
     @Override
     public InventoryDTO createInventory(InventoryDTO dto) {
@@ -54,6 +55,7 @@ public class InventoryServiceImpl implements InventoryService {
 
         securityUtil.checkAuthority(inventory);
 
+        inventory.setDeletedBy(userService.getCurrentUser().getId());
         inventoryRepository.delete(inventory);
     }
 

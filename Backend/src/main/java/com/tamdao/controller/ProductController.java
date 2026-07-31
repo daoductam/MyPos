@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -63,5 +63,18 @@ public class ProductController {
             @PathVariable Long storeId,
             @RequestParam String q) {
         return ResponseEntity.ok(productService.searchByKeyword(storeId, q));
+    }
+
+    @GetMapping("/store/{storeId}/trash")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    public ResponseEntity<List<ProductDTO>> getDeletedProducts(@PathVariable Long storeId) {
+        return ResponseEntity.ok(productService.getDeletedProducts(storeId));
+    }
+
+    @PatchMapping("/restore/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    public ResponseEntity<Void> restoreProduct(@PathVariable Long id) {
+        productService.restoreProduct(id);
+        return ResponseEntity.ok().build();
     }
 }

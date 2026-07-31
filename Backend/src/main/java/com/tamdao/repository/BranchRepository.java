@@ -51,4 +51,12 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
     """)
     List<BranchDTO> findBranchesWithNoSalesToday(@Param("storeAdminId") Long storeAdminId);
 
+    // Soft delete: trash & restore (native queries bypass @SQLRestriction)
+    @Query(value = "SELECT * FROM branches WHERE deleted = true AND store_id = :storeId", nativeQuery = true)
+    List<Branch> findDeletedByStoreId(@Param("storeId") Long storeId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query(value = "UPDATE branches SET deleted = false, deleted_at = NULL, deleted_by = NULL WHERE id = :id AND deleted = true", nativeQuery = true)
+    int restoreById(@Param("id") Long id);
+
 }

@@ -5,26 +5,26 @@ import com.tamdao.domain.OrderStatus;
 import com.tamdao.domain.PaymentType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@SQLDelete(sql = "UPDATE orders SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Double totalAmount;
-
-    private LocalDateTime createdAt;
 
     @ManyToOne
     @JsonIgnore
@@ -43,10 +43,5 @@ public class Order {
     private List<OrderItem> items;
 
     private OrderStatus status=OrderStatus.COMPLETED;
-
-    @PrePersist
-    public void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
 }
 

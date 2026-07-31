@@ -12,7 +12,7 @@ export const createInventory = createAsyncThunk(
       },
     };
     try {
-      const res = await api.post('/api/inventories', dto, config);
+      const res = await api.post('/api/v1/inventories', dto, config);
       console.log('createInventory fulfilled:', res.data);
       return res.data;
     } catch (err) {
@@ -33,7 +33,7 @@ export const updateInventory = createAsyncThunk(
       },
     };
     try {
-      const res = await api.put(`/api/inventories/${id}`, dto, config);
+      const res = await api.put(`/api/v1/inventories/${id}`, dto, config);
       console.log('updateInventory fulfilled:', res.data);
       return res.data;
     } catch (err) {
@@ -54,7 +54,7 @@ export const deleteInventory = createAsyncThunk(
        },
      };
     try {
-      await api.delete(`/api/inventories/${id}`, config);
+      await api.delete(`/api/v1/inventories/${id}`, config);
       console.log('deleteInventory fulfilled:', id);
       return id;
     } catch (err) {
@@ -75,7 +75,7 @@ export const getInventoryById = createAsyncThunk(
       },
     };
     try {
-      const res = await api.get(`/api/inventories/${id}`, config);
+      const res = await api.get(`/api/v1/inventories/${id}`, config);
       console.log('getInventoryById fulfilled:', res.data);
       return res.data;
     } catch (err) {
@@ -96,7 +96,7 @@ export const getInventoryByBranch = createAsyncThunk(
       },
     };
     try {
-      const res = await api.get(`/api/inventories/branch/${branchId}`, config);
+      const res = await api.get(`/api/v1/inventories/branch/${branchId}`, config);
       console.log('getInventoryByBranch fulfilled:', res.data);
       return res.data;
     } catch (err) {
@@ -117,7 +117,7 @@ export const getInventoryByProduct = createAsyncThunk(
       },
     };
     try {
-      const res = await api.get(`/api/inventories/product/${productId}`, config);
+      const res = await api.get(`/api/v1/inventories/product/${productId}`, config);
       console.log('getInventoryByProduct fulfilled:', res.data);
       return res.data;
     } catch (err) {

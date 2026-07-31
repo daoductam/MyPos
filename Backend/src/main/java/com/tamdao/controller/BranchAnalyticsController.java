@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/branch-analytics")
+@RequestMapping("/api/v1/branch-analytics")
 @RequiredArgsConstructor
 public class BranchAnalyticsController {
 

@@ -87,9 +87,10 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public void deleteRefund(Long refundId) {
-        if (!refundRepository.existsById(refundId)) {
-            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Refund not found");
-        }
-        refundRepository.deleteById(refundId);
+        Refund refund = refundRepository.findById(refundId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Refund not found"));
+        User currentUser = userService.getCurrentUser();
+        refund.setDeletedBy(currentUser.getId());
+        refundRepository.delete(refund);
     }
 }

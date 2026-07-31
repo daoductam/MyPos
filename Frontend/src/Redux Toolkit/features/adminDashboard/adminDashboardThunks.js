@@ -27,7 +27,7 @@ export const getDashboardSummary = createAsyncThunk(
       console.log('🔄 Fetching dashboard summary...');
       
       const headers = getAuthHeaders();
-      const res = await api.get('/api/super-admin/dashboard/summary', { headers });
+      const res = await api.get('/api/v1/super-admin/dashboard/summary', { headers });
       
       console.log('✅ Dashboard summary fetched successfully:', {
         totalStores: res.data.totalStores,
@@ -58,7 +58,7 @@ export const getStoreRegistrationStats = createAsyncThunk(
       console.log('🔄 Fetching store registration stats...');
       
       const headers = getAuthHeaders();
-      const res = await api.get('/api/super-admin/dashboard/store-registrations', { headers });
+      const res = await api.get('/api/v1/super-admin/dashboard/store-registrations', { headers });
       
       console.log('✅ Store registration stats fetched successfully:', {
         dataPoints: res.data.length,
@@ -90,7 +90,7 @@ export const getStoreStatusDistribution = createAsyncThunk(
       console.log('🔄 Fetching store status distribution...');
       
       const headers = getAuthHeaders();
-      const res = await api.get('/api/super-admin/dashboard/store-status-distribution', { headers });
+      const res = await api.get('/api/v1/super-admin/dashboard/store-status-distribution', { headers });
       
       console.log('✅ Store status distribution fetched successfully:', {
         active: res.data.active,

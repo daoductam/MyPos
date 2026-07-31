@@ -6,7 +6,7 @@ export const createPaymentLinkThunk = createAsyncThunk(
   async ({ planId, paymentMethod }, { rejectWithValue }) => {
     try {
       const response = await api.post(
-        `/api/payments/create?planId=${planId}&paymentMethod=${paymentMethod}`,{},
+        `/api/v1/payments/create?planId=${planId}&paymentMethod=${paymentMethod}`,{},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -29,7 +29,7 @@ export const proceedPaymentThunk = createAsyncThunk(
   async ({ paymentId, paymentLinkId }, { rejectWithValue }) => {
     try {
       const response = await api.patch(
-        `/api/payments/proceed?paymentId=${paymentId}&paymentLinkId=${paymentLinkId}`
+        `/api/v1/payments/proceed?paymentId=${paymentId}&paymentLinkId=${paymentLinkId}`
       );
       return response.data;
     } catch (error) {

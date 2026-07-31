@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
+@SQLDelete(sql = "UPDATE payment_order SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PaymentOrder {
+public class PaymentOrder extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

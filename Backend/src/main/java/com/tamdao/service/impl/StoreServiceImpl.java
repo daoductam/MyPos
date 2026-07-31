@@ -110,7 +110,9 @@ public class StoreServiceImpl implements StoreService {
         if (store == null) {
             throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Store not found");
         }
-        storeRepository.deleteById(store.getId());
+        User currentUser = userService.getCurrentUser();
+        store.setDeletedBy(currentUser.getId());
+        storeRepository.delete(store);
     }
 
     @Override

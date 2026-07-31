@@ -3,6 +3,7 @@ package com.tamdao.modal;
 import com.tamdao.domain.BillingCycle;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,12 +11,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "subscription_plans")
+@SQLDelete(sql = "UPDATE subscription_plans SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SubscriptionPlan {
+public class SubscriptionPlan extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,22 +57,6 @@ public class SubscriptionPlan {
     // Optional extra
     private Boolean enableMultiLocation;     // Existing field
 
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     @Column(nullable = false)
     private Boolean active = true;
-
-    @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

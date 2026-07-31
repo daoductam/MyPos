@@ -3,18 +3,21 @@ package com.tamdao.modal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
 @Entity
 @Table(name = "branches")
+@SQLDelete(sql = "UPDATE branches SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Branch {
+public class Branch extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,10 +42,6 @@ public class Branch {
 
     private LocalTime closeTime;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
@@ -50,14 +49,4 @@ public class Branch {
     @OneToOne(cascade = CascadeType.REMOVE)
     @JsonIgnore
     private User manager;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }

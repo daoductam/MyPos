@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/super-admin/subscription-plans")
+@RequestMapping("/api/v1/super-admin/subscription-plans")
 @RequiredArgsConstructor
 public class SubscriptionPlanController {
 

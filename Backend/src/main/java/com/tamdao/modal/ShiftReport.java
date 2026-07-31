@@ -5,16 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@SQLDelete(sql = "UPDATE shift_report SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShiftReport {
+public class ShiftReport extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

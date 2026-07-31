@@ -5,17 +5,19 @@ import com.tamdao.domain.PaymentStatus;
 import com.tamdao.domain.SubscriptionStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "subscriptions")
+@SQLDelete(sql = "UPDATE subscriptions SET deleted = true, deleted_at = NOW() WHERE id = ?")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Subscription {
+public class Subscription extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,20 +43,4 @@ public class Subscription {
 
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
-
-    @Column(updatable = false)
-    private java.time.LocalDateTime createdAt;
-
-    private java.time.LocalDateTime updatedAt;
-
-    @PrePersist
-    public void onCreate() {
-        this.createdAt = java.time.LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = java.time.LocalDateTime.now();
-    }
 }

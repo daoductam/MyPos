@@ -27,7 +27,7 @@ export const createOrder = createAsyncThunk(
       console.log('🔄 Creating order...', { dto });
       
       const headers = getAuthHeaders();
-      const res = await api.post('/api/orders', dto, { headers });
+      const res = await api.post('/api/v1/orders', dto, { headers });
       
       console.log('✅ Order created successfully:', {
         orderId: res.data.id,
@@ -58,7 +58,7 @@ export const getOrderById = createAsyncThunk(
       console.log('🔄 Fetching order by ID...', { orderId: id });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/orders/${id}`, { headers });
+      const res = await api.get(`/api/v1/orders/${id}`, { headers });
       
       console.log('✅ Order fetched successfully:', {
         orderId: res.data.id,
@@ -94,7 +94,7 @@ export const getOrdersByBranch = createAsyncThunk(
       if (paymentType) params.push(`paymentType=${paymentType}`);
       if (status) params.push(`status=${status}`);
       const query = params.length ? `?${params.join('&')}` : '';
-      const res = await api.get(`/api/orders/branch/${branchId}${query}`, { headers });
+      const res = await api.get(`/api/v1/orders/branch/${branchId}${query}`, { headers });
       console.log('✅ Orders by branch response:', res.data);
       return res.data;
     } catch (err) {
@@ -112,7 +112,7 @@ export const getOrdersByCashier = createAsyncThunk(
       console.log('🔄 Fetching orders by cashier...', { cashierId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/orders/cashier/${cashierId}`, { headers });
+      const res = await api.get(`/api/v1/orders/cashier/${cashierId}`, { headers });
       
       console.log('✅ Orders fetched successfully:', {
         cashierId,
@@ -147,7 +147,7 @@ export const getTodayOrdersByBranch = createAsyncThunk(
       console.log('🔄 Fetching today\'s orders by branch...', { branchId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/orders/today/branch/${branchId}`, { headers });
+      const res = await api.get(`/api/v1/orders/today/branch/${branchId}`, { headers });
       
       console.log('✅ Today\'s orders fetched successfully:', {
         branchId,
@@ -183,7 +183,7 @@ export const deleteOrder = createAsyncThunk(
       console.log('🔄 Deleting order...', { orderId: id });
       
       const headers = getAuthHeaders();
-      await api.delete(`/api/orders/${id}`, { headers });
+      await api.delete(`/api/v1/orders/${id}`, { headers });
       
       console.log('✅ Order deleted successfully:', { orderId: id });
       
@@ -209,7 +209,7 @@ export const getOrdersByCustomer = createAsyncThunk(
       console.log('🔄 Fetching orders by customer...', { customerId });
       
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/orders/customer/${customerId}`, { headers });
+      const res = await api.get(`/api/v1/orders/customer/${customerId}`, { headers });
       
       console.log('✅ Customer orders fetched successfully:', {
         customerId,
@@ -247,7 +247,7 @@ export const getRecentOrdersByBranch = createAsyncThunk(
     try {
       console.log('🔄 Fetching top 5 recent orders by branch...', { branchId });
       const headers = getAuthHeaders();
-      const res = await api.get(`/api/orders/recent/${branchId}`, { headers });
+      const res = await api.get(`/api/v1/orders/recent/${branchId}`, { headers });
       console.log('✅ Recent orders fetched successfully:', {
         branchId,
         orderCount: res.data.length,
