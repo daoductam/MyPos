@@ -7,11 +7,11 @@ export const completeOnboarding = createAsyncThunk(
   async (onboardingData, { rejectWithValue }) => {
     try {
       const res = await api.post('/onboarding/complete', onboardingData);
-      console.log('Onboarding complete success:', res.data.data);
-      return res.data.data;
+      console.log('Onboarding complete success:', res.data);
+      return res.data;
     } catch (err) {
       console.error('Onboarding complete error:', err);
-      return rejectWithValue(err.response?.data?.message || 'Onboarding failed');
+      return rejectWithValue(err.response?.data?.message || err.customMessage || 'Onboarding failed');
     }
   }
-); 
+);
