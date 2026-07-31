@@ -1,21 +1,21 @@
 package com.tamdao.controller;
 
-import com.tamdao.configurations.JwtProvider;
 import com.tamdao.payload.dto.UserDTO;
 import com.tamdao.payload.request.ForgotPasswordRequest;
 import com.tamdao.payload.request.LoginDto;
+import com.tamdao.payload.request.LogoutRequest;
+import com.tamdao.payload.request.RefreshTokenRequest;
 import com.tamdao.payload.request.ResetPasswordRequest;
+import com.tamdao.payload.response.ApiResponse;
 import com.tamdao.payload.response.AuthResponse;
-import com.tamdao.repository.UserRepository;
+import com.tamdao.payload.response.TokenRefreshResponse;
 import com.tamdao.service.AuthService;
-import com.tamdao.service.UserService;
-import com.tamdao.service.impl.CustomUserImplementation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,11 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
-    private final CustomUserImplementation customUserImplementation;
-    private final UserService userService;
     private final AuthService authService;
 
     @PostMapping("/signup")
@@ -42,6 +37,22 @@ public class AuthController {
             @RequestBody LoginDto req) {
         AuthResponse response = authService.login(req.getEmail(), req.getPassword());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenRefreshResponse> refreshToken(
+            @RequestBody @Valid RefreshTokenRequest request) {
+        TokenRefreshResponse response = authService.refreshToken(request.getRefreshToken());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
+            @RequestBody(required = false) LogoutRequest request) {
+        String refreshToken = request != null ? request.getRefreshToken() : null;
+        authService.logout(authHeader, refreshToken);
+        return ResponseEntity.ok(ApiResponse.success("Đăng xuất thành công", null));
     }
 
     @PostMapping("/forgot-password")

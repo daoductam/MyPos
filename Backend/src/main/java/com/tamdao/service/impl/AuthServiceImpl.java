@@ -9,17 +9,21 @@ import com.tamdao.modal.PasswordResetToken;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.UserDTO;
 import com.tamdao.payload.response.AuthResponse;
+import com.tamdao.payload.response.TokenRefreshResponse;
 import com.tamdao.repository.PasswordResetTokenRepository;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.AuthService;
 import com.tamdao.service.EmailService;
+import com.tamdao.service.RedisTokenService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,11 +31,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
@@ -40,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
     private final CustomUserImplementation customUserImplementation;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final EmailService emailService;
+    private final RedisTokenService redisTokenService;
 
     @Value("${app.frontend.reset-url}")
     private String frontendResetUrl;
@@ -70,11 +77,14 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
 
+        String refreshToken = generateAndSaveRefreshToken(savedUser.getId());
+
         AuthResponse response = new AuthResponse();
         response.setTitle("Welcome " + createdUser.getEmail());
         response.setMessage("Register success");
         response.setUser(UserMapper.toDTO(savedUser));
         response.setJwt(jwt);
+        response.setRefreshToken(refreshToken);
         return response;
     }
 
@@ -82,8 +92,6 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(String username, String password) {
         Authentication authentication = authenticate(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        String role = authorities.iterator().next().getAuthority();
         String token = jwtProvider.generateToken(authentication);
 
         User user = userRepository.findByEmail(username);
@@ -108,24 +116,119 @@ public class AuthServiceImpl implements AuthService {
             userRepository.save(user);
         }
 
+        String refreshToken = null;
+        if (user != null) {
+            refreshToken = generateAndSaveRefreshToken(user.getId());
+        }
+
         AuthResponse response = new AuthResponse();
         response.setTitle("Login success");
         response.setMessage("Welcome Back" + username);
         response.setJwt(token);
+        response.setRefreshToken(refreshToken);
         response.setUser(UserMapper.toDTO(user));
 
         return response;
     }
 
+    @Override
+    public TokenRefreshResponse refreshToken(String refreshTokenStr) {
+        if (refreshTokenStr == null || refreshTokenStr.isBlank()) {
+            throw new BusinessException(ErrorCode.UNAUTHENTICATED, "Refresh token không được để trống");
+        }
+
+        String[] parts = refreshTokenStr.split(":");
+        if (parts.length < 3) {
+            throw new BusinessException(ErrorCode.UNAUTHENTICATED, "Refresh token không đúng định dạng");
+        }
+
+        Long userId;
+        try {
+            userId = Long.parseLong(parts[0]);
+        } catch (NumberFormatException e) {
+            throw new BusinessException(ErrorCode.UNAUTHENTICATED, "Refresh token không đúng định dạng");
+        }
+
+        String tokenId = parts[1];
+
+        // Validate token in Redis
+        boolean isValid = redisTokenService.isValidRefreshToken(userId, tokenId, refreshTokenStr);
+
+        if (!isValid) {
+            // Theft detection (Reuse Attack): Token cũ không còn trong Redis -> Hủy toàn bộ token của user
+            log.warn("Refresh Token reuse detected for userId: {}. Revoking all tokens!", userId);
+            redisTokenService.revokeAllUserTokens(userId);
+            throw new BusinessException(ErrorCode.UNAUTHENTICATED, "Refresh token đã hết hạn hoặc đã được sử dụng trước đó");
+        }
+
+        // Xóa Refresh Token cũ (Rotation)
+        redisTokenService.deleteRefreshToken(userId, tokenId);
+
+        // Lấy thông tin user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, "User không tồn tại"));
+
+        // Tạo Authentication cho user
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                user.getEmail(),
+                null,
+                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
+        );
+
+        String newAccessToken = jwtProvider.generateToken(auth);
+        String newRefreshToken = generateAndSaveRefreshToken(user.getId());
+
+        return TokenRefreshResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .tokenType("Bearer")
+                .build();
+    }
+
+    @Override
+    public void logout(String accessTokenHeader, String refreshTokenStr) {
+        // Blacklist Access Token
+        if (accessTokenHeader != null && accessTokenHeader.startsWith("Bearer ")) {
+            String accessToken = accessTokenHeader.substring(7);
+            long remainingTtl = jwtProvider.getRemainingExpirationMs(accessToken);
+            if (remainingTtl > 0) {
+                redisTokenService.blacklistAccessToken(accessToken, remainingTtl);
+            }
+        }
+
+        // Revoke Refresh Token
+        if (refreshTokenStr != null && !refreshTokenStr.isBlank()) {
+            String[] parts = refreshTokenStr.split(":");
+            if (parts.length >= 2) {
+                try {
+                    Long userId = Long.parseLong(parts[0]);
+                    String tokenId = parts[1];
+                    redisTokenService.deleteRefreshToken(userId, tokenId);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+    }
+
+    private String generateAndSaveRefreshToken(Long userId) {
+        String tokenId = UUID.randomUUID().toString();
+        String secret = UUID.randomUUID().toString();
+        String refreshTokenStr = userId + ":" + tokenId + ":" + secret;
+
+        redisTokenService.saveRefreshToken(userId, tokenId, refreshTokenStr, JwtProvider.REFRESH_TOKEN_EXPIRATION);
+        return refreshTokenStr;
+    }
+
     public Authentication authenticate(String email, String password) {
-        UserDetails userDetails = customUserImplementation.loadUserByUsername(email);
-        if (userDetails == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND, "email id doesn't exist " + email);
+        try {
+            UserDetails userDetails = customUserImplementation.loadUserByUsername(email);
+            if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
+                throw new BadCredentialsException("Tên đăng nhập hoặc mật khẩu không chính xác");
+            }
+            return new UsernamePasswordAuthenticationToken(email, null, userDetails.getAuthorities());
+        } catch (Exception e) {
+            throw new BadCredentialsException("Tên đăng nhập hoặc mật khẩu không chính xác");
         }
-        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new BusinessException(ErrorCode.UNAUTHENTICATED, "Wrong Password ");
-        }
-        return new UsernamePasswordAuthenticationToken(email, null, userDetails.getAuthorities());
     }
 
     @Transactional

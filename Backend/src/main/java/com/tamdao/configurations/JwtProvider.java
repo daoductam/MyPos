@@ -22,6 +22,9 @@ public class JwtProvider {
 
 	private SecretKey key;
 
+	public static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000L; // 15 phút
+	public static final long REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000L; // 7 ngày
+
 	@PostConstruct
 	public void init() {
 		this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
@@ -31,20 +34,34 @@ public class JwtProvider {
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		String roles = populateAuthorities(authorities);
 
-        return Jwts.builder().issuedAt(new Date())
-				.expiration(new Date(new Date().getTime() + 86400000))
-				.claim("email",auth.getName())
-				.claim("authorities",roles)
+		return Jwts.builder().issuedAt(new Date())
+				.expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+				.claim("email", auth.getName())
+				.claim("authorities", roles)
 				.signWith(key)
 				.compact();
 	}
 
 	public String getEmailFromJwtToken(String jwt){
-		jwt = jwt.substring(7);
+		if (jwt != null && jwt.startsWith("Bearer ")) {
+			jwt = jwt.substring(7);
+		}
 		Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt).getPayload();
+		return String.valueOf(claims.get("email"));
+	}
 
-		String email = String.valueOf(claims.get("email"));
-		return email;
+	public long getRemainingExpirationMs(String jwt) {
+		if (jwt != null && jwt.startsWith("Bearer ")) {
+			jwt = jwt.substring(7);
+		}
+		try {
+			Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt).getPayload();
+			Date expiration = claims.getExpiration();
+			long remaining = expiration.getTime() - System.currentTimeMillis();
+			return Math.max(remaining, 0L);
+		} catch (Exception e) {
+			return 0L;
+		}
 	}
 
 	private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
@@ -53,6 +70,6 @@ public class JwtProvider {
 		for(GrantedAuthority authority : authorities){
 			auths.add(authority.getAuthority());
 		}
-		return String.join(",",auths);
+		return String.join(",", auths);
 	}
 }
