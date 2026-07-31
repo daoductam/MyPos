@@ -1,6 +1,5 @@
 package com.tamdao.controller;
 
-import com.tamdao.exception.ResourceNotFoundException;
 import com.tamdao.modal.Customer;
 import com.tamdao.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +25,14 @@ public class CustomerController {
     public ResponseEntity<Customer> update(
             @PathVariable Long id,
             @RequestBody Customer customer
-    ) throws ResourceNotFoundException {
+    ) {
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(
             @PathVariable Long id
-    ) throws ResourceNotFoundException {
+    ) {
         customerService.deleteCustomer(id);
         return ResponseEntity.ok("Customer deleted successfully");
     }
@@ -41,7 +40,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getById(
             @PathVariable Long id
-    ) throws ResourceNotFoundException {
+    ) {
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
@@ -49,6 +48,4 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> getAll() {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
-
-
 }

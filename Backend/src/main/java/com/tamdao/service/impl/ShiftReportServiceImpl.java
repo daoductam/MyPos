@@ -1,14 +1,12 @@
 package com.tamdao.service.impl;
 
-
-
 import com.tamdao.domain.PaymentType;
-import com.tamdao.exception.UserException;
+import com.tamdao.exception.BusinessException;
+import com.tamdao.exception.ErrorCode;
 import com.tamdao.modal.*;
 import com.tamdao.repository.*;
 import com.tamdao.service.ShiftReportService;
 import com.tamdao.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,17 +30,13 @@ public class ShiftReportServiceImpl implements ShiftReportService {
     public ShiftReport startShift(Long cashierId,
                                   Long branchId,
                                   LocalDateTime shiftStart
-    ) throws UserException {
-        User currentUser=userService.getCurrentUser();
-        shiftStart=LocalDateTime.now();
-
-//        User cashier = userRepository.findById(cashierId).orElseThrow(() ->
-//                new RuntimeException("Cashier not found with ID: " + cashierId));
+    ) {
+        User currentUser = userService.getCurrentUser();
+        shiftStart = LocalDateTime.now();
 
         Branch branch = branchRepository.findById(branchId).orElseThrow(() ->
-                new RuntimeException("Branch not found with ID: " + branchId));
+                new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found with ID: " + branchId));
 
-        // Prevent duplicate shifts on the same day
         LocalDateTime startOfDay = shiftStart.withHour(0).withMinute(0).withSecond(0);
         LocalDateTime endOfDay = shiftStart.withHour(23).withMinute(59).withSecond(59);
 
@@ -50,7 +44,7 @@ public class ShiftReportServiceImpl implements ShiftReportService {
                 .findByCashierAndShiftStartBetween(currentUser, startOfDay, endOfDay);
 
         if (existing.isPresent()) {
-            throw new RuntimeException("Shift already started today.");
+            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Shift already started today.");
         }
 
         ShiftReport shift = new ShiftReport();
@@ -63,16 +57,13 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
     @Override
     @Transactional
-    public ShiftReport endShift(Long shiftReportId, LocalDateTime shiftEnd) throws UserException {
-        User currentUser=userService.getCurrentUser();
+    public ShiftReport endShift(Long shiftReportId, LocalDateTime shiftEnd) {
+        User currentUser = userService.getCurrentUser();
 
-//        ShiftReport shift = shiftReportRepository.findById(shiftReportId)
-//                .orElseThrow(() -> new RuntimeException("Shift report not found"));
-
-        ShiftReport shift=shiftReportRepository
+        ShiftReport shift = shiftReportRepository
                 .findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(currentUser)
                 .orElseThrow(
-                        ()-> new EntityNotFoundException("shift report not found")
+                        () -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "No active shift report found")
                 );
 
         shift.setShiftEnd(shiftEnd);
@@ -91,7 +82,6 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
         double totalSales = orders.stream().mapToDouble(Order::getTotalAmount).sum();
         int totalOrders = orders.size();
-//        double totalRefunds = refunds.stream().mapToDouble(Refund::getAmount).sum();
         double netSales = totalSales - totalRefunds;
 
         shift.setTotalSales(totalSales);
@@ -109,7 +99,7 @@ public class ShiftReportServiceImpl implements ShiftReportService {
     @Override
     public ShiftReport getShiftReportById(Long id) {
         return shiftReportRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Shift report not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Shift report not found"));
     }
 
     @Override
@@ -120,26 +110,24 @@ public class ShiftReportServiceImpl implements ShiftReportService {
     @Override
     public List<ShiftReport> getShiftReportsByCashier(Long cashierId) {
         User cashier = userRepository.findById(cashierId)
-                .orElseThrow(() -> new RuntimeException("Cashier not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, "Cashier not found"));
         return shiftReportRepository.findByCashier(cashier);
     }
 
     @Override
     public List<ShiftReport> getShiftReportsByBranch(Long branchId) {
         Branch branch = branchRepository.findById(branchId)
-                .orElseThrow(() -> new RuntimeException("Branch not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found"));
         return shiftReportRepository.findByBranch(branch);
     }
 
     @Override
-    public ShiftReport getCurrentShiftProgress(Long cashierId) throws UserException {
-        User cashier=userService.getCurrentUser();
-//        User cashier = userRepository.findById(cashierId)
-//                .orElseThrow(() -> new RuntimeException("Cashier not found"));
+    public ShiftReport getCurrentShiftProgress(Long cashierId) {
+        User cashier = userService.getCurrentUser();
 
         ShiftReport shift = shiftReportRepository
                 .findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(cashier)
-                .orElseThrow(() -> new RuntimeException("No active shift found for this cashier"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "No active shift found for this cashier"));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -153,7 +141,6 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
         double totalSales = orders.stream().mapToDouble(Order::getTotalAmount).sum();
         int totalOrders = orders.size();
-//        double totalRefunds = refunds.stream().mapToDouble(Refund::getAmount).sum();
         double totalRefunds = refunds.stream()
                 .mapToDouble(refund -> refund.getAmount() != null ? refund.getAmount() : 0.0)
                 .sum();
@@ -176,19 +163,19 @@ public class ShiftReportServiceImpl implements ShiftReportService {
     @Override
     public ShiftReport getShiftReportByCashierAndDate(Long cashierId, LocalDateTime date) {
         User cashier = userRepository.findById(cashierId)
-                .orElseThrow(() -> new RuntimeException("Cashier not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, "Cashier not found"));
 
         LocalDateTime start = date.withHour(0).withMinute(0).withSecond(0);
         LocalDateTime end = date.withHour(23).withMinute(59).withSecond(59);
 
         return shiftReportRepository.findByCashierAndShiftStartBetween(cashier, start, end)
-                .orElseThrow(() -> new RuntimeException("No shift report found on this date"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "No shift report found on this date"));
     }
 
     @Override
     public void deleteShiftReport(Long id) {
         if (!shiftReportRepository.existsById(id)) {
-            throw new RuntimeException("Shift report not found");
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Shift report not found");
         }
         shiftReportRepository.deleteById(id);
     }
@@ -221,15 +208,11 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
     private List<PaymentSummary> getPaymentSummaries(List<Order> orders,
                                                      double totalSales) {
-//        Map<PaymentType, List<Order>> grouped = orders.stream()
-//                .collect(Collectors.groupingBy(Order::getPaymentType));
-
         Map<PaymentType, List<Order>> grouped = orders.stream()
                 .collect(Collectors.groupingBy(
                         order -> order.getPaymentType() != null ?
                                 order.getPaymentType() : PaymentType.CASH
                 ));
-
 
         List<PaymentSummary> summaries = new ArrayList<>();
 
@@ -239,7 +222,7 @@ public class ShiftReportServiceImpl implements ShiftReportService {
                     .mapToDouble(Order::getTotalAmount)
                     .sum();
             int transactions = entry.getValue().size();
-            double percent = (amount / totalSales) * 100;
+            double percent = totalSales > 0 ? (amount / totalSales) * 100 : 0;
 
             PaymentSummary ps = new PaymentSummary();
             ps.setType(entry.getKey());
@@ -252,4 +235,3 @@ public class ShiftReportServiceImpl implements ShiftReportService {
         return summaries;
     }
 }
-

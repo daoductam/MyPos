@@ -2,7 +2,6 @@ package com.tamdao.controller;
 
 import com.tamdao.domain.OrderStatus;
 import com.tamdao.domain.PaymentType;
-import com.tamdao.exception.UserException;
 import com.tamdao.payload.dto.OrderDTO;
 import com.tamdao.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class OrderController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO dto) throws UserException {
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO dto) {
         return ResponseEntity.ok(orderService.createOrder(dto));
     }
 
@@ -29,7 +28,6 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
-
 
     @GetMapping("/branch/{branchId}")
     public ResponseEntity<List<OrderDTO>> getOrdersByBranch(
@@ -76,7 +74,4 @@ public class OrderController {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }
-

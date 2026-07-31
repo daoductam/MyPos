@@ -1,17 +1,15 @@
 package com.tamdao.service.impl;
 
-
 import com.tamdao.domain.OrderStatus;
 import com.tamdao.domain.PaymentType;
-import com.tamdao.exception.UserException;
+import com.tamdao.exception.BusinessException;
+import com.tamdao.exception.ErrorCode;
 import com.tamdao.mapper.OrderMapper;
 import com.tamdao.modal.*;
 import com.tamdao.payload.dto.OrderDTO;
 import com.tamdao.repository.*;
-
 import com.tamdao.service.OrderService;
 import com.tamdao.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,13 +31,12 @@ public class OrderServiceImpl implements OrderService {
     private final UserService userService;
 
     @Override
-    public OrderDTO createOrder(OrderDTO dto) throws UserException {
+    public OrderDTO createOrder(OrderDTO dto) {
         User cashier = userService.getCurrentUser();
+        Branch branch = cashier.getBranch();
 
-        Branch branch=cashier.getBranch();
-
-        if(branch==null){
-            throw new UserException("cashier's branch is null");
+        if (branch == null) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Cashier's branch is null");
         }
 
         Order order = Order.builder()
@@ -52,17 +49,16 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = new java.util.ArrayList<>();
         for (com.tamdao.payload.dto.OrderItemDTO itemDto : dto.getItems()) {
             Product product = productRepository.findById(itemDto.getProductId())
-                    .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "Product not found"));
 
-            // ✅ Decrease Inventory
             Inventory inventory = inventoryRepository.findByBranchIdAndProductId(branch.getId(), product.getId());
 
             if (inventory == null) {
-                throw new UserException("Product '" + product.getName() + "' is not assigned to this branch inventory.");
+                throw new BusinessException(ErrorCode.OUT_OF_STOCK, "Product '" + product.getName() + "' is not assigned to this branch inventory.");
             }
 
             if (inventory.getQuantity() < itemDto.getQuantity()) {
-                throw new UserException("Insufficient stock for product: " + product.getName()
+                throw new BusinessException(ErrorCode.OUT_OF_STOCK, "Insufficient stock for product: " + product.getName()
                         + ". Available: " + inventory.getQuantity() + ", Requested: " + itemDto.getQuantity());
             }
 
@@ -89,10 +85,8 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO getOrderById(Long id) {
         return orderRepository.findById(id)
                 .map(OrderMapper::toDto)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Order not found"));
     }
-
-
 
     @Override
     public List<OrderDTO> getOrdersByBranch(Long branchId,
@@ -100,7 +94,6 @@ public class OrderServiceImpl implements OrderService {
                                             Long cashierId,
                                             PaymentType paymentType,
                                             OrderStatus status) {
-        // Optimized: Use repository query with direct SQL filtering instead of Java Stream filtering
         return orderRepository.findOrdersFiltered(branchId, customerId, cashierId, paymentType).stream()
                 .map(OrderMapper::toDto)
                 .collect(Collectors.toList());
@@ -116,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Long id) {
         if (!orderRepository.existsById(id)) {
-            throw new EntityNotFoundException("Order not found");
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Order not found");
         }
         orderRepository.deleteById(id);
     }
@@ -145,12 +138,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> getTop5RecentOrdersByBranchId(Long branchId) {
         branchRepository.findById(branchId)
-                .orElseThrow(() -> new EntityNotFoundException("Branch not found with ID: " + branchId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found with ID: " + branchId));
 
         List<Order> orders = orderRepository.findTop5ByBranchIdOrderByCreatedAtDesc(branchId);
         return orders.stream()
                 .map(OrderMapper::toDto)
                 .collect(Collectors.toList());
     }
-
 }

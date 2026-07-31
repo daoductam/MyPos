@@ -1,7 +1,5 @@
 package com.tamdao.controller;
 
-import com.tamdao.exception.ResourceNotFoundException;
-import com.tamdao.exception.UserException;
 import com.tamdao.mapper.RefundMapper;
 import com.tamdao.modal.Refund;
 import com.tamdao.payload.dto.RefundDTO;
@@ -23,16 +21,13 @@ public class RefundController {
 
     private final RefundService refundService;
 
-    // ✅ 1. Create a refund
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
-    public ResponseEntity<RefundDTO> createRefund(@RequestBody RefundDTO refundDTO)
-            throws UserException, ResourceNotFoundException {
+    public ResponseEntity<RefundDTO> createRefund(@RequestBody RefundDTO refundDTO) {
         Refund refund = refundService.createRefund(refundDTO);
         return ResponseEntity.ok(RefundMapper.toDTO(refund));
     }
 
-    // ✅ 2. Get all refunds (admin)
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
     public ResponseEntity<List<RefundDTO>> getAllRefunds() {
@@ -42,7 +37,6 @@ public class RefundController {
         return ResponseEntity.ok(refunds);
     }
 
-    // ✅ 3. Get refunds by cashier
     @GetMapping("/cashier/{cashierId}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<RefundDTO>> getRefundsByCashier(
@@ -53,7 +47,6 @@ public class RefundController {
         return ResponseEntity.ok(refunds);
     }
 
-    // ✅ 4. Get refunds by branch
     @GetMapping("/branch/{branchId}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<RefundDTO>> getRefundsByBranch(@PathVariable Long branchId) {
@@ -63,7 +56,6 @@ public class RefundController {
         return ResponseEntity.ok(refunds);
     }
 
-    // ✅ 5. Get refunds by shift report
     @GetMapping("/shift/{shiftReportId}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<RefundDTO>> getRefundsByShift(@PathVariable Long shiftReportId) {
@@ -73,7 +65,6 @@ public class RefundController {
         return ResponseEntity.ok(refunds);
     }
 
-    // ✅ 6. Get refunds by cashier and date range
     @GetMapping("/cashier/{cashierId}/range")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<RefundDTO>> getRefundsByCashierAndDateRange(
@@ -88,17 +79,15 @@ public class RefundController {
         return ResponseEntity.ok(refunds);
     }
 
-    // ✅ 7. Get refund by ID
     @GetMapping("/{id}")
-    public ResponseEntity<RefundDTO> getRefundById(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<RefundDTO> getRefundById(@PathVariable Long id) {
         Refund refund = refundService.getRefundById(id);
         return ResponseEntity.ok(RefundMapper.toDTO(refund));
     }
 
-    // ✅ 8. Delete refund
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_ADMIN', 'ROLE_STORE_ADMIN')")
-    public ResponseEntity<?> deleteRefund(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<?> deleteRefund(@PathVariable Long id) {
         refundService.deleteRefund(id);
         return ResponseEntity.ok("Refund deleted successfully.");
     }

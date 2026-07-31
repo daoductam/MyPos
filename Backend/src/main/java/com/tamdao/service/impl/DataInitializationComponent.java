@@ -84,6 +84,18 @@ public class DataInitializationComponent implements CommandLineRunner {
             user = userRepository.save(user);
         } else {
             boolean updated = false;
+            if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(rawPassword));
+                updated = true;
+            }
+            if (user.getRole() != role) {
+                user.setRole(role);
+                updated = true;
+            }
+            if (fullName != null && !fullName.equals(user.getFullName())) {
+                user.setFullName(fullName);
+                updated = true;
+            }
             if (store != null && user.getStore() == null) {
                 user.setStore(store);
                 updated = true;

@@ -1,7 +1,7 @@
 package com.tamdao.service.impl;
 
-
-import com.tamdao.exception.ResourceNotFoundException;
+import com.tamdao.exception.BusinessException;
+import com.tamdao.exception.ErrorCode;
 import com.tamdao.modal.Customer;
 import com.tamdao.repository.CustomerRepository;
 import com.tamdao.service.CustomerService;
@@ -22,10 +22,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Long id, Customer customerData) throws ResourceNotFoundException {
+    public Customer updateCustomer(Long id, Customer customerData) {
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Customer not found with id " + id));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Customer not found with id " + id));
 
         customer.setFullName(customerData.getFullName());
         customer.setEmail(customerData.getEmail());
@@ -38,16 +37,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(Long id) throws ResourceNotFoundException {
+    public void deleteCustomer(Long id) {
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + id));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Customer not found with id " + id));
         customerRepository.delete(customer);
     }
 
     @Override
-    public Customer getCustomerById(Long id) throws ResourceNotFoundException {
+    public Customer getCustomerById(Long id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + id));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Customer not found with id " + id));
     }
 
     @Override
@@ -59,5 +58,4 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> searchCustomer(String keyword) {
         return customerRepository.findByFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(keyword, keyword);
     }
-
 }

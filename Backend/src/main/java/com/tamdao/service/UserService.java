@@ -1,26 +1,16 @@
 package com.tamdao.service;
 
-
 import com.tamdao.domain.UserRole;
-import com.tamdao.exception.UserException;
 import com.tamdao.modal.User;
 
 import java.util.List;
 import java.util.Set;
-//import com.tamdao.payload.request.UpdateUserDto;
-
 
 public interface UserService {
-	User getUserByEmail(String email) throws UserException;
-	User getUserFromJwtToken(String jwt) throws UserException;
-	User getUserById(Long id) throws UserException;
-	Set<User> getUserByRole(UserRole role) throws UserException;
-	List<User> getUsers() throws UserException;
-	User getCurrentUser() throws UserException;
-
-
-
-//	User updateUser(UpdateUserDto updateData, User user);
-//	String sendForgotPasswordOtp(String email) throws UserException, MessagingException;
-//	User verifyForgotPasswordOtp(String otp, String updatedPassword) throws Exception;
+	User getUserByEmail(String email);
+	User getUserFromJwtToken(String jwt);
+	User getUserById(Long id);
+	Set<User> getUserByRole(UserRole role);
+	List<User> getUsers();
+	User getCurrentUser();
 }

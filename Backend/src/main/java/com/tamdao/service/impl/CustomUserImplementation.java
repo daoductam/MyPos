@@ -21,13 +21,20 @@ public class CustomUserImplementation implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if (username == null) {
+            throw new UsernameNotFoundException("Username/email cannot be null");
+        }
 
-        User user = userRepository.findByEmail(username);
+        String cleanedEmail = username.trim().toLowerCase();
+        User user = userRepository.findByEmail(cleanedEmail);
+
+        if (user == null) {
+            user = userRepository.findByEmail(username);
+        }
 
         if (user == null) {
             throw new UsernameNotFoundException("user doesn't exist with email " + username);
         }
-
 
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
         Collection<? extends GrantedAuthority> authorities = Collections.singletonList(authority);

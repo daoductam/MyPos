@@ -1,8 +1,5 @@
 package com.tamdao.controller;
 
-
-import com.tamdao.exception.AccessDeniedException;
-import com.tamdao.exception.UserException;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.ProductDTO;
 import com.tamdao.service.ProductService;
@@ -28,7 +25,7 @@ public class ProductController {
     public ResponseEntity<ProductDTO> create(
             @Valid @RequestBody ProductDTO dto,
             @RequestHeader("Authorization") String jwt
-    ) throws UserException, AccessDeniedException {
+    ) {
         User user = userService.getUserFromJwtToken(jwt);
         return ResponseEntity.ok(productService.createProduct(dto, user));
     }
@@ -38,21 +35,19 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
-
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id,
                                              @RequestBody ProductDTO dto,
-
-                                             @RequestHeader("Authorization") String jwt) throws UserException, AccessDeniedException {
+                                             @RequestHeader("Authorization") String jwt) {
         User user = userService.getUserFromJwtToken(jwt);
-        return ResponseEntity.ok(productService.updateProduct(id, dto,user));
+        return ResponseEntity.ok(productService.updateProduct(id, dto, user));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id,
-                                       @RequestHeader("Authorization") String jwt) throws UserException, AccessDeniedException {
+                                       @RequestHeader("Authorization") String jwt) {
         User user = userService.getUserFromJwtToken(jwt);
         productService.deleteProduct(id, user);
         return ResponseEntity.noContent().build();
@@ -67,10 +62,6 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> searchByKeyword(
             @PathVariable Long storeId,
             @RequestParam String q) {
-        return ResponseEntity.ok(productService.searchByKeyword(storeId,q));
+        return ResponseEntity.ok(productService.searchByKeyword(storeId, q));
     }
-
-
-
 }
-

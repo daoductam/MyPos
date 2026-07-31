@@ -1,6 +1,5 @@
 package com.tamdao.controller;
 
-import com.tamdao.exception.UserException;
 import com.tamdao.payload.dto.CategoryDTO;
 import com.tamdao.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class CategoryController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO dto) throws UserException {
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO dto) {
         return ResponseEntity.ok(categoryService.createCategory(dto));
     }
 
@@ -31,15 +30,14 @@ public class CategoryController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id,
-                                                      @RequestBody CategoryDTO dto) throws UserException {
+                                                      @RequestBody CategoryDTO dto) {
         return ResponseEntity.ok(categoryService.updateCategory(id, dto));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) throws UserException {
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 }
-

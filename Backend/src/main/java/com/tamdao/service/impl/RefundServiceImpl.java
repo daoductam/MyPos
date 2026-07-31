@@ -1,8 +1,8 @@
 package com.tamdao.service.impl;
 
 import com.tamdao.domain.OrderStatus;
-import com.tamdao.exception.ResourceNotFoundException;
-import com.tamdao.exception.UserException;
+import com.tamdao.exception.BusinessException;
+import com.tamdao.exception.ErrorCode;
 import com.tamdao.modal.Branch;
 import com.tamdao.modal.Order;
 import com.tamdao.modal.Refund;
@@ -13,7 +13,6 @@ import com.tamdao.repository.OrderRepository;
 import com.tamdao.repository.RefundRepository;
 import com.tamdao.service.RefundService;
 import com.tamdao.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,15 +31,14 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     @Transactional
-    public Refund createRefund(RefundDTO refundDTO) throws UserException, ResourceNotFoundException {
+    public Refund createRefund(RefundDTO refundDTO) {
         User currentCashier = userService.getCurrentUser();
 
         Order order = orderRepository.findById(refundDTO.getOrderId())
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Order not found"));
 
-        Branch branch=branchRepository.findById(refundDTO.getBranchId()).orElseThrow(
-                ()-> new EntityNotFoundException("branch not found")
-        );
+        Branch branch = branchRepository.findById(refundDTO.getBranchId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found"));
 
         Refund refund = new Refund();
         refund.setOrder(order);
@@ -50,8 +48,7 @@ public class RefundServiceImpl implements RefundService {
         refund.setCreatedAt(LocalDateTime.now());
         refund.setBranch(branch);
 
-
-        Refund savedRefund=refundRepository.save(refund);
+        Refund savedRefund = refundRepository.save(refund);
         order.setStatus(OrderStatus.REFUNDED);
         orderRepository.save(order);
         return savedRefund;
@@ -79,23 +76,20 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public List<Refund> getRefundsByBranch(Long branchId) {
-        List<Refund> refunds= refundRepository.findByBranchId(branchId);
-        return refunds;
+        return refundRepository.findByBranchId(branchId);
     }
 
     @Override
-    public Refund getRefundById(Long id) throws ResourceNotFoundException {
+    public Refund getRefundById(Long id) {
         return refundRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Refund not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Refund not found"));
     }
 
     @Override
-    public void deleteRefund(Long refundId) throws ResourceNotFoundException {
+    public void deleteRefund(Long refundId) {
         if (!refundRepository.existsById(refundId)) {
-            throw new ResourceNotFoundException("Refund not found");
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Refund not found");
         }
         refundRepository.deleteById(refundId);
     }
-
-
 }

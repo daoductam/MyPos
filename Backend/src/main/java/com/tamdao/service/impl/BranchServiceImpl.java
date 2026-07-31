@@ -1,8 +1,8 @@
 package com.tamdao.service.impl;
 
-
 import com.tamdao.domain.UserRole;
-import com.tamdao.exception.UserException;
+import com.tamdao.exception.BusinessException;
+import com.tamdao.exception.ErrorCode;
 import com.tamdao.mapper.BranchMapper;
 import com.tamdao.modal.Branch;
 import com.tamdao.modal.Store;
@@ -13,7 +13,6 @@ import com.tamdao.repository.StoreRepository;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.BranchService;
 import com.tamdao.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,12 +28,14 @@ public class BranchServiceImpl implements BranchService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final UserService userService;
 
     @Override
     public BranchDTO createBranch(BranchDTO branchDto, User user) {
         Store store = storeRepository.findByStoreAdminId(user.getId());
+        if (store == null) {
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Store not found for user");
+        }
 
         Branch branch = BranchMapper.toEntity(branchDto, store);
         return BranchMapper.toDto(branchRepository.save(branch));
@@ -43,18 +44,17 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public BranchDTO getBranchById(Long id) {
         Branch branch = branchRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found"));
         return BranchMapper.toDto(branch);
     }
 
     @Override
-    public List<BranchDTO> getAllBranchesByStoreId(Long storeId) throws UserException {
-        User currentUser=userService.getCurrentUser();
-        Store store=storeRepository.findById(storeId).orElseThrow(
-                () -> new EntityNotFoundException("Store not found")
+    public List<BranchDTO> getAllBranchesByStoreId(Long storeId) {
+        User currentUser = userService.getCurrentUser();
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Store not found")
         );
 
-        // Check if current user is allowed
         boolean isStoreManager = currentUser.getRole() == UserRole.ROLE_STORE_MANAGER &&
                 currentUser.getStore() != null &&
                 currentUser.getStore().getId().equals(storeId);
@@ -64,7 +64,7 @@ public class BranchServiceImpl implements BranchService {
                 store.getStoreAdmin().getId().equals(currentUser.getId());
 
         if (!isStoreManager && !isStoreAdmin) {
-            throw new UserException("You are not authorized to access this store's branches");
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "You are not authorized to access this store's branches");
         }
 
         return branchRepository.findByStoreId(store.getId()).stream()
@@ -73,16 +73,9 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public BranchDTO updateBranch(Long id, BranchDTO branchDto, User user) throws Exception {
-
-//        Store store = storeRepository.findByStoreAdminId(user.getId());
-
+    public BranchDTO updateBranch(Long id, BranchDTO branchDto, User user) {
         Branch existing = branchRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
-
-//        if(!store.getId().equals(existing.getStore().getId())){
-//            throw new Exception("can't have permission");
-//        }
+                .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found"));
 
         existing.setName(branchDto.getName());
         existing.setAddress(branchDto.getAddress());
@@ -98,7 +91,7 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public void deleteBranch(Long id) {
         if (!branchRepository.existsById(id)) {
-            throw new EntityNotFoundException("Branch not found");
+            throw new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found");
         }
         branchRepository.deleteById(id);
     }

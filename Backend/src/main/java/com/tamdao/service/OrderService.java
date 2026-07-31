@@ -1,15 +1,13 @@
 package com.tamdao.service;
 
-
 import com.tamdao.domain.OrderStatus;
 import com.tamdao.domain.PaymentType;
-import com.tamdao.exception.UserException;
 import com.tamdao.payload.dto.OrderDTO;
 
 import java.util.List;
 
 public interface OrderService {
-    OrderDTO createOrder(OrderDTO dto) throws UserException;
+    OrderDTO createOrder(OrderDTO dto);
     OrderDTO getOrderById(Long id);
 
     List<OrderDTO> getOrdersByBranch(Long branchId,

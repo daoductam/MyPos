@@ -1,6 +1,5 @@
 package com.tamdao.controller;
 
-import com.tamdao.exception.UserException;
 import com.tamdao.mapper.ShiftReportMapper;
 import com.tamdao.modal.ShiftReport;
 import com.tamdao.payload.dto.ShiftReportDTO;
@@ -23,15 +22,11 @@ public class ShiftReportController {
     private final ShiftReportService shiftReportService;
     private final ShiftReportMapper shiftReportMapper;
 
-    /**
-     * 🔄 Start a new shift (only once per day)
-     */
     @PostMapping("/start")
     @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
     public ResponseEntity<ShiftReport> startShift(
             @RequestParam Long branchId
-    ) throws UserException {
-        // current user will be auto-fetched from session in service
+    ) {
         ShiftReport shift = shiftReportService.startShift(
                 null,
                 branchId,
@@ -39,12 +34,9 @@ public class ShiftReportController {
         return ResponseEntity.ok(shift);
     }
 
-    /**
-     * 🛑 End the current shift for logged-in cashier
-     */
     @PatchMapping("/end")
     @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
-    public ResponseEntity<ShiftReportDTO> endShift() throws UserException {
+    public ResponseEntity<ShiftReportDTO> endShift() {
         ShiftReport ended = shiftReportService.endShift(
                 null,
                 LocalDateTime.now()
@@ -52,20 +44,13 @@ public class ShiftReportController {
         return ResponseEntity.ok(ShiftReportMapper.toDTO(ended));
     }
 
-    /**
-     * 📊 Get current shift progress (live data) by cashierId
-     */
     @GetMapping("/current")
     @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
-    public ResponseEntity<ShiftReportDTO> getCurrentShiftProgress(
-           ) throws UserException {
+    public ResponseEntity<ShiftReportDTO> getCurrentShiftProgress() {
         ShiftReport shift = shiftReportService.getCurrentShiftProgress(null);
         return ResponseEntity.ok(ShiftReportMapper.toDTO(shift));
     }
 
-    /**
-     * 📅 Get shift report by date (for cashier)
-     */
     @GetMapping("/cashier/{cashierId}/by-date")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<ShiftReportDTO> getShiftReportByDate(
@@ -75,28 +60,20 @@ public class ShiftReportController {
     ) {
         ShiftReport shift = shiftReportService.getShiftReportByCashierAndDate(
                 cashierId, date);
-        
         return ResponseEntity.ok(ShiftReportMapper.toDTO(shift));
     }
 
-    /**
-     * 👤 Get all shift reports for a cashier
-     */
     @GetMapping("/cashier/{cashierId}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<ShiftReportDTO>> getShiftsByCashier(
             @PathVariable Long cashierId
     ) {
-        List<ShiftReport> shift = shiftReportService
-                .getShiftReportsByCashier(cashierId);
+        List<ShiftReport> shift = shiftReportService.getShiftReportsByCashier(cashierId);
         List<ShiftReportDTO> dto = shift.stream()
                 .map(ShiftReportMapper::toDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dto);
     }
 
-    /**
-     * 🏬 Get all shift reports for a branch
-     */
     @GetMapping("/branch/{branchId}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<ShiftReportDTO>> getShiftsByBranch(
@@ -108,32 +85,21 @@ public class ShiftReportController {
         return ResponseEntity.ok(dto);
     }
 
-    /**
-     * 📋 Get all shift reports (admin use)
-     */
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
     public ResponseEntity<List<ShiftReportDTO>> getAllShifts() {
-        List<ShiftReport> shifts=shiftReportService.getAllShiftReports();
-
+        List<ShiftReport> shifts = shiftReportService.getAllShiftReports();
         List<ShiftReportDTO> dto = shifts.stream()
                 .map(ShiftReportMapper::toDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dto);
     }
 
-    /**
-     * 🔍 Get a shift by ID
-     */
     @GetMapping("/{id}")
     public ResponseEntity<ShiftReportDTO> getShiftById(@PathVariable Long id) {
-        ShiftReport shifts=shiftReportService.getShiftReportById(id);
-
+        ShiftReport shifts = shiftReportService.getShiftReportById(id);
         return ResponseEntity.ok(ShiftReportMapper.toDTO(shifts));
     }
 
-    /**
-     * ❌ Delete a shift report (admin use)
-     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_ADMIN', 'ROLE_STORE_ADMIN')")
     public ResponseEntity<?> deleteShift(@PathVariable Long id) {

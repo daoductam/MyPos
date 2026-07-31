@@ -1,5 +1,5 @@
 package com.tamdao.controller;
-import com.tamdao.exception.UserException;
+
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.BranchDTO;
 import com.tamdao.service.BranchService;
@@ -20,52 +20,43 @@ public class BranchController {
     private final BranchService branchService;
     private final UserService userService;
 
-
-    // 🔹 Create Branch
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
     public ResponseEntity<BranchDTO> createBranch(
             @Valid @RequestBody BranchDTO dto,
-
-            @RequestHeader("Authorization") String jwt) throws UserException {
+            @RequestHeader("Authorization") String jwt) {
         User user = userService.getUserFromJwtToken(jwt);
-        return ResponseEntity.ok(branchService.createBranch(dto,user));
+        return ResponseEntity.ok(branchService.createBranch(dto, user));
     }
 
-    // 🔹 Get Branch by ID
     @GetMapping("/{id}")
     public ResponseEntity<BranchDTO> getBranch(@PathVariable Long id) {
         return ResponseEntity.ok(branchService.getBranchById(id));
     }
 
-    // 🔹 Get All Branches (No Pagination)
     @GetMapping("/store/{storeId}")
     public ResponseEntity<List<BranchDTO>> getAllBranches(
             @RequestHeader("Authorization") String jwt,
             @PathVariable Long storeId
-    ) throws UserException {
-        User user=userService.getUserFromJwtToken(jwt);
+    ) {
+        User user = userService.getUserFromJwtToken(jwt);
         return ResponseEntity.ok(branchService.getAllBranchesByStoreId(storeId));
     }
 
-    // 🔹 Update Branch
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
     public ResponseEntity<BranchDTO> updateBranch(
             @PathVariable Long id,
             @RequestBody BranchDTO dto,
-            @RequestHeader("Authorization") String jwt) throws Exception {
-        User user=userService.getUserFromJwtToken(jwt);
+            @RequestHeader("Authorization") String jwt) {
+        User user = userService.getUserFromJwtToken(jwt);
         return ResponseEntity.ok(branchService.updateBranch(id, dto, user));
     }
 
-    // 🔹 Delete Branch
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
     public ResponseEntity<Void> deleteBranch(@PathVariable Long id) {
         branchService.deleteBranch(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }
