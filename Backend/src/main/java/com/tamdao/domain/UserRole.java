@@ -8,7 +8,9 @@ public enum UserRole {
     ROLE_BRANCH_MANAGER,
     ROLE_BRANCH_ADMIN,
     ROLE_BRANCH_CASHIER,
-    ROLE_CUSTOMER
+    ROLE_CUSTOMER,
+    // Appended to preserve the ordinal values used by legacy persisted users.
+    ROLE_CASHIER
 
 }
 

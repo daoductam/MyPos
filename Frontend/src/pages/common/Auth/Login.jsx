@@ -12,6 +12,8 @@ import {
 import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, forgotPassword } from '@/Redux Toolkit/features/auth/authThunk';
+import { getAuthorizationProfile } from '@/Redux Toolkit/features/user/userThunks';
+import { getHomePath } from '@/utils/capabilities';
 import { getUserProfile } from '@/Redux Toolkit/features/user/userThunks';
 import { startShift, getCurrentShiftProgress } from '@/Redux Toolkit/features/shiftReport/shiftReportThunks';
 import { useTranslation } from 'react-i18next';
@@ -66,11 +68,9 @@ const Login = () => {
 
         const user = resultAction.payload.user;
         dispatch(getUserProfile(resultAction.payload.jwt)); 
-        
-        const userRole = user.role;
-        if (userRole === 'ROLE_ADMIN') {
-          navigate('/super-admin');
-        } else if (userRole === 'ROLE_BRANCH_CASHIER') {
+        const authorizationProfile = await dispatch(getAuthorizationProfile()).unwrap();
+
+        if (authorizationProfile.capabilities?.includes('order.create')) {
           try {
             // First, try to get the current shift progress
             await dispatch(getCurrentShiftProgress()).unwrap();
@@ -81,12 +81,8 @@ const Login = () => {
             await dispatch(startShift({ branchId: user.branchId, cashierId: user.id })).unwrap();
           }
           navigate('/cashier');
-        } else if (userRole === 'ROLE_STORE_ADMIN' || userRole === 'ROLE_STORE_MANAGER') {
-          navigate('/store');
-        } else if (userRole === 'ROLE_BRANCH_MANAGER' || userRole === 'ROLE_BRANCH_ADMIN') {
-          navigate('/branch');
         } else {
-          navigate('/');
+          navigate(getHomePath(authorizationProfile));
         }
       } else {
         toast({

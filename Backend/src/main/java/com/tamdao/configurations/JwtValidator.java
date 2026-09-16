@@ -1,5 +1,7 @@
 package com.tamdao.configurations;
 
+import com.tamdao.authorization.AuthorizationSnapshot;
+import com.tamdao.service.AuthorizationService;
 import com.tamdao.service.RedisTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,8 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,6 +33,7 @@ public class JwtValidator extends OncePerRequestFilter {
 	private SecretKey key;
 
 	private final RedisTokenService redisTokenService;
+	private final AuthorizationService authorizationService;
 
 	@PostConstruct
 	public void init() {
@@ -61,10 +62,19 @@ public class JwtValidator extends OncePerRequestFilter {
 						.getPayload();
 
 				String email = String.valueOf(claims.get("email"));
-				String authorities = String.valueOf(claims.get("authorities"));
+				if (email == null || "null".equalsIgnoreCase(email)) {
+					throw new BadCredentialsException("JWT subject is missing");
+				}
 
-				List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-				Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, auths);
+				AuthorizationSnapshot snapshot = authorizationService.getSnapshotByEmail(email);
+				Object tokenVersion = claims.get("authz_version");
+				if (tokenVersion != null && Long.parseLong(String.valueOf(tokenVersion)) != snapshot.authorizationVersion()) {
+					throw new BadCredentialsException("Authorization version is stale");
+				}
+
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						email, null, authorizationService.getAuthorities(snapshot));
+				authentication.setDetails(snapshot);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			} catch (Exception e) {
 				SecurityContextHolder.clearContext();

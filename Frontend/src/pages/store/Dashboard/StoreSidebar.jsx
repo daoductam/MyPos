@@ -17,13 +17,14 @@ import {
   ArrowUpCircle,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { hasCapability } from "../../../utils/capabilities";
 
 const StoreSidebar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { store } = useSelector((state) => state.store);
-  const { userProfile } = useSelector((state) => state.user);
+  const { authorizationProfile } = useSelector((state) => state.user);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -45,7 +46,7 @@ const StoreSidebar = () => {
     { name: t('dashboard.store.bottomNav.settings'), path: "settings", icon: <Settings className="w-5 h-5" /> },
   ];
 
-  if (userProfile?.role === "ROLE_STORE_ADMIN") {
+  if (hasCapability(authorizationProfile, "subscription.manage")) {
     bottomLinks.push({ name: t('dashboard.store.bottomNav.upgradePlan'), path: "upgrade", icon: <ArrowUpCircle className="w-5 h-5" /> });
   }
 

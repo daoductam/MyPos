@@ -32,6 +32,7 @@ public class StoreAnalyticsServiceImpl implements StoreAnalyticsService {
         roles.add(UserRole.ROLE_STORE_MANAGER);
         roles.add(UserRole.ROLE_CUSTOMER);
         roles.add(UserRole.ROLE_BRANCH_CASHIER);
+        roles.add(UserRole.ROLE_CASHIER);
         roles.add(UserRole.ROLE_BRANCH_MANAGER);
 
         return StoreOverviewDTO.builder()

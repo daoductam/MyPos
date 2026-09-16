@@ -45,6 +45,7 @@ const BranchEmployees = () => {
   const { branch } = useSelector((state) => state.branch);
   const { employees } = useSelector((state) => state.employee)
   const { userProfile } = useSelector((state) => state.user);
+  const { authorizationProfile } = useSelector((state) => state.user);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -161,6 +162,7 @@ const BranchEmployees = () => {
       <div className="bg-black/20 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
         <EmployeeTable
           userProfile={userProfile}
+          authorizationProfile={authorizationProfile}
           employees={filteredEmployees}
           getStatusColor={getStatusColor}
           handleToggleAccess={handleToggleAccess}

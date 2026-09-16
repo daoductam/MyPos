@@ -34,11 +34,13 @@ public class StoreController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'store.read', #id) or @authorizationGuard.hasPlatformPermission(authentication, 'platform.store.read')")
     public ResponseEntity<StoreDTO> getStoreById(@PathVariable Long id) {
         return ResponseEntity.ok(storeService.getStoreById(id));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'store.update', #id)")
     public ResponseEntity<StoreDTO> updateStore(
             @PathVariable Long id,
             @RequestBody StoreDTO storeDto) {
@@ -46,12 +48,14 @@ public class StoreController {
     }
 
     @DeleteMapping()
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'store.delete')")
     public ResponseEntity<String> deleteStore() {
         storeService.deleteStore();
         return ResponseEntity.ok("Store deleted successfully");
     }
 
     @GetMapping("/admin")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'store.read')")
     public ResponseEntity<StoreDTO> getStoresByAdminId() {
         Store store = storeService.getStoreByAdminId();
         if (store == null) {
@@ -61,13 +65,14 @@ public class StoreController {
     }
 
     @GetMapping("/employee")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'store.read')")
     public ResponseEntity<StoreDTO> getStoresByEmployee() {
         StoreDTO store = storeService.getStoreByEmployee();
         return ResponseEntity.ok(store);
     }
 
     @GetMapping("/{storeId}/employee/list")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'employee.read', #storeId)")
     public ResponseEntity<List<UserDTO>> getStoreEmployeeList(
             @PathVariable Long storeId) {
         List<UserDTO> users = storeService.getEmployeesByStore(storeId);
@@ -75,7 +80,7 @@ public class StoreController {
     }
 
     @PostMapping("/add/employee")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'employee.create')")
     public ResponseEntity<UserDTO> addEmployee(
             @RequestBody UserDTO userDTO) {
         UserDTO user = storeService.addEmployee(null, userDTO);
@@ -83,6 +88,7 @@ public class StoreController {
     }
 
     @GetMapping
+    @PreAuthorize("@authorizationGuard.hasPlatformPermission(authentication, 'platform.store.read')")
     public ResponseEntity<List<StoreDTO>> getAllStores(
             @RequestParam(required = false) StoreStatus status
     ) {
@@ -90,6 +96,7 @@ public class StoreController {
     }
 
     @PutMapping("/{storeId}/moderate")
+    @PreAuthorize("@authorizationGuard.hasPlatformPermission(authentication, 'platform.store.moderate')")
     public StoreDTO moderateStore(
             @PathVariable Long storeId,
             @RequestParam StoreStatus action

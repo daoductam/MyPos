@@ -59,8 +59,8 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         localStorage.removeItem('jwt');
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
+        if (window.location.pathname !== '/auth/login') {
+          window.location.href = '/auth/login';
         }
         return Promise.reject(refreshError);
       }
@@ -68,6 +68,9 @@ api.interceptors.response.use(
 
     // Standardize error message extraction from backend ErrorCode / ApiResponse format
     const errorData = error.response?.data;
+    if (error.response?.status === 403) {
+      window.dispatchEvent(new CustomEvent('authorization:denied', { detail: errorData }));
+    }
     if (errorData && typeof errorData === 'object' && errorData.message) {
       error.customMessage = errorData.message;
     }

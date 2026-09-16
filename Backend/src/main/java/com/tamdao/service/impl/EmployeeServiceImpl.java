@@ -12,6 +12,8 @@ import com.tamdao.repository.BranchRepository;
 import com.tamdao.repository.StoreRepository;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.EmployeeService;
+import com.tamdao.authorization.ScopeType;
+import com.tamdao.service.AuthorizationMutationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final BranchRepository branchRepository;
     private final PasswordEncoder passwordEncoder;
     private final com.tamdao.service.UserService userService;
+    private final AuthorizationMutationService authorizationMutationService;
 
     @Override
     @Transactional
@@ -39,7 +42,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Branch branch = null;
 
-        if (dto.getRole() == UserRole.ROLE_BRANCH_MANAGER || dto.getRole() == UserRole.ROLE_BRANCH_CASHIER || dto.getRole() == UserRole.ROLE_BRANCH_ADMIN) {
+        if (dto.getRole() == UserRole.ROLE_BRANCH_MANAGER || dto.getRole() == UserRole.ROLE_CASHIER
+                || dto.getRole() == UserRole.ROLE_BRANCH_CASHIER || dto.getRole() == UserRole.ROLE_BRANCH_ADMIN) {
             if (dto.getBranchId() == null) {
                 throw new BusinessException(ErrorCode.INVALID_REQUEST, "Branch ID is required for Branch roles.");
             }
@@ -65,6 +69,14 @@ public class EmployeeServiceImpl implements EmployeeService {
             branchRepository.save(branch);
         }
 
+        authorizationMutationService.replaceAssignments(
+                savedEmployee,
+                canonicalRole(dto.getRole()),
+                branch == null ? ScopeType.STORE : ScopeType.BRANCH,
+                store.getId(),
+                branch == null ? null : branch.getId(),
+                "EMPLOYEE_CREATED");
+
         return UserMapper.toDTO(savedEmployee);
     }
 
@@ -73,19 +85,30 @@ public class EmployeeServiceImpl implements EmployeeService {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found with ID: " + branchId));
 
-        if (!(employee.getRole().equals(UserRole.ROLE_BRANCH_CASHIER) || employee.getRole().equals(UserRole.ROLE_BRANCH_MANAGER))) {
-            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Invalid role for branch employee. Must be ROLE_BRANCH_ADMIN or ROLE_BRANCH_MANAGER");
+        if (!(employee.getRole().equals(UserRole.ROLE_CASHIER)
+                || employee.getRole().equals(UserRole.ROLE_BRANCH_CASHIER)
+                || employee.getRole().equals(UserRole.ROLE_BRANCH_MANAGER))) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Invalid role for branch employee. Must be ROLE_BRANCH_MANAGER or ROLE_CASHIER");
         }
 
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         employee.setBranch(branch);
+        employee.setStore(branch.getStore());
 
         User isExist = userRepository.findByEmail(employee.getEmail());
         if (isExist != null) {
             employee.setId(isExist.getId());
         }
 
-        return userRepository.save(employee);
+        User savedEmployee = userRepository.save(employee);
+        authorizationMutationService.replaceAssignments(
+                savedEmployee,
+                canonicalRole(savedEmployee.getRole()),
+                ScopeType.BRANCH,
+                branch.getStore().getId(),
+                branch.getId(),
+                "EMPLOYEE_CREATED");
+        return savedEmployee;
     }
 
     @Override
@@ -105,7 +128,17 @@ public class EmployeeServiceImpl implements EmployeeService {
             existingEmployee.setRole(employeeDetails.getRole());
         }
 
-        return userRepository.save(existingEmployee);
+        User updatedEmployee = userRepository.save(existingEmployee);
+        if (updatedEmployee.getStore() != null) {
+            authorizationMutationService.replaceAssignments(
+                    updatedEmployee,
+                    canonicalRole(updatedEmployee.getRole()),
+                    updatedEmployee.getBranch() == null ? ScopeType.STORE : ScopeType.BRANCH,
+                    updatedEmployee.getStore().getId(),
+                    updatedEmployee.getBranch() == null ? null : updatedEmployee.getBranch().getId(),
+                    "EMPLOYEE_UPDATED");
+        }
+        return updatedEmployee;
     }
 
     @Override
@@ -113,6 +146,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         User employee = findEmployeeById(employeeId);
         User currentUser = userService.getCurrentUser();
         employee.setDeletedBy(currentUser.getId());
+        authorizationMutationService.revokeAssignments(employee, "EMPLOYEE_DELETED");
         userRepository.delete(employee);
     }
 
@@ -143,7 +177,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found with ID: " + branchId));
         return userRepository.findByBranchId(branch.getId()).stream()
-                .filter(user -> role == null || user.getRole() == role)
+                .filter(user -> role == null || canonicalRole(user.getRole()).equals(canonicalRole(role)))
                 .collect(Collectors.toList());
     }
 
@@ -161,5 +195,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (updated == 0) {
             throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Employee not found in trash");
         }
+    }
+
+    private String canonicalRole(UserRole role) {
+        if (role == null) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Employee role is required");
+        }
+        return switch (role) {
+            case ROLE_BRANCH_ADMIN, ROLE_BRANCH_MANAGER -> "ROLE_BRANCH_MANAGER";
+            case ROLE_BRANCH_CASHIER, ROLE_CASHIER -> "ROLE_CASHIER";
+            case ROLE_STORE_ADMIN -> "ROLE_STORE_ADMIN";
+            case ROLE_STORE_MANAGER -> "ROLE_STORE_MANAGER";
+            case ROLE_CUSTOMER -> "ROLE_CUSTOMER";
+            case ROLE_ADMIN -> throw new BusinessException(ErrorCode.INVALID_REQUEST, "Platform admin cannot be created as an employee");
+        };
     }
 }

@@ -17,6 +17,8 @@ import com.tamdao.repository.StoreRepository;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.StoreService;
 import com.tamdao.service.UserService;
+import com.tamdao.authorization.ScopeType;
+import com.tamdao.service.AuthorizationMutationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,11 +35,18 @@ public class StoreServiceImpl implements StoreService {
     private final BranchRepository branchRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthorizationMutationService authorizationMutationService;
 
     @Override
     public StoreDTO createStore(StoreDTO storeDto, User user) {
         Store store = StoreMapper.toEntity(storeDto, user);
-        return StoreMapper.toDto(storeRepository.save(store));
+        Store savedStore = storeRepository.save(store);
+        user.setRole(UserRole.ROLE_STORE_ADMIN);
+        user.setStore(savedStore);
+        User promotedUser = userRepository.save(user);
+        authorizationMutationService.ensureAssignment(
+                promotedUser, "ROLE_STORE_ADMIN", ScopeType.STORE, savedStore.getId(), null, "STORE_ONBOARDING");
+        return StoreMapper.toDto(savedStore);
     }
 
     @Override
@@ -122,7 +131,10 @@ public class StoreServiceImpl implements StoreService {
         User employee = UserMapper.toEntity(userDto);
         if (userDto.getRole() == UserRole.ROLE_STORE_MANAGER) {
             employee.setStore(store);
-        } else if (userDto.getRole() == UserRole.ROLE_BRANCH_MANAGER) {
+        } else if (userDto.getRole() == UserRole.ROLE_BRANCH_MANAGER
+                || userDto.getRole() == UserRole.ROLE_BRANCH_ADMIN
+                || userDto.getRole() == UserRole.ROLE_BRANCH_CASHIER
+                || userDto.getRole() == UserRole.ROLE_CASHIER) {
             Branch branch = branchRepository.findById(userDto.getBranchId())
                     .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Branch not found"));
             employee.setBranch(branch);
@@ -131,6 +143,16 @@ public class StoreServiceImpl implements StoreService {
 
         employee.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User addedEmployee = userRepository.save(employee);
+
+        authorizationMutationService.ensureAssignment(
+                addedEmployee,
+                (userDto.getRole() == UserRole.ROLE_BRANCH_CASHIER || userDto.getRole() == UserRole.ROLE_CASHIER) ? "ROLE_CASHIER"
+                        : userDto.getRole() == UserRole.ROLE_BRANCH_ADMIN ? "ROLE_BRANCH_MANAGER"
+                        : userDto.getRole().name(),
+                employee.getBranch() == null ? ScopeType.STORE : ScopeType.BRANCH,
+                store.getId(),
+                employee.getBranch() == null ? null : employee.getBranch().getId(),
+                "EMPLOYEE_CREATED");
 
         return UserMapper.toDTO(addedEmployee);
     }

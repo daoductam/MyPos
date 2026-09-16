@@ -3,6 +3,7 @@ package com.tamdao.service.impl;
 import com.tamdao.exception.BusinessException;
 import com.tamdao.exception.ErrorCode;
 import com.tamdao.modal.Customer;
+import com.tamdao.modal.User;
 import com.tamdao.repository.CustomerRepository;
 import com.tamdao.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer createCustomer(Customer customer) {
-        Long currentUserId = userService.getCurrentUser().getId();
+        User currentUser = userService.getCurrentUser();
+        Long currentUserId = currentUser.getId();
         customer.setCreatedBy(currentUserId);
         customer.setUpdatedBy(currentUserId);
+        customer.setStore(currentUser.getStore());
+        customer.setBranch(currentUser.getBranch());
         return customerRepository.save(customer);
     }
 
@@ -57,7 +61,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+        User currentUser = userService.getCurrentUser();
+        if (currentUser.getBranch() != null) {
+            return customerRepository.findByBranchId(currentUser.getBranch().getId());
+        }
+        return currentUser.getStore() == null ? List.of()
+                : customerRepository.findByStoreId(currentUser.getStore().getId());
     }
 
     @Override
@@ -67,7 +76,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getDeletedCustomers() {
-        return customerRepository.findDeleted();
+        User currentUser = userService.getCurrentUser();
+        if (currentUser.getBranch() != null) {
+            return customerRepository.findDeletedByBranchId(currentUser.getBranch().getId());
+        }
+        return currentUser.getStore() == null ? List.of()
+                : customerRepository.findDeletedByStoreId(currentUser.getStore().getId());
     }
 
     @Override

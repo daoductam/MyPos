@@ -12,7 +12,7 @@ import Onboarding from "./pages/onboarding/Onboarding";
 import SuperAdminRoutes from "./routes/SuperAdminRoutes";
 import PageNotFound from "./pages/common/PageNotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import { getUserProfile } from "./Redux Toolkit/features/user/userThunks";
+import { getAuthorizationProfile, getUserProfile } from "./Redux Toolkit/features/user/userThunks";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -23,6 +23,7 @@ const App = () => {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       dispatch(getUserProfile(jwt));
+      dispatch(getAuthorizationProfile());
     }
   }, [dispatch]);
 
@@ -58,7 +59,7 @@ const App = () => {
         <Route
           path="/super-admin/*"
           element={
-            <ProtectedRoute roles={['ROLE_ADMIN']}>
+            <ProtectedRoute permissions={['platform.dashboard.read']}>
               <SuperAdminRoutes />
             </ProtectedRoute>
           }
@@ -66,7 +67,7 @@ const App = () => {
         <Route
           path="/store/*"
           element={
-            <ProtectedRoute roles={['ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER']}>
+            <ProtectedRoute permissions={['store.read']}>
               <StoreRoutes />
             </ProtectedRoute>
           }
@@ -74,7 +75,7 @@ const App = () => {
         <Route
           path="/branch/*"
           element={
-            <ProtectedRoute roles={['ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN']}>
+            <ProtectedRoute permissions={['employee.create']}>
               <BranchManagerRoutes />
             </ProtectedRoute>
           }
@@ -82,7 +83,7 @@ const App = () => {
         <Route
           path="/cashier/*"
           element={
-            <ProtectedRoute roles={['ROLE_BRANCH_CASHIER']}>
+            <ProtectedRoute permissions={['order.create']}>
               <CashierRoutes />
             </ProtectedRoute>
           }

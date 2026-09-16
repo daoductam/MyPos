@@ -39,7 +39,7 @@ const EmployeeStats = ({ employees }) => {
             <p className="text-3xl font-bold mt-2 text-emerald-400">
               {
                 employees.filter(
-                  (e) => e.role === "ROLE_BRANCH_CASHIER"
+                  (e) => e.role === "ROLE_CASHIER" || e.role === "ROLE_BRANCH_CASHIER"
                 ).length
               }
             </p>

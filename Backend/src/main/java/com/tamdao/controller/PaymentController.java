@@ -22,7 +22,7 @@ public class PaymentController {
     private final UserService userService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'payment.manage')")
     public ResponseEntity<PaymentLinkResponse> createPaymentLink(
             @RequestHeader("Authorization") String jwt,
             @RequestParam Long planId,

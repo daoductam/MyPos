@@ -2,13 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router';
 
-const ProtectedRoute = ({ children, roles }) => {
-  const { userProfile, loading } = useSelector((state) => state.user);
+const ProtectedRoute = ({ children, permissions = [] }) => {
+  const { userProfile, authorizationProfile, loading, authorizationLoading } = useSelector((state) => state.user);
   const location = useLocation();
   const hasToken = localStorage.getItem("jwt");
 
 
-  if (loading || (hasToken && !userProfile)) {
+  if (loading || authorizationLoading || (hasToken && (!userProfile || !authorizationProfile))) {
     // Show a loading indicator while profile is being fetched
     return (
       <div className="flex h-screen w-screen items-center justify-center">
@@ -23,9 +23,10 @@ const ProtectedRoute = ({ children, roles }) => {
   }
 
 
-  const userHasRequiredRole = userProfile && roles.includes(userProfile.role);
+  const userHasRequiredCapability = permissions.length === 0
+    || permissions.some((permission) => authorizationProfile?.capabilities?.includes(permission));
 
-  if (!userHasRequiredRole) {
+  if (!userHasRequiredCapability) {
     // User does not have the required role, redirect to a 'not found' or 'unauthorized' page
     // Or redirect to the main landing page as a fallback.
     return <Navigate to="/" replace />;

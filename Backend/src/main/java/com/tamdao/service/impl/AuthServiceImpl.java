@@ -13,6 +13,8 @@ import com.tamdao.payload.response.TokenRefreshResponse;
 import com.tamdao.repository.PasswordResetTokenRepository;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.AuthService;
+import com.tamdao.authorization.ScopeType;
+import com.tamdao.service.AuthorizationMutationService;
 import com.tamdao.service.EmailService;
 import com.tamdao.service.RedisTokenService;
 import jakarta.transaction.Transactional;
@@ -47,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final EmailService emailService;
     private final RedisTokenService redisTokenService;
+    private final AuthorizationMutationService authorizationMutationService;
 
     @Value("${app.frontend.reset-url}")
     private String frontendResetUrl;
@@ -58,10 +61,6 @@ public class AuthServiceImpl implements AuthService {
             throw new BusinessException(ErrorCode.USER_EXISTED, "Email id already registered ");
         }
 
-        if (req.getRole().equals(UserRole.ROLE_ADMIN)) {
-            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Role admin is not allowed");
-        }
-
         User createdUser = new User();
         createdUser.setEmail(req.getEmail());
         createdUser.setPassword(passwordEncoder.encode(req.getPassword()));
@@ -69,9 +68,11 @@ public class AuthServiceImpl implements AuthService {
         createdUser.setPhone(req.getPhone());
         createdUser.setFullName(req.getFullName());
         createdUser.setLastLogin(LocalDateTime.now());
-        createdUser.setRole(req.getRole());
+        createdUser.setRole(UserRole.ROLE_CUSTOMER);
 
         User savedUser = userRepository.save(createdUser);
+        authorizationMutationService.ensureAssignment(
+                savedUser, "ROLE_CUSTOMER", ScopeType.SELF, null, null, "PUBLIC_SIGNUP");
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);

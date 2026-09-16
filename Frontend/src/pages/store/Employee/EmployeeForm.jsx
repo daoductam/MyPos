@@ -26,7 +26,7 @@ const EmployeeForm = ({ initialData, onSubmit, roles }) => {
     phone: Yup.string().required(t('storeModule.employees.validation.phoneRequired')),
     role: Yup.string().required(t('storeModule.employees.validation.roleRequired')),
     branchId: Yup.string().when("role", {
-      is: (role) => role === "ROLE_BRANCH_MANAGER" || role === "ROLE_BRANCH_CASHIER" || role === "ROLE_BRANCH_ADMIN",
+      is: (role) => role === "ROLE_BRANCH_MANAGER" || role === "ROLE_CASHIER",
       then: (schema) => schema.required(t('storeModule.employees.validation.branchRequired')),
       otherwise: (schema) => schema.notRequired(),
     }),
@@ -146,7 +146,7 @@ const EmployeeForm = ({ initialData, onSubmit, roles }) => {
             value={formik.values.role}
             onValueChange={(value) => {
             formik.setFieldValue("role", value);
-            if (value !== "ROLE_BRANCH_MANAGER" && value !== "ROLE_BRANCH_CASHIER" && value !== "ROLE_BRANCH_ADMIN") {
+            if (value !== "ROLE_BRANCH_MANAGER" && value !== "ROLE_CASHIER") {
               formik.setFieldValue("branchId", "");
             }
           }}
@@ -167,7 +167,7 @@ const EmployeeForm = ({ initialData, onSubmit, roles }) => {
             <div className="text-red-400 text-sm">{formik.errors.role}</div>
           ) : null}
         </div>
-        {(formik.values.role === "ROLE_BRANCH_MANAGER" || formik.values.role === "ROLE_BRANCH_ADMIN" || formik.values.role === "ROLE_BRANCH_CASHIER") && (
+        {(formik.values.role === "ROLE_BRANCH_MANAGER" || formik.values.role === "ROLE_CASHIER") && (
           <div className="space-y-2">
             <Label htmlFor="branchId" className="text-gray-300">{t('storeModule.employees.form.branch')}</Label>
             <Select

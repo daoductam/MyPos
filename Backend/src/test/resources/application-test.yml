@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:pos_test;MODE=MySQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  mail:
+    username: test@example.com
+    password: test-password
+
+app:
+  demo:
+    seed:
+      enabled: false
+  jwt:
+    secret: test-only-jwt-secret-key-which-is-long-enough-123456789
+
+razorpay:
+  api:
+    key: test-key
+    secret: test-secret
+
+stripe:
+  api:
+    key: test-key

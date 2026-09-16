@@ -53,6 +53,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Boolean verified = false;
 
+    @Column(name = "authorization_version", nullable = false)
+    private Long authorizationVersion = 1L;
+
     private LocalDateTime lastLogin;
 
 

@@ -32,4 +32,12 @@ public class Customer extends BaseEntity {
     private String phone;
 
     private Integer loyaltyPoints = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 }

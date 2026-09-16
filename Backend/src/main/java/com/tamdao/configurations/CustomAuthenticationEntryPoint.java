@@ -17,7 +17,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 			AuthenticationException authException) throws IOException, ServletException {
 		 response.setContentType("application/json");
 	     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-	     response.getWriter().write("{\"message\": \"" + authException.getMessage() + "\"}");
+	     String requestId = String.valueOf(request.getAttribute(RequestIdFilter.HEADER));
+	     response.getWriter().write("{\"success\":false,\"code\":\"AUTHENTICATION_REQUIRED\",\"message\":\"Authentication is required\",\"requestId\":\"" + requestId + "\"}");
 	       
 		
 	}

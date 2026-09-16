@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<Void>> handleSpringSecurityAccessDeniedException(AccessDeniedException ex) {
-        ApiResponse<Void> response = ApiResponse.error(ErrorCode.UNAUTHORIZED.getCode(), "Bạn không có quyền truy cập tài nguyên này");
+        ApiResponse<Void> response = ApiResponse.error(ErrorCode.AUTHORIZATION_DENIED.getCode(), "Bạn không có quyền truy cập tài nguyên này");
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 

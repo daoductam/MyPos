@@ -1,10 +1,12 @@
 package com.tamdao.configurations;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +21,7 @@ import java.util.Collections;
 
 
 @Configuration
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 	
@@ -40,9 +43,15 @@ public class SecurityConfig {
 			.addFilterBefore(jwtValidator, BasicAuthenticationFilter.class)
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-			.exceptionHandling(
+				.exceptionHandling(
 					exceptionHandler -> exceptionHandler
-							.authenticationEntryPoint(customAuthenticationEntryPoint))
+							.authenticationEntryPoint(customAuthenticationEntryPoint)
+							.accessDeniedHandler((request, response, exception) -> {
+								response.setContentType("application/json");
+								response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+								Object requestId = request.getAttribute(RequestIdFilter.HEADER);
+								response.getWriter().write("{\"success\":false,\"code\":\"AUTHORIZATION_DENIED\",\"message\":\"You do not have permission to perform this action.\",\"requestId\":\"" + requestId + "\"}");
+							}))
 			.build();
 	}
 	

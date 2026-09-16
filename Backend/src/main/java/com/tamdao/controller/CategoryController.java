@@ -17,25 +17,26 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'category.write', #dto.storeId)")
     public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO dto) {
         return ResponseEntity.ok(categoryService.createCategory(dto));
     }
 
     @GetMapping("/store/{storeId}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'category.read', #storeId)")
     public ResponseEntity<List<CategoryDTO>> getCategories(@PathVariable Long storeId) {
         return ResponseEntity.ok(categoryService.getCategoriesByStore(storeId));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'category.write', @resourceScopeResolver.categoryStoreId(#id))")
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id,
                                                       @RequestBody CategoryDTO dto) {
         return ResponseEntity.ok(categoryService.updateCategory(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'category.delete', @resourceScopeResolver.categoryStoreId(#id))")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();

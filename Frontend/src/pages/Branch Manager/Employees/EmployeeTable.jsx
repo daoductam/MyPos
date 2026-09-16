@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit, UserX, Key, BarChart, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { hasCapability } from "../../../utils/capabilities";
 
 const EmployeeTable = ({
   employees,
@@ -20,6 +21,7 @@ const EmployeeTable = ({
   openEditDialog,
   handleDelete,
   userProfile,
+  authorizationProfile,
 }) => {
   const { t } = useTranslation();
   // Note: loginAccess is hardcoded to true in the original file, I'll keep that but localize the text
@@ -101,7 +103,7 @@ const EmployeeTable = ({
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  {userProfile?.role === 'ROLE_BRANCH_ADMIN' && handleDelete && (
+                  {hasCapability(authorizationProfile, "employee.delete") && handleDelete && (
                     <Button
                       variant="outline"
                       size="sm"

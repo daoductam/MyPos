@@ -16,6 +16,15 @@ export const getUserProfile = createAsyncThunk('user/getProfile', async (token, 
   }
 });
 
+export const getAuthorizationProfile = createAsyncThunk('user/getAuthorizationProfile', async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.get('/api/v1/authorization/me');
+    return res.data;
+  } catch (err) {
+    return rejectWithValue(err.response?.data?.message || 'Failed to fetch authorization profile');
+  }
+});
+
 // 🔹 Get all customers
 export const getCustomers = createAsyncThunk('user/getCustomers', async (token, { rejectWithValue }) => {
   try {

@@ -17,31 +17,33 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'inventory.write', #dto.branchId)")
     public ResponseEntity<InventoryDTO> create(@RequestBody InventoryDTO dto) {
         return ResponseEntity.ok(inventoryService.createInventory(dto));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'inventory.write', @resourceScopeResolver.inventoryStoreId(#id))")
     public ResponseEntity<InventoryDTO> update(@PathVariable Long id,
                                                @RequestBody InventoryDTO dto) {
         return ResponseEntity.ok(inventoryService.updateInventory(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'inventory.delete', @resourceScopeResolver.inventoryStoreId(#id))")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         inventoryService.deleteInventory(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'inventory.read', @resourceScopeResolver.inventoryStoreId(#id))")
     public ResponseEntity<InventoryDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(inventoryService.getInventoryById(id));
     }
 
     @GetMapping("/product/{productId}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'inventory.read', @resourceScopeResolver.productStoreId(#productId))")
     public ResponseEntity<InventoryDTO> getInventoryByProduct(
             @PathVariable Long productId) {
         return ResponseEntity.ok(
@@ -50,6 +52,7 @@ public class InventoryController {
     }
 
     @GetMapping("/branch/{branchId}")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'inventory.read', #branchId)")
     public ResponseEntity<List<InventoryDTO>> getByBranch(@PathVariable Long branchId) {
         return ResponseEntity.ok(inventoryService.getInventoryByBranch(branchId));
     }

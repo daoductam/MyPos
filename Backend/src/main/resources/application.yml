@@ -6,7 +6,14 @@ spring:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:pos}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:TaM123456789@}
+    password: ${DB_PASSWORD}
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: true
+    locations: classpath:db/migration
 
   data:
     redis:
@@ -16,14 +23,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: your email
-    password: your gmail app password
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -37,7 +44,7 @@ spring:
 
 app:
   jwt:
-    secret: ${JWT_SECRET:asdfghjklpoiuytrewqzxcvbnmlkjhglpouhggfdsawqwertyyuiioplmnbvcxzasdfgh}
+    secret: ${JWT_SECRET}
   frontend:
     reset-url: http://localhost:5173/auth/reset-password?token=
   security:
@@ -53,12 +60,12 @@ server:
 
 razorpay:
   api:
-    key: your razor pay key
-    secret: your razorpay secret key
+    key: ${RAZORPAY_API_KEY}
+    secret: ${RAZORPAY_API_SECRET}
 
 stripe:
   api:
-    key: your stripe key
+    key: ${STRIPE_API_KEY}
 
 logging:
   level:
