@@ -5,13 +5,14 @@ import {
   getAllBranchesByStore,
   updateBranch,
   deleteBranch,
-  // addEmployeeToBranch,
-  // getEmployeesByBranch
+  getDeletedBranches,
+  restoreBranch
 } from './branchThunks';
 
 const initialState = {
   branch: null,
   branches: [],
+  deletedBranches: [],
   employees: [],
   loading: false,
   error: null,
@@ -24,6 +25,7 @@ const branchSlice = createSlice({
     clearBranchState: (state) => {
       state.branch = null;
       state.branches = [];
+      state.deletedBranches = [];
       state.employees = [];
       state.error = null;
     },
@@ -59,6 +61,14 @@ const branchSlice = createSlice({
         state.branches = action.payload;
       })
 
+      .addCase(getDeletedBranches.fulfilled, (state, action) => {
+        state.deletedBranches = action.payload;
+      })
+
+      .addCase(restoreBranch.fulfilled, (state, action) => {
+        state.deletedBranches = state.deletedBranches.filter((b) => b.id !== action.payload);
+      })
+
       .addCase(updateBranch.fulfilled, (state, action) => {
         state.branch = action.payload;
       })
@@ -66,8 +76,6 @@ const branchSlice = createSlice({
       .addCase(deleteBranch.fulfilled, (state, action) => {
         state.branches = state.branches.filter((b) => b.id !== action.payload);
       })
-
-
 
       .addMatcher(
         (action) => action.type.startsWith('branch/') && action.type.endsWith('/rejected'),

@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tag, DollarSign, Package, Calendar, Barcode, Palette, Image as ImageIcon } from "lucide-react";
+import AuditFooter from "@/components/common/AuditFooter";
 
 const ProductDetails = ({ product }) => {
   if (!product) return null;
@@ -113,6 +114,17 @@ const ProductDetails = ({ product }) => {
             <p className="text-gray-300 whitespace-pre-line">{product.description}</p>
           </div>
         )}
+
+        {/* Audit Trail Metadata */}
+        <AuditFooter
+          createdAt={product.createdAt}
+          createdBy={product.createdBy}
+          updatedAt={product.updatedAt}
+          updatedBy={product.updatedBy}
+          deletedAt={product.deletedAt}
+          deletedBy={product.deletedBy}
+          isDeleted={product.deleted}
+        />
       </CardContent>
     </Card>
   );

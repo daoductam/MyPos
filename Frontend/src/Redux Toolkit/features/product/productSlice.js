@@ -5,11 +5,14 @@ import {
   updateProduct,
   deleteProduct,
   getProductsByStore,
-  searchProducts
+  searchProducts,
+  getDeletedProducts,
+  restoreProduct
 } from './productThunks';
 
 const initialState = {
   products: [],
+  deletedProducts: [],
   product: null,
   searchResults: [],
   loading: false,
@@ -23,6 +26,7 @@ const productSlice = createSlice({
     clearProductState: (state) => {
       state.product = null;
       state.products = [];
+      state.deletedProducts = [];
       state.searchResults = [];
       state.error = null;
     },
@@ -61,6 +65,14 @@ const productSlice = createSlice({
 
       .addCase(getProductsByStore.fulfilled, (state, action) => {
         state.products = action.payload;
+      })
+
+      .addCase(getDeletedProducts.fulfilled, (state, action) => {
+        state.deletedProducts = action.payload;
+      })
+
+      .addCase(restoreProduct.fulfilled, (state, action) => {
+        state.deletedProducts = state.deletedProducts.filter((p) => p.id !== action.payload);
       })
 
       .addCase(searchProducts.pending, (state) => {
