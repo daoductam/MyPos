@@ -34,6 +34,7 @@ const StoreSidebar = () => {
     { name: t('dashboard.store.nav.dashboard'), path: "dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
     { name: t('dashboard.store.nav.sales'), path: "sales", icon: <ShoppingBag className="w-5 h-5" /> },
     { name: t('dashboard.store.nav.products'), path: "products", icon: <Package className="w-5 h-5" /> },
+    { name: t('dashboard.store.nav.inventory'), path: "inventory", icon: <ShoppingCart className="w-5 h-5" /> },
     { name: t('dashboard.store.nav.categories'), path: "categories", icon: <Tag className="w-5 h-5" /> },
     { name: t('dashboard.store.nav.branches'), path: "branches", icon: <GitBranch className="w-5 h-5" /> },
     { name: t('dashboard.store.nav.employees'), path: "employees", icon: <Users className="w-5 h-5" /> },

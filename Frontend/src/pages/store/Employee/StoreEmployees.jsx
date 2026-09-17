@@ -60,10 +60,14 @@ export default function StoreEmployees() {
 
   const handleEditEmployee = (updatedEmployeeData) => {
     if (currentEmployee?.id && localStorage.getItem("jwt")) {
+      const payload = {
+        ...updatedEmployeeData,
+        branch: updatedEmployeeData.branchId ? { id: Number(updatedEmployeeData.branchId) } : null,
+      };
       dispatch(
         updateEmployee({
           employeeId: currentEmployee.id,
-          employeeDetails: updatedEmployeeData,
+          employeeDetails: payload,
           token: localStorage.getItem("jwt"),
         })
       );

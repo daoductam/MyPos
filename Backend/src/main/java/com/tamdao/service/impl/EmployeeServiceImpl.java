@@ -105,6 +105,15 @@ public class EmployeeServiceImpl implements EmployeeService {
             existingEmployee.setRole(employeeDetails.getRole());
         }
 
+        // Update branch if role is branch role and branch is specified
+        if (employeeDetails.getBranch() != null && employeeDetails.getBranch().getId() != null) {
+            Branch branch = branchRepository.findById(employeeDetails.getBranch().getId())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found with ID: " + employeeDetails.getBranch().getId()));
+            existingEmployee.setBranch(branch);
+        } else if (existingEmployee.getRole() == UserRole.ROLE_STORE_ADMIN || existingEmployee.getRole() == UserRole.ROLE_STORE_MANAGER) {
+            existingEmployee.setBranch(null);
+        }
+
         return userRepository.save(existingEmployee);
     }
 

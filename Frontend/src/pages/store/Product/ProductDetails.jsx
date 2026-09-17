@@ -1,9 +1,12 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tag, DollarSign, Package, Calendar, Barcode, Palette, Image as ImageIcon } from "lucide-react";
+import { Tag, DollarSign, Package, Calendar, Barcode } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ProductDetails = ({ product }) => {
+  const { t } = useTranslation();
+
   if (!product) return null;
 
   return (
@@ -40,7 +43,7 @@ const ProductDetails = ({ product }) => {
             <div className="flex items-center gap-2">
               <Barcode className="h-5 w-5 text-gray-400" />
               <div>
-                <div className="text-sm text-gray-400">SKU</div>
+                <div className="text-sm text-gray-400">{t('storeModule.products.details.sku')}</div>
                 <div className="font-medium text-gray-200">{product.sku || 'N/A'}</div>
               </div>
             </div>
@@ -48,16 +51,8 @@ const ProductDetails = ({ product }) => {
             <div className="flex items-center gap-2">
               <Tag className="h-5 w-5 text-gray-400" />
               <div>
-                <div className="text-sm text-gray-400">Category</div>
-                <div className="font-medium text-gray-200">{product.category || 'Uncategorized'}</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Palette className="h-5 w-5 text-gray-400" />
-              <div>
-                <div className="text-sm text-gray-400">Color</div>
-                <div className="font-medium text-gray-200">{product.color || 'N/A'}</div>
+                <div className="text-sm text-gray-400">{t('storeModule.products.details.category')}</div>
+                <div className="font-medium text-gray-200">{product.category || t('storeModule.products.details.uncategorized')}</div>
               </div>
             </div>
           </div>
@@ -66,14 +61,14 @@ const ProductDetails = ({ product }) => {
             <div className="flex items-center gap-2">
               <DollarSign className="h-5 w-5 text-gray-400" />
               <div>
-                <div className="text-sm text-gray-400">Price</div>
+                <div className="text-sm text-gray-400">{t('storeModule.products.details.price')}</div>
                 <div className="font-medium text-gray-200">
                   <span className="text-lg font-bold text-emerald-400">
-                    ₹{product.sellingPrice?.toFixed(2) || product.price?.toFixed(2) || '0.00'}
+                    {(product.sellingPrice || product.price || 0).toLocaleString('vi-VN')} VNĐ
                   </span>
                   {product.mrp && product.mrp > (product.sellingPrice || product.price) && (
                     <span className="ml-2 text-sm line-through text-gray-500">
-                      ₹{product.mrp.toFixed(2)}
+                      {product.mrp.toLocaleString('vi-VN')} VNĐ
                     </span>
                   )}
                 </div>
@@ -83,13 +78,11 @@ const ProductDetails = ({ product }) => {
             {product.stock !== undefined && <div className="flex items-center gap-2">
               <Package className="h-5 w-5 text-gray-400" />
               <div>
-                <div className="text-sm text-gray-400">Stock</div>
+                <div className="text-sm text-gray-400">{t('storeModule.products.details.stock')}</div>
                 <div className="font-medium text-gray-200">
-                  {product.stock !== undefined ? (
-                    <Badge className={product.stock > 10 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}>
-                      {product.stock} in stock
-                    </Badge>
-                  ) : 'N/A'}
+                  <Badge className={product.stock > 10 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}>
+                    {product.stock} {t('storeModule.products.details.inStock')}
+                  </Badge>
                 </div>
               </div>
             </div>}
@@ -97,9 +90,9 @@ const ProductDetails = ({ product }) => {
             {product.updatedAt && <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-gray-400" />
               <div>
-                <div className="text-sm text-gray-400">Last Updated</div>
+                <div className="text-sm text-gray-400">{t('storeModule.products.details.lastUpdated')}</div>
                 <div className="font-medium text-gray-200">
-                  {product.updatedAt ? new Date(product.updatedAt).toLocaleDateString() : 'N/A'}
+                  {new Date(product.updatedAt).toLocaleDateString('vi-VN')}
                 </div>
               </div>
             </div>}
@@ -109,7 +102,7 @@ const ProductDetails = ({ product }) => {
         {/* Description */}
         {product.description && (
           <div className="mt-6 pt-6 border-t border-white/10">
-            <h3 className="text-lg font-medium mb-2 text-gray-200">Description</h3>
+            <h3 className="text-lg font-medium mb-2 text-gray-200">{t('storeModule.products.details.description')}</h3>
             <p className="text-gray-300 whitespace-pre-line">{product.description}</p>
           </div>
         )}

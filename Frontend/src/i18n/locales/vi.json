@@ -289,6 +289,7 @@
         "dashboard": "Bảng điều khiển",
         "sales": "Doanh số",
         "products": "Sản phẩm",
+        "inventory": "Kho hàng",
         "categories": "Danh mục",
         "branches": "Chi nhánh",
         "employees": "Nhân viên",
@@ -1084,9 +1085,9 @@
     "actions": "Hành động",
     "back": "Quay lại",
     "roles": {
-      "ROLE_STORE_MANAGER": "Chủ cửa hàng (Store Manager)",
+      "ROLE_STORE_MANAGER": "Tổng quản lý chuỗi (Store Manager)",
       "ROLE_BRANCH_MANAGER": "Quản lý chi nhánh (Branch Manager)",
-      "ROLE_BRANCH_ADMIN": "Quản trị viên (Branch Admin)",
+      "ROLE_BRANCH_ADMIN": "Quản trị chi nhánh (Branch Admin)",
       "ROLE_BRANCH_CASHIER": "Thu ngân (Cashier)"
     },
     "validation": {
@@ -1160,6 +1161,16 @@
         "updateBtn": "Cập nhật Sản phẩm",
         "addBtn": "Thêm Sản phẩm",
         "uploading": "Đang tải lên..."
+      },
+      "details": {
+        "sku": "Mã SKU",
+        "category": "Danh mục",
+        "uncategorized": "Chưa phân loại",
+        "price": "Giá bán",
+        "stock": "Tồn kho",
+        "inStock": "còn hàng",
+        "lastUpdated": "Cập nhật lần cuối",
+        "description": "Mô tả"
       },
       "table": {
         "loading": "Đang tải sản phẩm...",

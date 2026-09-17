@@ -283,6 +283,7 @@
         "dashboard": "Dashboard",
         "sales": "Sales",
         "products": "Products",
+        "inventory": "Inventory",
         "categories": "Categories",
         "branches": "Branches",
         "employees": "Employees",
@@ -1125,6 +1126,16 @@
         "updateBtn": "Update Product",
         "addBtn": "Add Product",
         "uploading": "Uploading..."
+      },
+      "details": {
+        "sku": "SKU",
+        "category": "Category",
+        "uncategorized": "Uncategorized",
+        "price": "Price",
+        "stock": "Stock",
+        "inStock": "in stock",
+        "lastUpdated": "Last Updated",
+        "description": "Description"
       },
       "table": {
         "loading": "Loading products...",
