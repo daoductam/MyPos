@@ -8,8 +8,11 @@ import { createStore, getStoreByAdmin } from '../../Redux Toolkit/features/store
 import { getUserProfile } from '../../Redux Toolkit/features/user/userThunks';
 import { useNavigate } from 'react-router';
 import { ShoppingCart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 const Onboarding = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, isCompleted } = useSelector((state) => state.onboarding);
@@ -184,14 +187,15 @@ const Onboarding = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white overflow-hidden relative">
-      {/* Website Logo */}
-      <div className="absolute top-0 left-0 z-20 p-6">
+      {/* Top Header Bar with Logo and Language Switcher */}
+      <div className="absolute top-0 left-0 right-0 z-20 p-6 flex justify-between items-center">
         <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => navigate('/')}>
           <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 transform">
             <ShoppingCart className="w-6 h-6 font-bold text-muted-foreground group-hover:text-emerald-600 transition-colors" />
           </div>
-          <span className="text-xl font-bold text-muted-foreground group-hover:text-primary transition-colors">POS Pro</span>
+          <span className="text-xl font-bold text-muted-foreground group-hover:text-primary transition-colors">{t('onboarding.brandTitle')}</span>
         </div>
+        <LanguageSwitcher />
       </div>
 
       {/* Animated background from landing.jsx */}
@@ -235,28 +239,28 @@ const Onboarding = () => {
               
               {/* Title */}
               <h1 className="text-4xl font-extrabold mb-4 leading-tight tracking-tight">
-                Set Up Your Digital Storefront
-                <span className="block text-green-300 mt-2">in Minutes</span>
+                {t('onboarding.leftTitle')}
+                <span className="block text-green-300 mt-2">{t('onboarding.leftHighlight')}</span>
               </h1>
               
               {/* Description */}
               <p className="text-lg text-green-100/90 mb-8 leading-relaxed">
-                Our guided setup makes it easy to configure your business and start selling.
+                {t('onboarding.leftSubtitle')}
               </p>
               
               {/* Features List */}
               <div className="space-y-4 text-left">
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <span className="text-green-100/90">Create your admin profile</span>
+                  <span className="text-green-100/90">{t('onboarding.features.profile')}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <span className="text-green-100/90">Define your store details</span>
+                  <span className="text-green-100/90">{t('onboarding.features.store')}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <span className="text-green-100/90">Go live instantly</span>
+                  <span className="text-green-100/90">{t('onboarding.features.golive')}</span>
                 </div>
               </div>
             </div>
@@ -268,17 +272,17 @@ const Onboarding = () => {
           <div className="w-full max-w-md relative z-10">
             {/* Progress Indicator */}
             <div className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                  Step {step} of 2
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-base font-semibold text-white">
+                  {t('onboarding.stepProgress', { step })}
                 </h2>
-                <span className="text-sm text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full font-medium">
-                  {step === 1 ? 'Owner Details' : 'Store Details'}
+                <span className="text-xs text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full font-medium">
+                  {step === 1 ? t('onboarding.steps.owner') : t('onboarding.steps.store')}
                 </span>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${(step / 2) * 100}%` }}
                 ></div>
               </div>
@@ -286,34 +290,34 @@ const Onboarding = () => {
 
             {/* Error Display */}
             {(error || localError) && (
-              <div className="mb-6 p-4 bg-red-900/30 border border-red-400/50 text-red-300 rounded-lg shadow-md backdrop-blur-sm">
+              <div className="mb-6 p-4 bg-red-900/30 border border-red-400/50 text-red-300 rounded-xl shadow-md backdrop-blur-sm">
                 <div className="flex items-center">
                   <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"></path></svg>
-                  <span className="font-medium">{error || localError}</span>
+                  <span className="font-medium text-sm">{error || localError}</span>
                 </div>
               </div>
             )}
 
             {/* Loading Overlay */}
             {localLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm rounded-2xl z-50">
-                <svg className="animate-spin h-10 w-10 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm rounded-3xl z-50">
+                <svg className="animate-spin h-10 w-10 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               </div>
             )}
 
-            {/* Form Card with glass effect */}
-            <Card className="w-full shadow-2xl border border-white/10 bg-white/10 backdrop-blur-xl rounded-2xl hover:bg-white/15 transition-colors duration-300">
-              <CardHeader className="text-center pb-4">
-                <CardTitle className="text-3xl font-bold text-white-900 dark:text-white">
-                  {step === 1 ? 'Create Your Account' : 'Store Information'}
+            {/* Form Card with liquid glass effect */}
+            <Card className="w-full shadow-2xl border border-white/10 bg-gray-900/60 backdrop-blur-2xl rounded-3xl overflow-hidden transition-all duration-300">
+              <CardHeader className="text-center pb-3 pt-6">
+                <CardTitle className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  {step === 1 ? t('onboarding.step1Title') : t('onboarding.step2Title')}
                 </CardTitle>
-                <p className="text-gray-300 mt-2">
+                <p className="text-gray-400 text-sm mt-1.5">
                   {step === 1 
-                    ? 'Let\'s start by setting up your account details' 
-                    : 'Tell us about your business'
+                    ? t('onboarding.step1Subtitle')
+                    : t('onboarding.step2Subtitle')
                   }
                 </p>
               </CardHeader>
@@ -331,9 +335,9 @@ const Onboarding = () => {
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-400">
-                Already have an account?{' '}
+                {t('onboarding.alreadyAccount')}{' '}
                 <a href="/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
-                  Sign in here
+                  {t('onboarding.signInHere')}
                 </a>
               </p>
             </div>

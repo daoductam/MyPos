@@ -140,7 +140,7 @@ const LiveDemoSection = () => {
                                 <div className="w-8 h-8 rounded bg-emerald-500/20"></div>
                               </div>
                               <p className="text-xs font-medium text-white mb-1">Sản phẩm {i + 1}</p>
-                              <p className="text-xs text-gray-400">₹{((i + 1) * 99).toFixed(2)}</p>
+                              <p className="text-xs text-gray-400">{((i + 1) * 45000).toLocaleString('vi-VN')}đ</p>
                             </div>
                           ))}
                         </div>
@@ -152,22 +152,26 @@ const LiveDemoSection = () => {
                           <h3 className="font-medium text-white mb-1">Đơn hàng hiện tại</h3>
                           <div className="flex justify-between text-sm">
                             <span className="text-gray-400">Sản phẩm: 3</span>
-                            <span className="text-gray-400">Tổng: 547.00đ</span>
+                            <span className="text-gray-400">Tổng: 544.500đ</span>
                           </div>
                         </div>
                         
                         <div className="flex-1 overflow-y-auto mb-4">
-                          {[1, 2, 3].map((item) => (
-                            <div key={item} className="flex items-center justify-between py-2 border-b border-white/5">
+                          {[
+                            { name: 'Sản phẩm 1', price: 45000, qty: 1 },
+                            { name: 'Sản phẩm 2', price: 90000, qty: 2 },
+                            { name: 'Sản phẩm 3', price: 135000, qty: 2 },
+                          ].map((item, idx) => (
+                            <div key={idx} className="flex items-center justify-between py-2 border-b border-white/5">
                               <div>
-                                <p className="text-sm font-medium text-white">Sản phẩm {item}</p>
+                                <p className="text-sm font-medium text-white">{item.name}</p>
                                 <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-                                  <span>₹{(item * 99).toFixed(2)}</span>
+                                  <span>{item.price.toLocaleString('vi-VN')}đ</span>
                                   <span>×</span>
-                                  <span>{item}</span>
+                                  <span>{item.qty}</span>
                                 </div>
                               </div>
-                              <p className="font-medium">₹{(item * item * 99).toFixed(2)}</p>
+                              <p className="font-medium">{(item.price * item.qty).toLocaleString('vi-VN')}đ</p>
                             </div>
                           ))}
                         </div>
@@ -175,15 +179,15 @@ const LiveDemoSection = () => {
                         <div className="space-y-2 mb-4">
                           <div className="flex justify-between">
                             <span className="text-gray-400">Tạm tính</span>
-                            <span className="font-medium">547.00đ</span>
+                            <span className="font-medium">495.000đ</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-400">Thuế (18%)</span>
-                            <span className="font-medium">98.46đ</span>
+                            <span className="text-gray-400">Thuế (VAT 10%)</span>
+                            <span className="font-medium">49.500đ</span>
                           </div>
                           <div className="flex justify-between text-lg font-bold">
                             <span>Tổng cộng</span>
-                            <span>645.46đ</span>
+                            <span className="text-emerald-400">544.500đ</span>
                           </div>
                         </div>
                         
@@ -233,7 +237,7 @@ const LiveDemoSection = () => {
                                 className="w-full bg-emerald-500/80 rounded-t" 
                                 style={{ height: `${height}%` }}
                               ></div>
-                              <p className="text-xs mt-1">{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}</p>
+                              <p className="text-xs mt-1">{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'][i]}</p>
                             </div>
                           ))}
                         </div>
@@ -275,7 +279,7 @@ const LiveDemoSection = () => {
                         <div key={i} className="grid grid-cols-4 py-2 border-t border-white/5">
                           <span className="text-sm">#ĐH-{1000 + i}</span>
                           <span className="text-sm">Khách hàng {i}</span>
-                          <span className="text-sm">{(i * 450).toLocaleString()}đ</span>
+                          <span className="text-sm">{(i * 450000).toLocaleString('vi-VN')}đ</span>
                           <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800 inline-block text-center w-20">
                             Hoàn thành
                           </span>
@@ -324,13 +328,13 @@ const LiveDemoSection = () => {
                         <div key={i} className="grid grid-cols-6 p-3 border-t border-white/5 items-center">
                           <div className="flex items-center space-x-2">
                             <div className="w-8 h-8 bg-black/20 rounded flex-shrink-0"></div>
-                            <span className="text-sm font-medium">Product {i + 1}</span>
+                            <span className="text-sm font-medium">Sản phẩm {i + 1}</span>
                           </div>
                           <div className="text-sm text-gray-400">SKU-{1000 + i}</div>
                           <div className="text-sm text-gray-400">
-                            {['Electronics', 'Clothing', 'Groceries', 'Home Goods', 'Toys'][i]}
+                            {['Điện tử', 'Thời trang', 'Thực phẩm', 'Gia dụng', 'Đồ chơi'][i]}
                           </div>
-                          <div className="text-sm">₹{((i + 1) * 499).toFixed(2)}</div>
+                          <div className="text-sm">{((i + 1) * 150000).toLocaleString('vi-VN')}đ</div>
                           <div>
                             <span className={`text-xs px-2 py-1 rounded-full ${i === 3 ? 'bg-red-500/20 text-red-300' : i === 2 ? 'bg-yellow-500/20 text-yellow-300' : 'bg-green-500/20 text-green-300'}`}>
                               {i === 3 ? 'Hết hàng' : i === 2 ? 'Sắp hết' : `Còn ${(i + 1) * 25}`}
@@ -387,10 +391,10 @@ const LiveDemoSection = () => {
                         <div key={i} className="grid grid-cols-6 p-3 border-t border-white/5 items-center">
                           <div className="flex items-center space-x-2">
                             <div className="w-8 h-8 bg-black/20 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-medium">
-                              {['RK', 'PS', 'AP', 'SK', 'MJ'][i]}
+                              {['NA', 'TM', 'LN', 'PT', 'DV'][i]}
                             </div>
                             <span className="text-sm font-medium">
-                              {['Rajesh Kumar', 'Priya Sharma', 'Amit Patel', 'Sneha Kapoor', 'Mohit Jain'][i]}
+                              {['Nguyễn Văn An', 'Trần Thị Mai', 'Lê Hoàng Nam', 'Phạm Minh Tuấn', 'Đặng Thảo Vy'][i]}
                             </span>
                           </div>
                           <div className="text-sm text-gray-400">customer{i + 1}@example.com</div>

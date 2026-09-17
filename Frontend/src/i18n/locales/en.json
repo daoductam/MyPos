@@ -1743,5 +1743,75 @@
         "save": "Save System Settings"
       }
     }
+  },
+  "onboarding": {
+    "brandTitle": "POS Pro",
+    "leftTitle": "Set Up Your Digital Storefront",
+    "leftHighlight": "in Minutes",
+    "leftSubtitle": "Our guided setup makes it easy to configure your business and start selling.",
+    "features": {
+      "profile": "Create your admin profile",
+      "store": "Define your store details",
+      "golive": "Go live instantly"
+    },
+    "stepProgress": "Step {{step}} of 2",
+    "steps": {
+      "owner": "Owner Details",
+      "store": "Store Details"
+    },
+    "step1Title": "Create Your Account",
+    "step1Subtitle": "Let's start by setting up your account details",
+    "step2Title": "Store Information",
+    "step2Subtitle": "Tell us about your business",
+    "alreadyAccount": "Already have an account?",
+    "signInHere": "Sign in here",
+    "ownerForm": {
+      "fullNameLabel": "Full Name",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "fullNamePlaceholder": "Enter your full name",
+      "emailPlaceholder": "Enter your email address",
+      "passwordPlaceholder": "Enter your password (min 6 characters)",
+      "confirmPasswordPlaceholder": "Re-enter your password to confirm",
+      "nextStep": "Next Step",
+      "processing": "Processing...",
+      "validation": {
+        "fullNameRequired": "Full name is required",
+        "fullNameMin": "Full name must be at least 2 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 6 characters",
+        "confirmRequired": "Confirm password is required",
+        "passwordMatch": "Passwords must match"
+      }
+    },
+    "storeForm": {
+      "storeNameLabel": "Store Name",
+      "storeTypeLabel": "Store Type",
+      "storeAddressLabel": "Store Address",
+      "storeNamePlaceholder": "Enter your store name",
+      "storeTypePlaceholder": "Select store type",
+      "storeAddressPlaceholder": "Enter store address (optional)",
+      "back": "Back",
+      "complete": "Complete Setup",
+      "creating": "Creating Store...",
+      "types": {
+        "retail": "Retail Store",
+        "restaurant": "Restaurant",
+        "cafe": "Café",
+        "pharmacy": "Pharmacy",
+        "grocery": "Grocery Store",
+        "electronics": "Electronics Store",
+        "clothing": "Clothing Store",
+        "other": "Other"
+      },
+      "validation": {
+        "storeNameRequired": "Store name is required",
+        "storeNameMin": "Store name must be at least 2 characters",
+        "storeTypeRequired": "Store type is required"
+      }
+    }
   }
 }
