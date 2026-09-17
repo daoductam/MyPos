@@ -4,6 +4,12 @@ Tài liệu này liệt kê toàn bộ các vai trò (`UserRole`) có trong hệ
 
 ---
 
+> **RBAC v2 status (2026-09-17):** Hệ thống đã chuyển sang 6 role chuẩn: `ROLE_ADMIN`, `ROLE_STORE_ADMIN`, `ROLE_STORE_MANAGER`, `ROLE_BRANCH_MANAGER`, `ROLE_CASHIER`, `ROLE_CUSTOMER`. `ROLE_BRANCH_ADMIN` và `ROLE_BRANCH_CASHIER` chỉ còn là alias tương thích trong giai đoạn migration, không được dùng làm role mới.
+>
+> Quyền thực tế được quyết định bởi permission + scope (`PLATFORM`, `STORE`, `BRANCH`, `SELF`), không chỉ bởi tên role. Backend kiểm tra lại scope từ database; frontend chỉ dùng capability để ẩn/hiện UI.
+>
+> Contract chính: [RBAC v2 contracts](designs/rbac-redesign/2026-09-16-contracts.md). Các bảng/migration và rollout gate: [RBAC implementation plan](plans/rbac-redesign/2026-09-16-plan.md).
+
 ## 1. Bản Đồ Tổng Quan Các Vai Trò (User Roles Overview)
 
 Hệ thống hỗ trợ 7 vai trò chính:
@@ -23,13 +29,13 @@ Dưới đây là thông tin đăng nhập của các tài khoản mẫu đượ
 
 | Vai Trò | Email Đăng Nhập | Mật Khẩu Mẫu | Tên Hiển Thị |
 | :--- | :--- | :--- | :--- |
-| `ROLE_ADMIN` | `tam@gmail.com` | `tam123456` | Tam Super Admin |
-| `ROLE_STORE_ADMIN` | `store.admin@dmart.com` | `StoreAdmin@123` | Store Admin |
-| `ROLE_STORE_MANAGER` | `store.manager@dmart.com` | `StoreManager@123` | Store Manager |
-| `ROLE_BRANCH_MANAGER` | `branch.manager@dmart.com` | `BranchManager@123` | Branch Manager |
-| `ROLE_BRANCH_ADMIN` | `branch.admin@dmart.com` | `BranchAdmin@123` | Branch Admin |
-| `ROLE_BRANCH_CASHIER` | `cashier@dmart.com` | `Cashier@123` | Branch Cashier |
-| `ROLE_CUSTOMER` | `customer@gmail.com` | `Customer@123` | Customer Guest |
+| `ROLE_ADMIN` | `tam@gmail.com` | Injected via environment only | Tam Super Admin |
+| `ROLE_STORE_ADMIN` | `store.admin@dmart.com` | Injected via environment only | Store Admin |
+| `ROLE_STORE_MANAGER` | `store.manager@dmart.com` | Injected via environment only | Store Manager |
+| `ROLE_BRANCH_MANAGER` | `branch.manager@dmart.com` | Injected via environment only | Branch Manager |
+| `ROLE_BRANCH_ADMIN` | `branch.admin@dmart.com` | Injected via environment only | Branch Admin |
+| `ROLE_BRANCH_CASHIER` | `cashier@dmart.com` | Injected via environment only | Branch Cashier |
+| `ROLE_CUSTOMER` | `customer@gmail.com` | Injected via environment only | Customer Guest |
 
 ---
 
