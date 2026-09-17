@@ -12,7 +12,13 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('jwt');
-    if (token) {
+    const isPublicAuthEndpoint =
+      config.url?.includes('/api/v1/auth/login') ||
+      config.url?.includes('/api/v1/auth/signup') ||
+      config.url?.includes('/api/v1/auth/forgot-password') ||
+      config.url?.includes('/api/v1/auth/reset-password');
+
+    if (token && !isPublicAuthEndpoint) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

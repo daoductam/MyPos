@@ -33,10 +33,17 @@ public class JwtValidator extends OncePerRequestFilter {
 	private SecretKey key;
 
 	private final RedisTokenService redisTokenService;
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 	@PostConstruct
 	public void init() {
 		this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+	}
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		String path = request.getServletPath();
+		return path != null && path.startsWith("/api/v1/auth/");
 	}
 
 	@Override
@@ -51,7 +58,9 @@ public class JwtValidator extends OncePerRequestFilter {
 			try {
 				if (redisTokenService.isBlacklisted(jwt)) {
 					SecurityContextHolder.clearContext();
-					throw new BadCredentialsException("Token has been revoked or logged out");
+					customAuthenticationEntryPoint.commence(request, response,
+							new BadCredentialsException("Token has been revoked or logged out"));
+					return;
 				}
 
 				Claims claims = Jwts.parser()
@@ -68,7 +77,9 @@ public class JwtValidator extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			} catch (Exception e) {
 				SecurityContextHolder.clearContext();
-				throw new BadCredentialsException("Invalid or expired JWT token", e);
+				customAuthenticationEntryPoint.commence(request, response,
+						new BadCredentialsException("Invalid or expired JWT token", e));
+				return;
 			}
 		}
 		filterChain.doFilter(request, response);
