@@ -175,5 +175,5 @@ CREATE INDEX idx_amq_unresolved
     ON authorization_migration_quarantine (resolved_at, created_at);
 
 ALTER TABLE users
-    ADD COLUMN IF NOT EXISTS authorization_version BIGINT NOT NULL DEFAULT 1
+    ADD COLUMN authorization_version BIGINT NOT NULL DEFAULT 1
         COMMENT 'Incremented whenever effective role assignments or permission overrides change';

@@ -33,6 +33,7 @@ public class DataInitializationComponent implements CommandLineRunner {
     private final BranchRepository branchRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthorizationMutationService authorizationMutationService;
+    private final DemoCatalogSeeder demoCatalogSeeder;
 
     @Value("${app.demo.seed.enabled:false}")
     private boolean demoSeedEnabled;
@@ -69,7 +70,7 @@ public class DataInitializationComponent implements CommandLineRunner {
         validateDemoSeedPasswords();
 
         // 1. Super Admin: Quản trị viên tối cao của toàn hệ thống SaaS POS
-        initializeUserIfNotExist("tam@gmail.com", demoAdminPassword, "Tam Super Admin", UserRole.ROLE_ADMIN, null, null);
+        User admin = initializeUserIfNotExist("tam@gmail.com", demoAdminPassword, "Tam Super Admin", UserRole.ROLE_ADMIN, null, null);
 
         // 2. Store Admin: Quản trị viên cấp chuỗi cửa hàng, quản lý cấu hình và nhân sự cấp cao của chuỗi
         User storeAdmin = initializeUserIfNotExist("store.admin@dmart.com", demoStoreAdminPassword, "Store Admin", UserRole.ROLE_STORE_ADMIN, null, null);
@@ -103,12 +104,14 @@ public class DataInitializationComponent implements CommandLineRunner {
         // 7. Customer: Khách hàng thành viên, tích điểm, nhận ưu đãi và tra cứu lịch sử mua hàng cá nhân
         User customer = initializeUserIfNotExist("customer@gmail.com", demoCustomerPassword, "Customer Guest", UserRole.ROLE_CUSTOMER, null, null);
 
+        synchronizeAuthorizationAssignment(admin);
         synchronizeAuthorizationAssignment(storeAdmin);
         synchronizeAuthorizationAssignment(storeManager);
         synchronizeAuthorizationAssignment(branchManager);
         synchronizeAuthorizationAssignment(branchAdmin);
         synchronizeAuthorizationAssignment(cashier);
         synchronizeAuthorizationAssignment(customer);
+        demoCatalogSeeder.seed(store, branch);
     }
 
     private void validateDemoSeedPasswords() {

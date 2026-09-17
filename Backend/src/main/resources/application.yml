@@ -1,4 +1,9 @@
 spring:
+  config:
+    # Load local development variables when running from the Backend directory.
+    # Docker Compose still provides container environment variables in Docker.
+    import: optional:file:.env[.properties]
+
   application:
     name: pos-system
 
@@ -29,8 +34,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         smtp:
@@ -43,6 +48,17 @@ spring:
       enabled: true
 
 app:
+  demo:
+    seed:
+      enabled: ${APP_DEMO_SEED_ENABLED:false}
+    passwords:
+      admin: ${APP_DEMO_PASSWORDS_ADMIN:}
+      store-admin: ${APP_DEMO_PASSWORDS_STORE_ADMIN:}
+      store-manager: ${APP_DEMO_PASSWORDS_STORE_MANAGER:}
+      branch-manager: ${APP_DEMO_PASSWORDS_BRANCH_MANAGER:}
+      branch-admin: ${APP_DEMO_PASSWORDS_BRANCH_ADMIN:}
+      cashier: ${APP_DEMO_PASSWORDS_CASHIER:}
+      customer: ${APP_DEMO_PASSWORDS_CUSTOMER:}
   jwt:
     secret: ${JWT_SECRET}
   frontend:
@@ -60,12 +76,12 @@ server:
 
 razorpay:
   api:
-    key: ${RAZORPAY_API_KEY}
-    secret: ${RAZORPAY_API_SECRET}
+    key: ${RAZORPAY_API_KEY:}
+    secret: ${RAZORPAY_API_SECRET:}
 
 stripe:
   api:
-    key: ${STRIPE_API_KEY}
+    key: ${STRIPE_API_KEY:}
 
 logging:
   level:

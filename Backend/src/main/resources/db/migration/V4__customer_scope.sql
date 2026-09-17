@@ -1,8 +1,8 @@
 -- Attach customer records to an operating tenant so customer APIs can enforce
 -- store/branch scope instead of returning a global customer list.
 ALTER TABLE customer
-    ADD COLUMN IF NOT EXISTS store_id BIGINT NULL,
-    ADD COLUMN IF NOT EXISTS branch_id BIGINT NULL;
+    ADD COLUMN store_id BIGINT NULL,
+    ADD COLUMN branch_id BIGINT NULL;
 
 CREATE INDEX idx_customer_store_scope ON customer (store_id, deleted);
 CREATE INDEX idx_customer_branch_scope ON customer (branch_id, deleted);

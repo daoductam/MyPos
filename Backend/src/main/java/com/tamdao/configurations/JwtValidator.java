@@ -5,6 +5,7 @@ import com.tamdao.service.AuthorizationService;
 import com.tamdao.service.RedisTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
@@ -15,18 +16,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class JwtValidator extends OncePerRequestFilter {
+
+	private static final Set<String> PUBLIC_AUTH_PATHS = Set.of(
+			"/api/v1/auth/login", "/api/v1/auth/signup", "/api/v1/auth/refresh",
+			"/api/v1/auth/forgot-password", "/api/v1/auth/reset-password");
 
 	@Value("${app.jwt.secret}")
 	private String secretKey;
@@ -34,10 +40,17 @@ public class JwtValidator extends OncePerRequestFilter {
 
 	private final RedisTokenService redisTokenService;
 	private final AuthorizationService authorizationService;
+	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
 	@PostConstruct
 	public void init() {
-		this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+		this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+	}
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		return "OPTIONS".equals(request.getMethod())
+				|| PUBLIC_AUTH_PATHS.contains(request.getServletPath());
 	}
 
 	@Override
@@ -76,9 +89,11 @@ public class JwtValidator extends OncePerRequestFilter {
 						email, null, authorizationService.getAuthorities(snapshot));
 				authentication.setDetails(snapshot);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-			} catch (Exception e) {
+			} catch (JwtException | IllegalArgumentException | AuthenticationException e) {
 				SecurityContextHolder.clearContext();
-				throw new BadCredentialsException("Invalid or expired JWT token", e);
+				authenticationEntryPoint.commence(request, response,
+						new BadCredentialsException("Invalid or expired JWT token", e));
+				return;
 			}
 		}
 		filterChain.doFilter(request, response);

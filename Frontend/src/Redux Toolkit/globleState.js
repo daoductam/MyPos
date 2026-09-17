@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice.js";
 import storeReducer from "./features/store/storeSlice.js";
 import branchReducer from "./features/branch/branchSlice.js";
@@ -22,8 +22,7 @@ import subscriptionPlanReducer from "./features/subscriptionPlan/subscriptionPla
 import subscriptionReducer from "./features/subscription/subscriptionSlice.js";
 import paymentReducer from "./features/payment/paymentSlice.js";
 
-const globleState = configureStore({
-  reducer: {
+const rootReducer = combineReducers({
     auth: authReducer,
     store: storeReducer,
     branch: branchReducer,
@@ -47,6 +46,15 @@ const globleState = configureStore({
     subscriptionPlan: subscriptionPlanReducer,
     subscription: subscriptionReducer,
     payment: paymentReducer,
+});
+
+const globleState = configureStore({
+  reducer: (state, action) => {
+    // Do not carry cart, branch or tenant data into the next user's session.
+    if (action.type === 'user/logout/fulfilled' || action.type === 'user/logout/rejected') {
+      state = undefined;
+    }
+    return rootReducer(state, action);
   },
 });
 

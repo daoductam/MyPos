@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -55,6 +56,13 @@ public class SecurityConfig {
 			.build();
 	}
 	
+	@Bean
+	public FilterRegistrationBean<JwtValidator> jwtFilterRegistration() {
+		FilterRegistrationBean<JwtValidator> registration = new FilterRegistrationBean<>(jwtValidator);
+		registration.setEnabled(false); // Run only inside the Spring Security chain.
+		return registration;
+	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

@@ -80,12 +80,14 @@ export const getUserById = createAsyncThunk('user/getById', async (userId, { rej
 // 🔹 Logout user
 export const logout = createAsyncThunk('user/logout', async (_, { rejectWithValue }) => {
   try {
+    await api.post('/api/v1/auth/logout', {});
     localStorage.removeItem('jwt');
     // Optionally, clear other relevant local storage items or session data
     console.log('User logged out successfully');
     return 'Logged out successfully';
   } catch (err) {
     console.error('Logout error:', err);
+    localStorage.removeItem('jwt');
     return rejectWithValue(err.message || 'Failed to logout');
   }
 });
