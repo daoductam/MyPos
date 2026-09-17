@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router';
 import { ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
+import { getAccessToken } from '../../utils/api';
 
 const Onboarding = () => {
   const { t } = useTranslation();
@@ -25,7 +26,6 @@ const Onboarding = () => {
     fullName: '',
     email: '',
     password: '',
-    confirmPassword: '',
     // Store Details
     storeName: '',
     storeType: '',
@@ -35,22 +35,21 @@ const Onboarding = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // On mount: check JWT, fetch profile, and store
+  // On mount: check token, fetch profile, and store
   useEffect(() => {
     const checkOnboarding = async () => {
-      const jwt = localStorage.getItem('jwt');
+      const token = getAccessToken();
       
-      if (jwt) {
+      if (token) {
         setLocalLoading(true);
         try {
-          const userRes = await dispatch(getUserProfile(jwt)).unwrap();
+          const userRes = await dispatch(getUserProfile(token)).unwrap();
           if (userRes && userRes.role === 'ROLE_STORE_ADMIN') {
             try {
-              const storeRes = await dispatch(getStoreByAdmin(jwt)).unwrap();
+              const storeRes = await dispatch(getStoreByAdmin(token)).unwrap();
               if (storeRes && storeRes.id) {
                 // Store exists, redirect to dashboard or show message
                 navigate('/');
-                
                 return;
               } else {
                 // No store, skip to store details
@@ -62,17 +61,12 @@ const Onboarding = () => {
             }
           } else {
             // Not an admin, or other role, start from step 1
-            setStep(1);
           }
         } catch (err) {
-          // Invalid jwt or error, clear jwt and stay on step 1
-          localStorage.removeItem('jwt');
+          setStep(1);
+        } finally {
+          setLocalLoading(false);
         }
-        setLocalLoading(false);
-      } else {
-        // No JWT, start from step 1
-        setStep(1);
-        setLocalLoading(false);
       }
     };
     checkOnboarding();
@@ -108,9 +102,7 @@ const Onboarding = () => {
           password: updatedFormData.password,
           role: 'ROLE_STORE_ADMIN',
         })).unwrap();
-        if (signupRes && signupRes.jwt) {
-          localStorage.setItem('jwt', signupRes.jwt);
-        }
+        const token = signupRes?.accessToken || signupRes?.jwt;
         setFadeIn(false);
         setTimeout(() => {
           setStep(2);

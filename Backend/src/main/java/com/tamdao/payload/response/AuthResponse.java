@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthResponse {
-	private String jwt;
+	private String accessToken;
+	@com.fasterxml.jackson.annotation.JsonIgnore
 	private String refreshToken;
 	private String message;
 	private String title;

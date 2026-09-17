@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TokenRefreshResponse {
     private String accessToken;
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private String refreshToken;
     @Builder.Default
     private String tokenType = "Bearer";

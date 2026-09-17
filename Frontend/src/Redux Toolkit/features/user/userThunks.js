@@ -1,12 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@/utils/api';
 
-// 🔹 Get user profile from JWT
+// 🔹 Get user profile from Access Token
 export const getUserProfile = createAsyncThunk('user/getProfile', async (token, { rejectWithValue }) => {
   try {
-    const res = await api.get('/api/v1/users/profile', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+    const res = await api.get('/api/v1/users/profile', config);
     
     console.log('Get user profile success:', res.data);
     return res.data;

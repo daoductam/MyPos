@@ -66,7 +66,8 @@ const Login = () => {
         });
 
         const user = resultAction.payload.user;
-        dispatch(getUserProfile(resultAction.payload.jwt)); 
+        const accessToken = resultAction.payload.accessToken || resultAction.payload.jwt;
+        dispatch(getUserProfile(accessToken)); 
         
         const userRole = user.role;
         if (userRole === 'ROLE_ADMIN') {

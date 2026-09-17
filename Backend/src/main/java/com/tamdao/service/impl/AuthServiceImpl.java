@@ -83,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         response.setTitle("Welcome " + createdUser.getEmail());
         response.setMessage("Register success");
         response.setUser(UserMapper.toDTO(savedUser));
-        response.setJwt(jwt);
+        response.setAccessToken(jwt);
         response.setRefreshToken(refreshToken);
         return response;
     }
@@ -124,7 +124,7 @@ public class AuthServiceImpl implements AuthService {
         AuthResponse response = new AuthResponse();
         response.setTitle("Login success");
         response.setMessage("Welcome Back" + username);
-        response.setJwt(token);
+        response.setAccessToken(token);
         response.setRefreshToken(refreshToken);
         response.setUser(UserMapper.toDTO(user));
 
@@ -215,7 +215,7 @@ public class AuthServiceImpl implements AuthService {
         String secret = UUID.randomUUID().toString();
         String refreshTokenStr = userId + ":" + tokenId + ":" + secret;
 
-        redisTokenService.saveRefreshToken(userId, tokenId, refreshTokenStr, JwtProvider.REFRESH_TOKEN_EXPIRATION);
+        redisTokenService.saveRefreshToken(userId, tokenId, refreshTokenStr, jwtProvider.getRefreshTokenExpirationMs());
         return refreshTokenStr;
     }
 

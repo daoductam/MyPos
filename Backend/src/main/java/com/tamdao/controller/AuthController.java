@@ -27,13 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final CookieUtil cookieUtil;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> signupHandler(
             @RequestBody @Valid UserDTO req,
             HttpServletResponse httpServletResponse) {
         AuthResponse response = authService.signup(req);
-        CookieUtil.setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
+        cookieUtil.setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
@@ -42,7 +43,7 @@ public class AuthController {
             @RequestBody LoginDto req,
             HttpServletResponse httpServletResponse) {
         AuthResponse response = authService.login(req.getEmail(), req.getPassword());
-        CookieUtil.setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
+        cookieUtil.setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
@@ -53,7 +54,7 @@ public class AuthController {
             HttpServletResponse httpServletResponse) {
         String tokenToUse = cookieRefreshToken != null ? cookieRefreshToken : (request != null ? request.getRefreshToken() : null);
         TokenRefreshResponse response = authService.refreshToken(tokenToUse);
-        CookieUtil.setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
+        cookieUtil.setRefreshTokenCookie(httpServletResponse, response.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
@@ -65,7 +66,7 @@ public class AuthController {
             HttpServletResponse httpServletResponse) {
         String refreshToken = cookieRefreshToken != null ? cookieRefreshToken : (request != null ? request.getRefreshToken() : null);
         authService.logout(authHeader, refreshToken);
-        CookieUtil.clearRefreshTokenCookie(httpServletResponse);
+        cookieUtil.clearRefreshTokenCookie(httpServletResponse);
         return ResponseEntity.ok(ApiResponse.success("Đăng xuất thành công", null));
     }
 

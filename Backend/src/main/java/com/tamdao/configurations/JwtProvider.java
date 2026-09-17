@@ -20,10 +20,21 @@ public class JwtProvider {
 	@Value("${app.jwt.secret}")
 	private String secretKey;
 
+	@Value("${app.jwt.access-token-expiration-ms:900000}")
+	private long accessTokenExpirationMs;
+
+	@Value("${app.jwt.refresh-token-expiration-ms:604800000}")
+	private long refreshTokenExpirationMs;
+
 	private SecretKey key;
 
-	public static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000L; // 15 phút
-	public static final long REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000L; // 7 ngày
+	public long getRefreshTokenExpirationMs() {
+		return refreshTokenExpirationMs;
+	}
+
+	public long getAccessTokenExpirationMs() {
+		return accessTokenExpirationMs;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -35,7 +46,7 @@ public class JwtProvider {
 		String roles = populateAuthorities(authorities);
 
 		return Jwts.builder().issuedAt(new Date())
-				.expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+				.expiration(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
 				.claim("email", auth.getName())
 				.claim("authorities", roles)
 				.signWith(key)
