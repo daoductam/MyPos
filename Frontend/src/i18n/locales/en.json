@@ -1076,6 +1076,8 @@
     "productUpdated": "Product updated successfully",
     "productDeleted": "Product deleted successfully",
     "productDeletedError": "Failed to delete product",
+    "categoryAdded": "Category added successfully",
+    "categoryUpdated": "Category updated successfully",
     "categoryDeleted": "Category deleted successfully",
     "categoryDeletedError": "Failed to delete category",
     "fetchError": "Failed to fetch data",

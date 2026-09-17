@@ -37,10 +37,10 @@ const CategoryForm = ({ initialValues, onSubmit, onCancel, isEditing = false }) 
 
       if (isEditing && initialValues?.id) {
         await dispatch(updateCategory({ id: initialValues.id, dto, token })).unwrap();
-        toast({ title: t('toast.success'), description: t('toast.categoryUpdated') || 'Category updated successfully' });
+        toast({ title: t('toast.success'), description: t('toast.categoryUpdated') });
       } else {
         await dispatch(createCategory({ dto, token })).unwrap();
-        toast({ title: t('toast.success'), description: t('toast.categoryAdded') || 'Category added successfully' });
+        toast({ title: t('toast.success'), description: t('toast.categoryAdded') });
         resetForm();
       }
 

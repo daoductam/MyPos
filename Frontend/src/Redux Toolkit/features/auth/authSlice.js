@@ -41,9 +41,9 @@ const authSlice = createSlice({
     builder
       .addCase(refreshAccessToken.fulfilled, (state, action) => {
         state.isInitialized = true;
+        state.isAuthenticated = true;
         if (action.payload?.user) {
           state.user = action.payload.user;
-          state.isAuthenticated = true;
         }
       })
       .addCase(refreshAccessToken.rejected, (state) => {

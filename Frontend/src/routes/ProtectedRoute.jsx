@@ -5,11 +5,12 @@ import { getAccessToken } from '../utils/api';
 
 const ProtectedRoute = ({ children, roles }) => {
   const { userProfile, loading: userLoading } = useSelector((state) => state.user);
-  const { isInitialized } = useSelector((state) => state.auth);
+  const { isInitialized, isAuthenticated } = useSelector((state) => state.auth);
   const location = useLocation();
 
-  if (!isInitialized || userLoading) {
-    // Show a loading indicator while session is being refreshed on reload
+  // Show loading spinner until session initialization is complete,
+  // or if user is authenticated but userProfile is still fetching.
+  if (!isInitialized || userLoading || (isAuthenticated && !userProfile)) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-emerald-500"></div>

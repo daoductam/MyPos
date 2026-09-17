@@ -17,7 +17,7 @@ const BranchForm = ({ initialValues, onSubmit, onCancel, isEditing }) => {
   const validationSchema = Yup.object({
     name: Yup.string().required(t('storeModule.branches.validation.nameRequired')),
     address: Yup.string().required(t('storeModule.branches.validation.addressRequired')),
-    manager: Yup.string().required(t('storeModule.branches.validation.managerRequired')),
+    manager: Yup.string().nullable(),
     phone: Yup.string().required(t('storeModule.branches.validation.phoneRequired')),
   });
 
@@ -58,9 +58,16 @@ const BranchForm = ({ initialValues, onSubmit, onCancel, isEditing }) => {
     }
   };
 
+  const defaultValues = {
+    name: initialValues?.name || "",
+    address: initialValues?.address || "",
+    manager: initialValues?.manager || "",
+    phone: initialValues?.phone || "",
+  };
+
   return (
     <Formik
-      initialValues={initialValues || { name: "", address: "", manager: "", phone: "" }}
+      initialValues={defaultValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
       enableReinitialize

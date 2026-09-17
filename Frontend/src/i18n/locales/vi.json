@@ -1111,6 +1111,8 @@
     "productUpdated": "Cập nhật sản phẩm thành công",
     "productDeleted": "Xóa sản phẩm thành công",
     "productDeletedError": "Lỗi khi xóa sản phẩm",
+    "categoryAdded": "Thêm danh mục thành công",
+    "categoryUpdated": "Cập nhật danh mục thành công",
     "categoryDeleted": "Xóa danh mục thành công",
     "categoryDeletedError": "Lỗi khi xóa danh mục",
     "fetchError": "Lỗi khi tải dữ liệu",
