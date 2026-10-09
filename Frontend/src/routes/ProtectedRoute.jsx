@@ -24,7 +24,11 @@ const ProtectedRoute = ({ children, permissions = [] }) => {
 
 
   const userHasRequiredCapability = permissions.length === 0
-    || permissions.some((permission) => authorizationProfile?.capabilities?.includes(permission));
+    || permissions.some((permission) => authorizationProfile?.capabilities?.includes(permission))
+    || (permissions.includes('order.create') && (userProfile?.role === 'ROLE_CASHIER' || userProfile?.role === 'ROLE_BRANCH_CASHIER'))
+    || (permissions.includes('employee.create') && (userProfile?.role === 'ROLE_BRANCH_MANAGER' || userProfile?.role === 'ROLE_BRANCH_ADMIN'))
+    || (permissions.includes('store.read') && (userProfile?.role === 'ROLE_STORE_ADMIN' || userProfile?.role === 'ROLE_STORE_MANAGER'))
+    || (permissions.includes('platform.dashboard.read') && userProfile?.role === 'ROLE_ADMIN');
 
   if (!userHasRequiredCapability) {
     // User does not have the required role, redirect to a 'not found' or 'unauthorized' page

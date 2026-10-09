@@ -3,6 +3,7 @@ services:
     image: mysql:8.0
     container_name: dmart-pos-mysql
     environment:
+      TZ: Asia/Ho_Chi_Minh
       MYSQL_DATABASE: ${DB_NAME:-pos}
       MYSQL_USER: ${DB_USERNAME:-pos_app}
       MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in Backend/.env}

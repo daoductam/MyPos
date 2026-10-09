@@ -78,11 +78,17 @@ const Login = () => {
             // If getting current shift fails (e.g., 404 Not Found), it means no shift is active.
             // So, we start a new one.
             console.log("Không tìm thấy ca làm việc hoạt động, đang bắt đầu ca mới.");
-            await dispatch(startShift({ branchId: user.branchId, cashierId: user.id })).unwrap();
+            try {
+              if (user?.branchId) {
+                await dispatch(startShift({ branchId: user.branchId, cashierId: user.id })).unwrap();
+              }
+            } catch (err) {
+              console.warn("Không thể tự động bắt đầu ca:", err);
+            }
           }
           navigate('/cashier');
         } else {
-          navigate(getHomePath(authorizationProfile));
+          navigate(getHomePath(authorizationProfile, user));
         }
       } else {
         toast({
