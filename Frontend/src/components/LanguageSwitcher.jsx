@@ -21,7 +21,8 @@ const LanguageSwitcher = ({ className = '' }) => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const currentLang = languages.find((l) => l.code === i18n.language) || languages[0];
+  const currentLanguageCode = i18n.resolvedLanguage || i18n.language?.split('-')[0] || 'vi';
+  const currentLang = languages.find((l) => l.code === currentLanguageCode) || languages[0];
 
   return (
     <div ref={ref} className={`relative ${className}`}>
@@ -44,7 +45,7 @@ const LanguageSwitcher = ({ className = '' }) => {
                 setOpen(false);
               }}
               className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center space-x-2 ${
-                i18n.language === lang.code
+                currentLanguageCode === lang.code
                   ? 'bg-emerald-600/20 text-emerald-400 font-medium'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white'
               }`}

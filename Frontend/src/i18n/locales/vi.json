@@ -717,7 +717,7 @@
     "login": {
       "title": "Chào mừng trở lại",
       "subtitle": "Đăng nhập vào tài khoản của bạn để tiếp tục",
-      "emailLabel": "Email Address",
+      "emailLabel": "Địa chỉ email",
       "emailPlaceholder": "Nhập email của bạn",
       "passwordLabel": "Mật khẩu",
       "passwordPlaceholder": "Nhập mật khẩu của bạn",
@@ -747,6 +747,65 @@
       "emailSentDesc": "Email đặt lại mật khẩu đã được gửi!",
       "errorTitle": "Lỗi",
       "errorDescFallback": "Gửi email đặt lại thất bại"
+    },
+    "onboarding": {
+      "brandTitle": "Thiết lập cửa hàng số của bạn",
+      "brandTitleAccent": "trong vài phút",
+      "brandDescription": "Quy trình hướng dẫn giúp bạn dễ dàng cấu hình doanh nghiệp và bắt đầu bán hàng.",
+      "features": {
+        "adminProfile": "Tạo hồ sơ quản trị viên",
+        "storeDetails": "Thiết lập thông tin cửa hàng",
+        "goLive": "Bắt đầu hoạt động ngay"
+      },
+      "step": "Bước {{step}}/2",
+      "ownerDetails": "Thông tin chủ cửa hàng",
+      "storeDetailsLabel": "Thông tin cửa hàng",
+      "createAccount": "Tạo tài khoản",
+      "createAccountDescription": "Hãy bắt đầu bằng cách thiết lập thông tin tài khoản của bạn",
+      "storeInformation": "Thông tin cửa hàng",
+      "storeInformationDescription": "Hãy cho chúng tôi biết về doanh nghiệp của bạn",
+      "alreadyHaveAccount": "Bạn đã có tài khoản?",
+      "signInHere": "Đăng nhập tại đây",
+      "owner": {
+        "fullNamePlaceholder": "Nhập họ và tên",
+        "emailPlaceholder": "Nhập địa chỉ email",
+        "passwordPlaceholder": "Nhập mật khẩu",
+        "confirmPasswordPlaceholder": "Xác nhận mật khẩu",
+        "processing": "Đang xử lý...",
+        "nextStep": "Bước tiếp theo"
+      },
+      "store": {
+        "namePlaceholder": "Nhập tên cửa hàng",
+        "typePlaceholder": "Chọn loại cửa hàng",
+        "typesLabel": "Loại cửa hàng",
+        "addressPlaceholder": "Nhập địa chỉ cửa hàng (không bắt buộc)",
+        "back": "Quay lại",
+        "processing": "Đang xử lý...",
+        "completeSetup": "Hoàn tất thiết lập"
+      },
+      "storeTypes": {
+        "retail": "Cửa hàng bán lẻ",
+        "restaurant": "Nhà hàng",
+        "cafe": "Quán cà phê",
+        "pharmacy": "Nhà thuốc",
+        "grocery": "Cửa hàng tạp hóa",
+        "electronics": "Cửa hàng điện tử",
+        "clothing": "Cửa hàng quần áo",
+        "other": "Khác"
+      },
+      "validation": {
+        "fullNameRequired": "Vui lòng nhập họ và tên",
+        "fullNameMin": "Họ và tên phải có ít nhất 2 ký tự",
+        "emailInvalid": "Địa chỉ email không hợp lệ",
+        "emailRequired": "Vui lòng nhập email",
+        "passwordMin": "Mật khẩu phải có ít nhất 6 ký tự",
+        "passwordRequired": "Vui lòng nhập mật khẩu",
+        "passwordMismatch": "Mật khẩu xác nhận không khớp",
+        "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu",
+        "storeNameRequired": "Vui lòng nhập tên cửa hàng",
+        "storeNameMin": "Tên cửa hàng phải có ít nhất 2 ký tự",
+        "storeTypeRequired": "Vui lòng chọn loại cửa hàng"
+      }
     }
   },
   "header": {

@@ -6,12 +6,15 @@ import StoreDetailsForm from './StoreDetailsForm';
 import { signup } from '../../Redux Toolkit/features/auth/authThunk';
 import { createStore, getStoreByAdmin } from '../../Redux Toolkit/features/store/storeThunks';
 import { getUserProfile } from '../../Redux Toolkit/features/user/userThunks';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { ShoppingCart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 const Onboarding = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { error } = useSelector((state) => state.onboarding);
   
   const [step, setStep] = useState(1);
@@ -193,6 +196,7 @@ const Onboarding = () => {
           <span className="text-xl font-bold text-muted-foreground group-hover:text-primary transition-colors">POS Pro</span>
         </div>
       </div>
+      <LanguageSwitcher className="absolute top-6 right-6 z-20" />
 
       {/* Animated background from landing.jsx */}
       <div className="absolute inset-0 z-0 opacity-60" style={{ perspective: '1000px' }}>
@@ -235,28 +239,28 @@ const Onboarding = () => {
               
               {/* Title */}
               <h1 className="text-4xl font-extrabold mb-4 leading-tight tracking-tight">
-                Set Up Your Digital Storefront
-                <span className="block text-green-300 mt-2">in Minutes</span>
+                {t('auth.onboarding.brandTitle')}
+                <span className="block text-green-300 mt-2">{t('auth.onboarding.brandTitleAccent')}</span>
               </h1>
               
               {/* Description */}
               <p className="text-lg text-green-100/90 mb-8 leading-relaxed">
-                Our guided setup makes it easy to configure your business and start selling.
+                {t('auth.onboarding.brandDescription')}
               </p>
               
               {/* Features List */}
               <div className="space-y-4 text-left">
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <span className="text-green-100/90">Create your admin profile</span>
+                  <span className="text-green-100/90">{t('auth.onboarding.features.adminProfile')}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <span className="text-green-100/90">Define your store details</span>
+                  <span className="text-green-100/90">{t('auth.onboarding.features.storeDetails')}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <span className="text-green-100/90">Go live instantly</span>
+                  <span className="text-green-100/90">{t('auth.onboarding.features.goLive')}</span>
                 </div>
               </div>
             </div>
@@ -270,10 +274,10 @@ const Onboarding = () => {
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                  Step {step} of 2
+                  {t('auth.onboarding.step', { step })}
                 </h2>
                 <span className="text-sm text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full font-medium">
-                  {step === 1 ? 'Owner Details' : 'Store Details'}
+                  {step === 1 ? t('auth.onboarding.ownerDetails') : t('auth.onboarding.storeDetailsLabel')}
                 </span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
@@ -308,12 +312,12 @@ const Onboarding = () => {
             <Card className="w-full shadow-2xl border border-white/10 bg-white/10 backdrop-blur-xl rounded-2xl hover:bg-white/15 transition-colors duration-300">
               <CardHeader className="text-center pb-4">
                 <CardTitle className="text-3xl font-bold text-white-900 dark:text-white">
-                  {step === 1 ? 'Create Your Account' : 'Store Information'}
+                  {step === 1 ? t('auth.onboarding.createAccount') : t('auth.onboarding.storeInformation')}
                 </CardTitle>
                 <p className="text-gray-300 mt-2">
                   {step === 1 
-                    ? 'Let\'s start by setting up your account details' 
-                    : 'Tell us about your business'
+                    ? t('auth.onboarding.createAccountDescription')
+                    : t('auth.onboarding.storeInformationDescription')
                   }
                 </p>
               </CardHeader>
@@ -331,10 +335,10 @@ const Onboarding = () => {
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-400">
-                Already have an account?{' '}
-                <a href="/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
-                  Sign in here
-                </a>
+                  {t('auth.onboarding.alreadyHaveAccount')}{' '}
+                <Link to="/auth/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
+                  {t('auth.onboarding.signInHere')}
+                </Link>
               </p>
             </div>
           </div>

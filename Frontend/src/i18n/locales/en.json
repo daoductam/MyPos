@@ -729,6 +729,65 @@
       "passwordMismatch": "Passwords do not match",
       "tooShort": "Too short",
       "tooLong": "Too long"
+    },
+    "onboarding": {
+      "brandTitle": "Set Up Your Digital Storefront",
+      "brandTitleAccent": "in Minutes",
+      "brandDescription": "Our guided setup makes it easy to configure your business and start selling.",
+      "features": {
+        "adminProfile": "Create your admin profile",
+        "storeDetails": "Define your store details",
+        "goLive": "Go live instantly"
+      },
+      "step": "Step {{step}} of 2",
+      "ownerDetails": "Owner Details",
+      "storeDetailsLabel": "Store Details",
+      "createAccount": "Create Your Account",
+      "createAccountDescription": "Let's start by setting up your account details",
+      "storeInformation": "Store Information",
+      "storeInformationDescription": "Tell us about your business",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInHere": "Sign in here",
+      "owner": {
+        "fullNamePlaceholder": "Enter your full name",
+        "emailPlaceholder": "Enter your email address",
+        "passwordPlaceholder": "Enter your password",
+        "confirmPasswordPlaceholder": "Confirm your password",
+        "processing": "Processing...",
+        "nextStep": "Next Step"
+      },
+      "store": {
+        "namePlaceholder": "Enter your store name",
+        "typePlaceholder": "Select store type",
+        "typesLabel": "Store Types",
+        "addressPlaceholder": "Enter store address (optional)",
+        "back": "Back",
+        "processing": "Processing...",
+        "completeSetup": "Complete Setup"
+      },
+      "storeTypes": {
+        "retail": "Retail Store",
+        "restaurant": "Restaurant",
+        "cafe": "Café",
+        "pharmacy": "Pharmacy",
+        "grocery": "Grocery Store",
+        "electronics": "Electronics Store",
+        "clothing": "Clothing Store",
+        "other": "Other"
+      },
+      "validation": {
+        "fullNameRequired": "Full name is required",
+        "fullNameMin": "Full name must be at least 2 characters",
+        "emailInvalid": "Invalid email address",
+        "emailRequired": "Email is required",
+        "passwordMin": "Password must be at least 6 characters",
+        "passwordRequired": "Password is required",
+        "passwordMismatch": "Passwords must match",
+        "confirmPasswordRequired": "Confirm password is required",
+        "storeNameRequired": "Store name is required",
+        "storeNameMin": "Store name must be at least 2 characters",
+        "storeTypeRequired": "Store type is required"
+      }
     }
   },
   "header": {

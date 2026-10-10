@@ -13,28 +13,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectGroup, SelectLabel } from "../../components/ui/select";
-
-const validationSchema = Yup.object({
-  storeName: Yup.string()
-    .required("Store name is required")
-    .min(2, "Store name must be at least 2 characters"),
-  storeType: Yup.string().required("Store type is required"),
-  storeAddress: Yup.string().optional(),
-});
+import { useTranslation } from 'react-i18next';
 
 const storeTypes = [
-  { value: "retail", label: "Retail Store" },
-  { value: "restaurant", label: "Restaurant" },
-  { value: "cafe", label: "Café" },
-  { value: "pharmacy", label: "Pharmacy" },
-  { value: "grocery", label: "Grocery Store" },
-  { value: "electronics", label: "Electronics Store" },
-  { value: "clothing", label: "Clothing Store" },
-  { value: "other", label: "Other" },
+  { value: "retail", labelKey: "retail" },
+  { value: "restaurant", labelKey: "restaurant" },
+  { value: "cafe", labelKey: "cafe" },
+  { value: "pharmacy", labelKey: "pharmacy" },
+  { value: "grocery", labelKey: "grocery" },
+  { value: "electronics", labelKey: "electronics" },
+  { value: "clothing", labelKey: "clothing" },
+  { value: "other", labelKey: "other" },
 ];
 
 const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) => {
+  const { t } = useTranslation();
   const [visibleFields, setVisibleFields] = useState([]);
+
+  const validationSchema = Yup.object({
+    storeName: Yup.string()
+      .required(t('auth.onboarding.validation.storeNameRequired'))
+      .min(2, t('auth.onboarding.validation.storeNameMin')),
+    storeType: Yup.string().required(t('auth.onboarding.validation.storeTypeRequired')),
+    storeAddress: Yup.string().optional(),
+  });
 
   useEffect(() => {
     const fields = ['storeName', 'storeType', 'storeAddress', 'navigation'];
@@ -71,7 +73,7 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       ? 'border-red-500' 
                       : 'border-white/20 hover:border-white/40'
                   }`}
-                  placeholder="Enter your store name"
+                  placeholder={t('auth.onboarding.store.namePlaceholder')}
                   autoComplete="organization"
                 />
                 <ErrorMessage name="storeName" component="div" className="text-red-500 text-sm mt-2 flex items-center">
@@ -96,15 +98,15 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       onValueChange={(value) => setFieldValue("storeType", value)}
                     >
                       <SelectTrigger className={`w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 ${!values.storeType && "text-gray-400"}`} id="storeType">
-                        <SelectValue placeholder="Select store type" />
+                        <SelectValue placeholder={t('auth.onboarding.store.typePlaceholder')} />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
 
                         <SelectGroup>
-                          <SelectLabel className="text-gray-300">Store Types</SelectLabel>
+                          <SelectLabel className="text-gray-300">{t('auth.onboarding.store.typesLabel')}</SelectLabel>
                           {storeTypes.map((type) => (
                           <SelectItem key={type.value} value={type.value} className="focus:bg-emerald-700/50">
-                            {type.label}
+                            {t(`auth.onboarding.storeTypes.${type.labelKey}`)}
                           </SelectItem>
                         ))}
                         </SelectGroup>
@@ -136,7 +138,7 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                   name="storeAddress"
                   rows="3"
                   className="w-full pl-10 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 resize-none"
-                  placeholder="Enter store address (optional)"
+                  placeholder={t('auth.onboarding.store.addressPlaceholder')}
                   autoComplete="street-address"
                 />
                 <ErrorMessage name="storeAddress" component="div" className="text-red-500 text-sm mt-2 flex items-center">
@@ -160,7 +162,7 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
               className="w-full sm:w-auto flex-1 group flex items-center justify-center py-3 text-base font-semibold border-2 border-white/20 text-gray-300 hover:bg-white/10 hover:border-white/40 rounded-lg shadow-sm transition-all duration-300 transform hover:scale-105"
             >
               <ArrowLeft className="w-5 h-5 mr-2 transition-transform duration-300 group-hover:-translate-x-1" />
-              Back
+              {t('auth.onboarding.store.back')}
             </Button>
             <Button
               type="submit"
@@ -170,12 +172,12 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
               {isSubmitting ? (
                 <>
                   <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                  Processing...
+                  {t('auth.onboarding.store.processing')}
                 </>
               ) : (
                 <>
                   <CheckCircle className="w-5 h-5 mr-2" />
-                  Complete Setup
+                  {t('auth.onboarding.store.completeSetup')}
                 </>
               )}
             </Button>

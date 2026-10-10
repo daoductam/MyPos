@@ -17,6 +17,7 @@ import { getHomePath } from '@/utils/capabilities';
 import { getUserProfile } from '@/Redux Toolkit/features/user/userThunks';
 import { startShift, getCurrentShiftProgress } from '@/Redux Toolkit/features/shiftReport/shiftReportThunks';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -257,6 +258,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-4 relative overflow-hidden">
+      <LanguageSwitcher className="absolute top-6 right-6 z-20" />
       {/* Animated Background */}
       <div className="absolute inset-0 z-0 opacity-60" style={{ perspective: '1000px' }}>
         <div className="absolute inset-0 transition-transform duration-500 ease-out" style={{ transform: `translateX(${mousePosition.x * -15}px) translateY(${mousePosition.y * -15}px)` }}><div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500/70 rounded-full filter blur-3xl animate-blob"></div></div>

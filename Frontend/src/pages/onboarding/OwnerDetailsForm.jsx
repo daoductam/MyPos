@@ -4,26 +4,28 @@ import * as Yup from 'yup';
 import { User, Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Input } from '@/components/ui/input';
-
-const validationSchema = Yup.object({
-  fullName: Yup.string()
-    .required('Full name is required')
-    .min(2, 'Full name must be at least 2 characters'),
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm password is required'),
-});
+import { useTranslation } from 'react-i18next';
 
 const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [visibleFields, setVisibleFields] = useState([]);
+
+  const validationSchema = Yup.object({
+    fullName: Yup.string()
+      .required(t('auth.onboarding.validation.fullNameRequired'))
+      .min(2, t('auth.onboarding.validation.fullNameMin')),
+    email: Yup.string()
+      .email(t('auth.onboarding.validation.emailInvalid'))
+      .required(t('auth.onboarding.validation.emailRequired')),
+    password: Yup.string()
+      .min(6, t('auth.onboarding.validation.passwordMin'))
+      .required(t('auth.onboarding.validation.passwordRequired')),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], t('auth.onboarding.validation.passwordMismatch'))
+      .required(t('auth.onboarding.validation.confirmPasswordRequired')),
+  });
 
   useEffect(() => {
     const fields = ['fullName', 'email', 'password', 'confirmPassword', 'submit'];
@@ -61,7 +63,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
                       ? 'border-red-500' 
                       : 'border-white/20 hover:border-white/40'
                   }`}
-                  placeholder="Enter your full name"
+                  placeholder={t('auth.onboarding.owner.fullNamePlaceholder')}
                   autoComplete="name"
                 />
                 <ErrorMessage name="fullName" component="div" className="text-red-500 text-sm mt-2 flex items-center">
@@ -90,7 +92,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
                       ? 'border-red-500' 
                       : 'border-white/20 hover:border-white/40'
                   }`}
-                  placeholder="Enter your email address"
+                  placeholder={t('auth.onboarding.owner.emailPlaceholder')}
                   autoComplete="email"
                 />
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-2 flex items-center">
@@ -119,7 +121,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
                       ? 'border-red-500' 
                       : 'border-white/20 hover:border-white/40'
                   }`}
-                  placeholder="Enter your password"
+                  placeholder={t('auth.onboarding.owner.passwordPlaceholder')}
                   autoComplete="new-password"
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
@@ -151,7 +153,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
                       ? 'border-red-500' 
                       : 'border-white/20 hover:border-white/40'
                   }`}
-                  placeholder="Confirm your password"
+                  placeholder={t('auth.onboarding.owner.confirmPasswordPlaceholder')}
                   autoComplete="new-password"
                 />
                 <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
@@ -179,11 +181,11 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
               {isSubmitting ? (
                 <>
                   <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                  Processing...
+                  {t('auth.onboarding.owner.processing')}
                 </>
               ) : (
                 <>
-                  Next Step
+                  {t('auth.onboarding.owner.nextStep')}
                   <ArrowRight className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </>
               )}
