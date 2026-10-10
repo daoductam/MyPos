@@ -1,15 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router';
+import { getAccessToken } from '../utils/api';
 
 const ProtectedRoute = ({ children, permissions = [] }) => {
   const { userProfile, authorizationProfile, loading, authorizationLoading } = useSelector((state) => state.user);
+const ProtectedRoute = ({ children, roles }) => {
+  const { userProfile, loading: userLoading } = useSelector((state) => state.user);
+  const { isInitialized, isAuthenticated } = useSelector((state) => state.auth);
   const location = useLocation();
-  const hasToken = localStorage.getItem("jwt");
 
 
   if (loading || authorizationLoading || (hasToken && (!userProfile || !authorizationProfile))) {
     // Show a loading indicator while profile is being fetched
+  // Show loading spinner until session initialization is complete,
+  // or if user is authenticated but userProfile is still fetching.
+  if (!isInitialized || userLoading || (isAuthenticated && !userProfile)) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-emerald-500"></div>

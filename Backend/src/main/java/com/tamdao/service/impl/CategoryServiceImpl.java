@@ -36,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = Category.builder()
                 .name(dto.getName())
+                .description(dto.getDescription())
                 .store(store)
                 .build();
 
@@ -58,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
         checkAuthority(user, category.getStore());
 
         category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
         return CategoryMapper.toDto(categoryRepository.save(category));
     }
 

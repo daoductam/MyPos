@@ -1,7 +1,6 @@
 import { createSlice} from '@reduxjs/toolkit';
-import { login, signup, forgotPassword, resetPassword } from './authThunk';
-
-
+import { login, signup, forgotPassword, resetPassword, refreshAccessToken } from './authThunk';
+import { clearAccessToken } from '../../../utils/api';
 
 // ✅ Auth Slice
 const authSlice = createSlice({
@@ -11,6 +10,7 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     isAuthenticated: false,
+    isInitialized: false,
     forgotPasswordLoading: false,
     forgotPasswordError: null,
     forgotPasswordSuccess: false,
@@ -22,6 +22,8 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      clearAccessToken();
+      localStorage.removeItem('jwt');
       localStorage.removeItem('token');
     },
     clearForgotPasswordState: (state) => {
@@ -37,6 +39,19 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(refreshAccessToken.fulfilled, (state, action) => {
+        state.isInitialized = true;
+        state.isAuthenticated = true;
+        if (action.payload?.user) {
+          state.user = action.payload.user;
+        }
+      })
+      .addCase(refreshAccessToken.rejected, (state) => {
+        state.isInitialized = true;
+        state.user = null;
+        state.isAuthenticated = false;
+        clearAccessToken();
+      })
       .addCase(signup.pending, (state) => {
         state.loading = true;
         state.error = null;

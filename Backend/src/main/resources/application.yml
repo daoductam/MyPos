@@ -60,7 +60,14 @@ app:
       cashier: ${APP_DEMO_PASSWORDS_CASHIER:}
       customer: ${APP_DEMO_PASSWORDS_CUSTOMER:}
   jwt:
-    secret: ${JWT_SECRET}
+    secret: ${JWT_SECRET:asdfghjklpoiuytrewqzxcvbnmlkjhglpouhggfdsawqwertyyuiioplmnbvcxzasdfgh}
+    access-token-expiration-ms: ${JWT_ACCESS_TOKEN_EXPIRATION_MS:900000} # 15 mins (15 * 60 * 1000)
+    refresh-token-expiration-ms: ${JWT_REFRESH_TOKEN_EXPIRATION_MS:604800000} # 7 days (7 * 24 * 60 * 60 * 1000)
+    cookie:
+      name: refreshToken
+      secure: ${COOKIE_SECURE:false}
+      same-site: ${COOKIE_SAME_SITE:Lax}
+      path: /
   frontend:
     reset-url: http://localhost:5173/auth/reset-password?token=
   security:

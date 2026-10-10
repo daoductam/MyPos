@@ -97,7 +97,7 @@ const MobileAppShowcase = () => {
                               <p className="text-xs font-medium">{t('mobileApp.phone.order')} #{1000 + item}</p>
                               <p className="text-xs text-gray-400">2 {t('mobileApp.phone.minsAgo')}</p>
                             </div>
-                            <p className="text-sm font-bold">${(item * 18).toFixed(2)}</p>
+                            <p className="text-sm font-bold">{(item * 180000).toLocaleString('vi-VN')}đ</p>
                           </div>
                         </div>
                       ))}

@@ -56,6 +56,12 @@ public class JwtValidator extends OncePerRequestFilter {
 	}
 
 	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		String path = request.getServletPath();
+		return path != null && path.startsWith("/api/v1/auth/");
+	}
+
+	@Override
 	protected void doFilterInternal(HttpServletRequest request,
 									HttpServletResponse response,
 									FilterChain filterChain)
@@ -67,7 +73,9 @@ public class JwtValidator extends OncePerRequestFilter {
 			try {
 				if (redisTokenService.isBlacklisted(jwt)) {
 					SecurityContextHolder.clearContext();
-					throw new BadCredentialsException("Token has been revoked or logged out");
+					customAuthenticationEntryPoint.commence(request, response,
+							new BadCredentialsException("Token has been revoked or logged out"));
+					return;
 				}
 
 				Claims claims = Jwts.parser()

@@ -1,12 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@/utils/api";
+import api, { getAccessToken } from "@/utils/api";
 
-// Helper function to get JWT token
+// Helper function to get token
 const getAuthToken = () => {
-  const token = localStorage.getItem('jwt');
-  if (!token) {
-    throw new Error('No JWT token found');
-  }
+  const token = getAccessToken() || localStorage.getItem('jwt');
   return token;
 };
 

@@ -10,8 +10,10 @@ import { Link, useNavigate } from 'react-router';
 import { ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
+import { getAccessToken } from '../../utils/api';
 
 const Onboarding = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -25,7 +27,6 @@ const Onboarding = () => {
     fullName: '',
     email: '',
     password: '',
-    confirmPassword: '',
     // Store Details
     storeName: '',
     storeType: '',
@@ -35,22 +36,21 @@ const Onboarding = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // On mount: check JWT, fetch profile, and store
+  // On mount: check token, fetch profile, and store
   useEffect(() => {
     const checkOnboarding = async () => {
-      const jwt = localStorage.getItem('jwt');
+      const token = getAccessToken();
       
-      if (jwt) {
+      if (token) {
         setLocalLoading(true);
         try {
-          const userRes = await dispatch(getUserProfile(jwt)).unwrap();
+          const userRes = await dispatch(getUserProfile(token)).unwrap();
           if (userRes && userRes.role === 'ROLE_STORE_ADMIN') {
             try {
-              const storeRes = await dispatch(getStoreByAdmin(jwt)).unwrap();
+              const storeRes = await dispatch(getStoreByAdmin(token)).unwrap();
               if (storeRes && storeRes.id) {
                 // Store exists, redirect to dashboard or show message
                 navigate('/');
-                
                 return;
               } else {
                 // No store, skip to store details
@@ -62,17 +62,15 @@ const Onboarding = () => {
             }
           } else {
             // Not an admin, or other role, start from step 1
-            setStep(1);
           }
         } catch {
           // Invalid jwt or error, clear jwt and stay on step 1
           localStorage.removeItem('jwt');
+        } catch (err) {
+          setStep(1);
+        } finally {
+          setLocalLoading(false);
         }
-        setLocalLoading(false);
-      } else {
-        // No JWT, start from step 1
-        setStep(1);
-        setLocalLoading(false);
       }
     };
     checkOnboarding();
@@ -108,9 +106,7 @@ const Onboarding = () => {
           password: updatedFormData.password,
           role: 'ROLE_STORE_ADMIN',
         })).unwrap();
-        if (signupRes && signupRes.jwt) {
-          localStorage.setItem('jwt', signupRes.jwt);
-        }
+        const token = signupRes?.accessToken || signupRes?.jwt;
         setFadeIn(false);
         setTimeout(() => {
           setStep(2);
@@ -187,14 +183,15 @@ const Onboarding = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white overflow-hidden relative">
-      {/* Website Logo */}
-      <div className="absolute top-0 left-0 z-20 p-6">
+      {/* Top Header Bar with Logo and Language Switcher */}
+      <div className="absolute top-0 left-0 right-0 z-20 p-6 flex justify-between items-center">
         <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => navigate('/')}>
           <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 transform">
             <ShoppingCart className="w-6 h-6 font-bold text-muted-foreground group-hover:text-emerald-600 transition-colors" />
           </div>
-          <span className="text-xl font-bold text-muted-foreground group-hover:text-primary transition-colors">POS Pro</span>
+          <span className="text-xl font-bold text-muted-foreground group-hover:text-primary transition-colors">{t('onboarding.brandTitle')}</span>
         </div>
+        <LanguageSwitcher />
       </div>
       <LanguageSwitcher className="absolute top-6 right-6 z-20" />
 
@@ -241,11 +238,14 @@ const Onboarding = () => {
               <h1 className="text-4xl font-extrabold mb-4 leading-tight tracking-tight">
                 {t('auth.onboarding.brandTitle')}
                 <span className="block text-green-300 mt-2">{t('auth.onboarding.brandTitleAccent')}</span>
+                {t('onboarding.leftTitle')}
+                <span className="block text-green-300 mt-2">{t('onboarding.leftHighlight')}</span>
               </h1>
               
               {/* Description */}
               <p className="text-lg text-green-100/90 mb-8 leading-relaxed">
                 {t('auth.onboarding.brandDescription')}
+                {t('onboarding.leftSubtitle')}
               </p>
               
               {/* Features List */}
@@ -261,6 +261,15 @@ const Onboarding = () => {
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   <span className="text-green-100/90">{t('auth.onboarding.features.goLive')}</span>
+                  <span className="text-green-100/90">{t('onboarding.features.profile')}</span>
+                </div>
+                <div className="flex items-center justify-center">
+                  <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span className="text-green-100/90">{t('onboarding.features.store')}</span>
+                </div>
+                <div className="flex items-center justify-center">
+                  <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span className="text-green-100/90">{t('onboarding.features.golive')}</span>
                 </div>
               </div>
             </div>
@@ -278,11 +287,17 @@ const Onboarding = () => {
                 </h2>
                 <span className="text-sm text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full font-medium">
                   {step === 1 ? t('auth.onboarding.ownerDetails') : t('auth.onboarding.storeDetailsLabel')}
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-base font-semibold text-white">
+                  {t('onboarding.stepProgress', { step })}
+                </h2>
+                <span className="text-xs text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full font-medium">
+                  {step === 1 ? t('onboarding.steps.owner') : t('onboarding.steps.store')}
                 </span>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${(step / 2) * 100}%` }}
                 ></div>
               </div>
@@ -290,18 +305,18 @@ const Onboarding = () => {
 
             {/* Error Display */}
             {(error || localError) && (
-              <div className="mb-6 p-4 bg-red-900/30 border border-red-400/50 text-red-300 rounded-lg shadow-md backdrop-blur-sm">
+              <div className="mb-6 p-4 bg-red-900/30 border border-red-400/50 text-red-300 rounded-xl shadow-md backdrop-blur-sm">
                 <div className="flex items-center">
                   <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"></path></svg>
-                  <span className="font-medium">{error || localError}</span>
+                  <span className="font-medium text-sm">{error || localError}</span>
                 </div>
               </div>
             )}
 
             {/* Loading Overlay */}
             {localLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm rounded-2xl z-50">
-                <svg className="animate-spin h-10 w-10 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm rounded-3xl z-50">
+                <svg className="animate-spin h-10 w-10 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -313,11 +328,18 @@ const Onboarding = () => {
               <CardHeader className="text-center pb-4">
                 <CardTitle className="text-3xl font-bold text-white-900 dark:text-white">
                   {step === 1 ? t('auth.onboarding.createAccount') : t('auth.onboarding.storeInformation')}
+            {/* Form Card with liquid glass effect */}
+            <Card className="w-full shadow-2xl border border-white/10 bg-gray-900/60 backdrop-blur-2xl rounded-3xl overflow-hidden transition-all duration-300">
+              <CardHeader className="text-center pb-3 pt-6">
+                <CardTitle className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  {step === 1 ? t('onboarding.step1Title') : t('onboarding.step2Title')}
                 </CardTitle>
-                <p className="text-gray-300 mt-2">
+                <p className="text-gray-400 text-sm mt-1.5">
                   {step === 1 
                     ? t('auth.onboarding.createAccountDescription')
                     : t('auth.onboarding.storeInformationDescription')
+                    ? t('onboarding.step1Subtitle')
+                    : t('onboarding.step2Subtitle')
                   }
                 </p>
               </CardHeader>
@@ -339,6 +361,10 @@ const Onboarding = () => {
                 <Link to="/auth/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
                   {t('auth.onboarding.signInHere')}
                 </Link>
+                {t('onboarding.alreadyAccount')}{' '}
+                <a href="/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
+                  {t('onboarding.signInHere')}
+                </a>
               </p>
             </div>
           </div>

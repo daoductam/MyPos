@@ -295,6 +295,7 @@
         "dashboard": "Bảng điều khiển",
         "sales": "Doanh số",
         "products": "Sản phẩm",
+        "inventory": "Kho hàng",
         "categories": "Danh mục",
         "branches": "Chi nhánh",
         "employees": "Nhân viên",
@@ -1151,9 +1152,9 @@
     "actions": "Hành động",
     "back": "Quay lại",
     "roles": {
-      "ROLE_STORE_MANAGER": "Chủ cửa hàng (Store Manager)",
+      "ROLE_STORE_MANAGER": "Tổng quản lý chuỗi (Store Manager)",
       "ROLE_BRANCH_MANAGER": "Quản lý chi nhánh (Branch Manager)",
-      "ROLE_BRANCH_ADMIN": "Quản trị viên (Branch Admin)",
+      "ROLE_BRANCH_ADMIN": "Quản trị chi nhánh (Branch Admin)",
       "ROLE_BRANCH_CASHIER": "Thu ngân (Cashier)"
     },
     "validation": {
@@ -1178,6 +1179,8 @@
     "productUpdated": "Cập nhật sản phẩm thành công",
     "productDeleted": "Xóa sản phẩm thành công",
     "productDeletedError": "Lỗi khi xóa sản phẩm",
+    "categoryAdded": "Thêm danh mục thành công",
+    "categoryUpdated": "Cập nhật danh mục thành công",
     "categoryDeleted": "Xóa danh mục thành công",
     "categoryDeletedError": "Lỗi khi xóa danh mục",
     "fetchError": "Lỗi khi tải dữ liệu",
@@ -1225,6 +1228,16 @@
         "updateBtn": "Cập nhật Sản phẩm",
         "addBtn": "Thêm Sản phẩm",
         "uploading": "Đang tải lên..."
+      },
+      "details": {
+        "sku": "Mã SKU",
+        "category": "Danh mục",
+        "uncategorized": "Chưa phân loại",
+        "price": "Giá bán",
+        "stock": "Tồn kho",
+        "inStock": "còn hàng",
+        "lastUpdated": "Cập nhật lần cuối",
+        "description": "Mô tả"
       },
       "table": {
         "loading": "Đang tải sản phẩm...",
@@ -1843,6 +1856,76 @@
         "maintenanceMode": "Chế độ bảo trì",
         "maintenanceModeDesc": "Tạm thời vô hiệu hóa quyền truy cập đối với người dùng không phải quản trị viên để cập nhật hệ thống.",
         "save": "Lưu cài đặt hệ thống"
+      }
+    }
+  },
+  "onboarding": {
+    "brandTitle": "POS Pro",
+    "leftTitle": "Thiết lập cửa hàng số của bạn",
+    "leftHighlight": "trong vài phút",
+    "leftSubtitle": "Hướng dẫn từng bước giúp bạn dễ dàng thiết lập doanh nghiệp và bắt đầu bán hàng ngay.",
+    "features": {
+      "profile": "Tạo tài khoản quản trị",
+      "store": "Thiết lập thông tin cửa hàng",
+      "golive": "Sẵn sàng bán hàng ngay lập tức"
+    },
+    "stepProgress": "Bước {{step}} / 2",
+    "steps": {
+      "owner": "Thông tin chủ sở hữu",
+      "store": "Thông tin cửa hàng"
+    },
+    "step1Title": "Tạo tài khoản của bạn",
+    "step1Subtitle": "Bắt đầu bằng việc thiết lập thông tin tài khoản của bạn",
+    "step2Title": "Thông tin cửa hàng",
+    "step2Subtitle": "Hãy cho chúng tôi biết về doanh nghiệp của bạn",
+    "alreadyAccount": "Đã có tài khoản?",
+    "signInHere": "Đăng nhập tại đây",
+    "ownerForm": {
+      "fullNameLabel": "Họ và tên",
+      "emailLabel": "Địa chỉ Email",
+      "passwordLabel": "Mật khẩu",
+      "confirmPasswordLabel": "Xác nhận mật khẩu",
+      "fullNamePlaceholder": "Nhập họ và tên của bạn",
+      "emailPlaceholder": "Nhập địa chỉ email của bạn",
+      "passwordPlaceholder": "Nhập mật khẩu (tối thiểu 6 ký tự)",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu để xác nhận",
+      "nextStep": "Tiếp tục",
+      "processing": "Đang xử lý...",
+      "validation": {
+        "fullNameRequired": "Vui lòng nhập họ và tên",
+        "fullNameMin": "Họ và tên phải có ít nhất 2 ký tự",
+        "emailRequired": "Vui lòng nhập email",
+        "emailInvalid": "Địa chỉ email không hợp lệ",
+        "passwordRequired": "Vui lòng nhập mật khẩu",
+        "passwordMin": "Mật khẩu phải có ít nhất 6 ký tự",
+        "confirmRequired": "Vui lòng xác nhận mật khẩu",
+        "passwordMatch": "Mật khẩu xác nhận không khớp"
+      }
+    },
+    "storeForm": {
+      "storeNameLabel": "Tên cửa hàng",
+      "storeTypeLabel": "Loại hình kinh doanh",
+      "storeAddressLabel": "Địa chỉ cửa hàng",
+      "storeNamePlaceholder": "Nhập tên cửa hàng của bạn",
+      "storeTypePlaceholder": "Chọn loại hình kinh doanh",
+      "storeAddressPlaceholder": "Nhập địa chỉ cửa hàng (không bắt buộc)",
+      "back": "Quay lại",
+      "complete": "Hoàn tất thiết lập",
+      "creating": "Đang tạo cửa hàng...",
+      "types": {
+        "retail": "Cửa hàng bán lẻ",
+        "restaurant": "Nhà hàng",
+        "cafe": "Quán Cà phê / Đồ uống",
+        "pharmacy": "Nhà thuốc",
+        "grocery": "Cửa hàng tạp hóa / Tiện lợi",
+        "electronics": "Cửa hàng điện tử",
+        "clothing": "Cửa hàng thời trang",
+        "other": "Khác"
+      },
+      "validation": {
+        "storeNameRequired": "Vui lòng nhập tên cửa hàng",
+        "storeNameMin": "Tên cửa hàng phải có ít nhất 2 ký tự",
+        "storeTypeRequired": "Vui lòng chọn loại hình kinh doanh"
       }
     }
   }

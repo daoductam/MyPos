@@ -13,16 +13,23 @@ import SuperAdminRoutes from "./routes/SuperAdminRoutes";
 import PageNotFound from "./pages/common/PageNotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { getAuthorizationProfile, getUserProfile } from "./Redux Toolkit/features/user/userThunks";
+import { getUserProfile } from "./Redux Toolkit/features/user/userThunks";
+import { refreshAccessToken } from "./Redux Toolkit/features/auth/authThunk";
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      dispatch(getUserProfile(jwt));
-      dispatch(getAuthorizationProfile());
-    }
+    // Silent Refresh via HttpOnly Cookie when App mounts/reloads
+    dispatch(refreshAccessToken())
+      .unwrap()
+      .then((res) => {
+        const token = res?.accessToken;
+        dispatch(getUserProfile(token));
+      })
+      .catch(() => {
+        // Not logged in or refresh cookie expired
+      });
   }, [dispatch]);
 
   useEffect(() => {

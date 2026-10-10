@@ -72,6 +72,13 @@ const Login = () => {
         const authorizationProfile = await dispatch(getAuthorizationProfile()).unwrap();
 
         if (authorizationProfile.capabilities?.includes('order.create')) {
+        const accessToken = resultAction.payload.accessToken || resultAction.payload.jwt;
+        dispatch(getUserProfile(accessToken)); 
+        
+        const userRole = user.role;
+        if (userRole === 'ROLE_ADMIN') {
+          navigate('/super-admin');
+        } else if (userRole === 'ROLE_BRANCH_CASHIER') {
           try {
             // First, try to get the current shift progress
             await dispatch(getCurrentShiftProgress()).unwrap();
@@ -259,6 +266,11 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-4 relative overflow-hidden">
       <LanguageSwitcher className="absolute top-6 right-6 z-20" />
+      {/* Top Header with Language Switcher */}
+      <div className="absolute top-0 right-0 z-20 p-6">
+        <LanguageSwitcher />
+      </div>
+
       {/* Animated Background */}
       <div className="absolute inset-0 z-0 opacity-60" style={{ perspective: '1000px' }}>
         <div className="absolute inset-0 transition-transform duration-500 ease-out" style={{ transform: `translateX(${mousePosition.x * -15}px) translateY(${mousePosition.y * -15}px)` }}><div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500/70 rounded-full filter blur-3xl animate-blob"></div></div>

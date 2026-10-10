@@ -181,7 +181,7 @@ const TestimonialCarousel = () => {
             <p className="text-gray-300">{t('testimonials.stats.satisfaction')}</p>
           </div>
           <div className="text-center">
-            <p className="text-4xl font-bold text-emerald-400 mb-2">$2.5B+</p>
+            <p className="text-4xl font-bold text-emerald-400 mb-2">5.000 Tỷ+</p>
             <p className="text-gray-300">{t('testimonials.stats.revenueProcessed')}</p>
           </div>
           <div className="text-center">

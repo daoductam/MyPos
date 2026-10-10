@@ -52,7 +52,6 @@ const ProductForm = ({
     categoryId: Yup.string().required(t('toast.error') + ": " + t('storeModule.products.form.category')),
     description: Yup.string().optional(),
     brand: Yup.string().optional(),
-    color: Yup.string().optional(),
     image: Yup.string().optional(),
   });
 
@@ -64,7 +63,6 @@ const ProductForm = ({
     sellingPrice: initialValues?.sellingPrice || "",
     brand: initialValues?.brand || "",
     categoryId: initialValues?.categoryId?.toString() || "",
-    color: initialValues?.color || "",
     image: initialValues?.image || "",
   };
 
@@ -243,56 +241,42 @@ const ProductForm = ({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label htmlFor="categoryId" className="block text-sm font-medium text-gray-300">
-                {t('storeModule.products.form.category')}
-              </label>
-              <Field name="categoryId">
-                {({ field }) => (
-                  <Select
-                    value={field.value}
-                    onValueChange={(value) =>
-                      setFieldValue("categoryId", value)
-                    }
+          <div className="space-y-2">
+            <label htmlFor="categoryId" className="block text-sm font-medium text-gray-300">
+              {t('storeModule.products.form.category')}
+            </label>
+            <Field name="categoryId">
+              {({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={(value) =>
+                    setFieldValue("categoryId", value)
+                  }
+                >
+                  <SelectTrigger
+                    className={`w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 ${touched.categoryId && errors.categoryId ? "border-red-500" : "border-white/20"}`}
                   >
-                    <SelectTrigger
-                      className={`w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 ${touched.categoryId && errors.categoryId ? "border-red-500" : "border-white/20"}`}
-                    >
-                      <SelectValue placeholder={t('storeModule.products.form.selectCategory')} />
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
-                      {categoryList.map((category) => (
-                        <SelectItem
-                          key={category.id}
-                          value={category.id.toString()}
-                          className="focus:bg-emerald-700/50"
-                        >
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              </Field>
-              <ErrorMessage
-                name="categoryId"
-                component="div"
-                className="text-red-400 text-sm"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="color" className="block text-sm font-medium text-gray-300">
-                {t('storeModule.products.form.color')}
-              </label>
-              <Field
-                as={Input}
-                id="color"
-                name="color"
-                className="w-full pl-4 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40"
-                placeholder={t('storeModule.products.form.enterColor')}
-              />
-            </div>
+                    <SelectValue placeholder={t('storeModule.products.form.selectCategory')} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-800/80 border-white/20 text-white backdrop-blur-lg">
+                    {categoryList.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                        className="focus:bg-emerald-700/50"
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </Field>
+            <ErrorMessage
+              name="categoryId"
+              component="div"
+              className="text-red-400 text-sm"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
