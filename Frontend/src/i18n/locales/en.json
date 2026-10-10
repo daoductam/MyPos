@@ -599,9 +599,7 @@
             "desc": "GST-compliant reports for easy tax filing and reconciliation."
           }
         },
-        "generate": "Generate Report",
-        "placeholderText1": "This is a placeholder for the report content.",
-        "placeholderText2": "In a real application, this PDF would be populated with actual report data."
+        "generate": "Generate Report"
       },
       "settings": {
         "title": "Branch Settings",

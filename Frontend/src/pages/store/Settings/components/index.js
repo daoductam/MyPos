@@ -1,7 +1,6 @@
 // Main components
 export { default as SettingsHeader } from './SettingsHeader';
 export { default as SettingsNavigation } from './SettingsNavigation';
-export { default as SettingsContent } from './SettingsContent';
 
 // Settings sections
 export { default as StoreSettings } from './StoreSettings';
@@ -19,4 +18,4 @@ export { default as ToggleSwitch } from './ToggleSwitch';
 export * from './validation';
 
 // Utilities
-export * from './formUtils'; 
+export * from './formUtils';

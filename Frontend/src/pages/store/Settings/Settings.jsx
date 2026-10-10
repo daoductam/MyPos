@@ -1,21 +1,51 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { User, Store, Shield, Bell } from "lucide-react";
 import StoreInformation from "../storeInformation/StoreInformation";
+import ProfileSettingsForm from "../../SuperAdminDashboard/settings/components/ProfileSettingsForm";
+import SecuritySettingsForm from "../../SuperAdminDashboard/settings/components/SecuritySettingsForm";
+import NotificationSettings from "./components/NotificationSettings";
 import { useTranslation } from "react-i18next";
 
-// Placeholder for other settings components
-const ProfileSettings = () => <div className="text-gray-400">Profile settings will be available here.</div>;
-const SecuritySettings = () => <div className="text-gray-400">Security settings will be available here.</div>;
-const NotificationsSettings = () => <div className="text-gray-400">Notifications settings will be available here.</div>;
+const defaultNotificationSettings = {
+  emailNotifications: true,
+  smsNotifications: false,
+  lowStockAlerts: true,
+  salesReports: true,
+  employeeActivity: false,
+};
 
 const Settings = () => {
   const { t } = useTranslation();
+  const { userProfile } = useSelector((state) => state.user);
+  const [notificationSettings, setNotificationSettings] = useState(defaultNotificationSettings);
+
+  React.useEffect(() => {
+    if (!userProfile?.id) return;
+    const storageKey = `store-notification-settings:${userProfile.id}`;
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+      if (saved) setNotificationSettings({ ...defaultNotificationSettings, ...saved });
+    } catch {
+      setNotificationSettings(defaultNotificationSettings);
+    }
+  }, [userProfile?.id]);
+
+  const handleNotificationChange = (name, value) => {
+    setNotificationSettings((current) => {
+      const updated = { ...current, [name]: value };
+      if (userProfile?.id) {
+        localStorage.setItem(`store-notification-settings:${userProfile.id}`, JSON.stringify(updated));
+      }
+      return updated;
+    });
+  };
 
   const settingsTabs = [
     { id: 'store', name: t('storeModule.settings.tabs.storeDetails'), icon: <Store className="w-5 h-5" />, component: <StoreInformation /> },
-    { id: 'profile', name: t('storeModule.settings.tabs.myProfile'), icon: <User className="w-5 h-5" />, component: <ProfileSettings /> },
-    { id: 'security', name: t('storeModule.settings.tabs.security'), icon: <Shield className="w-5 h-5" />, component: <SecuritySettings /> },
-    { id: 'notifications', name: t('storeModule.settings.tabs.notifications'), icon: <Bell className="w-5 h-5" />, component: <NotificationsSettings /> },
+    { id: 'profile', name: t('storeModule.settings.tabs.myProfile'), icon: <User className="w-5 h-5" />, component: <ProfileSettingsForm userProfile={userProfile} /> },
+    { id: 'security', name: t('storeModule.settings.tabs.security'), icon: <Shield className="w-5 h-5" />, component: <SecuritySettingsForm /> },
+    { id: 'notifications', name: t('storeModule.settings.tabs.notifications'), icon: <Bell className="w-5 h-5" />, component: <NotificationSettings settings={notificationSettings} onChange={handleNotificationChange} /> },
   ];
 
   const [activeTab, setActiveTab] = useState('store');
