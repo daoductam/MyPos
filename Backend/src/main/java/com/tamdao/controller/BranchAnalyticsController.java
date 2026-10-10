@@ -18,15 +18,12 @@ import java.util.List;
 public class BranchAnalyticsController {
 
     private final BranchAnalyticsService branchAnalyticsService;
-
     // ✅ Allow only BRANCH_MANAGER or BRANCH_ADMIN
-    private static final String ALLOWED_ROLES = "hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')";
-
     /**
      * Get daily sales chart data (last n days)
      */
     @GetMapping("/daily-sales")
-    @PreAuthorize(ALLOWED_ROLES)
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'analytics.read', #branchId)")
     public ResponseEntity<List<DailySalesDTO>> getDailySalesChart(
             @RequestParam Long branchId,
             @RequestParam(defaultValue = "7") int days
@@ -38,7 +35,7 @@ public class BranchAnalyticsController {
      * Get top 5 products by quantity (with % contribution)
      */
     @GetMapping("/top-products")
-    @PreAuthorize(ALLOWED_ROLES)
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'analytics.read', #branchId)")
     public ResponseEntity<List<ProductPerformanceDTO>> getTopProductsByQuantity(
             @RequestParam Long branchId
     ) {
@@ -49,7 +46,7 @@ public class BranchAnalyticsController {
      * Get top 5 cashiers by revenue
      */
     @GetMapping("/top-cashiers")
-    @PreAuthorize(ALLOWED_ROLES)
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'analytics.read', #branchId)")
     public ResponseEntity<List<CashierPerformanceDTO>> getTopCashiersByRevenue(
             @RequestParam Long branchId
     ) {
@@ -60,7 +57,7 @@ public class BranchAnalyticsController {
      * Get category-wise sales breakdown
      */
     @GetMapping("/category-sales")
-    @PreAuthorize(ALLOWED_ROLES)
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'analytics.read', #branchId)")
     public ResponseEntity<List<CategorySalesDTO>> getCategoryWiseSalesBreakdown(
             @RequestParam Long branchId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
@@ -69,7 +66,7 @@ public class BranchAnalyticsController {
     }
 
     @GetMapping("/today-overview")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'analytics.read', #branchId)")
     public ResponseEntity<BranchDashboardOverviewDTO> getTodayOverview(
             @RequestParam Long branchId
     ) {
@@ -78,7 +75,7 @@ public class BranchAnalyticsController {
 
 
     @GetMapping("/payment-breakdown")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'analytics.read', #branchId)")
     public ResponseEntity<List<PaymentSummary>> getPaymentBreakdown(
             @RequestParam Long branchId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date

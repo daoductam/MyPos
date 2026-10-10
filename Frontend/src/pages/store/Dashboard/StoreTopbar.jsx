@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Bell, User, Settings, LogOut } from "lucide-react";
+import { Search, User, Settings, LogOut } from "lucide-react";
 import { Input } from "../../../components/ui/input";
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 import { Button } from "../../../components/ui/button";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import OperationalNotificationsPopover from "@/components/notifications/OperationalNotificationsPopover";
 
 const StoreTopbar = () => {
   const { t, i18n } = useTranslation();
@@ -31,10 +32,7 @@ const StoreTopbar = () => {
 
         {/* Right side icons and user profile */}
         <div className="flex items-center space-x-6">
-          <Button variant="ghost" size="icon" className="relative text-gray-400 hover:text-white transition-colors">
-            <Bell className="w-6 h-6" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full"></span>
-          </Button>
+          <OperationalNotificationsPopover branchId={userProfile?.branchId || userProfile?.branch?.id} />
 
           {/* Language Switcher */}
           <DropdownMenu>

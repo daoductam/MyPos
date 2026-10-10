@@ -5,6 +5,8 @@ import com.tamdao.domain.UserRole;
 import com.tamdao.mapper.UserMapper;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.UserDTO;
+import com.tamdao.payload.request.ChangePasswordRequest;
+import com.tamdao.payload.request.UpdateProfileRequest;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.UserService;
 import com.tamdao.service.impl.CustomUserImplementation;
@@ -12,10 +14,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Set;
+import java.util.LinkedHashSet;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -36,7 +41,21 @@ public class UserController {
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
 	}
 
+	@PutMapping("/profile")
+	@PreAuthorize("@authorizationGuard.hasCurrentUserSelfPermission(authentication, 'profile.update_own')")
+	public ResponseEntity<UserDTO> updateCurrentProfile(@Valid @RequestBody UpdateProfileRequest request) {
+		return ResponseEntity.ok(UserMapper.toDTO(userService.updateCurrentUser(request)));
+	}
+
+	@PatchMapping("/profile/password")
+	@PreAuthorize("@authorizationGuard.hasCurrentUserSelfPermission(authentication, 'profile.update_own')")
+	public ResponseEntity<Void> changeCurrentPassword(@Valid @RequestBody ChangePasswordRequest request) {
+		userService.changeCurrentPassword(request);
+		return ResponseEntity.noContent().build();
+	}
+
 	@GetMapping("/customer")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'customer.read') or @authorizationGuard.hasCurrentUserBranchPermission(authentication, 'customer.read')")
 	public ResponseEntity<Set<UserDTO>> getCustomerList(
 			@RequestHeader("Authorization") String jwt) {
 		Set<User> users = userService.getUserByRole(UserRole.ROLE_CUSTOMER);
@@ -45,21 +64,25 @@ public class UserController {
 	}
 
 	@GetMapping("/cashier")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'employee.read') or @authorizationGuard.hasCurrentUserBranchPermission(authentication, 'employee.read')")
 	public ResponseEntity<Set<UserDTO>> getCashierList(
 			@RequestHeader("Authorization") String jwt) {
-		Set<User> users = userService.getUserByRole(UserRole.ROLE_BRANCH_CASHIER);
+        Set<User> users = new LinkedHashSet<>(userService.getUserByRole(UserRole.ROLE_BRANCH_CASHIER));
+        users.addAll(userService.getUserByRole(UserRole.ROLE_CASHIER));
 		Set<UserDTO> userDTO = UserMapper.toDTOSet(users);
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<List<User>> getUsersListHandler(
-			@RequestHeader("Authorization") String jwt) {
-		List<User> users = userService.getUsers();
-		return new ResponseEntity<>(users, HttpStatus.OK);
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'employee.read') or @authorizationGuard.hasCurrentUserBranchPermission(authentication, 'employee.read')")
+    public ResponseEntity<List<UserDTO>> getUsersListHandler(
+            @RequestHeader("Authorization") String jwt) {
+        List<User> users = userService.getUsers();
+        return new ResponseEntity<>(UserMapper.toDTOList(users), HttpStatus.OK);
 	}
 
 	@GetMapping("/{userId}")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'employee.read', #userId) or @authorizationGuard.hasSelfPermission(authentication, 'profile.read_own', #userId)")
 	public ResponseEntity<UserDTO> getUserByIdHandler(
 			@PathVariable Long userId
 	) {

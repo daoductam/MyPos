@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit, UserX, Key, BarChart, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { hasCapability } from "../../../utils/capabilities";
 
 const EmployeeTable = ({
   employees,
@@ -19,12 +20,9 @@ const EmployeeTable = ({
   openPerformanceDialog,
   openEditDialog,
   handleDelete,
-  userProfile,
+  authorizationProfile,
 }) => {
   const { t } = useTranslation();
-  // Note: loginAccess is hardcoded to true in the original file, I'll keep that but localize the text
-  const loginAccess = true;
-
   return (
     <Table>
       <TableHeader>
@@ -48,13 +46,13 @@ const EmployeeTable = ({
               <TableCell>
                 <Badge
                   className={
-                    loginAccess
+                    employee.accessEnabled !== false
                       ? "bg-green-500/20 text-green-300 border-green-500/30"
                       : "bg-red-500/20 text-red-300 border-red-500/30"
                   }
                   variant="secondary"
                 >
-                  {loginAccess ? t('dashboard.branchManager.employees.table.enabled') : t('dashboard.branchManager.employees.table.disabled')}
+                  {employee.accessEnabled !== false ? t('dashboard.branchManager.employees.table.enabled') : t('dashboard.branchManager.employees.table.disabled')}
                 </Badge>
               </TableCell>
             
@@ -66,7 +64,7 @@ const EmployeeTable = ({
                     size="sm"
                     onClick={() => handleToggleAccess(employee)}
                     title={
-                      employee.loginAccess
+                      employee.accessEnabled !== false
                         ? t('dashboard.branchManager.employees.table.disabled')
                         : t('dashboard.branchManager.employees.table.enabled')
                     }
@@ -101,7 +99,7 @@ const EmployeeTable = ({
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  {userProfile?.role === 'ROLE_BRANCH_ADMIN' && handleDelete && (
+                  {hasCapability(authorizationProfile, "employee.delete") && handleDelete && (
                     <Button
                       variant="outline"
                       size="sm"

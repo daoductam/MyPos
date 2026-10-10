@@ -21,7 +21,7 @@ public class ProductController {
     private final UserService userService;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.write', #dto.storeId)")
     public ResponseEntity<ProductDTO> create(
             @Valid @RequestBody ProductDTO dto,
             @RequestHeader("Authorization") String jwt
@@ -31,12 +31,13 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', @resourceScopeResolver.productStoreId(#id))")
     public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.write', @resourceScopeResolver.productStoreId(#id))")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id,
                                              @RequestBody ProductDTO dto,
                                              @RequestHeader("Authorization") String jwt) {
@@ -45,7 +46,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.delete', @resourceScopeResolver.productStoreId(#id))")
     public ResponseEntity<Void> delete(@PathVariable Long id,
                                        @RequestHeader("Authorization") String jwt) {
         User user = userService.getUserFromJwtToken(jwt);
@@ -54,11 +55,13 @@ public class ProductController {
     }
 
     @GetMapping("/store/{storeId}")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', #storeId)")
     public ResponseEntity<List<ProductDTO>> getByStore(@PathVariable Long storeId) {
         return ResponseEntity.ok(productService.getProductsByStoreId(storeId));
     }
 
     @GetMapping("/store/{storeId}/search")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', #storeId)")
     public ResponseEntity<List<ProductDTO>> searchByKeyword(
             @PathVariable Long storeId,
             @RequestParam String q) {
@@ -66,13 +69,13 @@ public class ProductController {
     }
 
     @GetMapping("/store/{storeId}/trash")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', #storeId)")
     public ResponseEntity<List<ProductDTO>> getDeletedProducts(@PathVariable Long storeId) {
         return ResponseEntity.ok(productService.getDeletedProducts(storeId));
     }
 
     @PatchMapping("/restore/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_MANAGER', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.restore', @resourceScopeResolver.productStoreId(#id))")
     public ResponseEntity<Void> restoreProduct(@PathVariable Long id) {
         productService.restoreProduct(id);
         return ResponseEntity.ok().build();

@@ -6,7 +6,7 @@ import StoreDetailsForm from './StoreDetailsForm';
 import { signup } from '../../Redux Toolkit/features/auth/authThunk';
 import { createStore, getStoreByAdmin } from '../../Redux Toolkit/features/store/storeThunks';
 import { getUserProfile } from '../../Redux Toolkit/features/user/userThunks';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
@@ -16,7 +16,8 @@ const Onboarding = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isCompleted } = useSelector((state) => state.onboarding);
+  const { t } = useTranslation();
+  const { error } = useSelector((state) => state.onboarding);
   
   const [step, setStep] = useState(1);
   const [fadeIn, setFadeIn] = useState(true);
@@ -55,13 +56,16 @@ const Onboarding = () => {
                 // No store, skip to store details
                 setStep(2);
               }
-            } catch (err) {
+            } catch {
               // No store found, skip to store details
               setStep(2);
             }
           } else {
             // Not an admin, or other role, start from step 1
           }
+        } catch {
+          // Invalid jwt or error, clear jwt and stay on step 1
+          localStorage.removeItem('jwt');
         } catch (err) {
           setStep(1);
         } finally {
@@ -189,6 +193,7 @@ const Onboarding = () => {
         </div>
         <LanguageSwitcher />
       </div>
+      <LanguageSwitcher className="absolute top-6 right-6 z-20" />
 
       {/* Animated background from landing.jsx */}
       <div className="absolute inset-0 z-0 opacity-60" style={{ perspective: '1000px' }}>
@@ -231,12 +236,15 @@ const Onboarding = () => {
               
               {/* Title */}
               <h1 className="text-4xl font-extrabold mb-4 leading-tight tracking-tight">
+                {t('auth.onboarding.brandTitle')}
+                <span className="block text-green-300 mt-2">{t('auth.onboarding.brandTitleAccent')}</span>
                 {t('onboarding.leftTitle')}
                 <span className="block text-green-300 mt-2">{t('onboarding.leftHighlight')}</span>
               </h1>
               
               {/* Description */}
               <p className="text-lg text-green-100/90 mb-8 leading-relaxed">
+                {t('auth.onboarding.brandDescription')}
                 {t('onboarding.leftSubtitle')}
               </p>
               
@@ -244,6 +252,15 @@ const Onboarding = () => {
               <div className="space-y-4 text-left">
                 <div className="flex items-center justify-center">
                   <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span className="text-green-100/90">{t('auth.onboarding.features.adminProfile')}</span>
+                </div>
+                <div className="flex items-center justify-center">
+                  <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span className="text-green-100/90">{t('auth.onboarding.features.storeDetails')}</span>
+                </div>
+                <div className="flex items-center justify-center">
+                  <svg className="w-5 h-5 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span className="text-green-100/90">{t('auth.onboarding.features.goLive')}</span>
                   <span className="text-green-100/90">{t('onboarding.features.profile')}</span>
                 </div>
                 <div className="flex items-center justify-center">
@@ -264,6 +281,12 @@ const Onboarding = () => {
           <div className="w-full max-w-md relative z-10">
             {/* Progress Indicator */}
             <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                  {t('auth.onboarding.step', { step })}
+                </h2>
+                <span className="text-sm text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full font-medium">
+                  {step === 1 ? t('auth.onboarding.ownerDetails') : t('auth.onboarding.storeDetailsLabel')}
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-base font-semibold text-white">
                   {t('onboarding.stepProgress', { step })}
@@ -300,6 +323,11 @@ const Onboarding = () => {
               </div>
             )}
 
+            {/* Form Card with glass effect */}
+            <Card className="w-full shadow-2xl border border-white/10 bg-white/10 backdrop-blur-xl rounded-2xl hover:bg-white/15 transition-colors duration-300">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-3xl font-bold text-white-900 dark:text-white">
+                  {step === 1 ? t('auth.onboarding.createAccount') : t('auth.onboarding.storeInformation')}
             {/* Form Card with liquid glass effect */}
             <Card className="w-full shadow-2xl border border-white/10 bg-gray-900/60 backdrop-blur-2xl rounded-3xl overflow-hidden transition-all duration-300">
               <CardHeader className="text-center pb-3 pt-6">
@@ -308,6 +336,8 @@ const Onboarding = () => {
                 </CardTitle>
                 <p className="text-gray-400 text-sm mt-1.5">
                   {step === 1 
+                    ? t('auth.onboarding.createAccountDescription')
+                    : t('auth.onboarding.storeInformationDescription')
                     ? t('onboarding.step1Subtitle')
                     : t('onboarding.step2Subtitle')
                   }
@@ -327,6 +357,10 @@ const Onboarding = () => {
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-400">
+                  {t('auth.onboarding.alreadyHaveAccount')}{' '}
+                <Link to="/auth/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
+                  {t('auth.onboarding.signInHere')}
+                </Link>
                 {t('onboarding.alreadyAccount')}{' '}
                 <a href="/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
                   {t('onboarding.signInHere')}

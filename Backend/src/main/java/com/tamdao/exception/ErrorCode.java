@@ -11,6 +11,11 @@ public enum ErrorCode {
     INVALID_REQUEST("INVALID_REQUEST", "Dữ liệu Yêu cầu không hợp lệ", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED("UNAUTHENTICATED", "Chưa xác thực hoặc Token không hợp lệ", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED("UNAUTHORIZED", "Bạn không có quyền thực hiện thao tác này", HttpStatus.FORBIDDEN),
+    AUTHENTICATION_REQUIRED("AUTHENTICATION_REQUIRED", "Authentication is required", HttpStatus.UNAUTHORIZED),
+    TOKEN_INVALID("TOKEN_INVALID", "The access token is invalid or expired", HttpStatus.UNAUTHORIZED),
+    TOKEN_REVOKED("TOKEN_REVOKED", "The access token has been revoked", HttpStatus.UNAUTHORIZED),
+    AUTHORIZATION_DENIED("AUTHORIZATION_DENIED", "You do not have permission to perform this action", HttpStatus.FORBIDDEN),
+    SCOPE_VIOLATION("SCOPE_VIOLATION", "The resource is outside the allowed scope", HttpStatus.FORBIDDEN),
     RESOURCE_NOT_FOUND("RESOURCE_NOT_FOUND", "Tài nguyên không tồn tại", HttpStatus.NOT_FOUND),
     DATA_INTEGRITY_VIOLATION("DATA_CONFLICT", "Dữ liệu bị trùng lặp hoặc vi phạm ràng buộc hệ thống", HttpStatus.CONFLICT),
 
@@ -19,8 +24,9 @@ public enum ErrorCode {
     BRANCH_NOT_FOUND("BRANCH_NOT_FOUND", "Chi nhánh không tồn tại", HttpStatus.NOT_FOUND),
     PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", "Sản phẩm không tồn tại", HttpStatus.NOT_FOUND),
     OUT_OF_STOCK("OUT_OF_STOCK", "Sản phẩm trong kho không đủ số lượng", HttpStatus.BAD_REQUEST),
+    EMAIL_SERVICE_UNAVAILABLE("EMAIL_SERVICE_UNAVAILABLE", "Dịch vụ email chưa được cấu hình", HttpStatus.SERVICE_UNAVAILABLE),
 
-    UNCATEGORIZED_EXCEPTION("INTERNAL_SERVER_ERROR", "Lỗi hệ thống chưa được phân loại", HttpStatus.INTERNAL_SERVER_ERROR),
+    UNCATEGORIZED_EXCEPTION("INTERNAL_ERROR", "Lỗi hệ thống chưa được phân loại", HttpStatus.INTERNAL_SERVER_ERROR),
     ALREADY_DELETED("ALREADY_DELETED", "Tài nguyên đã bị xóa", HttpStatus.GONE);
 
     private final String code;

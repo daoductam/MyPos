@@ -2,6 +2,8 @@ package com.tamdao.service.impl;
 
 import com.tamdao.modal.User;
 import com.tamdao.repository.UserRepository;
+import com.tamdao.service.AuthorizationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,10 +16,11 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserImplementation implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final AuthorizationService authorizationService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,10 +39,17 @@ public class CustomUserImplementation implements UserDetailsService {
             throw new UsernameNotFoundException("user doesn't exist with email " + username);
         }
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
-        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(authority);
+		Collection<? extends GrantedAuthority> authorities = authorizationService
+				.getAuthorities(authorizationService.getSnapshotByEmail(user.getEmail()));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+		return new org.springframework.security.core.userdetails.User(
+				user.getEmail(),
+				user.getPassword(),
+				user.getAccessEnabled() == null || user.getAccessEnabled(),
+				true,
+				true,
+				true,
+				authorities);
     }
 
 }

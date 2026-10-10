@@ -3,12 +3,14 @@ package com.tamdao.controller;
 import com.tamdao.payload.StoreAnalysis.*;
 import com.tamdao.service.StoreAnalyticsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/store/analytics")
+@PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'analytics.read', @resourceScopeResolver.storeIdByAdminId(#storeAdminId))")
 @RequiredArgsConstructor
 public class StoreAnalyticsController {
 

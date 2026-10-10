@@ -22,14 +22,14 @@ public class RefundController {
     private final RefundService refundService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserBranchPermission(authentication, 'refund.create')")
     public ResponseEntity<RefundDTO> createRefund(@RequestBody RefundDTO refundDTO) {
         Refund refund = refundService.createRefund(refundDTO);
         return ResponseEntity.ok(RefundMapper.toDTO(refund));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'refund.read')")
     public ResponseEntity<List<RefundDTO>> getAllRefunds() {
         List<RefundDTO> refunds = refundService.getAllRefunds().stream()
                 .map(RefundMapper::toDTO)
@@ -38,7 +38,7 @@ public class RefundController {
     }
 
     @GetMapping("/cashier/{cashierId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'refund.read', #cashierId) or @authorizationGuard.hasSelfPermission(authentication, 'refund.read_own', #cashierId)")
     public ResponseEntity<List<RefundDTO>> getRefundsByCashier(
             @PathVariable Long cashierId) {
         List<RefundDTO> refunds = refundService.getRefundsByCashier(cashierId).stream()
@@ -48,7 +48,7 @@ public class RefundController {
     }
 
     @GetMapping("/branch/{branchId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'refund.read', #branchId)")
     public ResponseEntity<List<RefundDTO>> getRefundsByBranch(@PathVariable Long branchId) {
         List<RefundDTO> refunds = refundService.getRefundsByBranch(branchId).stream()
                 .map(RefundMapper::toDTO)
@@ -57,7 +57,7 @@ public class RefundController {
     }
 
     @GetMapping("/shift/{shiftReportId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'refund.read', @resourceScopeResolver.shiftBranchId(#shiftReportId))")
     public ResponseEntity<List<RefundDTO>> getRefundsByShift(@PathVariable Long shiftReportId) {
         List<RefundDTO> refunds = refundService.getRefundsByShiftReport(shiftReportId).stream()
                 .map(RefundMapper::toDTO)
@@ -66,7 +66,7 @@ public class RefundController {
     }
 
     @GetMapping("/cashier/{cashierId}/range")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'refund.read', #cashierId) or @authorizationGuard.hasSelfPermission(authentication, 'refund.read_own', #cashierId)")
     public ResponseEntity<List<RefundDTO>> getRefundsByCashierAndDateRange(
             @PathVariable Long cashierId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
@@ -80,13 +80,14 @@ public class RefundController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'refund.read', @resourceScopeResolver.refundStoreId(#id)) or @authorizationGuard.hasSelfPermission(authentication, 'refund.read_own', @resourceScopeResolver.refundCashierId(#id))")
     public ResponseEntity<RefundDTO> getRefundById(@PathVariable Long id) {
         Refund refund = refundService.getRefundById(id);
         return ResponseEntity.ok(RefundMapper.toDTO(refund));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_ADMIN', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'refund.delete', @resourceScopeResolver.refundStoreId(#id))")
     public ResponseEntity<?> deleteRefund(@PathVariable Long id) {
         refundService.deleteRefund(id);
         return ResponseEntity.ok("Refund deleted successfully.");

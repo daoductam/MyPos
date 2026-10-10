@@ -16,6 +16,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
         JOIN oi.product p
         JOIN oi.order o
         WHERE o.branch.id = :branchId
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
         GROUP BY p.id, p.name
         ORDER BY SUM(oi.quantity) DESC
     """)
@@ -27,7 +28,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
         JOIN oi.product p
         JOIN p.category c
         JOIN oi.order o
-        WHERE o.branch.id = :branchId AND o.createdAt BETWEEN :start AND :end
+        WHERE o.branch.id = :branchId
+        AND o.createdAt BETWEEN :start AND :end
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
         GROUP BY c.name
         ORDER BY SUM(oi.quantity * oi.price) DESC
     """)

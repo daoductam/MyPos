@@ -1,11 +1,9 @@
 import { Outlet } from "react-router";
-import { useDispatch } from "react-redux";
 import React, { useState, useEffect } from "react";
 import SuperAdminSidebar from "./components/SuperAdminSidebar";
 import SuperAdminTopbar from "./components/SuperAdminTopbar";
 
 export default function SuperAdminDashboard() {
-  const dispatch = useDispatch();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {

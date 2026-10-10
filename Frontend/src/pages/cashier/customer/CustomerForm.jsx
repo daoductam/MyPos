@@ -32,7 +32,7 @@ const CustomerForm = ({
       .max(50, t('dashboard.cashier.customer.validation.nameMax')),
     phone: Yup.string()
       .required(t('dashboard.cashier.customer.validation.phoneRequired'))
-      .matches(/^[\+]?[1-9][\d]{0,15}$/, t('dashboard.cashier.customer.validation.phoneInvalid')),
+      .matches(/^\+?[1-9][\d]{0,15}$/, t('dashboard.cashier.customer.validation.phoneInvalid')),
     email: Yup.string().email(t('dashboard.cashier.customer.validation.emailInvalid')).optional(),
   });
 

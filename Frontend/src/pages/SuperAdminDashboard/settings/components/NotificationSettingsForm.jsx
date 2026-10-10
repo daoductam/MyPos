@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Label } from "../../../../components/ui/label";
 import { Switch } from "../../../../components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { useSettingsState } from "./useSettingsState";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../../../../components/ui/use-toast";
+import api from "../../../../utils/api";
 
 const getNotificationOptions = (t) => [
   { id: "newStore", label: t("superAdminModule.settings.notifications.newStore"), desc: t("superAdminModule.settings.notifications.newStoreDesc") },
@@ -14,23 +16,55 @@ const getNotificationOptions = (t) => [
 
 export default function NotificationSettingsForm() {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [notifications, setNotifications] = useSettingsState({
     newStore: true,
     subscriptionRenewal: true,
     systemAlerts: false,
   });
   const [isSaving, setIsSaving] = useState(false);
-  
+  const hasLoaded = useRef(false);
+
   const notificationOptions = React.useMemo(() => getNotificationOptions(t), [t]);
 
-  const handleSave = (e) => {
+  useEffect(() => {
+    if (hasLoaded.current) return;
+    hasLoaded.current = true;
+    const loadSettings = async () => {
+      try {
+        const response = await api.get("/api/v1/platform/settings");
+        ["newStore", "subscriptionRenewal", "systemAlerts"].forEach((key) => {
+          if (typeof response.data?.[key] === "boolean") setNotifications(key, response.data[key]);
+        });
+      } catch (error) {
+        toast({
+          title: t("superAdminModule.settings.notifications.save"),
+          description: error?.customMessage || t("superAdminModule.settings.notifications.loadError", "Notification preferences could not be loaded."),
+          variant: "destructive",
+        });
+      }
+    };
+    loadSettings();
+  }, [setNotifications, t, toast]);
+
+  const handleSave = async (e) => {
     e.preventDefault();
     setIsSaving(true);
-    console.log("Saving notification settings:", notifications);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await api.patch("/api/v1/platform/settings", notifications);
+      toast({
+        title: t("superAdminModule.settings.notifications.save"),
+        description: t("superAdminModule.settings.notifications.saveSuccess", "Notification preferences saved."),
+      });
+    } catch (error) {
+      toast({
+        title: t("superAdminModule.settings.notifications.save"),
+        description: error?.customMessage || t("superAdminModule.settings.notifications.saveError", "Notification preferences could not be saved."),
+        variant: "destructive",
+      });
+    } finally {
       setIsSaving(false);
-    }, 1500);
+    }
   };
 
   return (

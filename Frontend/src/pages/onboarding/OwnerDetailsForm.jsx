@@ -6,12 +6,27 @@ import { Button } from '../../components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
 
+const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
 const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [visibleFields, setVisibleFields] = useState([]);
 
+  const validationSchema = Yup.object({
+    fullName: Yup.string()
+      .required(t('auth.onboarding.validation.fullNameRequired'))
+      .min(2, t('auth.onboarding.validation.fullNameMin')),
+    email: Yup.string()
+      .email(t('auth.onboarding.validation.emailInvalid'))
+      .required(t('auth.onboarding.validation.emailRequired')),
+    password: Yup.string()
+      .min(6, t('auth.onboarding.validation.passwordMin'))
+      .required(t('auth.onboarding.validation.passwordRequired')),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], t('auth.onboarding.validation.passwordMismatch'))
+      .required(t('auth.onboarding.validation.confirmPasswordRequired')),
+  });
   const validationSchema = useMemo(() => Yup.object({
     fullName: Yup.string()
       .required(t('onboarding.ownerForm.validation.fullNameRequired'))
@@ -47,6 +62,8 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
         setSubmitting(false);
       }}
     >
+      {({ isSubmitting, touched, errors }) => (
+        <Form className="space-y-6">
       {({ isSubmitting, isValid, touched, errors }) => (
         <Form className="space-y-4 text-left">
           {/* Full Name Field */}
@@ -67,6 +84,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       ? 'border-red-500/80 ring-1 ring-red-500/30 bg-red-950/10' 
                       : 'border-white/15 hover:border-white/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
                   }`}
+                  placeholder={t('auth.onboarding.owner.fullNamePlaceholder')}
                   placeholder={t('onboarding.ownerForm.fullNamePlaceholder')}
                   autoComplete="name"
                 />
@@ -100,6 +118,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       ? 'border-red-500/80 ring-1 ring-red-500/30 bg-red-950/10' 
                       : 'border-white/15 hover:border-white/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
                   }`}
+                  placeholder={t('auth.onboarding.owner.emailPlaceholder')}
                   placeholder={t('onboarding.ownerForm.emailPlaceholder')}
                   autoComplete="email"
                 />
@@ -133,6 +152,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       ? 'border-red-500/80 ring-1 ring-red-500/30 bg-red-950/10' 
                       : 'border-white/15 hover:border-white/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
                   }`}
+                  placeholder={t('auth.onboarding.owner.passwordPlaceholder')}
                   placeholder={t('onboarding.ownerForm.passwordPlaceholder')}
                   autoComplete="new-password"
                 />
@@ -174,6 +194,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       ? 'border-red-500/80 ring-1 ring-red-500/30 bg-red-950/10' 
                       : 'border-white/15 hover:border-white/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
                   }`}
+                  placeholder={t('auth.onboarding.owner.confirmPasswordPlaceholder')}
                   placeholder={t('onboarding.ownerForm.confirmPasswordPlaceholder')}
                   autoComplete="new-password"
                 />
@@ -200,6 +221,23 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
           {/* Submit Button */}
           <div className={`pt-3 transition-all duration-500 ease-out ${visibleFields.includes('submit') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="transition-transform duration-500 ease-out" style={{ transform: `translateX(${mousePosition.x * 1.5}px) translateY(${mousePosition.y * 1.5}px)` }}>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full group flex items-center justify-center py-3 text-base font-semibold bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                  {t('auth.onboarding.owner.processing')}
+                </>
+              ) : (
+                <>
+                  {t('auth.onboarding.owner.nextStep')}
+                  <ArrowRight className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </>
+              )}
+            </Button>
               <Button
                 type="submit"
                 disabled={isSubmitting}

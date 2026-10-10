@@ -8,12 +8,6 @@ import {
 } from '@/components/ui/accordion';
 import { useTranslation } from 'react-i18next';
 
-const featureAvailability = [
-  { basic: [true, true, true, true, true] },
-  { basic: [false, false, false, false, false], pro: [true, true, true, true, true] },
-  { basic: [false, false, false, false, false], pro: [false, false, false, false, false], enterprise: [true, true, true, true, true] },
-];
-
 const FeatureComparisonTable = () => {
   const { t } = useTranslation();
   const categories = t('comparison.categories', { returnObjects: true });

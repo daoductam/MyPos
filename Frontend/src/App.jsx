@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 // Auth and Store Routes
 import AuthRoutes from "./routes/AuthRoutes";
@@ -12,13 +12,12 @@ import Onboarding from "./pages/onboarding/Onboarding";
 import SuperAdminRoutes from "./routes/SuperAdminRoutes";
 import PageNotFound from "./pages/common/PageNotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { getAuthorizationProfile, getUserProfile } from "./Redux Toolkit/features/user/userThunks";
 import { getUserProfile } from "./Redux Toolkit/features/user/userThunks";
 import { refreshAccessToken } from "./Redux Toolkit/features/auth/authThunk";
 
 const App = () => {
   const dispatch = useDispatch();
-  const { userProfile } = useSelector((state) => state.user);
-  const { store } = useSelector((state) => state.store);
 
   useEffect(() => {
     // Silent Refresh via HttpOnly Cookie when App mounts/reloads
@@ -65,7 +64,7 @@ const App = () => {
         <Route
           path="/super-admin/*"
           element={
-            <ProtectedRoute roles={['ROLE_ADMIN']}>
+            <ProtectedRoute permissions={['platform.dashboard.read']}>
               <SuperAdminRoutes />
             </ProtectedRoute>
           }
@@ -73,7 +72,7 @@ const App = () => {
         <Route
           path="/store/*"
           element={
-            <ProtectedRoute roles={['ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER']}>
+            <ProtectedRoute permissions={['store.read']}>
               <StoreRoutes />
             </ProtectedRoute>
           }
@@ -81,7 +80,7 @@ const App = () => {
         <Route
           path="/branch/*"
           element={
-            <ProtectedRoute roles={['ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN']}>
+            <ProtectedRoute permissions={['employee.create']}>
               <BranchManagerRoutes />
             </ProtectedRoute>
           }
@@ -89,7 +88,7 @@ const App = () => {
         <Route
           path="/cashier/*"
           element={
-            <ProtectedRoute roles={['ROLE_BRANCH_CASHIER']}>
+            <ProtectedRoute permissions={['order.create']}>
               <CashierRoutes />
             </ProtectedRoute>
           }

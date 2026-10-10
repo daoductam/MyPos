@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -11,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmployeeForm } from "../../store/Employee";
 import { Plus } from "lucide-react";
-import { branchAdminRole } from "../../../utils/userRole";
 import { useTranslation } from "react-i18next";
 
 export const AddEmployeeDialog = ({
@@ -31,6 +31,7 @@ export const AddEmployeeDialog = ({
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
         <DialogHeader className="text-center">
           <DialogTitle className="text-3xl font-bold">{t('dashboard.branchManager.employees.addNew')}</DialogTitle>
+          <DialogDescription className="sr-only">{t('storeModule.employees.enterDetails')}</DialogDescription>
           <p className="text-gray-300 mt-2">{t('storeModule.employees.enterDetails')}</p>
         </DialogHeader>
         <EmployeeForm
@@ -57,6 +58,7 @@ export const EditEmployeeDialog = ({
         <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
           <DialogHeader className="text-center">
             <DialogTitle className="text-3xl font-bold">{t('common.edit')} {t('dashboard.branchManager.employees.table.role')}</DialogTitle>
+            <DialogDescription className="sr-only">{t('storeModule.employees.updateDetails')}</DialogDescription>
             <p className="text-gray-300 mt-2">{t('storeModule.employees.updateDetails')}</p>
           </DialogHeader>
           <EmployeeForm
@@ -93,6 +95,7 @@ export const ResetPasswordDialog = ({
         <DialogContent className="sm:max-w-md bg-gray-900/80 border-white/20 text-white backdrop-blur-lg p-10">
           <DialogHeader className="text-center">
             <DialogTitle className="text-2xl font-bold">{t('dashboard.branchManager.employees.resetPassword.title')}</DialogTitle>
+            <DialogDescription className="sr-only">{t('dashboard.branchManager.employees.resetPassword.instruction')}</DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <p className="text-gray-300">
@@ -137,6 +140,7 @@ export const PerformanceDialog = ({
             <DialogTitle className="text-3xl font-bold">
               {t('dashboard.branchManager.employees.performance.title')} - {selectedEmployee.fullName || selectedEmployee.name}
             </DialogTitle>
+            <DialogDescription className="sr-only">{t('dashboard.branchManager.employees.performance.noData')}</DialogDescription>
           </DialogHeader>
           <div className="py-10 text-center">
             <p className="text-gray-400 text-lg">

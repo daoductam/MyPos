@@ -18,6 +18,7 @@ public class StoreDTO extends BaseDTO {
     private UserDTO storeAdmin;
     private String storeType;
     private StoreStatus status;
+    private Double commissionRate;
     private String description;
     private StoreContact contact;
 }

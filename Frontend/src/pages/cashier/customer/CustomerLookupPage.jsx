@@ -66,7 +66,7 @@ const CustomerLookupPage = () => {
         variant: "destructive",
       });
     }
-  }, [customerError, toast]);
+  }, [customerError, t, toast]);
 
   useEffect(() => {
     if (orderError) {
@@ -76,7 +76,7 @@ const CustomerLookupPage = () => {
         variant: "destructive",
       });
     }
-  }, [orderError, toast]);
+  }, [orderError, t, toast]);
 
   // Filter customers based on search term
   const filteredCustomers = filterCustomers(customers, searchTerm);
@@ -117,7 +117,7 @@ const CustomerLookupPage = () => {
           name: selectedCustomer.fullName || selectedCustomer.name
         }),
       });
-    }).catch(err => {
+    }).catch(() => {
        toast({
         title: "Lỗi",
         description: "Không thể cộng điểm, vui lòng thử lại.",
@@ -134,7 +134,7 @@ const CustomerLookupPage = () => {
     if (selectedCustomer) {
       dispatch(getOrdersByCustomer(selectedCustomer.id));
     }
-  }, [selectedCustomer]);
+  }, [dispatch, selectedCustomer]);
 
   // Calculate customer stats from orders
   const customerStats = selectedCustomer

@@ -214,3 +214,32 @@ export const searchProducts = createAsyncThunk(
     }
   }
 );
+
+// 🔹 Get Deleted (Trash) Products
+export const getDeletedProducts = createAsyncThunk(
+  "product/getDeleted",
+  async (storeId, { rejectWithValue }) => {
+    try {
+      const headers = getAuthHeaders();
+      const res = await api.get(`/api/v1/products/store/${storeId}/trash`, { headers });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch deleted products");
+    }
+  }
+);
+
+// 🔹 Restore Product
+export const restoreProduct = createAsyncThunk(
+  "product/restore",
+  async (id, { rejectWithValue }) => {
+    try {
+      const headers = getAuthHeaders();
+      await api.patch(`/api/v1/products/restore/${id}`, {}, { headers });
+      return id;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to restore product");
+    }
+  }
+);
+

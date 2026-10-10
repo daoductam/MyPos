@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Bell, User, Settings, LogOut } from "lucide-react";
+import { Search, User, Settings, LogOut } from "lucide-react";
 import { Input } from "../../../components/ui/input";
 import {
   DropdownMenu,
@@ -9,9 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
-import { Button } from "../../../components/ui/button";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../../../components/LanguageSwitcher";
+import OperationalNotificationsPopover from "@/components/notifications/OperationalNotificationsPopover";
 
 const SuperAdminTopbar = () => {
   const { t } = useTranslation();
@@ -36,10 +36,7 @@ const SuperAdminTopbar = () => {
         <div className="flex items-center space-x-4">
           <LanguageSwitcher />
 
-          <Button variant="ghost" size="icon" className="relative text-gray-400 hover:text-white transition-colors">
-            <Bell className="w-6 h-6" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full"></span>
-          </Button>
+          <OperationalNotificationsPopover />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

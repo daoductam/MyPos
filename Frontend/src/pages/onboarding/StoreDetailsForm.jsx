@@ -13,12 +13,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectGroup, SelectLabel } from "../../components/ui/select";
+import { useTranslation } from 'react-i18next';
+
+const storeTypes = [
+  { value: "retail", labelKey: "retail" },
+  { value: "restaurant", labelKey: "restaurant" },
+  { value: "cafe", labelKey: "cafe" },
+  { value: "pharmacy", labelKey: "pharmacy" },
+  { value: "grocery", labelKey: "grocery" },
+  { value: "electronics", labelKey: "electronics" },
+  { value: "clothing", labelKey: "clothing" },
+  { value: "other", labelKey: "other" },
+];
 import { useTranslation } from "react-i18next";
 
 const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) => {
   const { t } = useTranslation();
   const [visibleFields, setVisibleFields] = useState([]);
 
+  const validationSchema = Yup.object({
+    storeName: Yup.string()
+      .required(t('auth.onboarding.validation.storeNameRequired'))
+      .min(2, t('auth.onboarding.validation.storeNameMin')),
+    storeType: Yup.string().required(t('auth.onboarding.validation.storeTypeRequired')),
+    storeAddress: Yup.string().optional(),
+  });
   const validationSchema = useMemo(() => Yup.object({
     storeName: Yup.string()
       .required(t('onboarding.storeForm.validation.storeNameRequired'))
@@ -57,6 +76,8 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
         setSubmitting(false);
       }}
     >
+      {({ isSubmitting, touched, errors }) => (
+        <Form className="space-y-6">
       {({ isSubmitting, isValid, touched, errors }) => (
         <Form className="space-y-4 text-left">
           {/* Store Name Field */}
@@ -77,6 +98,7 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       ? 'border-red-500/80 ring-1 ring-red-500/30 bg-red-950/10' 
                       : 'border-white/15 hover:border-white/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
                   }`}
+                  placeholder={t('auth.onboarding.store.namePlaceholder')}
                   placeholder={t('onboarding.storeForm.storeNamePlaceholder')}
                   autoComplete="organization"
                 />
@@ -105,6 +127,8 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       value={values.storeType}
                       onValueChange={(value) => setFieldValue("storeType", value)}
                     >
+                      <SelectTrigger className={`w-full text-left border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 ${!values.storeType && "text-gray-400"}`} id="storeType">
+                        <SelectValue placeholder={t('auth.onboarding.store.typePlaceholder')} />
                       <SelectTrigger
                         className={`w-full h-12 text-left rounded-xl transition-all duration-200 text-white bg-white/5 border-white/15 hover:border-white/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 ${
                           !values.storeType && "text-gray-500"
@@ -115,6 +139,12 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                       </SelectTrigger>
                       <SelectContent className="bg-gray-900/95 border border-white/15 text-white backdrop-blur-xl rounded-xl shadow-2xl">
                         <SelectGroup>
+                          <SelectLabel className="text-gray-300">{t('auth.onboarding.store.typesLabel')}</SelectLabel>
+                          {storeTypes.map((type) => (
+                          <SelectItem key={type.value} value={type.value} className="focus:bg-emerald-700/50">
+                            {t(`auth.onboarding.storeTypes.${type.labelKey}`)}
+                          </SelectItem>
+                        ))}
                           <SelectLabel className="text-gray-400 text-xs">{t('onboarding.storeForm.storeTypeLabel')}</SelectLabel>
                           {storeTypes.map((type) => (
                             <SelectItem key={type.value} value={type.value} className="focus:bg-emerald-600/30 focus:text-emerald-300 cursor-pointer py-2.5">
@@ -151,6 +181,8 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
                   id="storeAddress"
                   name="storeAddress"
                   rows="3"
+                  className="w-full pl-10 pr-4 py-3 border rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10 text-white placeholder-gray-400 border-white/20 hover:border-white/40 resize-none"
+                  placeholder={t('auth.onboarding.store.addressPlaceholder')}
                   className="w-full pl-11 pr-4 py-3 rounded-xl transition-all duration-200 text-white placeholder-gray-500 bg-white/5 border border-white/15 hover:border-white/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none outline-none"
                   placeholder={t('onboarding.storeForm.storeAddressPlaceholder')}
                   autoComplete="street-address"
@@ -169,6 +201,33 @@ const StoreDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
 
           {/* Navigation Buttons */}
           <div className={`transition-all duration-500 ease-out ${visibleFields.includes('navigation') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className="flex flex-col-reverse sm:flex-row gap-4 pt-4 transition-transform duration-500 ease-out" style={{ transform: `translateX(${mousePosition.x * -1}px) translateY(${mousePosition.y * -1}px)` }}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onBack}
+              className="w-full sm:w-auto flex-1 group flex items-center justify-center py-3 text-base font-semibold border-2 border-white/20 text-gray-300 hover:bg-white/10 hover:border-white/40 rounded-lg shadow-sm transition-all duration-300 transform hover:scale-105"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2 transition-transform duration-300 group-hover:-translate-x-1" />
+              {t('auth.onboarding.store.back')}
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto flex-1 group flex items-center justify-center py-3 text-base font-semibold bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                  {t('auth.onboarding.store.processing')}
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="w-5 h-5 mr-2" />
+                  {t('auth.onboarding.store.completeSetup')}
+                </>
+              )}
+            </Button>
             <div className="flex flex-col-reverse sm:flex-row gap-3 pt-3 transition-transform duration-500 ease-out" style={{ transform: `translateX(${mousePosition.x * -1}px) translateY(${mousePosition.y * -1}px)` }}>
               <Button
                 type="button"

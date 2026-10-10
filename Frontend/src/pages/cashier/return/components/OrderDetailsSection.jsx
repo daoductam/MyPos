@@ -35,11 +35,11 @@ const OrderDetailsSection = ({ selectedOrder, setSelectedOrder }) => {
             <h3 className="font-medium text-sm text-muted-foreground mb-2">{t('dashboard.cashier.return.orderSummary')}</h3>
             <div className="text-sm">
               <div className="flex justify-between">
-                <span>{t('dashboard.cashier.cart.totalItems')}:</span>
+                <span>{t('dashboard.cashier.return.itemsLabel')}:</span>
                 <span>{selectedOrder.items.reduce((sum, item) => sum + item.quantity, 0)}</span>
               </div>
               <div className="flex justify-between font-medium">
-                <span>{t('dashboard.cashier.cart.total')}:</span>
+                <span>{t('dashboard.cashier.return.total')}:</span>
                 <span>VNĐ {selectedOrder.totalAmount?.toFixed(2)}</span>
               </div>
             </div>

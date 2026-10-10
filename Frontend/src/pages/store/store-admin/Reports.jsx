@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
@@ -9,14 +9,12 @@ import {
   getDailySales, 
   getSalesByBranch, 
   getSalesByCategory, 
-  getSalesByPaymentMethod,
-  getBranchPerformance
+  getSalesByPaymentMethod
 } from "../../../Redux Toolkit/features/storeAnalytics/storeAnalyticsThunks";
 import { useToast } from "../../../components/ui/use-toast";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, PieChart, Pie, Cell } from "recharts";
 
 const Reports = () => {
-  const { t } = t => t; // fallback or i18next
   const { t: translate } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -27,7 +25,6 @@ const Reports = () => {
     salesByBranch, 
     salesByCategory, 
     salesByPaymentMethod, 
-    branchPerformance,
     loading 
   } = useSelector((state) => state.storeAnalytics);
 

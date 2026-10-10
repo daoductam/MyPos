@@ -1,15 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   getUserProfile,
+  getAuthorizationProfile,
   getCustomers,
   getCashiers,
   getAllUsers,
   getUserById,
-  logout
+  logout,
+  updateProfile,
 } from './userThunks';
 
 const initialState = {
   userProfile: null,
+  authorizationProfile: null,
+  authorizationLoading: false,
   users: [],
   customers: [],
   cashiers: [],
@@ -24,6 +28,7 @@ const userSlice = createSlice({
   reducers: {
     clearUserState: (state) => {
       state.userProfile = null;
+      state.authorizationProfile = null;
       state.selectedUser = null;
       state.users = [];
       state.customers = [];
@@ -40,6 +45,23 @@ const userSlice = createSlice({
       })
       .addCase(getUserProfile.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.userProfile = action.payload;
+      })
+
+      .addCase(getAuthorizationProfile.pending, (state) => {
+        state.authorizationLoading = true;
+      })
+      .addCase(getAuthorizationProfile.fulfilled, (state, action) => {
+        state.authorizationLoading = false;
+        state.authorizationProfile = action.payload;
+      })
+      .addCase(getAuthorizationProfile.rejected, (state, action) => {
+        state.authorizationLoading = false;
+        state.authorizationProfile = null;
         state.error = action.payload;
       })
 
@@ -60,6 +82,7 @@ const userSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.userProfile = null;
+        state.authorizationProfile = null;
         state.selectedUser = null;
         state.error = null;
       })

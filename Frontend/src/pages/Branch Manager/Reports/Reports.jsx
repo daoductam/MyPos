@@ -4,9 +4,15 @@ import { Button } from "@/components/ui/button";
 import { FileText, BarChart2, Users, Package, Download } from "lucide-react";
 import jsPDF from "jspdf";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { useToast } from "@/components/ui/use-toast";
+import api from "@/utils/api";
 
 export default function Reports() {
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const { userProfile } = useSelector((state) => state.user);
+  const [isGenerating, setIsGenerating] = React.useState(false);
 
   const reportTypes = [
     {
@@ -47,16 +53,81 @@ export default function Reports() {
     },
   ];
 
-  const handleGenerateReport = (reportTitle) => {
-    const doc = new jsPDF();
-    doc.setFontSize(22);
-    doc.text(`${reportTitle}`, 105, 20, null, null, "center");
+  const handleGenerateReport = async (report) => {
+    const branchId = userProfile?.branchId;
+    if (!branchId) {
+      toast({
+        title: t("dashboard.branchManager.reports.title"),
+        description: t("dashboard.branchManager.reports.branchMissing", "No branch is assigned to this account."),
+        variant: "destructive",
+      });
+      return;
+    }
 
-    doc.setFontSize(12);
-    doc.text(t('dashboard.branchManager.reports.placeholderText1'), 105, 30, null, null, "center");
-    doc.text(t('dashboard.branchManager.reports.placeholderText2'), 105, 35, null, null, "center");
+    setIsGenerating(true);
+    try {
+      const requests = {
+        sales: () => api.get("/api/v1/branch-analytics/daily-sales", { params: { branchId, days: 30 } }),
+        inventory: () => api.get(`/api/v1/inventories/branch/${branchId}`),
+        customer: () => api.get("/api/v1/customers"),
+        employee: () => api.get(`/api/v1/employees/branch/${branchId}`),
+        transaction: () => api.get(`/api/v1/orders/branch/${branchId}`, { params: { status: "COMPLETED" } }),
+        tax: () => api.get(`/api/v1/orders/branch/${branchId}`, { params: { status: "COMPLETED" } }),
+      };
+      const response = await requests[report.id]();
+      const data = Array.isArray(response.data) ? response.data : [];
+      const columns = {
+        sales: ["date", "totalSales", "totalOrders"],
+        inventory: ["product", "quantity", "lastUpdated"],
+        customer: ["fullName", "email", "phone", "loyaltyPoints"],
+        employee: ["fullName", "email", "role", "accessEnabled"],
+        transaction: ["id", "status", "totalAmount", "paymentType", "createdAt"],
+        tax: ["id", "taxAmount", "totalAmount", "createdAt"],
+      }[report.id];
+      const normalizeRow = (item) => {
+        if (report.id === "inventory") {
+          return { product: item.product?.name || item.productName || item.name || "-", quantity: item.quantity, lastUpdated: item.lastUpdated };
+        }
+        if (report.id === "sales") return item;
+        if (report.id === "tax") return { ...item, taxAmount: item.taxAmount ?? 0 };
+        return item;
+      };
 
-    doc.save(`${reportTitle.replace(/ /g, "_")}.pdf`);
+      const doc = new jsPDF();
+      const safeText = (value) => String(value ?? "-").replace(/[^\x20-\x7E]/g, "?");
+      let y = 20;
+      const addLine = (text, size = 10) => {
+        if (y > 280) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.setFontSize(size);
+        doc.text(safeText(text).slice(0, 115), 14, y);
+        y += size >= 16 ? 10 : 7;
+      };
+      addLine(report.title, 18);
+      addLine(`Branch ${branchId} | Generated ${new Date().toLocaleString()}`, 9);
+      addLine(`Records: ${data.length}`, 9);
+      y += 3;
+      data.forEach((item, index) => {
+        const row = normalizeRow(item);
+        addLine(`${index + 1}. ${columns.map((column) => `${column}: ${safeText(row[column])}`).join(" | ")}`);
+      });
+      if (!data.length) addLine(t("dashboard.branchManager.reports.noData", "No data found for the selected report."));
+      doc.save(`${report.id}-report-${new Date().toISOString().slice(0, 10)}.pdf`);
+      toast({
+        title: t("dashboard.branchManager.reports.title"),
+        description: t("dashboard.branchManager.reports.generated", "Report generated successfully."),
+      });
+    } catch (error) {
+      toast({
+        title: t("dashboard.branchManager.reports.title"),
+        description: error?.customMessage || t("dashboard.branchManager.reports.generateFailed", "Could not generate the report."),
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -86,7 +157,8 @@ export default function Reports() {
               <Button
                 variant="outline"
                 className="w-full bg-transparent border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
-                onClick={() => handleGenerateReport(report.title)}
+                onClick={() => handleGenerateReport(report)}
+                disabled={isGenerating}
               >
                 <Download className="w-4 h-4 mr-2" />
                 {t('dashboard.branchManager.reports.generate')}

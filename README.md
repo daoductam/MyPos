@@ -187,5 +187,29 @@ Thay vì ném Prop liên miên, Redux chia làm các Slice rạch ròi:
 3. Thiết lập biến môi trường Base API vào file `.env` (Ví dụ `VITE_API_URL=http://localhost:5454`).
 4. Khởi động UI: `npm run dev`. App React sẽ Spin Server tại Port `5173`. Truy cập qua Web Browser.
 
+### Docker Compose (MySQL + Redis + Backend)
+
+Từ thư mục gốc dự án, copy `Backend/.env.example` thành `Backend/.env` và thay
+`DB_PASSWORD`, `MYSQL_ROOT_PASSWORD`, `JWT_SECRET` bằng giá trị local. Sau đó chạy:
+
+```powershell
+Copy-Item Backend/.env.example Backend/.env
+docker compose --env-file Backend/.env up --build
+```
+
+API chạy tại `http://localhost:5000`; MySQL được expose ở port `3301`. Schema
+được tạo bởi Flyway và subscription plans được seed ở lần khởi động đầu tiên.
+Dữ liệu MySQL được lưu trong Docker volume `mysql_data`.
+
+Để import SQL dump có sẵn sau khi database đã chạy:
+
+```powershell
+Get-Content .\backup.sql | docker compose --env-file Backend/.env exec -T posdb sh -c 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"'
+```
+
+Hoặc đặt dump tại `Backend/docker/mysql/init/001-seed.sql` trước lần khởi động
+đầu tiên. Init script chỉ chạy khi MySQL volume được tạo lần đầu. Không dùng
+`docker compose down -v` sau khi đã có dữ liệu thật vì lệnh này xoá database volume.
+
 ---
 _Đây là phiên bản Đặc tả Tài Liệu Siêu Cấp (Ultimate Edition) của dự án MyPos, phân tích cặn kẽ mọi góc nhìn trong cấu trúc phần mềm_

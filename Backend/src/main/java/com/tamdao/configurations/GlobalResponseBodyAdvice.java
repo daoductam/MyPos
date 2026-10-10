@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
@@ -33,10 +34,12 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
         if (body instanceof ApiResponse) {
+            ((ApiResponse<?>) body).setRequestId(resolveRequestId(request));
             return body;
         }
 
         ApiResponse<Object> apiResponse = ApiResponse.success(body);
+        apiResponse.setRequestId(resolveRequestId(request));
 
         if (body instanceof String) {
             try {
@@ -48,5 +51,12 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         }
 
         return apiResponse;
+    }
+
+    private String resolveRequestId(ServerHttpRequest request) {
+        if (request instanceof ServletServerHttpRequest servletRequest) {
+            return (String) servletRequest.getServletRequest().getAttribute("X-Request-Id");
+        }
+        return request.getHeaders().getFirst("X-Request-Id");
     }
 }

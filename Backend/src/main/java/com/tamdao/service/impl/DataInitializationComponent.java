@@ -3,6 +3,7 @@ package com.tamdao.service.impl;
 import com.tamdao.domain.BillingCycle;
 import com.tamdao.domain.StoreStatus;
 import com.tamdao.domain.UserRole;
+import com.tamdao.authorization.ScopeType;
 import com.tamdao.modal.Branch;
 import com.tamdao.modal.Store;
 import com.tamdao.modal.SubscriptionPlan;
@@ -11,7 +12,9 @@ import com.tamdao.repository.BranchRepository;
 import com.tamdao.repository.StoreRepository;
 import com.tamdao.repository.SubscriptionPlanRepository;
 import com.tamdao.repository.UserRepository;
+import com.tamdao.service.AuthorizationMutationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -29,17 +32,48 @@ public class DataInitializationComponent implements CommandLineRunner {
     private final SubscriptionPlanRepository subscriptionPlanRepository;
     private final BranchRepository branchRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthorizationMutationService authorizationMutationService;
+    private final DemoCatalogSeeder demoCatalogSeeder;
+
+    @Value("${app.demo.seed.enabled:false}")
+    private boolean demoSeedEnabled;
+
+    @Value("${app.demo.passwords.admin:}")
+    private String demoAdminPassword;
+
+    @Value("${app.demo.passwords.store-admin:}")
+    private String demoStoreAdminPassword;
+
+    @Value("${app.demo.passwords.store-manager:}")
+    private String demoStoreManagerPassword;
+
+    @Value("${app.demo.passwords.branch-manager:}")
+    private String demoBranchManagerPassword;
+
+    @Value("${app.demo.passwords.branch-admin:}")
+    private String demoBranchAdminPassword;
+
+    @Value("${app.demo.passwords.cashier:}")
+    private String demoCashierPassword;
+
+    @Value("${app.demo.passwords.customer:}")
+    private String demoCustomerPassword;
 
     @Override
     public void run(String... args) {
         // 0. Seed Subscription Plans
         initializeSubscriptionPlansIfNotExist();
 
+        if (!demoSeedEnabled) {
+            return;
+        }
+        validateDemoSeedPasswords();
+
         // 1. Super Admin: Quản trị viên tối cao của toàn hệ thống SaaS POS
-        initializeUserIfNotExist("tam@gmail.com", "tam123456", "Tam Super Admin", UserRole.ROLE_ADMIN, null, null);
+        User admin = initializeUserIfNotExist("tam@gmail.com", demoAdminPassword, "Tam Super Admin", UserRole.ROLE_ADMIN, null, null);
 
         // 2. Store Admin: Quản trị viên cấp chuỗi cửa hàng, quản lý cấu hình và nhân sự cấp cao của chuỗi
-        User storeAdmin = initializeUserIfNotExist("store.admin@dmart.com", "StoreAdmin@123", "Store Admin", UserRole.ROLE_STORE_ADMIN, null, null);
+        User storeAdmin = initializeUserIfNotExist("store.admin@dmart.com", demoStoreAdminPassword, "Store Admin", UserRole.ROLE_STORE_ADMIN, null, null);
         Store store = null;
         if (storeAdmin != null) {
             store = initializeStoreIfNotExist(storeAdmin, "D Mart HN", "Hệ thống siêu thị tiện ích D Mart Hà Nội", "Supermarket");
@@ -56,19 +90,44 @@ public class DataInitializationComponent implements CommandLineRunner {
         }
 
         // 3. Store Manager: Quản lý cấp chuỗi cửa hàng, điều phối hoạt động kinh doanh tổng thể của chuỗi
-        initializeUserIfNotExist("store.manager@dmart.com", "StoreManager@123", "Store Manager", UserRole.ROLE_STORE_MANAGER, store, null);
+        User storeManager = initializeUserIfNotExist("store.manager@dmart.com", demoStoreManagerPassword, "Store Manager", UserRole.ROLE_STORE_MANAGER, store, null);
 
         // 4. Branch Manager: Quản lý chi nhánh, phụ trách doanh thu, nhân sự và hàng hóa tại một chi nhánh cụ thể
-        initializeUserIfNotExist("branch.manager@dmart.com", "BranchManager@123", "Branch Manager", UserRole.ROLE_BRANCH_MANAGER, store, branch);
+        User branchManager = initializeUserIfNotExist("branch.manager@dmart.com", demoBranchManagerPassword, "Branch Manager", UserRole.ROLE_BRANCH_MANAGER, store, branch);
 
         // 5. Branch Admin: Quản trị viên chi nhánh, quản lý kỹ thuật, cấu hình thiết bị/quầy và phân quyền tại chi nhánh
-        initializeUserIfNotExist("branch.admin@dmart.com", "BranchAdmin@123", "Branch Admin", UserRole.ROLE_BRANCH_ADMIN, store, branch);
+        User branchAdmin = initializeUserIfNotExist("branch.admin@dmart.com", demoBranchAdminPassword, "Branch Admin", UserRole.ROLE_BRANCH_ADMIN, store, branch);
 
         // 6. Branch Cashier: Thu ngân chi nhánh, thực hiện các giao dịch bán hàng, thanh toán và in hóa đơn cho khách
-        initializeUserIfNotExist("cashier@dmart.com", "Cashier@123", "Branch Cashier", UserRole.ROLE_BRANCH_CASHIER, store, branch);
+        User cashier = initializeUserIfNotExist("cashier@dmart.com", demoCashierPassword, "Branch Cashier", UserRole.ROLE_BRANCH_CASHIER, store, branch);
 
         // 7. Customer: Khách hàng thành viên, tích điểm, nhận ưu đãi và tra cứu lịch sử mua hàng cá nhân
-        initializeUserIfNotExist("customer@gmail.com", "Customer@123", "Customer Guest", UserRole.ROLE_CUSTOMER, null, null);
+        User customer = initializeUserIfNotExist("customer@gmail.com", demoCustomerPassword, "Customer Guest", UserRole.ROLE_CUSTOMER, null, null);
+
+        synchronizeAuthorizationAssignment(admin);
+        synchronizeAuthorizationAssignment(storeAdmin);
+        synchronizeAuthorizationAssignment(storeManager);
+        synchronizeAuthorizationAssignment(branchManager);
+        synchronizeAuthorizationAssignment(branchAdmin);
+        synchronizeAuthorizationAssignment(cashier);
+        synchronizeAuthorizationAssignment(customer);
+        demoCatalogSeeder.seed(store, branch);
+    }
+
+    private void validateDemoSeedPasswords() {
+        List<String> passwords = Arrays.asList(
+                demoAdminPassword,
+                demoStoreAdminPassword,
+                demoStoreManagerPassword,
+                demoBranchManagerPassword,
+                demoBranchAdminPassword,
+                demoCashierPassword,
+                demoCustomerPassword
+        );
+
+        if (passwords.stream().anyMatch(password -> password == null || password.isBlank())) {
+            throw new IllegalStateException("Demo seed is enabled but one or more demo passwords are missing");
+        }
     }
 
     private User initializeUserIfNotExist(String email, String rawPassword, String fullName, UserRole role, Store store, Branch branch) {
@@ -203,6 +262,33 @@ public class DataInitializationComponent implements CommandLineRunner {
                     .build();
 
             subscriptionPlanRepository.saveAll(Arrays.asList(starter, professional, enterprise));
+        }
+    }
+
+    private void synchronizeAuthorizationAssignment(User user) {
+        if (user == null || user.getRole() == null) {
+            return;
+        }
+        switch (user.getRole()) {
+            case ROLE_ADMIN -> authorizationMutationService.ensureAssignment(
+                    user, "ROLE_ADMIN", ScopeType.PLATFORM, null, null, "DEMO_SEED");
+            case ROLE_STORE_ADMIN, ROLE_STORE_MANAGER -> {
+                if (user.getStore() != null) {
+                    authorizationMutationService.ensureAssignment(
+                            user, user.getRole().name(), ScopeType.STORE, user.getStore().getId(), null, "DEMO_SEED");
+                }
+            }
+            case ROLE_BRANCH_MANAGER, ROLE_BRANCH_ADMIN, ROLE_BRANCH_CASHIER, ROLE_CASHIER -> {
+                if (user.getStore() != null && user.getBranch() != null) {
+                    String roleCode = user.getRole() == UserRole.ROLE_BRANCH_CASHIER
+                            || user.getRole() == UserRole.ROLE_CASHIER
+                            ? "ROLE_CASHIER" : "ROLE_BRANCH_MANAGER";
+                    authorizationMutationService.ensureAssignment(
+                            user, roleCode, ScopeType.BRANCH, user.getStore().getId(), user.getBranch().getId(), "DEMO_SEED");
+                }
+            }
+            case ROLE_CUSTOMER -> authorizationMutationService.ensureAssignment(
+                    user, "ROLE_CUSTOMER", ScopeType.SELF, null, null, "DEMO_SEED");
         }
     }
 }

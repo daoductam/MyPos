@@ -4,6 +4,7 @@ import com.tamdao.domain.StoreStatus;
 import com.tamdao.modal.Store;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.StoreDTO;
+import com.tamdao.payload.dto.CommissionSummaryDTO;
 import com.tamdao.payload.dto.UserDTO;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface StoreService {
     List<UserDTO> getEmployeesByStore(Long storeId);
 
     StoreDTO moderateStore(Long storeId, StoreStatus action);
+    StoreDTO updateCommissionRate(Long storeId, double commissionRate);
+    List<CommissionSummaryDTO> getCommissionSummaries();
 }

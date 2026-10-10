@@ -30,7 +30,7 @@ const Orders = () => {
   // Fetch branch employees (cashiers)
   useEffect(() => {
     if (branchId) {
-      dispatch(findBranchEmployees({ branchId, role: "ROLE_BRANCH_CASHIER" }));
+      dispatch(findBranchEmployees({ branchId, role: "ROLE_CASHIER" }));
     }
   }, [branchId, dispatch]);
 

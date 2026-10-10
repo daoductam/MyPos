@@ -1,13 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import { User, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../../../../components/ui/use-toast";
+import { updateProfile } from "../../../../Redux Toolkit/features/user/userThunks";
 
 export default function ProfileSettingsForm({ userProfile }) {
   const { t } = useTranslation();
-  const [profile, setProfile] = useState({ name: '', email: '' });
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+  const [profile, setProfile] = useState({ name: '', email: '', phone: '' });
   const [isSaving, setIsSaving] = useState(false);
 
   React.useEffect(() => {
@@ -15,20 +20,31 @@ export default function ProfileSettingsForm({ userProfile }) {
       setProfile({
         name: userProfile.fullName || "Super Admin",
         email: userProfile.email || "admin@pospro.com",
+        phone: userProfile.phone || "",
       });
     }
   }, [userProfile]);
 
   const handleChange = (key, value) => setProfile(prev => ({ ...prev, [key]: value }));
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     setIsSaving(true);
-    console.log("Saving profile settings:", profile);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await dispatch(updateProfile({ fullName: profile.name, phone: profile.phone })).unwrap();
+      toast({
+        title: t('superAdminModule.settings.profile.save'),
+        description: t('superAdminModule.settings.profile.saveSuccess', 'Profile updated successfully.'),
+      });
+    } catch (error) {
+      toast({
+        title: t('superAdminModule.settings.profile.save'),
+        description: error,
+        variant: "destructive",
+      });
+    } finally {
       setIsSaving(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -38,7 +54,7 @@ export default function ProfileSettingsForm({ userProfile }) {
           <User className="w-10 h-10" />
         </div>
         <div className="space-y-2">
-          <Button type="button" variant="outline" className="border-white/20 text-white hover:bg-white/10">{t('superAdminModule.settings.profile.changeAvatar')}</Button>
+          <p className="text-sm text-gray-300">{t('superAdminModule.settings.profile.changeAvatar')}</p>
           <p className="text-xs text-gray-400">{t('superAdminModule.settings.profile.avatarHint')}</p>
         </div>
       </div>
@@ -59,7 +75,16 @@ export default function ProfileSettingsForm({ userProfile }) {
             id="profile-email"
             type="email"
             value={profile.email}
-            onChange={(e) => handleChange("email", e.target.value)}
+            readOnly
+            className="bg-white/5 border-white/20 text-white placeholder-gray-500"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="profile-phone" className="text-gray-300">{t('superAdminModule.settings.profile.phone', 'Phone Number')}</Label>
+          <Input
+            id="profile-phone"
+            value={profile.phone}
+            onChange={(e) => handleChange("phone", e.target.value)}
             className="bg-white/5 border-white/20 text-white placeholder-gray-500"
           />
         </div>

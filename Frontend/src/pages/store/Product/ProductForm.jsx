@@ -131,15 +131,7 @@ const ProductForm = ({
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      {({ isSubmitting, touched, errors, values, setFieldValue }) => {
-        // Debugging: Log validation errors if submission is attempted and fails
-        React.useEffect(() => {
-          if (Object.keys(errors).length > 0 && isSubmitting) {
-            console.error("Form validation failed:", errors);
-          }
-        }, [errors, isSubmitting]);
-
-        return (
+      {({ isSubmitting, touched, errors, values, setFieldValue }) => (
           <Form className="space-y-4 py-2 pr-2">
           <div className="flex flex-wrap gap-5">
             {!values.image ? (
@@ -390,8 +382,7 @@ const ProductForm = ({
             </Button>
           </div>
         </Form>
-      );
-    }}
+      )}
     </Formik>
   );
 };

@@ -23,6 +23,7 @@ public class StoreMapper {
                     .description(store.getDescription())
                     .contact(store.getContact())
                     .status(store.getStatus())
+                    .commissionRate(store.getCommissionRate())
                     .deleted(store.getDeleted())
                     .deletedAt(store.getDeletedAt())
                     .deletedBy(store.getDeletedBy())
@@ -40,6 +41,7 @@ public class StoreMapper {
                     .storeAdmin(storeAdmin)
                     .storeType(dto.getStoreType())
                     .description(dto.getDescription())
+                    .commissionRate(dto.getCommissionRate() == null ? 0.0 : dto.getCommissionRate())
                     .build();
         }
     }

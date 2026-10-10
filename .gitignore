@@ -18,6 +18,10 @@ Frontend/npm-debug.log*
 Frontend/yarn-debug.log*
 Frontend/yarn-error.log*
 
+# Local Docker secrets and imported database dumps
+Backend/.env
+Backend/docker/mysql/init/*.sql
+
 # IDEs/Editors
 .idea/
 .vscode/
@@ -49,3 +53,6 @@ Thumbs.db
 # CodeGraph local database
 .codegraph/
 
+# Local browser test artifacts
+.playwright-mcp/
+response.tmp

@@ -3,6 +3,7 @@ import {
   createStoreEmployee,
   createBranchEmployee,
   updateEmployee,
+  setEmployeeAccess,
   deleteEmployee,
   findEmployeeById,
   findStoreEmployees,
@@ -53,6 +54,13 @@ const employeeSlice = createSlice({
       })
 
       .addCase(updateEmployee.fulfilled, (state, action) => {
+        const index = state.employees.findIndex((e) => e.id === action.payload.id);
+        if (index !== -1) {
+          state.employees[index] = action.payload;
+        }
+      })
+
+      .addCase(setEmployeeAccess.fulfilled, (state, action) => {
         const index = state.employees.findIndex((e) => e.id === action.payload.id);
         if (index !== -1) {
           state.employees[index] = action.payload;

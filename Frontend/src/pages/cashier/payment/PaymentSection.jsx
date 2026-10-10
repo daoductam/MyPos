@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import {
   holdOrder,
   selectCartItems,
-  selectSelectedCustomer,
   selectTotal,
 } from "../../../Redux Toolkit/features/cart/cartSlice";
 import { Button } from "../../../components/ui/button";
@@ -18,7 +17,6 @@ import { formatVND } from "@/utils/formatCurrency";
 const PaymentSection = ({ setShowPaymentDialog }) => {
   const { t } = useTranslation();
   const cartItems = useSelector(selectCartItems);
-  const selectedCustomer = useSelector(selectSelectedCustomer);
 
   const total = useSelector(selectTotal);
 

@@ -28,6 +28,8 @@ import com.tamdao.util.SecurityUtil;
 @Transactional
 public class OrderServiceImpl implements OrderService {
 
+    private static final double VAT_RATE = 0.10d;
+
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final BranchRepository branchRepository;
@@ -48,6 +50,10 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException(ErrorCode.INVALID_REQUEST, "Order items cannot be empty");
         }
 
+        if (dto.getPaymentType() == null) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Payment type is required");
+        }
+
         List<Long> productIds = dto.getItems().stream()
                 .map(com.tamdao.payload.dto.OrderItemDTO::getProductId)
                 .collect(Collectors.toList());
@@ -66,10 +72,15 @@ public class OrderServiceImpl implements OrderService {
                 .cashier(cashier)
                 .customer(dto.getCustomer())
                 .paymentType(dto.getPaymentType())
+                .status(OrderStatus.COMPLETED)
                 .build();
 
         List<OrderItem> orderItems = new java.util.ArrayList<>();
         for (com.tamdao.payload.dto.OrderItemDTO itemDto : dto.getItems()) {
+            if (itemDto.getQuantity() == null || itemDto.getQuantity() <= 0) {
+                throw new BusinessException(ErrorCode.INVALID_REQUEST, "Order item quantity must be greater than zero");
+            }
+
             Product product = productMap.get(itemDto.getProductId());
             if (product == null) {
                 throw new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "Product not found with ID: " + itemDto.getProductId());
@@ -91,14 +102,31 @@ public class OrderServiceImpl implements OrderService {
             OrderItem orderItem = OrderItem.builder()
                     .product(product)
                     .quantity(itemDto.getQuantity())
-                    .price(product.getSellingPrice() * itemDto.getQuantity())
+                    .price(product.getSellingPrice())
                     .order(order)
                     .build();
             orderItems.add(orderItem);
         }
 
-        double total = orderItems.stream().mapToDouble(OrderItem::getPrice).sum();
+        double subtotal = orderItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+        double tax = subtotal * VAT_RATE;
+        double discount = dto.getDiscountAmount() == null ? 0d : dto.getDiscountAmount();
+        if (!Double.isFinite(discount) || discount < 0d || discount > subtotal + tax) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Discount amount is invalid");
+        }
+
+        double total = subtotal + tax - discount;
+        if (dto.getTotalAmount() != null
+                && (!Double.isFinite(dto.getTotalAmount())
+                || Math.abs(dto.getTotalAmount() - total) > 0.01d)) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST, "Order total does not match the item prices");
+        }
+
         order.setTotalAmount(total);
+        order.setTaxAmount(tax);
+        order.setDiscountAmount(discount);
         order.setItems(orderItems);
 
         return OrderMapper.toDto(orderRepository.save(order));
@@ -122,7 +150,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.BRANCH_NOT_FOUND, "Branch not found"));
         securityUtil.checkBranchAccess(branch);
 
-        return orderRepository.findOrdersFiltered(branchId, customerId, cashierId, paymentType).stream()
+        return orderRepository.findOrdersFiltered(branchId, customerId, cashierId, paymentType, status).stream()
                 .map(OrderMapper::toDto)
                 .collect(Collectors.toList());
     }

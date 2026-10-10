@@ -71,3 +71,28 @@ export const deleteBranch = createAsyncThunk('branch/delete', async ({ id, jwt }
   }
 });
 
+// 🔹 Get Deleted Branches
+export const getDeletedBranches = createAsyncThunk('branch/getDeleted', async ({ storeId, jwt }, { rejectWithValue }) => {
+  try {
+    const res = await api.get(`/api/v1/branches/store/${storeId}/trash`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    });
+    return res.data;
+  } catch (err) {
+    return rejectWithValue(err.response?.data?.message || 'Failed to fetch deleted branches');
+  }
+});
+
+// 🔹 Restore Branch
+export const restoreBranch = createAsyncThunk('branch/restore', async ({ id, jwt }, { rejectWithValue }) => {
+  try {
+    await api.patch(`/api/v1/branches/restore/${id}`, {}, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    });
+    return id;
+  } catch (err) {
+    return rejectWithValue(err.response?.data?.message || 'Failed to restore branch');
+  }
+});
+
+

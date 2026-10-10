@@ -19,17 +19,19 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserBranchPermission(authentication, 'order.create')")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO dto) {
         return ResponseEntity.ok(orderService.createOrder(dto));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'order.read', @resourceScopeResolver.orderStoreId(#id)) or @authorizationGuard.hasSelfPermission(authentication, 'order.read_own', @resourceScopeResolver.orderCashierId(#id))")
     public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @GetMapping("/branch/{branchId}")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'order.read', #branchId)")
     public ResponseEntity<List<OrderDTO>> getOrdersByBranch(
             @PathVariable Long branchId,
             @RequestParam(required = false) Long customerId,
@@ -47,29 +49,32 @@ public class OrderController {
     }
 
     @GetMapping("/cashier/{cashierId}")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'order.read', #cashierId) or @authorizationGuard.hasSelfPermission(authentication, 'order.read_own', #cashierId)")
     public ResponseEntity<List<OrderDTO>> getOrdersByCashier(@PathVariable Long cashierId) {
         return ResponseEntity.ok(orderService.getOrdersByCashier(cashierId));
     }
 
     @GetMapping("/today/branch/{branchId}")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'order.read', #branchId)")
     public ResponseEntity<List<OrderDTO>> getTodayOrders(@PathVariable Long branchId) {
         return ResponseEntity.ok(orderService.getTodayOrdersByBranch(branchId));
     }
 
     @GetMapping("/customer/{customerId}")
+    @PreAuthorize("@authorizationGuard.hasCustomerPermission(authentication, 'order.read', #customerId) or @authorizationGuard.hasCustomerPermission(authentication, 'customer.read', #customerId)")
     public ResponseEntity<List<OrderDTO>> getCustomerOrders(@PathVariable Long customerId) {
         return ResponseEntity.ok(orderService.getOrdersByCustomerId(customerId));
     }
 
     @GetMapping("/recent/{branchId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'order.read', #branchId)")
     public ResponseEntity<List<OrderDTO>> getRecentOrders(@PathVariable Long branchId) {
         List<OrderDTO> recentOrders = orderService.getTop5RecentOrdersByBranchId(branchId);
         return ResponseEntity.ok(recentOrders);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_STORE_MANAGER') or hasAuthority('ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'order.delete', @resourceScopeResolver.orderStoreId(#id))")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();

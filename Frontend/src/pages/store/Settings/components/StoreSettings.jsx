@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 const StoreSettings = ({ settings, onChange }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { store, loading, error } = useSelector((state) => state.store);
+  const { store, loading } = useSelector((state) => state.store);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFormSubmit = async (apiData, { setSubmitting, resetForm }) => {
@@ -70,7 +70,6 @@ const StoreSettings = ({ settings, onChange }) => {
           initialValues={settings}
           onSubmit={handleFormSubmit}
           isSubmitting={isSubmitting || loading}
-          storeId={store?.id}
         />
       </CardContent>
     </Card>

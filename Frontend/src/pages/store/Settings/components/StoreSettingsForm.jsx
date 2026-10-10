@@ -20,7 +20,7 @@ import { transformSettingsToApiFormat } from "./formUtils";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 
-const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) => {
+const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting }) => {
   const { t } = useTranslation();
 
   const validationSchema = Yup.object().shape({
@@ -32,7 +32,7 @@ const StoreSettingsForm = ({ initialValues, onSubmit, isSubmitting, storeId }) =
       .email(t('common.validation.email'))
       .required(t('common.validation.required', { field: "Email" })),
     storePhone: Yup.string()
-      .matches(/^[\+]?[1-9][\d]{0,15}$/, t('common.validation.phone'))
+      .matches(/^\+?[1-9][\d]{0,15}$/, t('common.validation.phone'))
       .required(t('common.validation.required', { field: "Phone" })),
     storeAddress: Yup.string()
       .min(10, t('common.validation.minLength', { field: t('storeModule.settings.storeInfo.address'), min: 10 }))

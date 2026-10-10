@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import {
   Dialog,
@@ -21,6 +21,8 @@ import {
   selectPaymentMethod, 
   selectCartItems, 
   selectSelectedCustomer, 
+  selectDiscountAmount,
+  selectTax,
   selectTotal, 
   selectNote,
   setPaymentMethod,
@@ -43,6 +45,8 @@ const PaymentDialog = ({
   const selectedCustomer = useSelector(selectSelectedCustomer);
 
   const total = useSelector(selectTotal);
+  const tax = useSelector(selectTax);
+  const discountAmount = useSelector(selectDiscountAmount);
 
   const note = useSelector(selectNote);
 
@@ -63,6 +67,8 @@ const PaymentDialog = ({
       // Prepare order data according to OrderDTO structure
       const orderData = {
         totalAmount: total,
+        taxAmount: tax,
+        discountAmount,
         branchId: branch?.branch?.id || userProfile?.branchId,
         cashierId: userProfile?.id,
         customer: selectedCustomer || null,

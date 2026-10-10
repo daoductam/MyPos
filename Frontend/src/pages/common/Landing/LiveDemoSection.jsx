@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, BarChart3, Users, Package, Calendar, Settings, ChevronRight, Play, Pause } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -8,12 +8,12 @@ const LiveDemoSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const { t } = useTranslation();
   
-  const tabs = [
+  const tabs = useMemo(() => [
     { id: 'pos', label: t('liveDemo.tabs.pos'), icon: <ShoppingCart className="w-5 h-5" /> },
     { id: 'analytics', label: t('liveDemo.tabs.analytics'), icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'inventory', label: t('liveDemo.tabs.inventory'), icon: <Package className="w-5 h-5" /> },
     { id: 'customers', label: t('liveDemo.tabs.customers'), icon: <Users className="w-5 h-5" /> },
-  ];
+  ], [t]);
 
   const features = t('liveDemo.featureLists', { returnObjects: true });
 
@@ -34,7 +34,7 @@ const LiveDemoSection = () => {
       }, 4000); // Change tab every 4 seconds
     }
     return () => clearInterval(tabInterval);
-  }, [isPlaying]);
+  }, [isPlaying, tabs]);
 
   return (
     <section className="py-20 md:py-28 relative">

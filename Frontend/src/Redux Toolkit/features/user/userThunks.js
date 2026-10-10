@@ -15,6 +15,33 @@ export const getUserProfile = createAsyncThunk('user/getProfile', async (token, 
   }
 });
 
+export const getAuthorizationProfile = createAsyncThunk('user/getAuthorizationProfile', async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.get('/api/v1/authorization/me');
+    return res.data;
+  } catch (err) {
+    return rejectWithValue(err.response?.data?.message || 'Failed to fetch authorization profile');
+  }
+});
+
+export const updateProfile = createAsyncThunk('user/updateProfile', async ({ fullName, phone }, { rejectWithValue }) => {
+  try {
+    const res = await api.put('/api/v1/users/profile', { fullName, phone });
+    return res.data;
+  } catch (err) {
+    return rejectWithValue(err.customMessage || err.response?.data?.message || 'Failed to update profile');
+  }
+});
+
+export const changePassword = createAsyncThunk('user/changePassword', async ({ currentPassword, newPassword }, { rejectWithValue }) => {
+  try {
+    await api.patch('/api/v1/users/profile/password', { currentPassword, newPassword });
+    return true;
+  } catch (err) {
+    return rejectWithValue(err.customMessage || err.response?.data?.message || 'Failed to change password');
+  }
+});
+
 // 🔹 Get all customers
 export const getCustomers = createAsyncThunk('user/getCustomers', async (token, { rejectWithValue }) => {
   try {
@@ -70,12 +97,14 @@ export const getUserById = createAsyncThunk('user/getById', async (userId, { rej
 // 🔹 Logout user
 export const logout = createAsyncThunk('user/logout', async (_, { rejectWithValue }) => {
   try {
+    await api.post('/api/v1/auth/logout', {});
     localStorage.removeItem('jwt');
     // Optionally, clear other relevant local storage items or session data
     console.log('User logged out successfully');
     return 'Logged out successfully';
   } catch (err) {
     console.error('Logout error:', err);
+    localStorage.removeItem('jwt');
     return rejectWithValue(err.message || 'Failed to logout');
   }
 });

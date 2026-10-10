@@ -34,7 +34,7 @@ const CreateOrderPage = () => {
         variant: "destructive",
       });
     }
-  }, [orderError, toast]);
+  }, [orderError, t, toast]);
 
   // Focus on search input when component mounts
   useEffect(() => {

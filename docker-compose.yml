@@ -1,0 +1,87 @@
+services:
+  posdb:
+    image: mysql:8.0
+    container_name: dmart-pos-mysql
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+      MYSQL_DATABASE: ${DB_NAME:-pos}
+      MYSQL_USER: ${DB_USERNAME:-pos_app}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in Backend/.env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD must be set in Backend/.env}
+    ports:
+      - "${MYSQL_HOST_PORT:-3301}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./Backend/docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$${MYSQL_ROOT_PASSWORD}\" --silent"]
+      timeout: 10s
+      retries: 12
+      interval: 5s
+      start_period: 20s
+    networks:
+      - pos-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: dmart-pos-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:${REDIS_HOST_PORT:-6380}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 5s
+      retries: 10
+      interval: 5s
+    networks:
+      - pos-network
+
+  pos-system:
+    # Opt in explicitly; local development runs Spring Boot from the IDE/terminal.
+    profiles: ["app"]
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    image: dmart-pos:local
+    container_name: dmart-pos-api
+    depends_on:
+      posdb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: posdb
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-pos}
+      DB_USERNAME: ${DB_USERNAME:-pos_app}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in Backend/.env}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set in Backend/.env}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      RAZORPAY_API_KEY: ${RAZORPAY_API_KEY:-}
+      RAZORPAY_API_SECRET: ${RAZORPAY_API_SECRET:-}
+      STRIPE_API_KEY: ${STRIPE_API_KEY:-}
+      APP_DEMO_SEED_ENABLED: ${APP_DEMO_SEED_ENABLED:-false}
+      APP_DEMO_PASSWORDS_ADMIN: ${APP_DEMO_PASSWORDS_ADMIN:-}
+      APP_DEMO_PASSWORDS_STORE_ADMIN: ${APP_DEMO_PASSWORDS_STORE_ADMIN:-}
+      APP_DEMO_PASSWORDS_STORE_MANAGER: ${APP_DEMO_PASSWORDS_STORE_MANAGER:-}
+      APP_DEMO_PASSWORDS_BRANCH_MANAGER: ${APP_DEMO_PASSWORDS_BRANCH_MANAGER:-}
+      APP_DEMO_PASSWORDS_BRANCH_ADMIN: ${APP_DEMO_PASSWORDS_BRANCH_ADMIN:-}
+      APP_DEMO_PASSWORDS_CASHIER: ${APP_DEMO_PASSWORDS_CASHIER:-}
+      APP_DEMO_PASSWORDS_CUSTOMER: ${APP_DEMO_PASSWORDS_CUSTOMER:-}
+    networks:
+      - pos-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  pos-network:

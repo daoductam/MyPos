@@ -67,8 +67,14 @@
           "failed": "Refund Failed",
           "failedDesc": "Failed to process refund. Please try again."
         },
+        "validation": {
+          "reasonRequired": "Select a return reason before processing the refund.",
+          "otherReasonRequired": "Enter a reason before processing the refund.",
+          "methodRequired": "Select a refund method before processing the refund."
+        },
         "receipt": {
           "title": "Return Receipt",
+          "description": "Receipt for the refunded order",
           "returnNumber": "Return #",
           "originalOrder": "Original Order",
           "thankYou": "Thank you for shopping with us!",
@@ -335,6 +341,7 @@
         "stores": "Stores",
         "subscriptions": "Subscription Plans",
         "requests": "Pending Requests",
+        "exports": "Exports",
         "settings": "Settings"
       },
       "logout": "Logout"
@@ -429,7 +436,8 @@
         "resetPassword": {
           "title": "Reset Password",
           "confirm": "Are you sure you want to reset the password for {{name}}?",
-          "instruction": "A temporary password will be generated and sent to their email address."
+          "instruction": "A secure password reset link will be sent to their email address.",
+          "success": "The password reset link was sent successfully."
         }
       },
       "customers": {
@@ -592,9 +600,7 @@
             "desc": "GST-compliant reports for easy tax filing and reconciliation."
           }
         },
-        "generate": "Generate Report",
-        "placeholderText1": "This is a placeholder for the report content.",
-        "placeholderText2": "In a real application, this PDF would be populated with actual report data."
+        "generate": "Generate Report"
       },
       "settings": {
         "title": "Branch Settings",
@@ -724,6 +730,65 @@
       "passwordMismatch": "Passwords do not match",
       "tooShort": "Too short",
       "tooLong": "Too long"
+    },
+    "onboarding": {
+      "brandTitle": "Set Up Your Digital Storefront",
+      "brandTitleAccent": "in Minutes",
+      "brandDescription": "Our guided setup makes it easy to configure your business and start selling.",
+      "features": {
+        "adminProfile": "Create your admin profile",
+        "storeDetails": "Define your store details",
+        "goLive": "Go live instantly"
+      },
+      "step": "Step {{step}} of 2",
+      "ownerDetails": "Owner Details",
+      "storeDetailsLabel": "Store Details",
+      "createAccount": "Create Your Account",
+      "createAccountDescription": "Let's start by setting up your account details",
+      "storeInformation": "Store Information",
+      "storeInformationDescription": "Tell us about your business",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInHere": "Sign in here",
+      "owner": {
+        "fullNamePlaceholder": "Enter your full name",
+        "emailPlaceholder": "Enter your email address",
+        "passwordPlaceholder": "Enter your password",
+        "confirmPasswordPlaceholder": "Confirm your password",
+        "processing": "Processing...",
+        "nextStep": "Next Step"
+      },
+      "store": {
+        "namePlaceholder": "Enter your store name",
+        "typePlaceholder": "Select store type",
+        "typesLabel": "Store Types",
+        "addressPlaceholder": "Enter store address (optional)",
+        "back": "Back",
+        "processing": "Processing...",
+        "completeSetup": "Complete Setup"
+      },
+      "storeTypes": {
+        "retail": "Retail Store",
+        "restaurant": "Restaurant",
+        "cafe": "Café",
+        "pharmacy": "Pharmacy",
+        "grocery": "Grocery Store",
+        "electronics": "Electronics Store",
+        "clothing": "Clothing Store",
+        "other": "Other"
+      },
+      "validation": {
+        "fullNameRequired": "Full name is required",
+        "fullNameMin": "Full name must be at least 2 characters",
+        "emailInvalid": "Invalid email address",
+        "emailRequired": "Email is required",
+        "passwordMin": "Password must be at least 6 characters",
+        "passwordRequired": "Password is required",
+        "passwordMismatch": "Passwords must match",
+        "confirmPasswordRequired": "Confirm password is required",
+        "storeNameRequired": "Store name is required",
+        "storeNameMin": "Store name must be at least 2 characters",
+        "storeTypeRequired": "Store type is required"
+      }
     }
   },
   "header": {
@@ -1052,6 +1117,7 @@
     "roles": {
       "ROLE_STORE_MANAGER": "Store Manager",
       "ROLE_BRANCH_MANAGER": "Branch Manager",
+      "ROLE_CASHIER": "Cashier",
       "ROLE_BRANCH_ADMIN": "Branch Admin",
       "ROLE_BRANCH_CASHIER": "Cashier"
     },
@@ -1471,6 +1537,7 @@
       "subtitle": "Manage commission rates for all stores",
       "stats": {
         "totalEarnings": "Total Earnings",
+        "earningsHint": "Based on completed orders.",
         "averageRate": "Average Rate",
         "activeStores": "Active Stores",
         "rateSetHint": "All stores have commission rates set"
@@ -1481,6 +1548,7 @@
         "currentRate": "Current Rate",
         "rateChange": "Rate Change",
         "totalEarnings": "Total Earnings",
+        "completedOrders": "Completed Orders",
         "lastUpdated": "Last Updated",
         "actions": "Actions",
         "editRate": "Edit Rate"
@@ -1514,7 +1582,7 @@
         "button": "Generate Export",
         "exporting": "Exporting...",
         "started": "Export Started",
-        "startedDesc": "{name} export has been initiated. You'll receive a notification when it's ready."
+        "startedDesc": "{{name}} export has been initiated. You'll receive a notification when it's ready."
       },
       "available": {
         "title": "Available Export Types",

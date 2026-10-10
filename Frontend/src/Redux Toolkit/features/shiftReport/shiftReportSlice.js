@@ -96,7 +96,7 @@ const shiftReportSlice = createSlice({
       })
       .addCase(getCurrentShiftProgress.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message ?? action.payload;
       })
 
       // Get Shift Report by Date

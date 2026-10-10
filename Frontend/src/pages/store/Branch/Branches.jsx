@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
 import {
   getAllBranchesByStore,
 } from "@/Redux Toolkit/features/branch/branchThunks";
@@ -20,13 +19,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import BranchTable from "./BranchTable";
 import BranchForm from "./BranchForm";
 import { useTranslation } from "react-i18next";
+import { hasCapability } from "../../../utils/capabilities";
 
 export default function Branches() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { branches, loading, error } = useSelector((state) => state.branch);
   const { store } = useSelector((state) => state.store);
-  const { userProfile } = useSelector((state) => state.user);
+  const { userProfile, authorizationProfile } = useSelector((state) => state.user);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -60,7 +60,7 @@ export default function Branches() {
     setIsEditDialogOpen(true);
   };
 
-  const isStoreAdmin = userProfile?.role === "ROLE_STORE_ADMIN";
+  const canCreateBranch = hasCapability(authorizationProfile, "branch.create");
 
   return (
     <div className="space-y-6 text-white">
@@ -70,7 +70,7 @@ export default function Branches() {
           <p className="text-gray-400 mt-1">{t('storeModule.branches.subtitle')}</p>
         </div>
 
-        {isStoreAdmin && (
+        {canCreateBranch && (
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <Button onClick={() => setIsAddDialogOpen(true)} className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
               <Plus className="mr-2 h-4 w-4" /> {t('storeModule.branches.addBranch')}

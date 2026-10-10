@@ -23,19 +23,19 @@ public class ShiftReportController {
     private final ShiftReportMapper shiftReportMapper;
 
     @PostMapping("/start")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
-    public ResponseEntity<ShiftReport> startShift(
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'shift.start', #branchId)")
+    public ResponseEntity<ShiftReportDTO> startShift(
             @RequestParam Long branchId
     ) {
         ShiftReport shift = shiftReportService.startShift(
                 null,
                 branchId,
                 LocalDateTime.now());
-        return ResponseEntity.ok(shift);
+        return ResponseEntity.ok(ShiftReportMapper.toDTO(shift));
     }
 
     @PatchMapping("/end")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserSelfPermission(authentication, 'shift.end')")
     public ResponseEntity<ShiftReportDTO> endShift() {
         ShiftReport ended = shiftReportService.endShift(
                 null,
@@ -45,14 +45,14 @@ public class ShiftReportController {
     }
 
     @GetMapping("/current")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_CASHIER')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserSelfPermission(authentication, 'shift.read_own')")
     public ResponseEntity<ShiftReportDTO> getCurrentShiftProgress() {
         ShiftReport shift = shiftReportService.getCurrentShiftProgress(null);
         return ResponseEntity.ok(ShiftReportMapper.toDTO(shift));
     }
 
     @GetMapping("/cashier/{cashierId}/by-date")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'shift.read', #cashierId) or @authorizationGuard.hasSelfPermission(authentication, 'shift.read_own', #cashierId)")
     public ResponseEntity<ShiftReportDTO> getShiftReportByDate(
             @PathVariable Long cashierId,
             @RequestParam
@@ -64,7 +64,7 @@ public class ShiftReportController {
     }
 
     @GetMapping("/cashier/{cashierId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_CASHIER', 'ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'shift.read', #cashierId) or @authorizationGuard.hasSelfPermission(authentication, 'shift.read_own', #cashierId)")
     public ResponseEntity<List<ShiftReportDTO>> getShiftsByCashier(
             @PathVariable Long cashierId
     ) {
@@ -75,7 +75,7 @@ public class ShiftReportController {
     }
 
     @GetMapping("/branch/{branchId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_MANAGER', 'ROLE_BRANCH_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'shift.read', #branchId)")
     public ResponseEntity<List<ShiftReportDTO>> getShiftsByBranch(
             @PathVariable Long branchId
     ) {
@@ -86,7 +86,7 @@ public class ShiftReportController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_STORE_ADMIN', 'ROLE_STORE_MANAGER')")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserStorePermission(authentication, 'shift.read')")
     public ResponseEntity<List<ShiftReportDTO>> getAllShifts() {
         List<ShiftReport> shifts = shiftReportService.getAllShiftReports();
         List<ShiftReportDTO> dto = shifts.stream()
@@ -95,13 +95,14 @@ public class ShiftReportController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'shift.read', @resourceScopeResolver.shiftStoreId(#id)) or @authorizationGuard.hasSelfPermission(authentication, 'shift.read_own', @resourceScopeResolver.shiftCashierId(#id))")
     public ResponseEntity<ShiftReportDTO> getShiftById(@PathVariable Long id) {
         ShiftReport shifts = shiftReportService.getShiftReportById(id);
         return ResponseEntity.ok(ShiftReportMapper.toDTO(shifts));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_BRANCH_ADMIN', 'ROLE_STORE_ADMIN')")
+    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'shift.delete', @resourceScopeResolver.shiftStoreId(#id))")
     public ResponseEntity<?> deleteShift(@PathVariable Long id) {
         shiftReportService.deleteShiftReport(id);
         return ResponseEntity.ok().build();

@@ -27,7 +27,13 @@ export const createOrder = createAsyncThunk(
       console.log('🔄 Creating order...', { dto });
       
       const headers = getAuthHeaders();
-      const res = await api.post('/api/v1/orders', dto, { headers });
+      const payload = {
+        ...dto,
+        paymentType: dto.paymentType?.toUpperCase(),
+        taxAmount: dto.taxAmount ?? 0,
+        discountAmount: dto.discountAmount ?? 0,
+      };
+      const res = await api.post('/api/v1/orders', payload, { headers });
       
       console.log('✅ Order created successfully:', {
         orderId: res.data.id,

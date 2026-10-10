@@ -23,6 +23,7 @@ public class ApiResponse<T> {
     private T data;
     private List<FieldErrorDetail> errors;
     private String timestamp;
+    private String requestId;
 
     public ApiResponse(String message) {
         this.success = true;

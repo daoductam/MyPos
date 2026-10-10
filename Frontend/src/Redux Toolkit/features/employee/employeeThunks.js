@@ -85,6 +85,34 @@ export const updateEmployee = createAsyncThunk(
   }
 );
 
+export const setEmployeeAccess = createAsyncThunk(
+  "employee/setEmployeeAccess",
+  async ({ employeeId, enabled }, { rejectWithValue }) => {
+    try {
+      const res = await api.patch(`/api/v1/employees/${employeeId}/access`, { enabled }, {
+        headers: getAuthHeaders(),
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to update employee access");
+    }
+  }
+);
+
+export const requestEmployeePasswordReset = createAsyncThunk(
+  "employee/requestEmployeePasswordReset",
+  async ({ employeeId }, { rejectWithValue }) => {
+    try {
+      await api.post(`/api/v1/employees/${employeeId}/password-reset`, null, {
+        headers: getAuthHeaders(),
+      });
+      return employeeId;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to send password reset email");
+    }
+  }
+);
+
 // 🔹 Delete Employee
 export const deleteEmployee = createAsyncThunk(
   "employee/deleteEmployee",

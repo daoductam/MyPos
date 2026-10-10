@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "@/components/ui/use-toast";
@@ -21,19 +21,7 @@ export default function Stores() {
   const [storeData, setStoreData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    if (userProfile) {
-      fetchStoreData();
-    }
-  }, [dispatch, userProfile]);
-  
-  useEffect(() => {
-    if (store) {
-      setStoreData(store);
-    }
-  }, [store]);
-  
-  const fetchStoreData = async () => {
+  const fetchStoreData = useCallback(async () => {
     setRefreshing(true);
     try {
       if (userProfile?.role === "ROLE_STORE_ADMIN") {
@@ -50,7 +38,20 @@ export default function Stores() {
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [dispatch, userProfile]);
+
+  useEffect(() => {
+    if (userProfile) {
+      fetchStoreData();
+    }
+  }, [fetchStoreData, userProfile]);
+  
+  useEffect(() => {
+    if (store) {
+      setStoreData(store);
+    }
+  }, [store]);
+  
 
   const handleEditStore = async (values, { setSubmitting, resetForm }) => {
     try {

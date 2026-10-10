@@ -12,6 +12,8 @@ import {
 import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, forgotPassword } from '@/Redux Toolkit/features/auth/authThunk';
+import { getAuthorizationProfile } from '@/Redux Toolkit/features/user/userThunks';
+import { getHomePath } from '@/utils/capabilities';
 import { getUserProfile } from '@/Redux Toolkit/features/user/userThunks';
 import { startShift, getCurrentShiftProgress } from '@/Redux Toolkit/features/shiftReport/shiftReportThunks';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +36,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { error, loading } = useSelector((state) => state.auth);
+  const { error: authError, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const handleMouseMove = (event) => {
@@ -66,6 +68,10 @@ const Login = () => {
         });
 
         const user = resultAction.payload.user;
+        dispatch(getUserProfile(resultAction.payload.jwt)); 
+        const authorizationProfile = await dispatch(getAuthorizationProfile()).unwrap();
+
+        if (authorizationProfile.capabilities?.includes('order.create')) {
         const accessToken = resultAction.payload.accessToken || resultAction.payload.jwt;
         dispatch(getUserProfile(accessToken)); 
         
@@ -77,23 +83,25 @@ const Login = () => {
             // First, try to get the current shift progress
             await dispatch(getCurrentShiftProgress()).unwrap();
           } catch (shiftError) {
-            // If getting current shift fails (e.g., 404 Not Found), it means no shift is active.
-            // So, we start a new one.
-            console.log("Không tìm thấy ca làm việc hoạt động, đang bắt đầu ca mới.");
-            await dispatch(startShift({ branchId: user.branchId, cashierId: user.id })).unwrap();
+            // Only a missing active shift should trigger automatic shift start.
+            // Forbidden/server errors must not be silently converted into a write.
+            console.warn("Không thể đọc ca hiện tại:", shiftError);
+            try {
+              if (shiftError?.status === 404 && user?.branchId) {
+                await dispatch(startShift({ branchId: user.branchId, cashierId: user.id })).unwrap();
+              }
+            } catch (err) {
+              console.warn("Không thể tự động bắt đầu ca:", err);
+            }
           }
           navigate('/cashier');
-        } else if (userRole === 'ROLE_STORE_ADMIN' || userRole === 'ROLE_STORE_MANAGER') {
-          navigate('/store');
-        } else if (userRole === 'ROLE_BRANCH_MANAGER' || userRole === 'ROLE_BRANCH_ADMIN') {
-          navigate('/branch');
         } else {
-          navigate('/');
+          navigate(getHomePath(authorizationProfile, user));
         }
       } else {
         toast({
           title: t('auth.login.errorTitle'),
-          description: resultAction.payload || t('auth.login.errorDescFallback'),
+          description: resultAction.payload || authError || t('auth.login.errorDescFallback'),
           variant: "destructive",
         });
       }
@@ -257,6 +265,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-4 relative overflow-hidden">
+      <LanguageSwitcher className="absolute top-6 right-6 z-20" />
       {/* Top Header with Language Switcher */}
       <div className="absolute top-0 right-0 z-20 p-6">
         <LanguageSwitcher />
