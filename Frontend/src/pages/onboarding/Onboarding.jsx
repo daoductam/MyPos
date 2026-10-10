@@ -12,7 +12,7 @@ import { ShoppingCart } from 'lucide-react';
 const Onboarding = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isCompleted } = useSelector((state) => state.onboarding);
+  const { error } = useSelector((state) => state.onboarding);
   
   const [step, setStep] = useState(1);
   const [fadeIn, setFadeIn] = useState(true);
@@ -53,7 +53,7 @@ const Onboarding = () => {
                 // No store, skip to store details
                 setStep(2);
               }
-            } catch (err) {
+            } catch {
               // No store found, skip to store details
               setStep(2);
             }
@@ -61,7 +61,7 @@ const Onboarding = () => {
             // Not an admin, or other role, start from step 1
             setStep(1);
           }
-        } catch (err) {
+        } catch {
           // Invalid jwt or error, clear jwt and stay on step 1
           localStorage.removeItem('jwt');
         }

@@ -2,6 +2,7 @@ package com.tamdao.repository;
 
 import com.tamdao.modal.Order;
 import com.tamdao.modal.User;
+import com.tamdao.domain.OrderStatus;
 import com.tamdao.payload.StoreAnalysis.BranchSalesDTO;
 import com.tamdao.payload.StoreAnalysis.PaymentInsightDTO;
 import com.tamdao.payload.StoreAnalysis.TimeSeriesPointDTO;
@@ -24,11 +25,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
            "AND (:customerId IS NULL OR o.customer.id = :customerId) " +
            "AND (:cashierId IS NULL OR o.cashier.id = :cashierId) " +
            "AND (:paymentType IS NULL OR o.paymentType = :paymentType) " +
+           "AND (:status IS NULL OR o.status = :status) " +
            "ORDER BY o.createdAt DESC")
     List<Order> findOrdersFiltered(@Param("branchId") Long branchId,
                                    @Param("customerId") Long customerId,
                                    @Param("cashierId") Long cashierId,
-                                   @Param("paymentType") com.tamdao.domain.PaymentType paymentType);
+                                   @Param("paymentType") com.tamdao.domain.PaymentType paymentType,
+                                   @Param("status") OrderStatus status);
 
     List<Order> findByBranchIdAndCreatedAtBetween(Long branchId,
                                                   LocalDateTime start,
@@ -43,16 +46,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             FROM Order o 
             WHERE o.branch.id = :branchId  
             AND o.createdAt BETWEEN :start AND :end
+            AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
            """)
     Optional<BigDecimal> getTotalSalesBetween(@Param("branchId") Long branchId,
                                               @Param("start") LocalDateTime start,
                                               @Param("end") LocalDateTime end);
 
     @Query("""
-        SELECT u.id, u.fullName, SUM(o.totalAmount) AS totalRevenue
+        SELECT u.id, u.fullName, COUNT(o) AS totalOrders, SUM(o.totalAmount) AS totalRevenue
         FROM Order o
         JOIN o.cashier u
         WHERE o.branch.id = :branchId
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
         GROUP BY u.id, u.fullName
         ORDER BY totalRevenue DESC
     """)
@@ -63,6 +68,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         FROM Order o
         WHERE o.branch.id = :branchId
         AND DATE(o.createdAt) = :date
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
     """)
     int countOrdersByBranchAndDate(@Param("branchId") Long branchId,
                                    @Param("date") LocalDate date);
@@ -72,6 +78,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         FROM Order o
         WHERE o.branch.id = :branchId
         AND DATE(o.createdAt) = :date
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
     """)
     int countDistinctCashiersByBranchAndDate(@Param("branchId") Long branchId,
                                              @Param("date") LocalDate date);
@@ -81,6 +88,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     FROM Order o
     WHERE o.branch.id = :branchId
     AND DATE(o.createdAt) = :date
+    AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
     GROUP BY o.paymentType
 """)
     List<Object[]> getPaymentBreakdownByMethod(
@@ -91,10 +99,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     ////////////////////
 
 
-        @Query("SELECT SUM(o.totalAmount) FROM Order o WHERE o.branch.store.storeAdmin.id = :storeAdminId")
+        @Query("SELECT SUM(o.totalAmount) FROM Order o WHERE o.branch.store.storeAdmin.id = :storeAdminId AND o.status = com.tamdao.domain.OrderStatus.COMPLETED")
         Optional<Double> sumTotalSalesByStoreAdmin(@Param("storeAdminId") Long storeAdminId);
 
-        @Query("SELECT COUNT(o) FROM Order o WHERE o.branch.store.storeAdmin.id = :storeAdminId")
+        @Query("SELECT COUNT(o) FROM Order o WHERE o.branch.store.storeAdmin.id = :storeAdminId AND o.status = com.tamdao.domain.OrderStatus.COMPLETED")
         int countByStoreAdminId(@Param("storeAdminId") Long storeAdminId);
 //
 
@@ -102,6 +110,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     SELECT o FROM Order o 
     WHERE o.branch.store.storeAdmin.id = :storeAdminId 
     AND o.createdAt BETWEEN :start AND :end
+    AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
 """)
     List<Order> findAllByStoreAdminAndCreatedAtBetween(@Param("storeAdminId") Long storeAdminId,
                                                        @Param("start") LocalDateTime start,
@@ -117,6 +126,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     FROM Order o
     WHERE o.branch.store.storeAdmin.id = :storeAdminId
      AND o.createdAt BETWEEN :start AND :end
+     AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
     GROUP BY o.createdAt
     ORDER BY o.createdAt
 """)
@@ -132,6 +142,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         )
         FROM Order o
         WHERE o.branch.store.storeAdmin.id = :storeAdminId
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
         GROUP BY o.paymentType
     """)
         List<PaymentInsightDTO> getSalesByPaymentMethod(@Param("storeAdminId") Long storeAdminId);
@@ -143,6 +154,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         )
         FROM Order o
         WHERE o.branch.store.storeAdmin.id = :storeAdminId
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
         GROUP BY o.branch.id
     """)
         List<BranchSalesDTO> getSalesByBranch(@Param("storeAdminId") Long storeAdminId);

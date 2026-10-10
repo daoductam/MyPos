@@ -2,6 +2,7 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogFooter,
@@ -15,13 +16,18 @@ const ReturnReceiptDialog = ({
   showReceiptDialog,
   setShowReceiptDialog,
   selectedOrder,
+  refundDetails,
 }) => {
   const { t } = useTranslation();
+  const refundMethod = refundDetails?.refundMethod || selectedOrder.paymentType;
   return (
     <Dialog open={showReceiptDialog} onOpenChange={setShowReceiptDialog}>
     <DialogContent>
       <DialogHeader>
         <DialogTitle>{t('dashboard.cashier.return.receipt.title')}</DialogTitle>
+        <DialogDescription className="sr-only">
+          {t('dashboard.cashier.return.receipt.description')}
+        </DialogDescription>
       </DialogHeader>
       <div className="bg-white p-6 max-h-96 overflow-y-auto">
         <div className="text-center mb-4">
@@ -60,15 +66,13 @@ const ReturnReceiptDialog = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {selectedOrder.items
-              
-              .map((item) => (
+            {selectedOrder.items.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="py-2">{item.product?.name.slice(0, 20)+"..."}</TableCell>
-                  <TableCell className="text-center py-2">{item.returnQuantity}</TableCell>
-                  <TableCell className="text-right py-2">VNĐ {item.product?.sellingPrice?.toFixed(2)}</TableCell>
+                  <TableCell className="py-2">{item.product?.name?.slice(0, 20)}...</TableCell>
+                  <TableCell className="text-center py-2">{item.returnQuantity ?? item.quantity}</TableCell>
+                  <TableCell className="text-right py-2">VNĐ {(item.price ?? item.product?.sellingPrice)?.toFixed(2)}</TableCell>
                   <TableCell className="text-right py-2">
-                    VNĐ {(item.product.sellingPrice * item.returnQuantity)?.toFixed(2)}
+                    VNĐ {((item.price ?? item.product?.sellingPrice) * (item.returnQuantity ?? item.quantity))?.toFixed(2)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -82,11 +86,12 @@ const ReturnReceiptDialog = ({
           <div className="flex justify-between pt-1">
             <span>{t('dashboard.cashier.return.refundMethodLabel')}</span>
             <span>
-              {selectedOrder.paymentType ? t(`dashboard.cashier.paymentDialog.methods.${selectedOrder.paymentType}`) : t('common.unknown')}
+              {refundMethod ? t(`dashboard.cashier.paymentDialog.methods.${refundMethod}`) : t('common.unknown')}
             </span>
           </div>
           <div className="flex justify-between pt-1">
             <span>{t('dashboard.cashier.return.reasonLabel')}</span>
+            <span>{refundDetails?.reason || t('common.unknown')}</span>
           </div>
         </div>
         <div className="text-center text-sm mt-6">
@@ -97,7 +102,14 @@ const ReturnReceiptDialog = ({
         </div>
       </div>
       <DialogFooter>
-        <Button variant="outline" className="gap-2" >
+        <Button
+          variant="outline"
+          className="gap-2"
+          onClick={() => {
+            window.print();
+            setShowReceiptDialog(false);
+          }}
+        >
           <PrinterIcon className="h-4 w-4" />
           {t('dashboard.cashier.return.receipt.printComplete')}
         </Button>

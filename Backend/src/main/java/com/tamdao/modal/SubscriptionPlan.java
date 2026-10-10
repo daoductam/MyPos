@@ -52,11 +52,13 @@ public class SubscriptionPlan extends BaseEntity {
     private Boolean prioritySupport;         // Priority support access
 
     @ElementCollection
-    private List<String> extraFeatures=new ArrayList<>();
+    @Builder.Default
+    private List<String> extraFeatures = new ArrayList<>();
 
     // Optional extra
     private Boolean enableMultiLocation;     // Existing field
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean active = true;
 }

@@ -139,8 +139,9 @@ export const getCurrentShiftProgress = createAsyncThunk(
       return res.data;
     } catch (err) {
       const message = extractError(err);
-      console.error('❌ Failed to fetch current shift progress:', { message });
-      return rejectWithValue(message);
+      const status = err?.response?.status;
+      console.error('❌ Failed to fetch current shift progress:', { message, status });
+      return rejectWithValue({ message, status });
     }
   }
 );

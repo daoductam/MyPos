@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.read', @resourceScopeResolver.productStoreId(#id))")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', @resourceScopeResolver.productStoreId(#id))")
     public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
@@ -55,13 +55,13 @@ public class ProductController {
     }
 
     @GetMapping("/store/{storeId}")
-    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.read', #storeId)")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', #storeId)")
     public ResponseEntity<List<ProductDTO>> getByStore(@PathVariable Long storeId) {
         return ResponseEntity.ok(productService.getProductsByStoreId(storeId));
     }
 
     @GetMapping("/store/{storeId}/search")
-    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.read', #storeId)")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', #storeId)")
     public ResponseEntity<List<ProductDTO>> searchByKeyword(
             @PathVariable Long storeId,
             @RequestParam String q) {
@@ -69,7 +69,7 @@ public class ProductController {
     }
 
     @GetMapping("/store/{storeId}/trash")
-    @PreAuthorize("@authorizationGuard.hasStorePermission(authentication, 'product.read', #storeId)")
+    @PreAuthorize("@authorizationGuard.hasStoreOrBranchPermission(authentication, 'product.read', #storeId)")
     public ResponseEntity<List<ProductDTO>> getDeletedProducts(@PathVariable Long storeId) {
         return ResponseEntity.ok(productService.getDeletedProducts(storeId));
     }

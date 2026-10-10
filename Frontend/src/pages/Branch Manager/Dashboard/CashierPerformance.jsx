@@ -11,7 +11,6 @@ import {
   Tooltip,
   Legend,
   CartesianGrid,
-  ResponsiveContainer
 } from "recharts";
 import { Loader2 } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -55,8 +54,7 @@ const CashierPerformance = () => {
       </CardHeader>
       <CardContent className="pt-6">
         <ChartContainer config={config}>
-          <ResponsiveContainer width="100%" height={256}>
-            <BarChart
+          <BarChart
               layout="vertical"
               data={data}
               margin={{
@@ -81,8 +79,7 @@ const CashierPerformance = () => {
                 labelStyle={{ color: 'white' }}
               />
               <Bar dataKey="sales" fill="currentColor" radius={[0, 4, 4, 0]} className="fill-emerald-500" />
-            </BarChart>
-          </ResponsiveContainer>
+          </BarChart>
         </ChartContainer>
         {loading && (
           <div className="flex justify-center items-center h-full">

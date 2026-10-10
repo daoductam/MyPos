@@ -6,7 +6,8 @@ import {
   getCashiers,
   getAllUsers,
   getUserById,
-  logout
+  logout,
+  updateProfile,
 } from './userThunks';
 
 const initialState = {
@@ -45,6 +46,10 @@ const userSlice = createSlice({
       .addCase(getUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.userProfile = action.payload;
       })
 
       .addCase(getAuthorizationProfile.pending, (state) => {

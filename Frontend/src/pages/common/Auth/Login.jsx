@@ -35,7 +35,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { error, loading } = useSelector((state) => state.auth);
+  const { error: authError, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const handleMouseMove = (event) => {
@@ -75,11 +75,11 @@ const Login = () => {
             // First, try to get the current shift progress
             await dispatch(getCurrentShiftProgress()).unwrap();
           } catch (shiftError) {
-            // If getting current shift fails (e.g., 404 Not Found), it means no shift is active.
-            // So, we start a new one.
-            console.log("Không tìm thấy ca làm việc hoạt động, đang bắt đầu ca mới.");
+            // Only a missing active shift should trigger automatic shift start.
+            // Forbidden/server errors must not be silently converted into a write.
+            console.warn("Không thể đọc ca hiện tại:", shiftError);
             try {
-              if (user?.branchId) {
+              if (shiftError?.status === 404 && user?.branchId) {
                 await dispatch(startShift({ branchId: user.branchId, cashierId: user.id })).unwrap();
               }
             } catch (err) {
@@ -93,7 +93,7 @@ const Login = () => {
       } else {
         toast({
           title: t('auth.login.errorTitle'),
-          description: resultAction.payload || t('auth.login.errorDescFallback'),
+          description: resultAction.payload || authError || t('auth.login.errorDescFallback'),
           variant: "destructive",
         });
       }

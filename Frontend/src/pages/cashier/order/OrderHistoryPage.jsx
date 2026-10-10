@@ -72,14 +72,20 @@ const OrderHistoryPage = () => {
         variant: "destructive",
       });
     }
-  }, [error, toast]);
+  }, [error, t, toast]);
 
   // Get current date for filtering
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
 
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - today.getDay());
+  const weekStart = useMemo(() => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - today.getDay());
+    return date;
+  }, [today]);
 
   const filteredOrders = useMemo(() => {
     // Note: Most filtering is now server-side. 

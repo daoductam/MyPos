@@ -8,6 +8,7 @@ import com.tamdao.modal.Store;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.StoreDTO;
 import com.tamdao.payload.dto.UserDTO;
+import com.tamdao.payload.request.CommissionRateRequest;
 import com.tamdao.service.StoreService;
 import com.tamdao.service.UserService;
 import jakarta.validation.Valid;
@@ -102,5 +103,13 @@ public class StoreController {
             @RequestParam StoreStatus action
     ) {
         return storeService.moderateStore(storeId, action);
+    }
+
+    @PatchMapping("/{storeId}/commission-rate")
+    @PreAuthorize("@authorizationGuard.hasPlatformPermission(authentication, 'platform.store.moderate')")
+    public StoreDTO updateCommissionRate(
+            @PathVariable Long storeId,
+            @Valid @RequestBody CommissionRateRequest request) {
+        return storeService.updateCommissionRate(storeId, request.rate());
     }
 }

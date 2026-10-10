@@ -16,6 +16,8 @@ public class OrderMapper {
         return OrderDTO.builder()
                 .id(order.getId())
                 .totalAmount(order.getTotalAmount())
+                .taxAmount(order.getTaxAmount())
+                .discountAmount(order.getDiscountAmount())
                 .branchId(order.getBranch() != null ? order.getBranch().getId() : null)
                 .cashierId(order.getCashier() != null ? order.getCashier().getId() : null)
                 .customer(order.getCustomer())

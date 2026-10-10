@@ -22,7 +22,7 @@ public class RefundController {
     private final RefundService refundService;
 
     @PostMapping
-    @PreAuthorize("@authorizationGuard.hasBranchPermission(authentication, 'refund.create', #refundDTO.branchId)")
+    @PreAuthorize("@authorizationGuard.hasCurrentUserBranchPermission(authentication, 'refund.create')")
     public ResponseEntity<RefundDTO> createRefund(@RequestBody RefundDTO refundDTO) {
         Refund refund = refundService.createRefund(refundDTO);
         return ResponseEntity.ok(RefundMapper.toDTO(refund));

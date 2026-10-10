@@ -22,6 +22,7 @@ public class UserMapper {
         userDTO.setBranchId(user.getBranch() == null ? null : user.getBranch().getId());
         userDTO.setBranch(user.getBranch() == null ? null : BranchMapper.toDto(user.getBranch()));
         userDTO.setRole(user.getRole());
+        userDTO.setAccessEnabled(user.getAccessEnabled() == null || user.getAccessEnabled());
         userDTO.setStoreId(user.getStore() == null ? null : user.getStore().getId());
         userDTO.setPhone(user.getPhone());
         userDTO.setDeleted(user.getDeleted());

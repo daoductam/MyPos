@@ -54,6 +54,24 @@ class AuthorizationGuardTest {
     }
 
     @Test
+    void allowsBranchReaderToReadStoreResourceInSameStore() {
+        when(scopeRepository.storeExists(10L)).thenReturn(true);
+        when(authorizationService.hasPermission(
+                authentication, "product.read", ScopeType.STORE, 10L, null, null))
+                .thenReturn(false);
+        when(authentication.getDetails()).thenReturn(new AuthorizationSnapshot(
+                15L, "cashier@example.com", "ROLE_CASHIER", 1L, null, null, null));
+        when(scopeRepository.userScope(15L))
+                .thenReturn(new AuthorizationScopeRepository.UserScope(10L, 20L));
+        when(scopeRepository.branchStoreId(20L)).thenReturn(10L);
+        when(authorizationService.hasPermission(
+                authentication, "product.read", ScopeType.BRANCH, 10L, 20L, null))
+                .thenReturn(true);
+
+        assertTrue(guard.hasStoreOrBranchPermission(authentication, "product.read", 10L));
+    }
+
+    @Test
     void failsClosedWhenScopeRepositoryThrows() {
         when(scopeRepository.customerScope(30L)).thenThrow(new IllegalStateException("database unavailable"));
 

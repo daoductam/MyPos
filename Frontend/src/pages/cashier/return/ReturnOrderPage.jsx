@@ -17,6 +17,7 @@ const ReturnOrderPage = () => {
   const { t } = useTranslation();
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showReceiptDialog, setShowReceiptDialog] = useState(false);
+  const [refundDetails, setRefundDetails] = useState(null);
 
   const dispatch = useDispatch();
   const { branch } = useSelector((state) => state.branch);
@@ -25,7 +26,7 @@ const ReturnOrderPage = () => {
   useEffect(() => {
     console.log("branch ", branch);
     if (branch?.id) {
-      dispatch(getOrdersByBranch({ branchId: branch.id }));
+      dispatch(getOrdersByBranch({ branchId: branch.id, status: "COMPLETED" }));
     }
   }, [dispatch, branch]);
 
@@ -33,6 +34,7 @@ const ReturnOrderPage = () => {
 
   const handleSelectOrder = (order) => {
     console.log("selected order", order);
+    setRefundDetails(null);
     setSelectedOrder(order);
   };
 
@@ -54,6 +56,7 @@ const ReturnOrderPage = () => {
             />
             <ReturnItemsSection
               setShowReceiptDialog={setShowReceiptDialog}
+              setRefundDetails={setRefundDetails}
               selectedOrder={selectedOrder}
             />
           </>
@@ -65,6 +68,7 @@ const ReturnOrderPage = () => {
           showReceiptDialog={showReceiptDialog}
           setShowReceiptDialog={setShowReceiptDialog}
           selectedOrder={selectedOrder}
+          refundDetails={refundDetails}
         />
       )}
     </div>

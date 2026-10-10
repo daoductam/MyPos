@@ -15,7 +15,7 @@ const CashierSideBar = ({ navItems, onClose }) => {
 
   const dispatch = useDispatch();
   const { userProfile } = useSelector((state) => state.user);
-  const { branch, loading, error } = useSelector((state) => state.branch);
+  const { branch } = useSelector((state) => state.branch);
   const navigate=useNavigate();
 
   useEffect(() => {

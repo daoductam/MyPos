@@ -34,7 +34,7 @@ const returnReasonsKeys = [
   "other",
 ];
 
-const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog }) => {
+const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog, setRefundDetails }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { userProfile } = useSelector((state) => state.user);
@@ -46,8 +46,30 @@ const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog }) => {
   const [refundMethod, setRefundMethod] = useState("");
 
   const processRefund = async () => {
-    // setShowRefundDialog(false);
-    setShowReceiptDialog(true);
+    if (!returnReason) {
+      toast({
+        title: t('dashboard.cashier.return.toast.failed'),
+        description: t('dashboard.cashier.return.validation.reasonRequired'),
+        variant: "destructive",
+      });
+      return;
+    }
+    if (returnReason === "other" && !otherReason.trim()) {
+      toast({
+        title: t('dashboard.cashier.return.toast.failed'),
+        description: t('dashboard.cashier.return.validation.otherReasonRequired'),
+        variant: "destructive",
+      });
+      return;
+    }
+    if (!refundMethod) {
+      toast({
+        title: t('dashboard.cashier.return.toast.failed'),
+        description: t('dashboard.cashier.return.validation.methodRequired'),
+        variant: "destructive",
+      });
+      return;
+    }
 
     // Prepare refundDTO for API
     const refundDTO = {
@@ -57,10 +79,12 @@ const ReturnItemsSection = ({ selectedOrder, setShowReceiptDialog }) => {
 
       reason: returnReason === "other" ? otherReason : t(`dashboard.cashier.return.reasons.${returnReason}`),
       refundMethod:
-        refundMethod === "original" ? selectedOrder.paymentType : refundMethod,
+        (refundMethod === "original" ? selectedOrder.paymentType : refundMethod).toUpperCase(),
     };
     try {
-      await dispatch(createRefund(refundDTO)).unwrap();
+      const createdRefund = await dispatch(createRefund(refundDTO)).unwrap();
+      setRefundDetails({ ...createdRefund, ...refundDTO });
+      setShowReceiptDialog(true);
       toast({
         title: t('dashboard.cashier.return.toast.processed'),
         description: t('dashboard.cashier.return.toast.processedDesc', { amount: selectedOrder.totalAmount, method: refundDTO.refundMethod }),

@@ -4,7 +4,9 @@ import com.tamdao.domain.UserRole;
 import com.tamdao.mapper.UserMapper;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.UserDTO;
+import com.tamdao.payload.request.EmployeeAccessRequest;
 import com.tamdao.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,22 @@ public class EmployeeController {
         User employeeDetails = UserMapper.toEntity(employeeDto);
         User updatedEmployee = employeeService.updateEmployee(employeeId, employeeDetails);
         return new ResponseEntity<>(UserMapper.toDTO(updatedEmployee), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{employeeId}/access")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'employee.update', #employeeId)")
+    public ResponseEntity<UserDTO> setAccessEnabled(
+            @PathVariable Long employeeId,
+            @Valid @RequestBody EmployeeAccessRequest request) {
+        User updatedEmployee = employeeService.setAccessEnabled(employeeId, request.enabled());
+        return ResponseEntity.ok(UserMapper.toDTO(updatedEmployee));
+    }
+
+    @PostMapping("/{employeeId}/password-reset")
+    @PreAuthorize("@authorizationGuard.hasUserScopePermission(authentication, 'employee.update', #employeeId)")
+    public ResponseEntity<Void> requestPasswordReset(@PathVariable Long employeeId) {
+        employeeService.requestPasswordReset(employeeId);
+        return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{employeeId}")

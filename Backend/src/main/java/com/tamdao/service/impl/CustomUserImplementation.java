@@ -42,7 +42,14 @@ public class CustomUserImplementation implements UserDetailsService {
 		Collection<? extends GrantedAuthority> authorities = authorizationService
 				.getAuthorities(authorizationService.getSnapshotByEmail(user.getEmail()));
 
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+		return new org.springframework.security.core.userdetails.User(
+				user.getEmail(),
+				user.getPassword(),
+				user.getAccessEnabled() == null || user.getAccessEnabled(),
+				true,
+				true,
+				true,
+				authorities);
     }
 
 }

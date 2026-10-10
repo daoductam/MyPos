@@ -1,26 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Label } from "../../../../components/ui/label";
 import { Switch } from "../../../../components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { useSettingsState } from "./useSettingsState";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../../../../components/ui/use-toast";
 
 export default function SystemSettingsForm() {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [system, setSystem] = useSettingsState({
     maintenanceMode: false,
   });
   const [isSaving, setIsSaving] = useState(false);
+  const hasLoaded = useRef(false);
+
+  useEffect(() => {
+    if (hasLoaded.current) return;
+    hasLoaded.current = true;
+    try {
+      const saved = localStorage.getItem("pos.super-admin.system-settings");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (typeof parsed.maintenanceMode === "boolean") {
+          setSystem("maintenanceMode", parsed.maintenanceMode);
+        }
+      }
+    } catch {
+      toast({
+        title: t("superAdminModule.settings.system.save"),
+        description: t("superAdminModule.settings.system.loadError", "Saved system preferences could not be loaded."),
+        variant: "destructive",
+      });
+    }
+  }, [setSystem, t, toast]);
 
   const handleSave = (e) => {
     e.preventDefault();
     setIsSaving(true);
-    console.log("Saving system settings:", system);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      localStorage.setItem("pos.super-admin.system-settings", JSON.stringify(system));
+      toast({
+        title: t("superAdminModule.settings.system.save"),
+        description: t("superAdminModule.settings.system.saveSuccess", "System preferences saved in this browser."),
+      });
+    } catch {
+      toast({
+        title: t("superAdminModule.settings.system.save"),
+        description: t("superAdminModule.settings.system.saveError", "System preferences could not be saved."),
+        variant: "destructive",
+      });
+    } finally {
       setIsSaving(false);
-    }, 1500);
+    }
   };
 
   return (

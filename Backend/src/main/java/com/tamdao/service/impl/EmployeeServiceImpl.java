@@ -13,6 +13,9 @@ import com.tamdao.repository.StoreRepository;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.EmployeeService;
 import com.tamdao.authorization.ScopeType;
+import com.tamdao.repository.authorization.AuthorizationAssignmentRepository;
+import com.tamdao.service.AuthorizationService;
+import com.tamdao.service.AuthService;
 import com.tamdao.service.AuthorizationMutationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final PasswordEncoder passwordEncoder;
     private final com.tamdao.service.UserService userService;
     private final AuthorizationMutationService authorizationMutationService;
+    private final AuthorizationAssignmentRepository authorizationAssignmentRepository;
+    private final AuthorizationService authorizationService;
+    private final AuthService authService;
 
     @Override
     @Transactional
@@ -139,6 +145,28 @@ public class EmployeeServiceImpl implements EmployeeService {
                     "EMPLOYEE_UPDATED");
         }
         return updatedEmployee;
+    }
+
+    @Override
+    @Transactional
+    public User setAccessEnabled(Long employeeId, boolean enabled) {
+        User employee = findEmployeeById(employeeId);
+        boolean current = employee.getAccessEnabled() == null || employee.getAccessEnabled();
+        if (current == enabled) {
+            return employee;
+        }
+
+        employee.setAccessEnabled(enabled);
+        User updatedEmployee = userRepository.save(employee);
+        authorizationAssignmentRepository.incrementAuthorizationVersion(employeeId);
+        authorizationService.invalidate(employeeId);
+        return updatedEmployee;
+    }
+
+    @Override
+    public void requestPasswordReset(Long employeeId) {
+        User employee = findEmployeeById(employeeId);
+        authService.createPasswordResetToken(employee.getEmail());
     }
 
     @Override

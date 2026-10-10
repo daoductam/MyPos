@@ -32,6 +32,7 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
         FROM Branch b
         JOIN Order o ON o.branch.id = b.id
         WHERE b.store.storeAdmin.id = :storeAdminId
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
         GROUP BY b.id
         ORDER BY SUM(o.totalAmount) DESC
     """)
@@ -47,6 +48,7 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
             SELECT DISTINCT o.branch.id
             FROM Order o
             WHERE CAST(o.createdAt AS date) = CURRENT_DATE
+            AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
         )
     """)
     List<BranchDTO> findBranchesWithNoSalesToday(@Param("storeAdminId") Long storeAdminId);

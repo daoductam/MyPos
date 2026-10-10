@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
     .required('Confirm password is required'),
 });
 
-const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) => {
+const OwnerDetailsForm = ({ initialValues, onSubmit, mousePosition }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [visibleFields, setVisibleFields] = useState([]);
@@ -45,7 +45,7 @@ const OwnerDetailsForm = ({ initialValues, onSubmit, onBack, mousePosition }) =>
         setSubmitting(false);
       }}
     >
-      {({ isSubmitting, isValid, touched, errors }) => (
+      {({ isSubmitting, touched, errors }) => (
         <Form className="space-y-6">
           <div className={`transition-all duration-500 ease-out ${visibleFields.includes('fullName') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="transition-transform duration-500 ease-out" style={{ transform: `translateX(${mousePosition.x * 1}px) translateY(${mousePosition.y * 1}px)` }}>

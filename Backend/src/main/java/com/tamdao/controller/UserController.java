@@ -5,6 +5,8 @@ import com.tamdao.domain.UserRole;
 import com.tamdao.mapper.UserMapper;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.UserDTO;
+import com.tamdao.payload.request.ChangePasswordRequest;
+import com.tamdao.payload.request.UpdateProfileRequest;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.UserService;
 import com.tamdao.service.impl.CustomUserImplementation;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Set;
@@ -36,6 +39,19 @@ public class UserController {
 		User user = userService.getUserFromJwtToken(jwt);
 		UserDTO userDTO = UserMapper.toDTO(user);
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
+	}
+
+	@PutMapping("/profile")
+	@PreAuthorize("@authorizationGuard.hasCurrentUserSelfPermission(authentication, 'profile.update_own')")
+	public ResponseEntity<UserDTO> updateCurrentProfile(@Valid @RequestBody UpdateProfileRequest request) {
+		return ResponseEntity.ok(UserMapper.toDTO(userService.updateCurrentUser(request)));
+	}
+
+	@PatchMapping("/profile/password")
+	@PreAuthorize("@authorizationGuard.hasCurrentUserSelfPermission(authentication, 'profile.update_own')")
+	public ResponseEntity<Void> changeCurrentPassword(@Valid @RequestBody ChangePasswordRequest request) {
+		userService.changeCurrentPassword(request);
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/customer")

@@ -223,7 +223,8 @@ public class AuthServiceImpl implements AuthService {
     public Authentication authenticate(String email, String password) {
         try {
             UserDetails userDetails = customUserImplementation.loadUserByUsername(email);
-            if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
+            if (userDetails == null || !userDetails.isEnabled()
+                    || !passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("Tên đăng nhập hoặc mật khẩu không chính xác");
             }
             return new UsernamePasswordAuthenticationToken(email, null, userDetails.getAuthorities());

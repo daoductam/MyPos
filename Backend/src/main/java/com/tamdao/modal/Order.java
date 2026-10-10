@@ -26,6 +26,10 @@ public class Order extends BaseEntity {
 
     private Double totalAmount;
 
+    private Double taxAmount;
+
+    private Double discountAmount;
+
     @ManyToOne
     @JsonIgnore
     private Branch branch;
@@ -42,6 +46,7 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
-    private OrderStatus status=OrderStatus.COMPLETED;
+    @Builder.Default
+    private OrderStatus status = OrderStatus.COMPLETED;
 }
 

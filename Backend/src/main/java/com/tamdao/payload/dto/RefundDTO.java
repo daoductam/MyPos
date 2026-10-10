@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import com.tamdao.domain.PaymentType;
 
 @Data
 @AllArgsConstructor
@@ -22,6 +23,7 @@ public class RefundDTO extends BaseDTO {
     private String cashierName;
     private Long shiftReportId;
     private Long branchId;
+    private PaymentType refundMethod;
 
     /**
      * JPQL constructor used by RefundRepository.findRefundSpikes()

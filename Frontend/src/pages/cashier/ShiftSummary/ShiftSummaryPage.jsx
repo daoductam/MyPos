@@ -41,15 +41,20 @@ const ShiftSummaryPage = () => {
 
   const handleEndShift = async () => {
     setShowLogoutConfirmDialog(false);
-    if (true) {
-       dispatch(endShift());
-       dispatch(logout())
-       navigate("/")
+    try {
+      await dispatch(endShift()).unwrap();
+      await dispatch(logout()).unwrap();
+      navigate("/");
       toast({
         title: t('dashboard.cashier.shiftSummary.toast.ended'),
         description: t('dashboard.cashier.shiftSummary.toast.endedDesc'),
       });
-      
+    } catch (endShiftError) {
+      toast({
+        title: t('common.error'),
+        description: endShiftError?.message || endShiftError || t('dashboard.cashier.shiftSummary.noData'),
+        variant: 'destructive',
+      });
     }
   };
 

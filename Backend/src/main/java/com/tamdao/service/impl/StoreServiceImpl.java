@@ -181,4 +181,12 @@ public class StoreServiceImpl implements StoreService {
         Store updatedStore = storeRepository.save(store);
         return StoreMapper.toDto(updatedStore);
     }
+
+    @Override
+    public StoreDTO updateCommissionRate(Long storeId, double commissionRate) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Store not found with id: " + storeId));
+        store.setCommissionRate(commissionRate);
+        return StoreMapper.toDto(storeRepository.save(store));
+    }
 }

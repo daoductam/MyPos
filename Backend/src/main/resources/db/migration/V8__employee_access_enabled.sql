@@ -1,0 +1,2 @@
+ALTER TABLE users
+    ADD COLUMN access_enabled BIT NOT NULL DEFAULT 1;

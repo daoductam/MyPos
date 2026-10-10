@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ const ProductSection = ({searchInputRef}) => {
   const { branch } = useSelector((state) => state.branch);
   const { userProfile } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
+  const debounceTimeoutRef = useRef(null);
   const {
     products,
     searchResults,
@@ -86,37 +87,31 @@ const ProductSection = ({searchInputRef}) => {
     };
 
     fetchProducts();
-  }, [dispatch, branch, userProfile, toast]);
+  }, [dispatch, branch, t, toast, userProfile]);
 
   // Debounced search function
-  const debouncedSearch = useCallback(
-    (() => {
-      let timeoutId;
-      return (query) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          if (query.trim() && branch?.storeId && localStorage.getItem("jwt")) {
-            dispatch(
-              searchProducts({
-                query: query.trim(),
-                storeId: branch.storeId,
-              })
-            )
-              .unwrap()
-              .catch((error) => {
-                console.error("Search failed:", error);
-                toast({
-                  title: t('common.error'),
-                  description: error || t('dashboard.cashier.pos.noMatchingProducts'),
-                  variant: "destructive",
-                });
-              });
-          }
-        }, 500); // 300ms debounce
-      };
-    })(),
-    [dispatch, branch, toast]
-  );
+  const debouncedSearch = useCallback((query) => {
+    clearTimeout(debounceTimeoutRef.current);
+    debounceTimeoutRef.current = setTimeout(() => {
+      if (query.trim() && branch?.storeId && localStorage.getItem("jwt")) {
+        dispatch(
+          searchProducts({
+            query: query.trim(),
+            storeId: branch.storeId,
+          })
+        )
+          .unwrap()
+          .catch((error) => {
+            console.error("Search failed:", error);
+            toast({
+              title: t('common.error'),
+              description: error || t('dashboard.cashier.pos.noMatchingProducts'),
+              variant: "destructive",
+            });
+          });
+      }
+    }, 500);
+  }, [branch, dispatch, t, toast]);
 
   // Handle search term changes
   const handleSearchChange = (e) => {
@@ -138,7 +133,7 @@ const ProductSection = ({searchInputRef}) => {
           variant: 'destructive',
         });
       }
-    }, [productsError, toast]);
+    }, [productsError, t, toast]);
 
   return (
     <div className="w-3/5 flex flex-col bg-black/10 border-r border-white/10">

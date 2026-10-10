@@ -24,7 +24,7 @@ const EmployeeStats = ({ employees }) => {
               {t('dashboard.branchManager.dashboard.stats.activeEmployees')}
             </h3>
             <p className="text-3xl font-bold mt-2 text-emerald-400">
-              {employees.length}
+              {employees.filter((employee) => employee.accessEnabled !== false).length}
             </p>
           </div>
         </CardContent>

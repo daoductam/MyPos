@@ -18,6 +18,8 @@ import java.util.List;
 public class OrderDTO extends BaseDTO {
     private Long id;
     private Double totalAmount;
+    private Double taxAmount;
+    private Double discountAmount;
     private Long branchId;
     private Long cashierId;
     private Customer customer;

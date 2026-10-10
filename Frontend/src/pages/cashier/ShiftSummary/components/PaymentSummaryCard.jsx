@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { getPaymentIcon } from '../../../../utils/getPaymentIcon';
-import { getPaymentMethodLabel } from '../../../../utils/paymentMethodLable';
 import { useTranslation } from "react-i18next";
 import { formatVND } from '../../../../utils/formatCurrency';
 

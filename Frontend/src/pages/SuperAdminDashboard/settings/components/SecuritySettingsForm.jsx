@@ -1,13 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import { Loader2 } from "lucide-react";
 import { useSettingsState } from "./useSettingsState";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../../../../components/ui/use-toast";
+import { changePassword } from "../../../../Redux Toolkit/features/user/userThunks";
 
 export default function SecuritySettingsForm() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { toast } = useToast();
   const [passwords, setPasswords] = useSettingsState({
     currentPassword: "",
     newPassword: "",
@@ -15,14 +20,33 @@ export default function SecuritySettingsForm() {
   });
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      toast({
+        title: t('superAdminModule.settings.security.updateButton'),
+        description: t('superAdminModule.settings.security.passwordMismatch', 'New passwords do not match.'),
+        variant: "destructive",
+      });
+      return;
+    }
     setIsSaving(true);
-    console.log("Saving security settings:", passwords);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await dispatch(changePassword({
+        currentPassword: passwords.currentPassword,
+        newPassword: passwords.newPassword,
+      })).unwrap();
+      localStorage.removeItem('jwt');
+      window.location.assign('/auth/login');
+    } catch (error) {
+      toast({
+        title: t('superAdminModule.settings.security.updateButton'),
+        description: error,
+        variant: "destructive",
+      });
+    } finally {
       setIsSaving(false);
-    }, 1500);
+    }
   };
 
   return (

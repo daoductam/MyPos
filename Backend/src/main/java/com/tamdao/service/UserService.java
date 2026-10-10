@@ -2,6 +2,8 @@ package com.tamdao.service;
 
 import com.tamdao.domain.UserRole;
 import com.tamdao.modal.User;
+import com.tamdao.payload.request.ChangePasswordRequest;
+import com.tamdao.payload.request.UpdateProfileRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -13,4 +15,6 @@ public interface UserService {
 	Set<User> getUserByRole(UserRole role);
 	List<User> getUsers();
 	User getCurrentUser();
+	User updateCurrentUser(UpdateProfileRequest request);
+	void changeCurrentPassword(ChangePasswordRequest request);
 }

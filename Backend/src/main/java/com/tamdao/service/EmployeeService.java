@@ -10,6 +10,8 @@ public interface EmployeeService {
     UserDTO createStoreEmployee(UserDTO employee, Long storeId) throws Exception;
     User createBranchEmployee(User employee, Long branchId) throws Exception;
     User updateEmployee(Long employeeId, User employeeDetails) throws Exception;
+    User setAccessEnabled(Long employeeId, boolean enabled);
+    void requestPasswordReset(Long employeeId);
     void deleteEmployee(Long employeeId) throws Exception;
     User findEmployeeById(Long employeeId) throws Exception;
     List<User> findStoreEmployees(Long storeId, UserRole role) throws Exception;

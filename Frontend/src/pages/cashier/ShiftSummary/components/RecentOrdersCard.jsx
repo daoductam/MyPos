@@ -2,7 +2,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatTime } from '../../../../utils/formateDate';
 import { getPaymentIcon } from '../../../../utils/getPaymentIcon';
-import { getPaymentMethodLabel } from '../../../../utils/paymentMethodLable';
 import { useTranslation } from "react-i18next";
 import { formatVND } from '../../../../utils/formatCurrency';
 

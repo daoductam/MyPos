@@ -11,6 +11,8 @@ import StoreListPage from "../pages/SuperAdminDashboard/store/StoreListPage";
 import StoreDetailsPage from "../pages/SuperAdminDashboard/store/StoreDetailsPage";
 import PendingRequestsPage from "../pages/SuperAdminDashboard/store/PendingRequestsPage";
 import SettingsPage from "@/pages/SuperAdminDashboard/settings/SettingsPage";
+import ExportsPage from "../pages/SuperAdminDashboard/ExportsPage";
+import CommissionsPage from "../pages/SuperAdminDashboard/CommissionsPage";
 
 const SuperAdminRoutes = () => {
   return (
@@ -23,6 +25,8 @@ const SuperAdminRoutes = () => {
               <Route path="requests" element={<PendingRequestsPage />} />
               <Route path="subscriptions" element={<SubscriptionPlansPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="exports" element={<ExportsPage />} />
+              <Route path="commissions" element={<CommissionsPage />} />
           </Route>
       </Routes>
   );

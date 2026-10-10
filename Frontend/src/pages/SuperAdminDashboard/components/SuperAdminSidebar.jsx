@@ -11,6 +11,8 @@ import {
   Clock,
   LogOut,
   ShoppingCart,
+  Download,
+  Percent,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -39,6 +41,16 @@ export default function SuperAdminSidebar() {
       name: t('dashboard.superAdmin.nav.requests'),
       path: "requests",
       icon: <Clock className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.superAdmin.nav.exports'),
+      path: "exports",
+      icon: <Download className="w-5 h-5" />,
+    },
+    {
+      name: t('dashboard.superAdmin.nav.commissions', 'Commissions'),
+      path: "commissions",
+      icon: <Percent className="w-5 h-5" />,
     },
     {
       name: t('dashboard.superAdmin.nav.settings'),

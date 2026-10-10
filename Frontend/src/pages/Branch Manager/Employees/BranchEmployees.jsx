@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { branchAdminRole } from "../../../utils/userRole";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../../../components/ui/use-toast";
 
 import EmployeeStats from "./EmployeeStats";
 import EmployeeTable from "./EmployeeTable";
@@ -19,6 +20,8 @@ import {
   findBranchEmployees,
   updateEmployee,
   deleteEmployee,
+  setEmployeeAccess,
+  requestEmployeePasswordReset,
 } from "../../../Redux Toolkit/features/employee/employeeThunks";
 
 const getStatusColor = (status) => {
@@ -42,8 +45,9 @@ const BranchEmployees = () => {
   const [isPerformanceDialogOpen, setIsPerformanceDialogOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const dispatch = useDispatch();
+  const { toast } = useToast();
   const { branch } = useSelector((state) => state.branch);
-  const { employees } = useSelector((state) => state.employee)
+  const { employees } = useSelector((state) => state.employee);
   const { userProfile } = useSelector((state) => state.user);
   const { authorizationProfile } = useSelector((state) => state.user);
 
@@ -103,20 +107,33 @@ const BranchEmployees = () => {
     }
   }, [dispatch, branch?.id]);
 
-  const handleToggleAccess = (employee) => {
-    const updatedEmployees = employees.map((emp) =>
-      emp.id === employee.id
-        ? {
-          ...emp,
-          loginAccess: !emp.loginAccess,
-          status: !emp.loginAccess ? "Inactive" : "Active",
-        }
-        : emp
-    );
+  const handleToggleAccess = async (employee) => {
+    try {
+      await dispatch(setEmployeeAccess({
+        employeeId: employee.id,
+        enabled: employee.accessEnabled === false,
+      })).unwrap();
+    } catch (error) {
+      console.error("Failed to update employee access:", error);
+    }
   };
 
-  const handleResetPassword = () => {
-    setIsResetPasswordDialogOpen(false);
+  const handleResetPassword = async () => {
+    if (!selectedEmployee?.id) return;
+    try {
+      await dispatch(requestEmployeePasswordReset({ employeeId: selectedEmployee.id })).unwrap();
+      setIsResetPasswordDialogOpen(false);
+      toast({
+        title: t('dashboard.branchManager.employees.resetPassword.title'),
+        description: t('dashboard.branchManager.employees.resetPassword.success'),
+      });
+    } catch (error) {
+      toast({
+        title: t('dashboard.branchManager.employees.resetPassword.title'),
+        description: error,
+        variant: "destructive",
+      });
+    }
   };
 
   const openEditDialog = (employee) => {

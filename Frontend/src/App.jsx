@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 // Auth and Store Routes
 import AuthRoutes from "./routes/AuthRoutes";
@@ -16,8 +16,6 @@ import { getAuthorizationProfile, getUserProfile } from "./Redux Toolkit/feature
 
 const App = () => {
   const dispatch = useDispatch();
-  const { userProfile } = useSelector((state) => state.user);
-  const { store } = useSelector((state) => state.store);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");

@@ -85,7 +85,8 @@ public class BranchAnalyticsServiceImpl implements BranchAnalyticsService{
                 .map(obj -> CashierPerformanceDTO.builder()
                         .cashierId((Long) obj[0])
                         .cashierName((String) obj[1])
-                        .totalRevenue((Double) obj[2])
+                        .totalOrders(((Number) obj[2]).longValue())
+                        .totalRevenue(((Number) obj[3]).doubleValue())
                         .build()
                 ).collect(Collectors.toList());
     }

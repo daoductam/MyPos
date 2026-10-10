@@ -3,6 +3,7 @@ package com.tamdao.configurations;
 import com.tamdao.authorization.AuthorizationSnapshot;
 import com.tamdao.service.AuthorizationService;
 import com.tamdao.service.RedisTokenService;
+import com.tamdao.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtException;
@@ -40,6 +41,7 @@ public class JwtValidator extends OncePerRequestFilter {
 
 	private final RedisTokenService redisTokenService;
 	private final AuthorizationService authorizationService;
+	private final UserRepository userRepository;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
 	@PostConstruct
@@ -77,6 +79,11 @@ public class JwtValidator extends OncePerRequestFilter {
 				String email = String.valueOf(claims.get("email"));
 				if (email == null || "null".equalsIgnoreCase(email)) {
 					throw new BadCredentialsException("JWT subject is missing");
+				}
+				var authenticatedUser = userRepository.findByEmail(email);
+				if (authenticatedUser == null
+						|| !Boolean.TRUE.equals(authenticatedUser.getAccessEnabled())) {
+					throw new BadCredentialsException("User access is disabled");
 				}
 
 				AuthorizationSnapshot snapshot = authorizationService.getSnapshotByEmail(email);

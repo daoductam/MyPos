@@ -67,8 +67,14 @@
           "failed": "Refund Failed",
           "failedDesc": "Failed to process refund. Please try again."
         },
+        "validation": {
+          "reasonRequired": "Select a return reason before processing the refund.",
+          "otherReasonRequired": "Enter a reason before processing the refund.",
+          "methodRequired": "Select a refund method before processing the refund."
+        },
         "receipt": {
           "title": "Return Receipt",
+          "description": "Receipt for the refunded order",
           "returnNumber": "Return #",
           "originalOrder": "Original Order",
           "thankYou": "Thank you for shopping with us!",
@@ -334,6 +340,7 @@
         "stores": "Stores",
         "subscriptions": "Subscription Plans",
         "requests": "Pending Requests",
+        "exports": "Exports",
         "settings": "Settings"
       },
       "logout": "Logout"
@@ -428,7 +435,8 @@
         "resetPassword": {
           "title": "Reset Password",
           "confirm": "Are you sure you want to reset the password for {{name}}?",
-          "instruction": "A temporary password will be generated and sent to their email address."
+          "instruction": "A secure password reset link will be sent to their email address.",
+          "success": "The password reset link was sent successfully."
         }
       },
       "customers": {
@@ -1502,7 +1510,7 @@
         "button": "Generate Export",
         "exporting": "Exporting...",
         "started": "Export Started",
-        "startedDesc": "{name} export has been initiated. You'll receive a notification when it's ready."
+        "startedDesc": "{{name}} export has been initiated. You'll receive a notification when it's ready."
       },
       "available": {
         "title": "Available Export Types",

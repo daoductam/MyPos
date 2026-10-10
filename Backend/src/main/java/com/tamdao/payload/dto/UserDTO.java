@@ -25,6 +25,7 @@ public class UserDTO extends BaseDTO {
     private BranchDTO branch;
     private String branchName;
     private LocalDateTime lastLogin;
+    private Boolean accessEnabled;
 
 
 

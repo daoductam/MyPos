@@ -11,7 +11,6 @@ import {
   Tooltip,
   Legend,
   CartesianGrid,
-  ResponsiveContainer
 } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { getDailySalesChart } from "@/Redux Toolkit/features/branchAnalytics/branchAnalyticsThunks";
@@ -51,8 +50,7 @@ const SalesChart = () => {
       </CardHeader>
       <CardContent className="pt-6">
         <ChartContainer config={config}>
-          <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={data}>
+          <BarChart data={data}>
               <XAxis
                 dataKey="name"
                 stroke="rgba(255, 255, 255, 0.5)"
@@ -85,8 +83,7 @@ const SalesChart = () => {
                 radius={[4, 4, 0, 0]}
                 className="fill-emerald-500"
               />
-            </BarChart>
-          </ResponsiveContainer>
+          </BarChart>
         </ChartContainer>
         {analytics?.loading && <div className="text-center text-xs text-gray-400 mt-2">Loading...</div>}
       </CardContent>

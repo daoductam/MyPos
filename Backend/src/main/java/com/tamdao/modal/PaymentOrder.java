@@ -5,6 +5,7 @@ import com.tamdao.domain.PaymentOrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
@@ -13,6 +14,7 @@ import org.hibernate.annotations.SQLDelete;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class PaymentOrder extends BaseEntity {
 
     @Id

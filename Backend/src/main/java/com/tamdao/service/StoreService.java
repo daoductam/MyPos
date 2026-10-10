@@ -20,4 +20,5 @@ public interface StoreService {
     List<UserDTO> getEmployeesByStore(Long storeId);
 
     StoreDTO moderateStore(Long storeId, StoreStatus action);
+    StoreDTO updateCommissionRate(Long storeId, double commissionRate);
 }

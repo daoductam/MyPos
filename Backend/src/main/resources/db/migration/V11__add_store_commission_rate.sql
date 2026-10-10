@@ -1,0 +1,2 @@
+ALTER TABLE stores
+    ADD COLUMN commission_rate DOUBLE NOT NULL DEFAULT 0.0;

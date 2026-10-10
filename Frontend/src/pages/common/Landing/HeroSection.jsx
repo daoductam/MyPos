@@ -17,7 +17,7 @@ const HeroSection = () => {
       setCurrentBusinessTypeIndex((prevIndex) => (prevIndex + 1) % businessTypes.length);
     }, 4000); // Change text every 4 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [businessTypes.length]);
 
   const handleGetStartedClick = () => {
     navigate('/auth/onboarding');

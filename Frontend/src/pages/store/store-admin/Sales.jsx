@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,14 +29,7 @@ export default function Sales() {
     loading 
   } = useSelector((state) => state.storeAnalytics);
 
-
-  useEffect(() => {
-    if (userProfile?.id) {
-      fetchSalesData();
-    }
-  }, [userProfile]);
-
-  const fetchSalesData = async () => {
+  const fetchSalesData = useCallback(async () => {
     try {
       await Promise.all([
         dispatch(getStoreOverview(userProfile.id)).unwrap(),
@@ -50,7 +43,14 @@ export default function Sales() {
         variant: "destructive",
       });
     }
-  };
+  }, [dispatch, t, toast, userProfile]);
+
+
+  useEffect(() => {
+    if (userProfile?.id) {
+      fetchSalesData();
+    }
+  }, [fetchSalesData, userProfile?.id]);
 
   // Format currency
   const formatCurrency = (amount) => {
@@ -115,13 +115,13 @@ export default function Sales() {
                     formatCurrency(storeOverview?.totalSales || 0)
                   )}
                 </h3>
-                <p className="text-xs text-emerald-500 mt-1">
+                <div className="text-xs text-emerald-500 mt-1">
                   {loading ? (
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     formatChange(storeOverview?.totalSales, storeOverview?.previousPeriodSales)
                   )} {t('storeModule.sales.fromLastWeek')}
-                </p>
+                </div>
               </div>
               <div className="p-3 bg-emerald-100 rounded-full">
                 <DollarSign className="w-8 h-8 text-emerald-600" />
@@ -142,13 +142,13 @@ export default function Sales() {
                     storeOverview?.todayOrders || 0
                   )}
                 </h3>
-                <p className="text-xs text-emerald-500 mt-1">
+                <div className="text-xs text-emerald-500 mt-1">
                   {loading ? (
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     formatChange(storeOverview?.todayOrders, storeOverview?.yesterdayOrders)
                   )} {t('storeModule.sales.fromYesterday')}
-                </p>
+                </div>
               </div>
               <div className="p-3 bg-blue-100 rounded-full">
                 <Store className="w-8 h-8 text-blue-600" />
@@ -169,13 +169,13 @@ export default function Sales() {
                     storeOverview?.activeCashiers || 0
                   )}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <div className="text-xs text-gray-500 mt-1">
                   {loading ? (
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     t('storeModule.sales.sameAsYesterday')
                   )}
-                </p>
+                </div>
               </div>
               <div className="p-3 bg-purple-100 rounded-full">
                 <User className="w-8 h-8 text-purple-600" />
@@ -196,13 +196,13 @@ export default function Sales() {
                     formatCurrency(storeOverview?.averageOrderValue || 0)
                   )}
                 </h3>
-                <p className="text-xs text-emerald-500 mt-1">
+                <div className="text-xs text-emerald-500 mt-1">
                   {loading ? (
                     <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     formatChange(storeOverview?.averageOrderValue, storeOverview?.previousPeriodAverageOrderValue)
                   )} {t('storeModule.sales.fromLastWeek')}
-                </p>
+                </div>
               </div>
               <div className="p-3 bg-orange-100 rounded-full">
                 <CreditCard className="w-8 h-8 text-orange-600" />

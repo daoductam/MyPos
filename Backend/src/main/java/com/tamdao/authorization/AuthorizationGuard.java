@@ -6,6 +6,8 @@ import com.tamdao.repository.authorization.AuthorizationScopeRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * Method-security entry points for resource scope checks.
  *
@@ -36,6 +38,32 @@ public class AuthorizationGuard {
         return scopeRepository.storeExists(storeId)
                 && authorizationService.hasPermission(
                 authentication, permissionCode, ScopeType.STORE, storeId, null, null);
+    }
+
+    /**
+     * Allows a store-scoped resource to be read by an actor assigned directly
+     * to a branch in that store. This is intentionally separate from
+     * hasStorePermission so branch assignments cannot gain store-level write
+     * access accidentally.
+     */
+    public boolean hasStoreOrBranchPermission(Authentication authentication, String permissionCode, Long storeId) {
+        if (storeId == null || !scopeRepository.storeExists(storeId)) {
+            return false;
+        }
+        if (authorizationService.hasPermission(
+                authentication, permissionCode, ScopeType.STORE, storeId, null, null)) {
+            return true;
+        }
+        try {
+            Long branchId = currentUserBranchId(authentication);
+            Long branchStoreId = branchId == null ? null : scopeRepository.branchStoreId(branchId);
+            return Objects.equals(storeId, branchStoreId)
+                    && authorizationService.hasPermission(
+                    authentication, permissionCode, ScopeType.BRANCH,
+                    storeId, branchId, null);
+        } catch (RuntimeException ex) {
+            return false;
+        }
     }
 
     public boolean hasBranchPermission(Authentication authentication, String permissionCode, Long branchId) {

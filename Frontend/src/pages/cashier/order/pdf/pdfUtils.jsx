@@ -1,7 +1,6 @@
 import { pdf } from "@react-pdf/renderer";
 
 import { OrderPDF } from "./OrderPDF";
-import { formatDate } from "@/pages/cashier/order/data";
 
 export const handleDownloadOrderPDF = async (order, toast) => {
   try {

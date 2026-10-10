@@ -67,13 +67,15 @@ const EmployeeForm = ({ initialData, onSubmit, roles }) => {
     },
   });
 
+  const { setValues, resetForm } = formik;
+
   useEffect(() => {
     if (initialData) {
-      formik.setValues(initialData);
+      setValues(initialData);
     } else {
-      formik.resetForm();
+      resetForm();
     }
-  }, [initialData]);
+  }, [initialData, resetForm, setValues]);
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-6 py-2 pr-2">

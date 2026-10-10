@@ -1,7 +1,9 @@
 package com.tamdao.service.impl;
 
 import com.tamdao.domain.UserRole;
-import com.tamdao.modal.Order;
+import com.tamdao.domain.OrderStatus;
+import com.tamdao.exception.BusinessException;
+import com.tamdao.exception.ErrorCode;
 import com.tamdao.payload.StoreAnalysis.*;
 import com.tamdao.repository.*;
 import com.tamdao.service.StoreAnalyticsService;
@@ -9,11 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,44 +54,73 @@ public class StoreAnalyticsServiceImpl implements StoreAnalyticsService {
 
     @Override
     public TimeSeriesDataDTO getSalesTrends(Long storeAdminId, String period) {
-    //        // Dummy data, replace with actual queries later
-    ////        List<TimeSeriesPointDTO> points = List.of(
-    ////                new TimeSeriesPointDTO("Week 1", BigDecimal.valueOf(4000)),
-    ////                new TimeSeriesPointDTO("Week 2", BigDecimal.valueOf(6200))
-    ////        );
-        return null;
+        String normalizedPeriod = period == null ? "DAILY" : period.trim().toUpperCase(Locale.ROOT);
+        if (!List.of("DAILY", "WEEKLY", "MONTHLY").contains(normalizedPeriod)) {
+            throw new BusinessException(ErrorCode.INVALID_REQUEST,
+                    "period must be DAILY, WEEKLY, or MONTHLY");
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime end = today.plusDays(1).atStartOfDay().minusNanos(1);
+        Map<LocalDate, Double> buckets = new LinkedHashMap<>();
+        LocalDate startDate;
+
+        switch (normalizedPeriod) {
+            case "WEEKLY" -> {
+                startDate = today.with(DayOfWeek.MONDAY).minusWeeks(11);
+                for (int i = 0; i < 12; i++) {
+                    buckets.put(startDate.plusWeeks(i), 0d);
+                }
+            }
+            case "MONTHLY" -> {
+                YearMonth firstMonth = YearMonth.from(today).minusMonths(11);
+                startDate = firstMonth.atDay(1);
+                for (int i = 0; i < 12; i++) {
+                    buckets.put(firstMonth.plusMonths(i).atDay(1), 0d);
+                }
+            }
+            default -> {
+                startDate = today.minusDays(29);
+                for (int i = 0; i < 30; i++) {
+                    buckets.put(startDate.plusDays(i), 0d);
+                }
+            }
+        }
+
+        LocalDateTime start = startDate.atStartOfDay();
+        orderRepository.findAllByStoreAdminAndCreatedAtBetween(storeAdminId, start, end).stream()
+                .filter(order -> order.getStatus() == OrderStatus.COMPLETED)
+                .filter(order -> order.getCreatedAt() != null && order.getTotalAmount() != null)
+                .forEach(order -> {
+                    LocalDate bucket = switch (normalizedPeriod) {
+                        case "WEEKLY" -> order.getCreatedAt().toLocalDate().with(DayOfWeek.MONDAY);
+                        case "MONTHLY" -> order.getCreatedAt().toLocalDate().withDayOfMonth(1);
+                        default -> order.getCreatedAt().toLocalDate();
+                    };
+                    if (buckets.containsKey(bucket)) {
+                        buckets.compute(bucket, (ignored, value) -> value + order.getTotalAmount());
+                    }
+                });
+
+        List<TimeSeriesPointDTO> points = buckets.entrySet().stream()
+                .map(entry -> new TimeSeriesPointDTO(entry.getKey().atStartOfDay(), entry.getValue()))
+                .toList();
+
+        return TimeSeriesDataDTO.builder()
+                .period(normalizedPeriod)
+                .points(points)
+                .build();
     }
 
     @Override
     public List<TimeSeriesPointDTO> getMonthlySalesGraph(Long storeAdminId) {
-        LocalDateTime end = LocalDateTime.now();
-        LocalDateTime start = end.minusDays(365);
-
-        List<Order> orders = orderRepository.findAllByStoreAdminAndCreatedAtBetween(storeAdminId, start, end);
-
-        Map<YearMonth, Double> grouped = orders.stream()
-                .collect(Collectors.groupingBy(
-                        order -> YearMonth.from(order.getCreatedAt()),  // Group by Year-Month
-                        Collectors.summingDouble(order ->
-                                order.getTotalAmount() != null ? order.getTotalAmount().doubleValue() : 0.0
-                        )
-                ));
-
-        return grouped.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(entry -> new TimeSeriesPointDTO(
-                        entry.getKey().atDay(1).atStartOfDay(), // Convert YearMonth to LocalDateTime
-                        entry.getValue()
-                ))
-                .collect(Collectors.toList());
+        return getSalesTrends(storeAdminId, "MONTHLY").getPoints();
     }
 
     @Override
     public List<TimeSeriesPointDTO> getDailySalesGraph(Long storeAdminId) {
-//        return null;
-        LocalDateTime end = LocalDateTime.now();
-        LocalDateTime start = end.minusDays(6);
-        return orderRepository.getDailySales(storeAdminId, start, end);
+        List<TimeSeriesPointDTO> points = getSalesTrends(storeAdminId, "DAILY").getPoints();
+        return points.subList(Math.max(0, points.size() - 7), points.size());
     }
 
     @Override

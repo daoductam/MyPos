@@ -25,6 +25,24 @@ export const getAuthorizationProfile = createAsyncThunk('user/getAuthorizationPr
   }
 });
 
+export const updateProfile = createAsyncThunk('user/updateProfile', async ({ fullName, phone }, { rejectWithValue }) => {
+  try {
+    const res = await api.put('/api/v1/users/profile', { fullName, phone });
+    return res.data;
+  } catch (err) {
+    return rejectWithValue(err.customMessage || err.response?.data?.message || 'Failed to update profile');
+  }
+});
+
+export const changePassword = createAsyncThunk('user/changePassword', async ({ currentPassword, newPassword }, { rejectWithValue }) => {
+  try {
+    await api.patch('/api/v1/users/profile/password', { currentPassword, newPassword });
+    return true;
+  } catch (err) {
+    return rejectWithValue(err.customMessage || err.response?.data?.message || 'Failed to change password');
+  }
+});
+
 // 🔹 Get all customers
 export const getCustomers = createAsyncThunk('user/getCustomers', async (token, { rejectWithValue }) => {
   try {

@@ -5,13 +5,57 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { Badge } from "../../components/ui/badge";
-import { Download, FileText, Calendar, Filter, CheckCircle, Loader2 } from "lucide-react";
+import { Download, FileText, Calendar, CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "../../components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import api from "../../utils/api";
+
+const EXPORT_HISTORY_KEY = "pos.super-admin.export-history";
+
+const csvEscape = (value) => {
+  const text = value == null ? "" : String(value);
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+};
+
+const downloadCsv = (filename, rows) => {
+  const headers = rows.length ? Object.keys(rows[0]) : ["message"];
+  const content = [
+    headers.map(csvEscape).join(","),
+    ...(rows.length ? rows : [{ message: "No records found" }]).map((row) =>
+      headers.map((header) => csvEscape(row[header])).join(",")),
+  ].join("\n");
+  const blob = new Blob([`\uFEFF${content}`], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+  return blob.size;
+};
+
+const withinDateRange = (dateValue, dateRange) => {
+  if (!dateValue) return true;
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return true;
+  if (dateRange.from && date < new Date(`${dateRange.from}T00:00:00`)) return false;
+  if (dateRange.to && date > new Date(`${dateRange.to}T23:59:59.999`)) return false;
+  return true;
+};
 
 export default function ExportsPage() {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const [selectedType, setSelectedType] = useState("");
+  const [dateRange, setDateRange] = useState({ from: "", to: "" });
+  const [isExporting, setIsExporting] = useState(false);
+  const [recentExports, setRecentExports] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(EXPORT_HISTORY_KEY) || "[]");
+    } catch {
+      return [];
+    }
+  });
 
   const exportTypes = [
     {
@@ -25,14 +69,7 @@ export default function ExportsPage() {
       id: "store-status",
       name: t('superAdminModule.exports.available.types.store-status.name'),
       description: t('superAdminModule.exports.available.types.store-status.desc'),
-      format: "Excel",
-      icon: <FileText className="w-5 h-5" />,
-    },
-    {
-      id: "commission-report",
-      name: t('superAdminModule.exports.available.types.commission-report.name'),
-      description: t('superAdminModule.exports.available.types.commission-report.desc'),
-      format: "Excel",
+      format: "CSV",
       icon: <FileText className="w-5 h-5" />,
     },
     {
@@ -41,33 +78,6 @@ export default function ExportsPage() {
       description: t('superAdminModule.exports.available.types.pending-requests.desc'),
       format: "CSV",
       icon: <FileText className="w-5 h-5" />,
-    },
-  ];
-
-  const recentExports = [
-    {
-      id: 1,
-      type: t('superAdminModule.exports.available.types.store-list.name'),
-      date: "2025-01-15 14:30",
-      status: "completed",
-      size: "2.3 MB",
-      downloads: 3,
-    },
-    {
-      id: 2,
-      type: t('superAdminModule.exports.available.types.commission-report.name'),
-      date: "2025-01-14 09:15",
-      status: "completed",
-      size: "1.8 MB",
-      downloads: 1,
-    },
-    {
-      id: 3,
-      type: t('superAdminModule.exports.available.types.store-status.name'),
-      date: "2025-01-13 16:45",
-      status: "completed",
-      size: "1.2 MB",
-      downloads: 2,
     },
   ];
 
@@ -82,24 +92,65 @@ export default function ExportsPage() {
     }
 
     setIsExporting(true);
-    
-    // Simulate export process
-    setTimeout(() => {
+    try {
       const exportType = exportTypes.find(type => type.id === selectedType);
+      const params = selectedType === "pending-requests" ? { status: "PENDING" } : undefined;
+      const response = await api.get("/api/v1/stores", { params });
+      const stores = Array.isArray(response.data) ? response.data : [];
+      const rows = stores
+        .filter((store) => withinDateRange(store.createdAt, dateRange))
+        .map((store) => ({
+          id: store.id,
+          brand: store.brand,
+          status: store.status,
+          storeType: store.storeType,
+          email: store.contact?.email || store.storeAdmin?.email,
+          phone: store.contact?.phone || store.storeAdmin?.phone,
+          createdAt: store.createdAt,
+        }));
+      const timestamp = new Date();
+      const filename = `${selectedType}-${timestamp.toISOString().slice(0, 10)}.csv`;
+      const size = downloadCsv(filename, rows);
+      const item = {
+        id: `${timestamp.getTime()}`,
+        type: exportType.name,
+        date: timestamp.toLocaleString(),
+        status: "completed",
+        size: `${size} B`,
+        downloads: 1,
+        filename,
+        rows,
+      };
+      const updatedHistory = [item, ...recentExports].slice(0, 10);
+      setRecentExports(updatedHistory);
+      localStorage.setItem(EXPORT_HISTORY_KEY, JSON.stringify(updatedHistory));
       toast({
         title: t('superAdminModule.exports.create.started'),
-        description: t('superAdminModule.exports.create.startedDesc', { name: exportType.name }),
+        description: `${t('superAdminModule.exports.create.startedDesc', { name: exportType.name })} (${rows.length} records)`,
       });
-      setIsExporting(false);
       setSelectedType("");
       setDateRange({ from: "", to: "" });
-    }, 2000);
+    } catch (error) {
+      toast({
+        title: t('superAdminModule.exports.create.started'),
+        description: error?.customMessage || t('superAdminModule.exports.recent.toast.downloadStartedDesc'),
+        variant: "destructive",
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
-  const handleDownload = (exportId) => {
+  const handleDownload = (exportItem) => {
+    downloadCsv(exportItem.filename, exportItem.rows || []);
+    const updatedHistory = recentExports.map((item) => item.id === exportItem.id
+      ? { ...item, downloads: item.downloads + 1 }
+      : item);
+    setRecentExports(updatedHistory);
+    localStorage.setItem(EXPORT_HISTORY_KEY, JSON.stringify(updatedHistory));
     toast({
       title: t('superAdminModule.exports.recent.toast.downloadStarted'),
-      description: t('superAdminModule.exports.recent.toast.downloadStartedDesc'),
+      description: `${t('superAdminModule.exports.recent.toast.downloadStartedDesc')} (#${exportItem.id})`,
     });
   };
 
@@ -261,7 +312,7 @@ export default function ExportsPage() {
                   <Button
                     variant="outline"
                     size="sm" className="border-white/20 text-white hover:bg-white/10"
-                    onClick={() => handleDownload(exportItem.id)}
+                    onClick={() => handleDownload(exportItem)}
                   >
                     <Download className="w-4 h-4 mr-1" />
                     {t('superAdminModule.exports.recent.downloadButton')}

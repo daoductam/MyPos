@@ -13,9 +13,13 @@ import { formatCurrency, getPaymentModeLabel } from "../data";
 
 // Create PDF document
 export const OrderPDF = ({ order }) => {
-  const subtotal = order.totalAmount || 0;
-  const tax = subtotal * 0.1; // Default 10% VAT for Vietnam
-  const grandTotal = subtotal + tax;
+  const subtotal = order.items?.reduce(
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 0),
+    0,
+  ) || 0;
+  const tax = order.taxAmount ?? Math.max((order.totalAmount || 0) - subtotal, 0);
+  const discount = order.discountAmount || 0;
+  const grandTotal = order.totalAmount ?? subtotal + tax - discount;
 
   return (
     <Document title={`Hóa đơn - #${order.id}`}>
@@ -91,6 +95,14 @@ export const OrderPDF = ({ order }) => {
               {formatCurrency(tax)}
             </Text>
           </View>
+          {discount > 0 && (
+            <View style={pdfStyles.totalsRow}>
+              <Text style={pdfStyles.totalsLabel}>Giảm giá</Text>
+              <Text style={pdfStyles.totalsValue}>
+                -{formatCurrency(discount)}
+              </Text>
+            </View>
+          )}
           <View style={[pdfStyles.totalsRow, pdfStyles.grandTotal]}>
             <Text style={pdfStyles.grandTotalLabel}>Tổng cộng</Text>
             <Text style={pdfStyles.grandTotalValue}>

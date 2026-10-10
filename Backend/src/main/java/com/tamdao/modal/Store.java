@@ -36,9 +36,14 @@ public class Store extends BaseEntity {
 
     private StoreStatus status;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Double commissionRate = 0.0;
+
     // Contact Information
     @Embedded
-    private StoreContact contact=new StoreContact();
+    @Builder.Default
+    private StoreContact contact = new StoreContact();
 
     @PrePersist
     protected void onCreate() {

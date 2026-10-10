@@ -235,10 +235,14 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         }
         return switch (grantedScope) {
             case PLATFORM -> true;
-            case STORE -> (targetScope == ScopeType.STORE || targetScope == ScopeType.BRANCH)
-                    && Objects.equals(grantedStoreId, targetStoreId);
-            case BRANCH -> targetScope == ScopeType.BRANCH
-                    && Objects.equals(grantedBranchId, targetBranchId);
+            case STORE -> (targetScope == ScopeType.STORE || targetScope == ScopeType.BRANCH
+                    || targetScope == ScopeType.SELF)
+                    && (targetScope == ScopeType.SELF
+                    || Objects.equals(grantedStoreId, targetStoreId));
+            case BRANCH -> (targetScope == ScopeType.BRANCH
+                    && Objects.equals(grantedBranchId, targetBranchId))
+                    || (targetScope == ScopeType.SELF
+                    && Objects.equals(subjectUserId, snapshotUserId));
             case SELF -> targetScope == ScopeType.SELF
                     && (subjectUserId == null || Objects.equals(subjectUserId, snapshotUserId));
         };

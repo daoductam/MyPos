@@ -73,8 +73,14 @@
           "failed": "Hoàn tiền thất bại",
           "failedDesc": "Không thể xử lý hoàn tiền. Vui lòng thử lại."
         },
+        "validation": {
+          "reasonRequired": "Hãy chọn lý do trả hàng trước khi hoàn tiền.",
+          "otherReasonRequired": "Hãy nhập lý do trước khi hoàn tiền.",
+          "methodRequired": "Hãy chọn phương thức hoàn tiền trước khi xử lý."
+        },
         "receipt": {
           "title": "Biên lai trả hàng",
+          "description": "Biên lai cho đơn hàng đã hoàn tiền",
           "returnNumber": "Mã trả hàng",
           "originalOrder": "Đơn hàng gốc",
           "thankYou": "Cảm ơn quý khách đã mua hàng!",
@@ -344,6 +350,7 @@
         "stores": "Cửa hàng",
         "subscriptions": "Gói đăng ký",
         "requests": "Yêu cầu chờ xử lý",
+        "exports": "Xuất dữ liệu",
         "settings": "Cài đặt"
       },
       "logout": "Đăng xuất"
@@ -449,7 +456,8 @@
         "resetPassword": {
           "title": "Đặt lại mật khẩu",
           "confirm": "Bạn có chắc chắn muốn đặt lại mật khẩu cho {{name}}?",
-          "instruction": "Mật khẩu tạm thời sẽ được tạo và gửi đến email của họ."
+          "instruction": "Một liên kết đặt lại mật khẩu an toàn sẽ được gửi đến email của họ.",
+          "success": "Đã gửi liên kết đặt lại mật khẩu thành công."
         }
       },
       "customers": {

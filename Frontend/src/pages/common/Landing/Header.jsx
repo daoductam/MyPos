@@ -1,7 +1,7 @@
 import { ShoppingCart, Menu, X, ChevronDown } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { Button } from '../../../components/ui/button'
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../../../components/LanguageSwitcher'
 
