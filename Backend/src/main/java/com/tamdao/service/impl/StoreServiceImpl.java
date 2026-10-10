@@ -11,8 +11,10 @@ import com.tamdao.modal.Store;
 import com.tamdao.modal.StoreContact;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.StoreDTO;
+import com.tamdao.payload.dto.CommissionSummaryDTO;
 import com.tamdao.payload.dto.UserDTO;
 import com.tamdao.repository.BranchRepository;
+import com.tamdao.repository.OrderRepository;
 import com.tamdao.repository.StoreRepository;
 import com.tamdao.repository.UserRepository;
 import com.tamdao.service.StoreService;
@@ -33,6 +35,7 @@ public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
     private final UserService userService;
     private final BranchRepository branchRepository;
+    private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthorizationMutationService authorizationMutationService;
@@ -188,5 +191,24 @@ public class StoreServiceImpl implements StoreService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "Store not found with id: " + storeId));
         store.setCommissionRate(commissionRate);
         return StoreMapper.toDto(storeRepository.save(store));
+    }
+
+    @Override
+    public List<CommissionSummaryDTO> getCommissionSummaries() {
+        return storeRepository.findAll().stream()
+                .map(store -> {
+                    double grossSales = orderRepository.sumCompletedSalesByStoreId(store.getId()).orElse(0.0);
+                    double rate = store.getCommissionRate() == null ? 0.0 : store.getCommissionRate();
+                    return new CommissionSummaryDTO(
+                            store.getId(),
+                            store.getBrand(),
+                            store.getStatus(),
+                            rate,
+                            grossSales,
+                            grossSales * rate / 100.0,
+                            orderRepository.countCompletedOrdersByStoreId(store.getId())
+                    );
+                })
+                .toList();
     }
 }

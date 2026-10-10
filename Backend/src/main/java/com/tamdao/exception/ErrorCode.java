@@ -24,6 +24,7 @@ public enum ErrorCode {
     BRANCH_NOT_FOUND("BRANCH_NOT_FOUND", "Chi nhánh không tồn tại", HttpStatus.NOT_FOUND),
     PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", "Sản phẩm không tồn tại", HttpStatus.NOT_FOUND),
     OUT_OF_STOCK("OUT_OF_STOCK", "Sản phẩm trong kho không đủ số lượng", HttpStatus.BAD_REQUEST),
+    EMAIL_SERVICE_UNAVAILABLE("EMAIL_SERVICE_UNAVAILABLE", "Dịch vụ email chưa được cấu hình", HttpStatus.SERVICE_UNAVAILABLE),
 
     UNCATEGORIZED_EXCEPTION("INTERNAL_ERROR", "Lỗi hệ thống chưa được phân loại", HttpStatus.INTERNAL_SERVER_ERROR),
     ALREADY_DELETED("ALREADY_DELETED", "Tài nguyên đã bị xóa", HttpStatus.GONE);

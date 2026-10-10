@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useSettingsState } from "./useSettingsState";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../../../components/ui/use-toast";
+import api from "../../../../utils/api";
 
 export default function SystemSettingsForm() {
   const { t } = useTranslation();
@@ -19,36 +20,36 @@ export default function SystemSettingsForm() {
   useEffect(() => {
     if (hasLoaded.current) return;
     hasLoaded.current = true;
-    try {
-      const saved = localStorage.getItem("pos.super-admin.system-settings");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (typeof parsed.maintenanceMode === "boolean") {
-          setSystem("maintenanceMode", parsed.maintenanceMode);
+    const loadSettings = async () => {
+      try {
+        const response = await api.get("/api/v1/platform/settings");
+        if (typeof response.data?.maintenanceMode === "boolean") {
+          setSystem("maintenanceMode", response.data.maintenanceMode);
         }
+      } catch (error) {
+        toast({
+          title: t("superAdminModule.settings.system.save"),
+          description: error?.customMessage || t("superAdminModule.settings.system.loadError", "System preferences could not be loaded."),
+          variant: "destructive",
+        });
       }
-    } catch {
-      toast({
-        title: t("superAdminModule.settings.system.save"),
-        description: t("superAdminModule.settings.system.loadError", "Saved system preferences could not be loaded."),
-        variant: "destructive",
-      });
-    }
+    };
+    loadSettings();
   }, [setSystem, t, toast]);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     setIsSaving(true);
     try {
-      localStorage.setItem("pos.super-admin.system-settings", JSON.stringify(system));
+      await api.patch("/api/v1/platform/settings", { maintenanceMode: system.maintenanceMode });
       toast({
         title: t("superAdminModule.settings.system.save"),
-        description: t("superAdminModule.settings.system.saveSuccess", "System preferences saved in this browser."),
+        description: t("superAdminModule.settings.system.saveSuccess", "System preferences saved."),
       });
-    } catch {
+    } catch (error) {
       toast({
         title: t("superAdminModule.settings.system.save"),
-        description: t("superAdminModule.settings.system.saveError", "System preferences could not be saved."),
+        description: error?.customMessage || t("superAdminModule.settings.system.saveError", "System preferences could not be saved."),
         variant: "destructive",
       });
     } finally {

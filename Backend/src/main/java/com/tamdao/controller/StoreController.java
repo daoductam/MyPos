@@ -7,6 +7,7 @@ import com.tamdao.mapper.StoreMapper;
 import com.tamdao.modal.Store;
 import com.tamdao.modal.User;
 import com.tamdao.payload.dto.StoreDTO;
+import com.tamdao.payload.dto.CommissionSummaryDTO;
 import com.tamdao.payload.dto.UserDTO;
 import com.tamdao.payload.request.CommissionRateRequest;
 import com.tamdao.service.StoreService;
@@ -94,6 +95,12 @@ public class StoreController {
             @RequestParam(required = false) StoreStatus status
     ) {
         return ResponseEntity.ok(storeService.getAllStores(status));
+    }
+
+    @GetMapping("/commission-summary")
+    @PreAuthorize("@authorizationGuard.hasPlatformPermission(authentication, 'platform.store.read')")
+    public ResponseEntity<List<CommissionSummaryDTO>> getCommissionSummaries() {
+        return ResponseEntity.ok(storeService.getCommissionSummaries());
     }
 
     @PutMapping("/{storeId}/moderate")

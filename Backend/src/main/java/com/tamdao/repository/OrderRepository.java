@@ -84,6 +84,22 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                                              @Param("date") LocalDate date);
 
     @Query("""
+        SELECT COALESCE(SUM(o.totalAmount), 0)
+        FROM Order o
+        WHERE o.branch.store.id = :storeId
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
+    """)
+    Optional<Double> sumCompletedSalesByStoreId(@Param("storeId") Long storeId);
+
+    @Query("""
+        SELECT COUNT(o)
+        FROM Order o
+        WHERE o.branch.store.id = :storeId
+        AND o.status = com.tamdao.domain.OrderStatus.COMPLETED
+    """)
+    long countCompletedOrdersByStoreId(@Param("storeId") Long storeId);
+
+    @Query("""
     SELECT o.paymentType, SUM(o.totalAmount), COUNT(o)
     FROM Order o
     WHERE o.branch.id = :branchId

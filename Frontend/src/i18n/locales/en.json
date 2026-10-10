@@ -1467,6 +1467,7 @@
       "subtitle": "Manage commission rates for all stores",
       "stats": {
         "totalEarnings": "Total Earnings",
+        "earningsHint": "Based on completed orders.",
         "averageRate": "Average Rate",
         "activeStores": "Active Stores",
         "rateSetHint": "All stores have commission rates set"
@@ -1477,6 +1478,7 @@
         "currentRate": "Current Rate",
         "rateChange": "Rate Change",
         "totalEarnings": "Total Earnings",
+        "completedOrders": "Completed Orders",
         "lastUpdated": "Last Updated",
         "actions": "Actions",
         "editRate": "Edit Rate"

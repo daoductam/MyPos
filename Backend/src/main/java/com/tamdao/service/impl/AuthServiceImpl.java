@@ -273,7 +273,9 @@ public class AuthServiceImpl implements AuthService {
 
         User user = resetToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
+        user.setAuthorizationVersion((user.getAuthorizationVersion() == null ? 0L : user.getAuthorizationVersion()) + 1L);
         userRepository.save(user);
+        redisTokenService.revokeAllUserTokens(user.getId());
 
         passwordResetTokenRepository.delete(resetToken);
     }
